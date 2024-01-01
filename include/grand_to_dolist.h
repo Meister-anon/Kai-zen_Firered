@@ -1897,23 +1897,33 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   rain works though, ok so sun ALSO doesn't work...think only rain works, just because rain has overworld stuff..
   ok yeah only rain works... fixed issue was logic order smh
 
-  - see about using gMoveWeatherChangeStringIds to pull string from code/file rathe rhtan script?
-  rather than use ability made it rain since idea is prediting weather as if its overworld set not abilitys set
+  -forecsat complete
 
-  -change no castform transformed message
-  switch in
-  -change data transform castform
-  -message castform predicted so and so weather
-  -normal weather message i.e it started to rain/hail; sunlight turned harsh
-  -end first weather
-  -next weather message "The Forecast came true! n\It started to hail!"
+  - TMHM Expansion base setup complete, need actually add on to tm list now
+  Wanted to make comprehensive list for better list,
+  think what I want is mix of gen 1 tms,
+  gen 4 tm list, and
+  gen 7 8 and 9 tm list
 
-  reintroduced old forecast freeze bug thingissue is if elses  
-  also need go over starters and make sure all of them have some form of damaging move,
-  hoppip only had splash tails whip and sysntehsis for example - fixed, just missed the  old catchon sandstorm 
-  -will still need to redo to get messages to display correctly
-  -actuallt think shoud eb simple, just a mater of not using drizzle etc.
-  should be able to keep current setup
+  //gem 7 was best tm diversity, and  added a good deal more type variety and status moves to list,
+
+  //what I like about gen 8 is it brought back some of the moves that were tms in gen 1,
+  while also putting moves that were just type variations to the tm list making them much more accessible 
+  than having to keep them in learnset,  i.e elemental punches.
+
+  //gen 9 had some good points on this as well, specifically all the elemental fangs are teachable tms  (sans psychic fang which is new/exclusive)
+
+  //think I would want to make the trap moves, false swipe, super fang, future sight tm moves as well.  (and magic coat)
+  //-(oh gen8 list added all trap moves to tm list nice)
+  //so thinking of having a tm list around 120,
+  would need to setup all hms so rock climb as well so around 128 or 130 values total
+
+  //just learned because of the stupid items.json all tmhm values need their move descriptions to match this exact format
+  gMoveDescription_moveId    aka gMoveDescription_RockClimb,  which I didn't do, to save time during porting
+
+  from ee which uses gMOVE_IDDescription instead... because it isn't locked to the json
+  //so would need to remove the items json, and remove the item data from the json_data_rules.mk file   make file
+  
 
   //from battle_main.c field endturn function goes before battlerendturn
  //I THINK my abilitybattleeffects is triggered before this so foreast should be fine?

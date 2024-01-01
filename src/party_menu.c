@@ -4988,7 +4988,7 @@ void ItemUseCB_PPUp(u8 taskId, UNUSED TaskFunc func)
 
 u16 ItemIdToBattleMoveId(u16 item)
 {
-    u16 tmNumber = item - ITEM_TM01_FOCUS_PUNCH;
+    u16 tmNumber = item - ITEM_TM01_FOCUS_PUNCH; //everytghing that uses "- ITEM_TM01_FOCUS_PUNCH"  is in my way, and forces item order
 
     return sTMHMMoves[tmNumber];
 }//mt1 -tm1 is 0, so it lines up with the first value in the array

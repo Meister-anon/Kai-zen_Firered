@@ -5599,7 +5599,7 @@
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",
       "holdEffectParam": 0,
-      "description_english": "A 2-turn attack in which the user\\ndives underwater on the first turn,\\nthen strikes in the next turn.",
+      "description_english": "?????",
       "importance": 1,
       "exitsBagOnUse": 0,
       "pocket": "POCKET_TM_CASE",
@@ -5611,20 +5611,21 @@
       "moveId": "Dive"
     },
     {
-      "english": "????????",
-      "itemId": "ITEM_NONE",
+      "english": "HM09",
+      "itemId": "ITEM_HM09",
       "price": 0,
       "holdEffect": "HOLD_EFFECT_NONE",
       "holdEffectParam": 0,
       "description_english": "?????",
-      "importance": 0,
+      "importance": 1,
       "exitsBagOnUse": 0,
-      "pocket": "POCKET_ITEMS",
-      "type": 4,
-      "fieldUseFunc": "FieldUseFunc_OakStopsYou",
+      "pocket": "POCKET_TM_CASE",
+      "type": 1,
+      "fieldUseFunc": "NULL",
       "battleUsage": 0,
       "battleUseFunc": "NULL",
-      "secondaryId": 0
+      "secondaryId": 0,
+      "moveId": "RockClimb"
     },
     {
       "english": "????????",

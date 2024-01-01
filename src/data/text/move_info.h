@@ -507,7 +507,7 @@ const u8 gMIRROR_SHOTDescription
 const u8 gFLASH_CANNONDescription 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Releases a blast of light\nthat may lower Sp. Def.");
 
-const u8 gROCK_CLIMBDescription 
+const u8 gMoveDescription_RockClimb 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("A charging attack that may\nconfuse the foe.");
 
 const u8 gDEFOGDescription 
@@ -1902,7 +1902,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_ZEN_HEADBUTT ] = gZEN_HEADBUTTDescription,
     [ MOVE_MIRROR_SHOT ] = gMIRROR_SHOTDescription,
     [ MOVE_FLASH_CANNON ] = gFLASH_CANNONDescription,
-    [ MOVE_ROCK_CLIMB ] = gROCK_CLIMBDescription,
+    [ MOVE_ROCK_CLIMB ] = gMoveDescription_RockClimb,
     [ MOVE_DEFOG ] = gDEFOGDescription,
     [ MOVE_TRICK_ROOM ] = gTRICK_ROOMDescription,
     [ MOVE_DRACO_METEOR ] = gDRACO_METEORDescription,

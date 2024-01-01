@@ -891,8 +891,8 @@ struct SaveBlock1
     /*0x3A4C*/ u8 rivalName[PLAYER_NAME_LENGTH + 1];
     /*0x3A54*/ struct FameCheckerSaveData fameChecker[NUM_FAMECHECKER_PERSONS];
     /*0x3A94*/ u8 filler3A94[0x40];
-    /*0x3AD4*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
-    /*0x3BA8*/ struct TrainerNameRecord trainerNameRecords[20];
+    /*0x3AD4*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21]; //if not using union room may be able to remove
+    /*0x3BA8*/ struct TrainerNameRecord trainerNameRecords[20]; //look into if this is just for record mixing
     /*0x3C98*/ struct DaycareMon route5DayCareMon;
     /*0x3D24*/ u8 filler3D24[0x10];
     /*0x3D34*/ u32 towerChallengeId;

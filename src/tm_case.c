@@ -792,7 +792,7 @@ static void GetTMNumberAndMoveString(u8 * dest, u16 itemId)
     }
     StringAppend(gStringVar4, sText_SingleSpace);
     StringAppend(gStringVar4, gText_FontSize2);
-    StringAppend(gStringVar4, gMoveNames[ItemIdToBattleMoveId(itemId)]);
+    StringAppend(gStringVar4, gMoveNames[ItemIdToBattleMoveId(itemId)]); //hmm this is the name display in tm case from itemid so what is moveid even for?, its nto on item struct either
     StringCopy(dest, gStringVar4);
 }
 

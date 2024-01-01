@@ -84,7 +84,7 @@
 #define TMHM_POCKET        2
 #define BERRIES_POCKET     3
 #define KEYITEMS_POCKET    4
-#define NUM_BAG_POCKETS 5
+#define NUM_BAG_POCKETS 5   //plan add medicine pouch/field item pouch for things like repel revives potions etc. so items doesn't get as cluttered
 
 #define MAX_MON_MOVES 4
 #define NUM_EV_STATS 6

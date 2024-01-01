@@ -362,7 +362,7 @@
 #define ITEM_HM06 344
 #define ITEM_HM07 345
 #define ITEM_HM08 346
-#define ITEM_15B 347
+#define ITEM_HM09 347
 #define ITEM_15C 348
 
 #define ITEM_TM01_FOCUS_PUNCH ITEM_TM01
@@ -422,7 +422,8 @@
 #define ITEM_HM05_FLASH ITEM_HM05
 #define ITEM_HM06_ROCK_SMASH ITEM_HM06
 #define ITEM_HM07_WATERFALL ITEM_HM07
-#define ITEM_HM08_DIVE ITEM_HM08
+#define ITEM_HM08_DIVE ITEM_HM08 //can add rock climb right after this simple enough
+#define ITEM_HM08_ROCK_CLIMB ITEM_HM09
 
 // FireRed/LeafGreen  believe this is key items actually maybe..?
 #define ITEM_OAKS_PARCEL 349
@@ -699,7 +700,7 @@
 #define ITEM_TO_BERRY(itemId)(((itemId - FIRST_BERRY_INDEX) + 1))
 
 #define NUM_TECHNICAL_MACHINES 50 //change to 120 later  / or more plan to add on to tms I think for ease spreading certain moves
-#define NUM_HIDDEN_MACHINES     8
+#define NUM_HIDDEN_MACHINES     9
 
 // Check if the item is one that can be used on a Pokemon.
 #define IS_POKEMON_ITEM(item) ((item) > ITEM_PREMIER_BALL && (item) < ITEM_0B2)

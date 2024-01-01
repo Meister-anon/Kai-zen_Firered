@@ -85,10 +85,10 @@
 #define STDSTRING_SMART             3
 #define STDSTRING_TOUGH             4
 #define STDSTRING_COOL2             5
-#define STDSTRING_BEAUTY2           6
+#define STDSTRING_BEAUTY2           6 //what are these for
 #define STDSTRING_CUTE2             7
-#define STDSTRING_SMART2            8
-#define STDSTRING_TOUGH2            9
+#define STDSTRING_SMART2            8 //hese
+#define STDSTRING_TOUGH2            9 //these duplicates or actually relevant?
 #define STDSTRING_ITEMS             10
 #define STDSTRING_KEY_ITEMS         11
 #define STDSTRING_POKEBALLS         12
