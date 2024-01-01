@@ -186,7 +186,7 @@ static void SpriteCB_MoveTMSpriteInCase(struct Sprite * sprite);
 static void LoadTMTypePalettes(void);
 //added for new tm case
 static void DrawPartyMonIcons(void);
-static void TintPartyMonIcons(u16 tm);
+static void TintPartyMonIcons(u16 tm, s32 itemIndex);
 static void DestroyPartyMonIcons(void);
 
 
@@ -800,8 +800,8 @@ static void TMCase_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *
 {
     u16 itemId;
 
-    if (itemIndex == -2)
-        itemId = 0;
+    if (itemIndex == -2) //index -2 seems to be close tm box
+        itemId = 0; //actually think this may be issue causing mew to not tint when on close tm case screen, nope didn't work cuz doesn't track to other function
     else
         itemId = BagGetItemIdByPocketPosition(POCKET_TM_CASE, itemIndex);
 
@@ -817,7 +817,7 @@ static void TMCase_MoveCursorFunc(s32 itemIndex, bool8 onInit, struct ListMenu *
 
 static void TMCase_ItemPrintFunc(u8 windowId, s32 itemId, u8 y)
 {
-    if (itemId != -2)
+    if (itemId != -2) //this seems to be same as itemIndex??
     {
         if (!itemid_is_unique(BagGetItemIdByPocketPosition(POCKET_TM_CASE, itemId)))
         {
@@ -849,7 +849,7 @@ static void TMCase_MoveCursor_UpdatePrintedDescription(s32 itemIndex)
 
     // update icons
     if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] != sSelectTMActionTasks[2])
-        TintPartyMonIcons(itemId);
+        TintPartyMonIcons(itemId, itemIndex);
 }
 
 // Darkens (or subsequently lightens) the blue bg tiles around the description window when a TM/HM is selected.
@@ -1402,7 +1402,7 @@ static void Task_AfterSale_ReturnToList(u8 taskId)
     }
 }
 
-void Pokedude_InitTMCase(void)
+void Pokedude_InitTMCase(void) //for teach tv
 {
     sPokedudePackBackup = AllocZeroed(sizeof(*sPokedudePackBackup));
     memcpy(sPokedudePackBackup->bagPocket_TMHM, gSaveBlock1Ptr->bagPocket_TMHM, sizeof(gSaveBlock1Ptr->bagPocket_TMHM));
@@ -1717,7 +1717,7 @@ static u8 CreateTMSprite(u16 itemId)
     else
     {
         r5 = itemId - 33; //think this uses 33 because tm uses - 32 to find id values,  this is using 33 prob need to adjust later w tm update/expansion vsonic
-        SetTMSpriteAnim(&gSprites[spriteId], r5);
+        SetTMSpriteAnim(&gSprites[spriteId], r5); //or not, did expansion so not usign bit field but still worked as is?
         TintTMSpriteByType(gBattleMoves[ItemIdToBattleMoveId(itemId)].type);
         UpdateTMSpritePosition(&gSprites[spriteId], r5);
         return spriteId;
@@ -1895,7 +1895,7 @@ so its blacked out on route unless you've already caught the mon (or mon in evo 
 but when you see it on the route it'll reveal the mon so you can see the progress for revealing encounters
 for dexnav to work think I may need to make a separate mon seen value*/
 #define MON_TINT_LOGIC
-static void TintPartyMonIcons(u16 tm)
+static void TintPartyMonIcons(u16 tm, s32 itemIndex)
 {
     u8 i;
     u16 species;
@@ -1905,7 +1905,12 @@ static void TintPartyMonIcons(u16 tm)
         species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
         SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_ALL);
         SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(7, 11));
-        if (!CanSpeciesLearnTMHM(species, tm))//if cant learn tmhm grey out, 
+        
+        if (itemIndex == -2) //I'm so stupid this was so simple smh, ok, ensures that mon sprite is faded if on close tm case option
+        {
+            gSprites[spriteIdData[i]].oam.objMode = ST_OAM_OBJ_BLEND;//gMonIconPaletteIndices[species];
+        }
+        else if (!CanSpeciesLearnTMHM(species, tm))//if cant learn tmhm grey out, 
         {
             gSprites[spriteIdData[i]].oam.objMode = ST_OAM_OBJ_BLEND;
         }

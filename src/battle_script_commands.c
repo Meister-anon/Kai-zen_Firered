@@ -1448,8 +1448,8 @@ static void atk00_attackcanceler(void) //vsonic
 
     else if ((GetBattlerAbility(gBattlerTarget) == ABILITY_FOREWARN)
     //&& gBattlerAttacker == gForewarnedBattler  //spefiic condition just for forewarn, extra leway given to anticipation
-    && gBattlerAttacker == gDisableStructs[gBattlerAttacker].forewarnedBattler //redid effect realized as weas would be reset if two forewarn mon on enemy side
-    && gDisableStructs[gBattlerTarget].forewarnedMove != MOVE_UNAVAILABLE // ^ works
+    && gBattlerAttacker == gDisableStructs[gBattlerTarget].forewarnedBattler //redid effect realized as weas would be reset if two forewarn mon on enemy side
+    && gDisableStructs[gBattlerTarget].forewarnedMove != MOVE_UNAVAILABLE // ^ works //edit had wrong battler listed, forgot to properly adjust
     && gDisableStructs[gBattlerTarget].forewarnedMove != MOVE_NONE) //works perfectly
     {
         if (gCurrentMove == gDisableStructs[gBattlerTarget].forewarnedMove)
