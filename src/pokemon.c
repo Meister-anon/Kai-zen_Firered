@@ -7973,40 +7973,63 @@ bool8 TryIncrementMonLevel(struct Pokemon *mon)
     }
 }
 
-u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
+u32 CanMonLearnTMHM(struct Pokemon *mon, u16 tm)
 {
+    u16 i;
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     if (species == SPECIES_EGG)
     {
         return 0;
     }
-    else if (tm < 32) //this may be hex 32, since 32 in hex is 50 in decimal?
+    /*else if (tm < 32) //this may be hex 32, since 32 in hex is 50 in decimal?
     {
         u32 mask = 1 << tm;
-        return sTMHMLearnsets[species][0] & mask;
-    }
+        return gTMHMLearnsets[species][0] & mask;
+    }*/
     else  //actually I think this is a type split? breaking the array into 2 32 bit section? - yup
     {
-        u32 mask = 1 << (tm - 32);
-        return sTMHMLearnsets[species][1] & mask;
+        //u32 mask = 1 << (tm - 32);
+        for (i = 0; gTMHMLearnsets[species][i] != TMHM_LEARNSET_END; i++)
+        {
+            if (gTMHMLearnsets[species][i] == tm)
+                break;
+            if (gTMHMLearnsets[species][i] == TMHM_LEARN_ALL)
+                break;
+
+        }
+        if (gTMHMLearnsets[species][i] != TMHM_LEARNSET_END)
+            return TRUE; //change to a loop
+        else 
+            return FALSE;
     }
 }//ok so when I apply the tmhm expansion that does away with the bit stuff will have to adjust these
 
-u32 CanSpeciesLearnTMHM(u16 species, u8 tm) //for this belive replace with loop to check?
+u32 CanSpeciesLearnTMHM(u16 species, u16 tm) //for this belive replace with loop to check?
 {
+    u16 i;
     if (species == SPECIES_EGG)
     {
         return 0;
     }
-    else if (tm < 32)
+    /*else if (tm < 32)
     {
         u32 mask = 1 << tm;
-        return sTMHMLearnsets[species][0] & mask;
-    }
+        return gTMHMLearnsets[species][0] & mask;
+    }*/
     else
     {
-        u32 mask = 1 << (tm - 32);
-        return sTMHMLearnsets[species][1] & mask;
+        //u32 mask = 1 << (tm - 32);
+        for (i = 0; gTMHMLearnsets[species][i] != TMHM_LEARNSET_END; i++)
+        {
+            if (gTMHMLearnsets[species][i] == tm)
+                break;
+            if (gTMHMLearnsets[species][i] == TMHM_LEARN_ALL)
+                break;
+        }
+        if (gTMHMLearnsets[species][i] != TMHM_LEARNSET_END)
+            return TRUE; //change to a loop
+        else 
+            return FALSE;
     }
 }
 

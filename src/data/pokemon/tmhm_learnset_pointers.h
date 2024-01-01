@@ -160,7 +160,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_TYPHLOSION] = sTyphlosionTMHMLearnset,
     [SPECIES_TOTODILE] = sTotodileTMHMLearnset,
     [SPECIES_CROCONAW] = sCroconawTMHMLearnset,
-    [SPECIES_FERALIGATR] = sFeraligatrTMHMLearnset,
+    [SPECIES_FERALIGATOR] = sFeraligatrTMHMLearnset,
     [SPECIES_SENTRET] = sSentretTMHMLearnset,
     [SPECIES_FURRET] = sFurretTMHMLearnset,
     [SPECIES_HOOTHOOT] = sHoothootTMHMLearnset,
@@ -522,7 +522,8 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_MUSHARNA] = sMusharnaTMHMLearnset,
     [SPECIES_PIDOVE] = sPidoveTMHMLearnset,
     [SPECIES_TRANQUILL] = sTranquillTMHMLearnset,
-    [SPECIES_UNFEZANT] = sUnfezantTMHMLearnset,
+    [SPECIES_UNFEZANT_M] = sUnfezantTMHMLearnset,
+    [SPECIES_UNFEZANT_F] = sUnfezantTMHMLearnset,
     [SPECIES_BLITZLE] = sBlitzleTMHMLearnset,
     [SPECIES_ZEBSTRIKA] = sZebstrikaTMHMLearnset,
     [SPECIES_ROGGENROLA] = sRoggenrolaTMHMLearnset,
@@ -669,7 +670,8 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_SPEWPA] = sSpewpaTMHMLearnset,
     [SPECIES_VIVILLON] = sVivillonTMHMLearnset,
     [SPECIES_LITLEO] = sLitleoTMHMLearnset,
-    [SPECIES_PYROAR] = sPyroarTMHMLearnset,
+    [SPECIES_PYROAR_M] = sPyroarTMHMLearnset,
+    [SPECIES_PYROAR_F] = sPyroarTMHMLearnset,
     [SPECIES_FLABEBE] = sFlabebeTMHMLearnset,
     [SPECIES_FLOETTE] = sFloetteTMHMLearnset,
     [SPECIES_FLORGES] = sFlorgesTMHMLearnset,
@@ -679,7 +681,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_PANGORO] = sPangoroTMHMLearnset,
     [SPECIES_FURFROU] = sFurfrouTMHMLearnset,
     [SPECIES_ESPURR] = sEspurrTMHMLearnset,
-    [SPECIES_MEOWSTIC] = sMeowsticTMHMLearnset,
+    [SPECIES_MEOWSTIC] = sMeowsticMaleTMHMLearnset,
     [SPECIES_HONEDGE] = sHonedgeTMHMLearnset,
     [SPECIES_DOUBLADE] = sDoubladeTMHMLearnset,
     [SPECIES_AEGISLASH] = sAegislashTMHMLearnset,
@@ -877,7 +879,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_FROSMOTH] = sFrosmothTMHMLearnset,
     [SPECIES_STONJOURNER] = sStonjournerTMHMLearnset,
     [SPECIES_EISCUE] = sEiscueTMHMLearnset,
-    [SPECIES_INDEEDEE] = sIndeedeeTMHMLearnset,
+    [SPECIES_INDEEDEE] = sIndeedeeMaleTMHMLearnset,
     [SPECIES_MORPEKO] = sMorpekoTMHMLearnset,
     [SPECIES_CUFANT] = sCufantTMHMLearnset,
     [SPECIES_COPPERAJAH] = sCopperajahTMHMLearnset,
@@ -900,6 +902,17 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_GLASTRIER] = sGlastrierTMHMLearnset,
     [SPECIES_SPECTRIER] = sSpectrierTMHMLearnset,
     [SPECIES_CALYREX] = sCalyrexTMHMLearnset,
+
+    [SPECIES_WYRDEER] = sWyrdeerTMHMLearnset,
+    [SPECIES_KLEAVOR] = sKleavorTMHMLearnset,
+    [SPECIES_URSALUNA] = sUrsalunaTMHMLearnset,
+    [SPECIES_BASCULEGION] = sBasculegionTMHMLearnset,
+    [SPECIES_SNEASLER] = sSneaslerTMHMLearnset,
+    [SPECIES_OVERQWIL] = sOverqwilTMHMLearnset,
+    [SPECIES_ENAMORUS] = sEnamorusTMHMLearnset,
+
+    [SPECIES_CEFIREON] = sCefireonTMHMLearnset,
+    [SPECIES_FRAEYJTA] = sFraeyjtaTMHMLearnset,
     // Megas
     [SPECIES_VENUSAUR_MEGA] = sVenusaurTMHMLearnset,
     [SPECIES_CHARIZARD_MEGA_X] = sCharizardTMHMLearnset,
@@ -991,14 +1004,31 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_DARMANITAN_GALARIAN] = sDarmanitanGalarianTMHMLearnset,
     [SPECIES_YAMASK_GALARIAN] = sYamaskGalarianTMHMLearnset,
     [SPECIES_STUNFISK_GALARIAN] = sStunfiskGalarianTMHMLearnset,
+    // Hisuian Forms
+    [SPECIES_GROWLITHE_HISUIAN] = sGrowlitheHisuianTMHMLearnset,
+    [SPECIES_ARCANINE_HISUIAN] = sArcanineHisuianTMHMLearnset,
+    [SPECIES_VOLTORB_HISUIAN] = sVoltorbHisuianTMHMLearnset,
+    [SPECIES_ELECTRODE_HISUIAN] = sElectrodeHisuianTMHMLearnset,
+    [SPECIES_TYPHLOSION_HISUIAN] = sTyphlosionHisuianTMHMLearnset,
+    [SPECIES_QWILFISH_HISUIAN] = sQwilfishHisuianTMHMLearnset,
+    [SPECIES_SNEASEL_HISUIAN] = sSneaselHisuianTMHMLearnset,
+    [SPECIES_SAMUROTT_HISUIAN] = sSamurottHisuianTMHMLearnset,
+    [SPECIES_LILLIGANT_HISUIAN] = sLilligantHisuianTMHMLearnset,
+    [SPECIES_ZORUA_HISUIAN] = sZoruaHisuianTMHMLearnset,
+    [SPECIES_ZOROARK_HISUIAN] = sZoroarkHisuianTMHMLearnset,
+    [SPECIES_BRAVIARY_HISUIAN] = sBraviaryHisuianTMHMLearnset,
+    [SPECIES_SLIGGOO_HISUIAN] = sSliggooHisuianTMHMLearnset,
+    [SPECIES_GOODRA_HISUIAN] = sGoodraHisuianTMHMLearnset,
+    [SPECIES_AVALUGG_HISUIAN] = sAvaluggHisuianTMHMLearnset,
+    [SPECIES_DECIDUEYE_HISUIAN] = sDecidueyeHisuianTMHMLearnset,
+
     // Misc Forms
     // Cosplay Pikachu
-    [SPECIES_PIKACHU_COSPLAY] = sPikachuTMHMLearnset,
-    [SPECIES_PIKACHU_ROCK_STAR] = sPikachuTMHMLearnset,
-    [SPECIES_PIKACHU_BELLE] = sPikachuTMHMLearnset,
-    [SPECIES_PIKACHU_POP_STAR] = sPikachuTMHMLearnset,
-    [SPECIES_PIKACHU_PH_D] = sPikachuTMHMLearnset,
-    [SPECIES_PIKACHU_LIBRE] = sPikachuTMHMLearnset,
+    [SPECIES_PIKACHU_ROCK_STAR] = sPikachuRockStarTMHMLearnset,
+    [SPECIES_PIKACHU_BELLE] = sPikachuBelleTMHMLearnset,
+    [SPECIES_PIKACHU_POP_STAR] = sPikachuPopStarTMHMLearnset,
+    [SPECIES_PIKACHU_PH_D] = sPikachuPhdTMHMLearnset,
+    [SPECIES_PIKACHU_LIBRE] = sPikachuLibreTMHMLearnset,
     // Cap Pikachu
     [SPECIES_PIKACHU_ORIGINAL_CAP] = sPikachuTMHMLearnset,
     [SPECIES_PIKACHU_HOENN_CAP] = sPikachuTMHMLearnset,
@@ -1044,9 +1074,9 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_CASTFORM_RAINY] = sCastformTMHMLearnset,
     [SPECIES_CASTFORM_SNOWY] = sCastformTMHMLearnset,
     // Deoxys
-    [SPECIES_DEOXYS_ATTACK] = sDeoxysAttackTMHMLearnset,
-    [SPECIES_DEOXYS_DEFENSE] = sDeoxysDefenseTMHMLearnset,
-    [SPECIES_DEOXYS_SPEED] = sDeoxysSpeedTMHMLearnset,
+    [SPECIES_DEOXYS_ATTACK] = sDeoxysTMHMLearnset,
+    [SPECIES_DEOXYS_DEFENSE] = sDeoxysTMHMLearnset,
+    [SPECIES_DEOXYS_SPEED] = sDeoxysTMHMLearnset,
 
     // Burmy
     [SPECIES_BURMY_SANDY_CLOAK] = sBurmyTMHMLearnset,
@@ -1071,7 +1101,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     // Shaymin
     [SPECIES_SHAYMIN_SKY] = sShayminSkyTMHMLearnset,
     // Arceus
-    [SPECIES_ARCEUS_FIGHTING] = sArceusTMHMLearnset,
+    /*[SPECIES_ARCEUS_FIGHTING] = sArceusTMHMLearnset,
     [SPECIES_ARCEUS_FLYING] = sArceusTMHMLearnset,
     [SPECIES_ARCEUS_POISON] = sArceusTMHMLearnset,
     [SPECIES_ARCEUS_GROUND] = sArceusTMHMLearnset,
@@ -1088,6 +1118,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_ARCEUS_DRAGON] = sArceusTMHMLearnset,
     [SPECIES_ARCEUS_DARK] = sArceusTMHMLearnset,
     [SPECIES_ARCEUS_FAIRY] = sArceusTMHMLearnset,
+    */
     // Basculin
     [SPECIES_BASCULIN_BLUE_STRIPED] = sBasculinTMHMLearnset,
     // Darmanitan
@@ -1106,8 +1137,8 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_THUNDURUS_THERIAN] = sThundurusTMHMLearnset,
     [SPECIES_LANDORUS_THERIAN] = sLandorusTMHMLearnset,
     // Kyurem
-    [SPECIES_KYUREM_WHITE] = sKyuremWhiteTMHMLearnset,
-    [SPECIES_KYUREM_BLACK] = sKyuremBlackTMHMLearnset,
+    [SPECIES_KYUREM_WHITE] = sKyuremTMHMLearnset,
+    [SPECIES_KYUREM_BLACK] = sKyuremTMHMLearnset,
     // Keldeo
     [SPECIES_KELDEO_RESOLUTE] = sKeldeoTMHMLearnset,
     // Meloetta
@@ -1150,7 +1181,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_FLOETTE_ORANGE_FLOWER] = sFloetteTMHMLearnset,
     [SPECIES_FLOETTE_BLUE_FLOWER] = sFloetteTMHMLearnset,
     [SPECIES_FLOETTE_WHITE_FLOWER] = sFloetteTMHMLearnset,
-    [SPECIES_FLOETTE_ETERNAL_FLOWER] = sFloetteEternalFlowerTMHMLearnset,
+    [SPECIES_FLOETTE_ETERNAL_FLOWER] = sFloetteEternalFlowerTMHMLearnset, //seems to be identical to normal floette
     // Florges
     [SPECIES_FLORGES_YELLOW_FLOWER] = sFlorgesTMHMLearnset,
     [SPECIES_FLORGES_ORANGE_FLOWER] = sFlorgesTMHMLearnset,
@@ -1241,8 +1272,6 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     // Cramorant
     [SPECIES_CRAMORANT_GULPING] = sCramorantTMHMLearnset,
     [SPECIES_CRAMORANT_GORGING] = sCramorantTMHMLearnset,
-    // Toxtricity
-    [SPECIES_TOXTRICITY_LOW_KEY] = sToxtricityLowKeyTMHMLearnset,
     // Sinistea
     [SPECIES_SINISTEA_ANTIQUE] = sSinisteaTMHMLearnset,
     // Polteageist
@@ -1275,5 +1304,9 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     // Calyrex
     [SPECIES_CALYREX_ICE_RIDER] = sCalyrexIceRiderTMHMLearnset,
     [SPECIES_CALYREX_SHADOW_RIDER] = sCalyrexShadowRiderTMHMLearnset,
+
+    //New Mega Forms
+    [SPECIES_TORTERRA_MEGA] = sTorterraTMHMLearnset,
+    [SPECIES_MAROWAK_MEGA] = sMarowakTMHMLearnset,
 
 };

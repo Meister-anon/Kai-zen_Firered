@@ -1841,7 +1841,7 @@ bool8 ScrCmd_checkpartymove(struct ScriptContext * ctx)
             break;
         }    
                                      //CanSpeciesLearnTMHM(species, moveId)     MonKnowsMove(&gPlayerParty[i], moveId)
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanSpeciesLearnTMHM(species, moveId - ITEM_TM01))
+        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && CanSpeciesLearnTMHM(species, moveId))
         {
             gSpecialVar_Result = i;
             gSpecialVar_0x8004 = species;

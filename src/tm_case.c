@@ -186,7 +186,7 @@ static void SpriteCB_MoveTMSpriteInCase(struct Sprite * sprite);
 static void LoadTMTypePalettes(void);
 //added for new tm case
 static void DrawPartyMonIcons(void);
-static void TintPartyMonIcons(u8 tm);
+static void TintPartyMonIcons(u16 tm);
 static void DestroyPartyMonIcons(void);
 
 
@@ -849,7 +849,7 @@ static void TMCase_MoveCursor_UpdatePrintedDescription(s32 itemIndex)
 
     // update icons
     if (sSelectTMActionTasks[sTMCaseStaticResources.tmCaseMenuType] != sSelectTMActionTasks[2])
-        TintPartyMonIcons(itemId - ITEM_TM01);
+        TintPartyMonIcons(itemId);
 }
 
 // Darkens (or subsequently lightens) the blue bg tiles around the description window when a TM/HM is selected.
@@ -1895,7 +1895,7 @@ so its blacked out on route unless you've already caught the mon (or mon in evo 
 but when you see it on the route it'll reveal the mon so you can see the progress for revealing encounters
 for dexnav to work think I may need to make a separate mon seen value*/
 #define MON_TINT_LOGIC
-static void TintPartyMonIcons(u8 tm)
+static void TintPartyMonIcons(u16 tm)
 {
     u8 i;
     u16 species;

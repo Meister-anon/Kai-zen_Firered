@@ -15656,12 +15656,13 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_BUG,
         .eggGroup2 = EGG_GROUP_BUG,
-        .abilities = {ABILITY_HEATPROOF, ABILITY_NONE},
+        .abilities = {ABILITY_HEATPROOF, ABILITY_SWARM},
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
     },//GAVE HEATPROOF cuz apparently steel armor was to protect against main predator a fire type, buffing heatproof to be /4 damage since this is 4x weak
     //and just being neutral for mon with normal weakness isn't exactly "heat proof"
+    //put swarm back, since made in a pinch more accessible, and heatproof was reduced back w super change
 
     [SPECIES_DEINO] =
     { 

@@ -1900,7 +1900,7 @@ static u8 CanMonLearnTMTutor(struct Pokemon *mon, u16 item, u8 tutor)
 
     if (item >= ITEM_TM01_FOCUS_PUNCH)
     {
-        if (CanMonLearnTMHM(mon, item - ITEM_TM01_FOCUS_PUNCH))
+        if (CanMonLearnTMHM(mon, item))
             move = ItemIdToBattleMoveId(item);
         else
             return CANNOT_LEARN_MOVE;
@@ -3095,7 +3095,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     for (j = 0; j < FIELD_MOVE_TELEPORT; ++j) //need do pointer logic to check sPartyMenuInternal->actions, to make sure its not more than 9 entries for this
     {
         //should prevent learnable hms from showing in  list until you have the badge to use them(working)
-            if (CanSpeciesLearnTMHM(species, ((j + ITEM_HM01_CUT) - ITEM_TM01)) && ShouldDisplayHMFieldMove(j)
+            if (CanSpeciesLearnTMHM(species, ((j + ITEM_HM01_CUT))) && ShouldDisplayHMFieldMove(j)
              && sPartyMenuInternal->numActions <= 5) 
                 AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, j + MENU_FIELD_MOVES);
                 //break;since I'm trying to check all didn't actually need the break, plus I only have 1 loop not 2
@@ -4991,7 +4991,7 @@ u16 ItemIdToBattleMoveId(u16 item)
     u16 tmNumber = item - ITEM_TM01_FOCUS_PUNCH;
 
     return sTMHMMoves[tmNumber];
-}
+}//mt1 -tm1 is 0, so it lines up with the first value in the array
 
 bool8 IsMoveHm(u16 move)
 {
