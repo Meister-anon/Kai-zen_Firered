@@ -16,19 +16,22 @@ struct Item
     u8 importance;
     u8 exitsBagOnUse;
     u8 pocket;
-    u8 type;
-    ItemUseFunc fieldUseFunc;
-    u8 battleUsage;
-    ItemUseFunc battleUseFunc;
-    u8 secondaryId;
-};
-
+    u8 type;    //first glance this seems to just be about how the menu callback works, i.e fadeout etc., will copy emerald setup, value 1 seems ot be from party, other values seem to be use from bag?
+    ItemUseFunc fieldUseFunc; //seems only value 1 and 2 have an effect, otherwise just executes a default behavior? idk, seems work diff for pokeballs
+    //u8 battleUsage;     //doesn't exist in emerald, searched seems this is only relevant to firered because its only used for contextmenu i.e help menu, which I've removed
+    ItemUseFunc battleUseFunc; //meaning I could remove this to save room for adding fling logic, logic for it is only necessary because json, so just remove and it'll be fine
+    u8 secondaryId; //actually battleUsage doesnt seem to have special json rule so maybe not an issue?
+    u8 flingPower;
+};//got battleusage wrong context menu isn't help menu, it tells it what strings to display i.e use, give, cancel, etc. instead of usage value try to get to check for battle usage func not 0
+//replacing with battleusefunc check worked, can remove
+//removed item.json values for json_data_rules.mk able to build without battleUsage, but still follows json rull for moveinfo etc.
 struct BagPocket
 {
     struct ItemSlot *itemSlots;
     u8 capacity;
 };
 
+extern const struct Item gItems[];
 extern struct BagPocket gBagPockets[];
 
 void GetBerryCountString(u8* dst, const u8* berryName, u32 quantity);
@@ -56,7 +59,7 @@ u8 ItemId_GetUnknownValue(u16 itemId);
 u8 ItemId_GetPocket(u16 itemId);
 u8 ItemId_GetType(u16 itemId);
 ItemUseFunc ItemId_GetFieldFunc(u16 itemId);
-u8 ItemId_GetBattleUsage(u16 itemId);
+u8 ItemId_GetBattleUsage(u16 itemId);   //not using now, usnig battlfunc check instead
 ItemUseFunc ItemId_GetBattleFunc(u16 itemId);
 u8 ItemId_GetSecondaryId(u16 itemId);
 u16 itemid_get_market_price(u16 itemId);

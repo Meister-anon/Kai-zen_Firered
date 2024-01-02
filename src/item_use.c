@@ -126,6 +126,7 @@ static const u8 sUnref_83E27B4[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
+//means only type values of value 1 and 2 have any real meaning?
 static void (*const sExitCallbackByItemType[])(void) = {
     CB2_ShowPartyMenuForItemUse,
     CB2_ReturnToField,
@@ -137,9 +138,9 @@ static void Task_FadeOuFromBackToField(u8 taskId)
 {
     u8 itemType;
     if (gSpecialVar_ItemId == ITEM_ENIGMA_BERRY)
-        itemType = gTasks[taskId].data[4] - 1;
+        itemType = gTasks[taskId].data[4] - 1; //use item effect?
     else
-        itemType = ItemId_GetType(gSpecialVar_ItemId) - 1;
+        itemType = ItemId_GetType(gSpecialVar_ItemId) - 1; //otherwise use type field
     if (GetPocketByItemId(gSpecialVar_ItemId) == POCKET_BERRY_POUCH)
     {
         BerryPouch_SetExitCallback(sExitCallbackByItemType[itemType]);

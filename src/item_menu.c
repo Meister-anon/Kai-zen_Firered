@@ -1353,7 +1353,8 @@ static void OpenContextMenu(u8 taskId)
             sContextMenuItemsPtr = sContextMenuItemsBuffer;
             sContextMenuNumItems = 2;
         }
-        else if (ItemId_GetBattleUsage(gSpecialVar_ItemId))
+        //else if (ItemId_GetBattleUsage(gSpecialVar_ItemId)) //only important to check not 0, so thought to replace w battlefunc check instead
+        else if (ItemId_GetBattleFunc(gSpecialVar_ItemId)) 
         {
             sContextMenuItemsPtr = sContextMenuItems_BattleUse;
             sContextMenuNumItems = 2;

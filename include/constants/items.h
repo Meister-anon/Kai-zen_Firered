@@ -702,6 +702,15 @@
 #define NUM_TECHNICAL_MACHINES 50 //change to 120 later  / or more plan to add on to tms I think for ease spreading certain moves
 #define NUM_HIDDEN_MACHINES     9
 
+//copy from emerald for replacing the numerical values in type field in items.json
+// Item type IDs (used to determine the exit callback)
+//#define ITEM_USE_MAIL             0
+#define ITEM_USE_PARTY_MENU       1
+#define ITEM_USE_FIELD            2
+#define ITEM_USE_PBLOCK_CASE      3
+#define ITEM_USE_BAG_MENU         4 // No exit callback, stays in bag menu / firered seem to use a nonconstant value, but its used with switch cases with fallthrough 
+#define ITEM_USE_PARTY_MENU_MOVES 5 //so I believe the overall effect should be identical?  mostly seen in pokeball variants
+
 // Check if the item is one that can be used on a Pokemon.
 #define IS_POKEMON_ITEM(item) ((item) > ITEM_PREMIER_BALL && (item) < ITEM_0B2)
 #define IS_POKEMON_ITEM2(item) ((item) > ITEM_EV_SHACKLES && (item) < ITEM_SEA_INCENSE)

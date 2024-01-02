@@ -1176,6 +1176,7 @@ static const u16 sTMHMMoves_Duplicate[] =
     MOVE_ROCK_SMASH,
     MOVE_WATERFALL,
     MOVE_DIVE,
+    MOVE_ROCK_CLIMB,
 };
 
 enum
@@ -1353,6 +1354,7 @@ static const u8 *const sUnionRoomTradeMessages[] =
 //actually think I can't do that, as it needs to use move id values
 //pretty sure this is used to translate tm ids to the move associated with them
 //as its ordered by tm id value/order here.  so can't change
+#define TMHM_LIST
 static const u16 sTMHMMoves[] =
 {
     MOVE_FOCUS_PUNCH,
@@ -1413,4 +1415,5 @@ static const u16 sTMHMMoves[] =
     MOVE_ROCK_SMASH,
     MOVE_WATERFALL,
     MOVE_DIVE,
+    MOVE_ROCK_CLIMB,
 };

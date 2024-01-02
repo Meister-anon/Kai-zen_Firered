@@ -16,6 +16,7 @@ EWRAM_DATA struct BagPocket gBagPockets[NUM_BAG_POCKETS] = {};
 void SortAndCompactBagPocket(struct BagPocket * pocket);
 
 // Item descriptions and data
+#include "data/text/item_descriptions.h"  //after json removal use this  vsonic
 #include "data/items.h"
 // don't have this file right now, guess becuase I ran clean, and haven't built my items file yet.
 u16 GetBagItemQuantity(u16 * ptr)
@@ -673,7 +674,7 @@ ItemUseFunc ItemId_GetFieldFunc(u16 itemId)
 
 bool8 ItemId_GetBattleUsage(u16 itemId)
 {
-    return gItems[SanitizeItemId(itemId)].battleUsage;
+    return 0; //gItems[SanitizeItemId(itemId)].battleUsage;
 }
 
 ItemUseFunc ItemId_GetBattleFunc(u16 itemId)

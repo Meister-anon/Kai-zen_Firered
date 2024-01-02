@@ -1924,6 +1924,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   from ee which uses gMOVE_IDDescription instead... because it isn't locked to the json
   //so would need to remove the items json, and remove the item data from the json_data_rules.mk file   make file
 
+  //converted items.json to c file, thinking that'd give me more flex but still need to order tms all in one spot,
+  //but there is some small benefit I guess, I can define things in my constants item file without needing
+  to add it to my items.h without breaking building but that' stil nto something I'd want to do for sake of not forgetting/losing track of things.
+
   
   foudn issue with pressure/high pressure, seems the attack cancel effect is running on wrongbattler for some reason
   its affecting the mon with pressure/hi-pressure or its just putting the animation on the wrong battler
@@ -2239,6 +2243,11 @@ that way you don't need to keep flying aruond to different places looking for th
  goto ITEMEFFECT_DATA
 
  goto FIX_WARP_RESPAWN_LOGIC //for heal warp location, on whiteout, and think relevant to teleport
+
+
+ goto TMHM_LIST //party_menu.h place for listing of tmhms add on as needed as well as update technical_machine and hm count
+ /*#define NUM_TECHNICAL_MACHINES 50 //change to 120 later  in item constants file
+#define NUM_HIDDEN_MACHINES     9*/
 
  /*
 
