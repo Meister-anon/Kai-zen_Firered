@@ -759,8 +759,9 @@ static const u8 sText_AuraFlaredToLife[] = _("{B_DEF_NAME_WITH_PREFIX}'s aura fl
 static const u8 sText_AirLockActivates[] = _("The effects of weather\ndisappeared.");
 static const u8 sText_DefeatistActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} lost the will to fight\nand is ready to run!");
 static const u8 sText_PressureActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is exerting its\npressure!");
-static const u8 sText_PressureAtkCancel[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY}\nmade {B_SCR_ACTIVE_NAME_WITH_PREFIX} too afraid to attack!");
-static const u8 sText_IronWillLostResolve[] =_("{B_ATK_NAME_WITH_PREFIX} lost its resolve\nin the face of {B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY}!");
+static const u8 sText_PressureAtkCancel[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY} made\n{B_SCR_ACTIVE_NAME_WITH_PREFIX} too afraid to attack!");
+static const u8 sText_IronWillLostResolve[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_DEF_ABILITY} made\n{B_ATK_NAME_WITH_PREFIX} lose its resolve!");
+
 //need fix the buffer make a function to prooperly buffer values and do cancel -done need test
 static const u8 sText_DarkAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na dark aura!");
 static const u8 sText_FairyAuraActivates[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} is radiating\na fairy aura!");
@@ -1558,6 +1559,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_COMATOSE] = STRINGID_COMATOSEENTERS,
     [B_MSG_SWITCHIN_CORRUPTION] = STRINGID_CORRUPTIONENTERS,
     [B_MSG_SWITCHIN_STENCH] = STRINGID_STENCHENTERS,
+    [B_MSG_SWITCHIN_PRESSURE] = STRINGID_PRESSUREENTERS,
     /*[B_MSG_SWITCHIN_MOLDBREAKER] = STRINGID_MOLDBREAKERENTERS,
     [B_MSG_SWITCHIN_TERAVOLT] = STRINGID_TERAVOLTENTERS,
     [B_MSG_SWITCHIN_TURBOBLAZE] = STRINGID_TURBOBLAZEENTERS,

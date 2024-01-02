@@ -1926,12 +1926,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   //converted items.json to c file, thinking that'd give me more flex but still need to order tms all in one spot,
   //but there is some small benefit I guess, I can define things in my constants item file without needing
-  to add it to my items.h without breaking building but that' stil nto something I'd want to do for sake of not forgetting/losing track of things.
+  to add it to my items.h without breaking building but that's still nto something I'd want to do for sake of not forgetting/losing track of things.
 
   
   foudn issue with pressure/high pressure, seems the attack cancel effect is running on wrongbattler for some reason
   its affecting the mon with pressure/hi-pressure or its just putting the animation on the wrong battler
   //could be trigging correctly otherwise
+
+  -fixed animeation, and for onw deciding notouse exert pressre message for surprise effect
 
   was also no enter message no "exerting itrs pressure"
 

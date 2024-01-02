@@ -265,7 +265,9 @@ void PressurePPLoseOnUsingImprison(u8 attacker)//it was so simple *facepalm*
 
     for (i = 0; i < gBattlersCount; ++i)
     {
-        if (atkSide != GetBattlerSide(i) && gBattleMons[i].ability == ABILITY_PRESSURE)
+        if (atkSide != GetBattlerSide(i) && (gBattleMons[i].ability == ABILITY_PRESSURE|| 
+        gBattleMons[i].ability == ABILITY_UNNERVE || gBattleMons[i].ability ==  ABILITY_AS_ONE_ICE_RIDER 
+        || gBattleMons[i].ability == ABILITY_AS_ONE_SHADOW_RIDER))
         {
             for (j = 0; j < MAX_MON_MOVES && gBattleMons[attacker].moves[j] != MOVE_IMPRISON; ++j);
             if (j != MAX_MON_MOVES)
@@ -4091,7 +4093,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 && IsBlackFogNotOnField()) //was gonna prevent work on switch but that kinda ruins it?
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
-                gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
+                gBattlescriptCurrInstr = BattleScript_MovePressureCanceler; //isue was base animation was made tobe played from target side not attacker, had make new version for this
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
                 {
@@ -6033,6 +6035,22 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                     ++effect;
                 }
+            /*case ABILITY_PRESSURE:
+                if (!gSpecialStatuses[battler].switchInAbilityDone)
+                {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PRESSURE;
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                    ++effect;
+                }
+            case ABILITY_HI_PRESSURE:
+                if (!gSpecialStatuses[battler].switchInAbilityDone)
+                {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PRESSURE;
+                    gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+                    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                    ++effect;
+                }*/ //on fence about using as added effects to unnerve etc. has more impact if you don't initially know of it
             case ABILITY_SCREEN_CLEANER:
                 if (!gSpecialStatuses[battler].switchInAbilityDone && TryRemoveScreens(battler))
                 {

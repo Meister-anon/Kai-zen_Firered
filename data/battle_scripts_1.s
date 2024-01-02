@@ -7603,15 +7603,15 @@ BattleScript_MoveUsedIsParalyzed::
 BattleScript_MovePressureCanceler::
 	printstring STRINGID_PRESSUREATKCANCEL
 	waitmessage 0x40
-	playanimation BS_ATTACKER, B_ANIM_MON_SCARED, NULL
+	playanimation BS_ATTACKER, B_ANIM_TARGET_SCARED, NULL
 	cancelmultiturnmoves BS_ATTACKER
 	goto BattleScript_MoveEnd
 
 BattleScript_AbilityEffectIronWill::
 	printstring STRINGID_IRON_WILL
 	waitmessage 0x40
-	playanimation BS_ATTACKER, B_ANIM_MON_SCARED, NULL
-	cancelmultiturnmoves BS_ATTACKER
+	playanimation BS_ATTACKER, B_ANIM_TARGET_SCARED, NULL
+	@cancelmultiturnmoves BS_ATTACKER	@shouldnt cancel as attack is still going off just weakened
 	return
 
 BattleScript_PowderMoveNoEffect::

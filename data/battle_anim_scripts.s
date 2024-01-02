@@ -922,6 +922,7 @@ gBattleAnims_General::		@aligns with constants/battle_anim.h
 	.4byte General_BeakBlastSetUp           @ B_ANIM_BEAK_BLAST_SETUP
 	.4byte General_ShellTrapSetUp           @ B_ANIM_SHELL_TRAP_SETUP
 	.4byte General_ZMoveActivate            @ B_ANIM_ZMOVE_ACTIVATE
+	.4byte General_TargetMonScared			@ B_ANIM_TARGET_SCARED    /for pressure etc.
 
 gBattleAnims_Special::
 	.4byte Special_LevelUp					@ B_ANIM_LVL_UP
@@ -25144,6 +25145,23 @@ General_MonScared:: @ 81D628A
 	createvisualtask AnimTask_StretchTargetUp, 3, 
 	waitforvisualfinish
 	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 0, 4, 2, 10, 0, 26336
+	waitforvisualfinish
+	end
+
+General_TargetMonScared:: @ 81D628A
+	@createvisualtask AnimTask_SafariOrGhost_DecideAnimSides, 2, 1
+	@waitforvisualfinish
+	loadspritegfx ANIM_TAG_SWEAT_BEAD
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_TARGET, 0, 4, 2, 0, 10, 26336
+	createvisualtask AnimTask_ShakeMon2, 2, 1, 2, 0, 10, 1
+	delay 20
+	createsprite gSprayWaterDropletSpriteTemplate, ANIM_ATTACKER, 5, 0, 1
+	playsewithpan SE_M_SKETCH, SOUND_PAN_TARGET
+	createsprite gSprayWaterDropletSpriteTemplate, ANIM_ATTACKER, 5, 1, 1
+	createvisualtask AnimTask_ShakeMon2, 2, 1, 4, 0, 5, 1
+	createvisualtask AnimTask_StretchAttackerUp, 3, 
+	waitforvisualfinish
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_TARGET, 0, 4, 2, 10, 0, 26336
 	waitforvisualfinish
 	end
 

@@ -545,6 +545,7 @@
 #define B_ANIM_BEAK_BLAST_SETUP         0x28
 #define B_ANIM_SHELL_TRAP_SETUP         0x29
 #define B_ANIM_ZMOVE_ACTIVATE           0x2A // Using Z Moves
+#define B_ANIM_TARGET_SCARED            0x2B //scared animation for pressure/hi-pressure attempt
 
 // special animations table
 #define B_ANIM_LVL_UP                   0x0
