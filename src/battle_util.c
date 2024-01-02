@@ -243,7 +243,8 @@ void PressurePPLose(u8 target, u8 attacker, u16 move)
             if (gBattleMons[attacker].pp[i]) //current pp not 0
             {
                 --gBattleMons[attacker].pp[i];
-                --gBattleMons[attacker].pp[i];
+                if (gBattleMons[attacker].pp[i])
+                    --gBattleMons[attacker].pp[i];
             }
                 
             if (!(gBattleMons[attacker].status2 & STATUS2_TRANSFORMED)
@@ -285,8 +286,11 @@ void PressurePPLoseOnUsingImprison(u8 attacker)//it was so simple *facepalm*
             {
                 imprisonPos = j;
                 if (gBattleMons[attacker].pp[j])
+                {
                     --gBattleMons[attacker].pp[j];
-                --gBattleMons[attacker].pp[j];
+                    if (gBattleMons[attacker].pp[j]) //do twice if wouldn't make 0
+                        --gBattleMons[attacker].pp[j];
+                }
             }
         }
     }
