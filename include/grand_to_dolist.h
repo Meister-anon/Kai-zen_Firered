@@ -1923,6 +1923,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   from ee which uses gMOVE_IDDescription instead... because it isn't locked to the json
   //so would need to remove the items json, and remove the item data from the json_data_rules.mk file   make file
+
+  
+  foudn issue with pressure/high pressure, seems the attack cancel effect is running on wrongbattler for some reason
+  its affecting the mon with pressure/hi-pressure or its just putting the animation on the wrong battler
+  //could be trigging correctly otherwise
+
+  was also no enter message no "exerting itrs pressure"
+
   
 
   //from battle_main.c field endturn function goes before battlerendturn
