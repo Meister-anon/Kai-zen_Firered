@@ -4091,8 +4091,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE)
                 && (Random() % 4) == 1) //1 - 5
                 && IsBlackFogNotOnField()
-                GetBattlerAbility(gBattlerAttacker) != ABILITY_PRESSURE
-                GetBattlerAbility(gBattlerAttacker) != ABILITY_HI_PRESSURE) //pressure counter play
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_PRESSURE
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_HI_PRESSURE) //pressure counter play
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler; //isue was base animation was made tobe played from target side not attacker, had make new version for this
@@ -4108,8 +4108,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             else if (((GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE) //for legendaries only
                 && (Random() % 4) == 1) //1 in 4 //too high, think will keep same level cancel, only dif will be amount of pp lost
                 && IsBlackFogNotOnField()
-                GetBattlerAbility(gBattlerAttacker) != ABILITY_PRESSURE
-                GetBattlerAbility(gBattlerAttacker) != ABILITY_HI_PRESSURE)
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_PRESSURE
+                && GetBattlerAbility(gBattlerAttacker) != ABILITY_HI_PRESSURE)
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
