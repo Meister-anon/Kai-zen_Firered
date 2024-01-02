@@ -10779,7 +10779,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FIELD,
         .abilities = {ABILITY_PRESSURE, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_GUTS, ABILITY_HI_PRESSURE},
+            .abilityHidden = {ABILITY_GUTS, ABILITY_SNOW_CLOAK},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
@@ -15458,10 +15458,10 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         .abilities = {ABILITY_DEFIANT, ABILITY_INNER_FOCUS},
-        .abilityHidden = {ABILITY_HI_PRESSURE, ABILITY_NONE},
+        .abilityHidden = {ABILITY_PRESSURE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-    },//GIVE Hi pressure ability
+    },//GIVE Hi pressure ability //change mind normal pressure
 
     [SPECIES_BOUFFALANT] =
     { 

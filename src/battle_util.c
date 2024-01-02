@@ -4077,7 +4077,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MoveUsedIsParalyzed;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE)       
                 {
                     ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
@@ -4089,13 +4089,15 @@ u8 AtkCanceller_UnableToUseMove(void)
             break;
         case CANCELLER_PRESSURE: // new pressure effect
             if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE)
-                && (Random() % 6) == 1)
-                && IsBlackFogNotOnField()) //was gonna prevent work on switch but that kinda ruins it?
+                && (Random() % 4) == 1) //1 - 5
+                && IsBlackFogNotOnField()
+                GetBattlerAbility(gBattlerAttacker) != ABILITY_PRESSURE
+                GetBattlerAbility(gBattlerAttacker) != ABILITY_HI_PRESSURE) //pressure counter play
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler; //isue was base animation was made tobe played from target side not attacker, had make new version for this
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE)          
                 {
                     ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
@@ -4104,13 +4106,15 @@ u8 AtkCanceller_UnableToUseMove(void)
                 effect = 1;
             }
             else if (((GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE) //for legendaries only
-                && (Random() % 4) == 1)
-                && IsBlackFogNotOnField())
+                && (Random() % 4) == 1) //1 in 4 //too high, think will keep same level cancel, only dif will be amount of pp lost
+                && IsBlackFogNotOnField()
+                GetBattlerAbility(gBattlerAttacker) != ABILITY_PRESSURE
+                GetBattlerAbility(gBattlerAttacker) != ABILITY_HI_PRESSURE)
             {
                 gProtectStructs[gBattlerAttacker].prlzImmobility = 1;
                 gBattlescriptCurrInstr = BattleScript_MovePressureCanceler;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE) //would be any time miss, with ANY attack, so don't really want that            
+                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RAGE)       
                 {
                     ClearRageStatuses(gBattlerAttacker);
                     BattleScriptPushCursor();
