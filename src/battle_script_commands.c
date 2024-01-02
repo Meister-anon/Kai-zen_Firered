@@ -1387,6 +1387,24 @@ static void atk00_attackcanceler(void) //vsonic
         return;
     }
 
+    if (GetBattlerAbility(gBattlerTarget) == ABILITY_IRON_WILL
+        && IsBlackFogNotOnField()
+        && !gProtectStructs[gBattlerAttacker].ironwill //sinceit returns needs value to allow skip so doesnt loop
+        && gBattlerTarget != gBattlerAttacker) //need to ensure not self target
+            {
+                if ((Random() % 5 < 2) //40%  //was 5
+                && gBattleMoves[gCurrentMove].power) //only non status moves
+                {
+                    gProtectStructs[gBattlerAttacker].ironwill++;
+                    gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+                    gDynamicBasePower = (gDynamicBasePower * 75) / 100;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AbilityEffectIronWill;
+                    return;
+                } //should do dmg drop but not cancel move
+
+            } //moved effect out here, as otherwise caused freeze
+
     if (TryAegiFormChange())
         return;
 

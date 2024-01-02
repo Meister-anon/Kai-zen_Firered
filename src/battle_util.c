@@ -4091,6 +4091,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE)
                 && (Random() % 4) == 1) //1 - 5
                 && IsBlackFogNotOnField()
+                && gBattlerTarget != gBattlerAttacker
                 && GetBattlerAbility(gBattlerAttacker) != ABILITY_PRESSURE
                 && GetBattlerAbility(gBattlerAttacker) != ABILITY_HI_PRESSURE) //pressure counter play
             {
@@ -4108,6 +4109,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             else if (((GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE) //for legendaries only
                 && (Random() % 4) == 1) //1 in 4 //too high, think will keep same level cancel, only dif will be amount of pp lost
                 && IsBlackFogNotOnField()
+                && gBattlerTarget != gBattlerAttacker
                 && GetBattlerAbility(gBattlerAttacker) != ABILITY_PRESSURE
                 && GetBattlerAbility(gBattlerAttacker) != ABILITY_HI_PRESSURE)
             {
@@ -4141,7 +4143,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_IRON_WILL:
-        if (GetBattlerAbility(gBattlerTarget) == ABILITY_IRON_WILL)
+        if (GetBattlerAbility(gBattlerTarget) == ABILITY_IRON_WILL
+        && gBattlerTarget != gBattlerAttacker) //need to ensure not self target
             {
                 if ((Random() % 7 == 3)
                 && IsBlackFogNotOnField())
@@ -4157,13 +4160,6 @@ u8 AtkCanceller_UnableToUseMove(void)
                     }
                     effect = 1;
                 }
-                else if (Random() % 5 < 2) //40%
-                {
-                    gDynamicBasePower = gBattleMoves[gCurrentMove].power;
-                    gDynamicBasePower = (gDynamicBasePower * 75) / 100;
-                    gBattlescriptCurrInstr = BattleScript_AbilityEffectIronWill;
-                } //should do dmg drop but not cancel move
-
             }
             ++gBattleStruct->atkCancellerTracker;
             break;

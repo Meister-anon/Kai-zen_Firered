@@ -328,6 +328,7 @@ struct ProtectStruct
              u32 touchedProtectLike : 1;
              u32 obstructed : 1;
              u32 disableEjectPack : 1;    
+             u8 ironwill; //for ability 
              u16 fieldE;
 };
 
