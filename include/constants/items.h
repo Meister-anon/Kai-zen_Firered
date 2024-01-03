@@ -354,7 +354,7 @@
 #define ITEM_TM48 336
 #define ITEM_TM49 337
 #define ITEM_TM50 338
-#define ITEM_HM01 339
+#define ITEM_HM01 339 //end of tms
 #define ITEM_HM02 340
 #define ITEM_HM03 341
 #define ITEM_HM04 342
@@ -415,6 +415,64 @@
 #define ITEM_TM48_SKILL_SWAP ITEM_TM48
 #define ITEM_TM49_SNATCH ITEM_TM49
 #define ITEM_TM50_OVERHEAT ITEM_TM50 //expand and add onto list at bottom of file
+
+//razor leaf
+//infestation
+//sandtomb
+//fire spin
+//whirlpool
+//FIRE PUnch
+//thunder punch
+//ice punch
+//shadow punch
+//fire fang
+//thunder fang
+//ice fang
+//tri-attack
+//solar blade
+//rage
+//megapunch
+//mega kick
+//teleport - for when update teleport effect
+//double edge
+//magic guard
+//add gen 4 tms above 50 about 100 total
+//work up
+//venoshock
+//sleep talk 
+//snore
+//volt switch
+//rock polish
+//aurora veil
+//dazzling gleam
+//confide
+//wild charge
+//all elemental slash variants
+//frost breath
+//flame charge ?
+//solar blade
+//rock tomb
+//icicle spear
+//fake tears
+//weather ball?
+//beat up
+//heat wave  i.e fire surf
+//pledge moves
+//terrain moves
+//smack down
+//bug bite
+//knock off
+//haze
+//future sight
+//dual wing
+//MOVE_HONE_CLAWS
+//uproar
+//gravity
+
+//keep in mind also expanding learnsets
+//so more moves will be there too
+//can't put too much in tms  or learnsets wont feel unique
+
 #define ITEM_HM01_CUT ITEM_HM01
 #define ITEM_HM02_FLY ITEM_HM02
 #define ITEM_HM03_SURF ITEM_HM03
@@ -618,7 +676,7 @@
 #define ITEM_ROSE_INCENSE 390
 #define ITEM_LUCK_INCENSE 391
 #define ITEM_PURE_INCENSE 392
-// Plates
+// Plates          - changed arceus so not using these
 #define ITEM_INSECT_PLATE 322
 #define ITEM_DREAD_PLATE 323
 #define ITEM_DRACO_PLATE 324
