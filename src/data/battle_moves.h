@@ -1173,10 +1173,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_RAZOR_LEAF] =
     {
         .effect = EFFECT_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_GRASS,
         .accuracy = 95,
-        .pp = 25,
+        .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_BOTH,
         .priority = 0,
@@ -2534,7 +2534,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 [MOVE_SLASH] =
 {
     .effect = EFFECT_HIT,
-    .power = 70,
+    .power = 75,
     .type = TYPE_NORMAL,
     .accuracy = 95,
     .pp = 20,
@@ -5162,8 +5162,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_MUDDY_WATER] =
     {
-        .power = 95,
-        .effect = EFFECT_ACCURACY_DOWN_HIT,
+        .power = 65, //95
+        .effect = EFFECT_TWO_TYPED_MOVE,  //EFFECT_TWO_TYPED_MOVE    EFFECT_ACCURACY_DOWN_HIT
         .type = TYPE_WATER,
         .accuracy = 85,
         .pp = 10,
@@ -5172,8 +5172,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .argument = TYPE_GROUND,
     },//think want to make into two typed move, make custom effect so can set accuracy drop in bs would drop power to compensate
     //thinking water//ground bp 65, would still be strong as most things weak to water are also weak to ground
+    //can potentially do accuracy drop with call_if?  since tink two typed effect doesn't actually set anything to move effect?
+    //works!  two typed move and also drops accuracy
     
 
     [MOVE_BULLET_SEED] =
@@ -6282,7 +6285,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_NIGHT_SLASH] =
     {
         .effect = EFFECT_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_DARK,
         .accuracy = 95,
         .pp = 20,
@@ -6604,7 +6607,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SHADOW_CLAW] =
     {
         .effect = EFFECT_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_GHOST,
         .accuracy = 95,
         .pp = 20,
@@ -6691,7 +6694,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_PSYCHO_CUT] =
     {
         .effect = EFFECT_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 20,
@@ -6885,7 +6888,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_CROSS_POISON] =
     {
         .effect = EFFECT_POISON_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_POISON,
         .accuracy = 95,
         .pp = 20,

@@ -1392,7 +1392,7 @@ static void atk00_attackcanceler(void) //vsonic
         && !gProtectStructs[gBattlerAttacker].ironwill //sinceit returns needs value to allow skip so doesnt loop
         && gBattlerTarget != gBattlerAttacker) //need to ensure not self target
             {
-                if ((Random() % 5 < 2) //40%  //was 5
+                if ((Random() % 5 < 2) //40% 
                 && gBattleMoves[gCurrentMove].power) //only non status moves
                 {
                     gProtectStructs[gBattlerAttacker].ironwill++;
@@ -17999,7 +17999,12 @@ void BS_call_if(void) //comparing to jumpifholdeffect
             if (gCurrentMove == MOVE_ROCK_SMASH)
                 gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
                 gBattlescriptCurrInstr = cmd->nextInstr;
-                break;           
+                break;       
+            case EFFECT_TWO_TYPED_MOVE:
+            if (gCurrentMove == MOVE_MUDDY_WATER)
+                gBattleScripting.moveEffect = MOVE_EFFECT_ACC_MINUS_1;
+                gBattlescriptCurrInstr = cmd->nextInstr;
+                break;    
             case EFFECT_PARALYZE:
             if ((IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_ELECTRIC) && gBattleMoves[gCurrentMove].type == TYPE_ELECTRIC)
             && gBattleMoves[gCurrentMove].split == SPLIT_STATUS) //for thunder wave
@@ -18072,6 +18077,10 @@ void BS_getmoveeffect(void)//transfer move effects mostly for multihit but also 
         case EFFECT_TARGET_TYPE_DAMAGE:
             if (gCurrentMove == MOVE_ROCK_SMASH)
                 gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
+            break;
+        case EFFECT_TWO_TYPED_MOVE:
+            if (gCurrentMove == MOVE_MUDDY_WATER)
+                gBattleScripting.moveEffect = MOVE_EFFECT_ACC_MINUS_1;
             break;
         case EFFECT_SPEED_DOWN_HIT:
         gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;

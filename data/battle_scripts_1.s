@@ -2589,6 +2589,7 @@ BattleScript_HitFromCritCalc::
 	typecalc	@typecalc has issue its only reading first type for some reason, also some other issue with wrap animation? effect? @something weirder absorb always not effective ghost moves always no effect against things it should effect
 	call_if EFFECT_ROLLOUT	@somehow not working its being triggered everytime, when it shouldnt? thought that was a thing but then ran clean and no issue? / change to use nativeargs seems fine now?
 	call_if EFFECT_REVENGE	@ double dmg for revenge effects
+	call_if EFFECT_TWO_TYPED_MOVE	@for muddy water i.e two typed moves that need do extra effect etc. go throw seteffect w chance, works for simple things only setting move effect
 	adjustnormaldamage	@THIS was the issue, forgot the currinstr increment *facepalm so obviously it couldnt continue passed this to animation
 	pause 0x5	@was put after every adjustnormaldamage script, as added playcry pause is to clear values
 BattleScript_HitFromAtkAnimation::
