@@ -1928,6 +1928,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //but there is some small benefit I guess, I can define things in my constants item file without needing
   to add it to my items.h without breaking building but that's still nto something I'd want to do for sake of not forgetting/losing track of things.
 
+  //transitioned the files moved everything over, but now realize its untracked??
+  asked in pret issue was the .gitignore file, it makes things not track/ignored by git,
+  which makes sense as the file was previously derivitive of the json file
+
+  so  for removing anything from json gonig forward
+  process is removing the json.txt file of said name,  renaming the  .json to .h
+  and removing the rules in json_data_rules.mk  and finally removing the created file name from the .gitignore
+
   
   foudn issue with pressure/high pressure, seems the attack cancel effect is running on wrongbattler for some reason
   its affecting the mon with pressure/hi-pressure or its just putting the animation on the wrong battler

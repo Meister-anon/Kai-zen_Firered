@@ -8,7 +8,7 @@
 
 #$(C_BUILDDIR)/item.o: c_dep += $(DATA_C_SUBDIR)/items.h
 
-#i think the json.txt file is the source fo json stuff? so I need to remove the items.json.txt before I can get rid of json for items?
+#i think the json.txt file is the source fo json stuff think its the inja file? so I need to remove the items.json.txt before I can get rid of json for items?
 #confirmed removed json.txt which was instruction file, and renamed items.json to items.h and works
 #also required removal of generated items.h in data file beforehand, to prevent duplicate
 
