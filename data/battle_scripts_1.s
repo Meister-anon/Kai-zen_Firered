@@ -2560,19 +2560,10 @@ BattleScript_EffectPlaceholder:
 	printstring STRINGID_NOTDONEYET
 	goto BattleScript_MoveEnd
 
-@vsonic tracking down battle bug
-@changes I've made have had an effect so it means the game is actually IN this script
-@but i'm also confused on what its dooing with the weird wrap affect,I assumed scripts were out of alignment and it was going to dif effect
-@but that can't be right?
-@seems to be happening on switchin/ battle start?
 BattleScript_EffectHit::
-	jumpifmove MOVE_SPLISHY_SPLASH, BattleScript_EffectParalyzeHit
-	jumpifmove MOVE_FREEZE_SHOCK, BattleScript_EffectParalyzeHit
-	jumpifmove MOVE_ICE_BURN, BattleScript_EffectBurnHit
-	@jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler	@hmm double check how logic is handled now, potentially remove this
-	@jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_HitFromAtkCanceler
-	@orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
-	@setbyte sDMG_MULTIPLIER, 2
+	@with call_if change no longer need jump for just adding move effect to two_typed_moves only put jumpifmove here if twotyped needs to run from different script ex multihit
+	@jumpifmove MOVE_SPLISHY_SPLASH, BattleScript_EffectParalyzeHit		
+	@jumpifmove MOVE_ICE_BURN, BattleScript_EffectBurnHit
 BattleScript_HitFromAtkCanceler::
 	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_EffectMultiHit
 	attackcanceler
@@ -2584,14 +2575,14 @@ BattleScript_HitFromAtkString::
 BattleScript_SkyDropHitFromAtkString::
 	attackstring	
 BattleScript_HitFromCritCalc::
-	critcalc		@ok actually I'm starting to think my type chart is just somehow out of sync? like its reading a different line than what it should be
+	critcalc		
 	damagecalc
-	typecalc	@typecalc has issue its only reading first type for some reason, also some other issue with wrap animation? effect? @something weirder absorb always not effective ghost moves always no effect against things it should effect
-	call_if EFFECT_ROLLOUT	@somehow not working its being triggered everytime, when it shouldnt? thought that was a thing but then ran clean and no issue? / change to use nativeargs seems fine now?
+	typecalc	
+	call_if EFFECT_ROLLOUT	
 	call_if EFFECT_REVENGE	@ double dmg for revenge effects
 	call_if EFFECT_TWO_TYPED_MOVE	@for muddy water i.e two typed moves that need do extra effect etc. go throw seteffect w chance, works for simple things only setting move effect
-	adjustnormaldamage	@THIS was the issue, forgot the currinstr increment *facepalm so obviously it couldnt continue passed this to animation
-	pause 0x5	@was put after every adjustnormaldamage script, as added playcry pause is to clear values
+	adjustnormaldamage
+	pause 0x5	@was put after every adjustnormaldamage script, as added playcry effect pause is to clear values
 BattleScript_HitFromAtkAnimation::
 	attackanimation
 	waitanimation
@@ -2607,7 +2598,7 @@ BattleScript_HitFromHpUpdate::
 	waitmessage 0x40
 	setmoveeffectwithchance		@seems to be fine
 	setargumentwithchance	@seems to be fine   @this dosent work need make into separate ommand arguentefectwcance  @ok think should work now?
-	tryfaintmon BS_TARGET, 0, NULL	@somehow this is an issue now, player mon isn't fainting animation
+	tryfaintmon BS_TARGET, 0, NULL	
 BattleScript_MoveEnd::
 	moveendall
 	end
@@ -2816,13 +2807,10 @@ BattleScript_AbsorbHealBlock::
 BattleScript_EffectBurnHit::
 BattleScript_EffectScald:
 	setmoveeffect MOVE_EFFECT_BURN
-	jumpifmove MOVE_ICE_BURN, BattleScript_HitFromAtkCanceler
 	goto BattleScript_EffectHit
 
 BattleScript_EffectParalyzeHit::
 	setmoveeffect MOVE_EFFECT_PARALYSIS
-	jumpifmove MOVE_SPLISHY_SPLASH, BattleScript_HitFromAtkCanceler
-	jumpifmove MOVE_FREEZE_SHOCK, BattleScript_HitFromAtkCanceler
 	goto BattleScript_EffectHit
 
 BattleScript_EffectExplosion::

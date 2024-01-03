@@ -1936,6 +1936,20 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   process is removing the json.txt file of said name,  renaming the  .json to .h
   and removing the rules in json_data_rules.mk  and finally removing the created file name from the .gitignore
 
+  IMPORTANT Update for two typed moves
+  was able to use call if to assign simple move effects that take the secondary effect chance into account and run through the seteffectwchance funtion command
+  as two typed moves don't actually take a move effect and just run normally throuhg effect_hit, they just have extra logic in typecalc that does the effect 
+  //I thought it was impossible to keep normal move effcts after making two typed as it takes up both the effect and argument slot,
+  //but for simple things that only require adding a move effect and not running through different scripts it should be possible
+  //I may be able to do the more complex things as well, but would just require multiple call_ifs to manually navigate through scripts
+  //ex. if I want it to be multihit and set poison I'd put logic in BS_getmoveeffect for poison_move_effect,  use call_if at top of effect_hit 
+  //to jump to multihit script  and ad a clause in the multihit function if necessary for how many hits it should be.
+
+  so yeah just a matter of putting call_if at top of effect_hit to jump to whatever existing battlescript I want it ot emulate
+  //say I wanted a twotyped move that worked like overheat and did recoil, I'd make a goto to BattleScript_EffectOverheat
+  and since overheat then goes to effecthit normally, I'd need to use jumpifmove to instead go to BattleScript_HitFromAtkCanceler
+  to avoid a loop -actually overheat is still a simple effect, I'd just set the move effect for that, but you get the point
+
   
   foudn issue with pressure/high pressure, seems the attack cancel effect is running on wrongbattler for some reason
   its affecting the mon with pressure/hi-pressure or its just putting the animation on the wrong battler

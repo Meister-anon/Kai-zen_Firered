@@ -18003,6 +18003,12 @@ void BS_call_if(void) //comparing to jumpifholdeffect
             case EFFECT_TWO_TYPED_MOVE:
             if (gCurrentMove == MOVE_MUDDY_WATER)
                 gBattleScripting.moveEffect = MOVE_EFFECT_ACC_MINUS_1;
+            else if (gCurrentMove == MOVE_SPLISHY_SPLASH)
+                gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+            else if (gCurrentMove == MOVE_FREEZE_SHOCK)
+                gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+            else if (gCurrentMove == MOVE_ICE_BURN)
+                gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
                 gBattlescriptCurrInstr = cmd->nextInstr;
                 break;    
             case EFFECT_PARALYZE:
