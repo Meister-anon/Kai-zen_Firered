@@ -5534,6 +5534,7 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     //hey old me, that ish is all wrong, without secondary chance, effects won't apply, and that's dealt with in battle_moves file
     //
     u32 percentChance,argumentChance;
+    u8 atkHoldEffectParam = GetBattlerHoldEffectParam(gBattlerAttacker);
     if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
     {
 
@@ -5570,6 +5571,10 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
 
     else if (GetBattlerAbility(BATTLE_PARTNER(gBattlerAttacker)) == ABILITY_DARK_DEAL) //hopefully stacks
         percentChance *= 2; //ok now the order is right
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_FLINCH_HIT
+        && GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_FLINCH) //kings rock, make it link with move effect chance
+        percentChance = (percentChance * (atkHoldEffectParam + 100)) / 100; //ex (20 * 110) = 2200  / 100 = 22  w this serene grace applies once not twice for kings rock
 
         
 
@@ -8002,6 +8007,18 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
         ++gBattleScripting.atk49_state;
         break;
         }
+        case MOVE_END_TWOTURN_MOVES:
+            if (gCurrentMove == MOVE_SKY_ATTACK)
+            {
+                if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)) //if not status which should only be on 2nd turn of move
+                {
+                    SET_STATCHANGER(STAT_EVASION, 2, TRUE);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_SkyattackMoveEndStatDrop; //should work but need test
+                }
+            }
+            ++gBattleScripting.atk49_state;  
+            break;
         case MOVE_END_NEXT_TARGET: // For moves hitting two opposing Pokemon.
         {
             u16 moveTarget = GetBattlerMoveTargetType(gBattlerAttacker, gCurrentMove);

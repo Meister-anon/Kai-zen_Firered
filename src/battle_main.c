@@ -1198,6 +1198,19 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
         gBattleStruct->dynamicMoveType = ateType;// | F_DYNAMIC_TYPE_2; //above should do type change already, dmg boosts are already in pokemon.c
         gBattleStruct->ateBoost[battlerAtk] = 1;
     }
+    else if (gBattleMoves[move].type == TYPE_SOUND
+             && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
+             && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
+             && gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM
+             && gBattleMoves[move].effect != EFFECT_NATURAL_GIFT
+             && ((attackerAbility == ABILITY_PIXILATE && (ateType = TYPE_FAIRY))))//Think leave just for fairy? fairy for sound kinda makes sense to me, think they sing?
+                 //|| (attackerAbility == ABILITY_REFRIGERATE && (ateType = TYPE_ICE))
+                 //|| (attackerAbility == ABILITY_AERILATE && (ateType = TYPE_FLYING))
+                 //|| ((attackerAbility == ABILITY_GALVANIZE) && (ateType = TYPE_ELECTRIC))))
+    {
+        gBattleStruct->dynamicMoveType = ateType;// | F_DYNAMIC_TYPE_2; //above should do type change already, dmg boosts are already in pokemon.c
+        gBattleStruct->ateBoost[battlerAtk] = 1;
+    }
     else if ((gBattleMoves[move].type != TYPE_NORMAL)
              && (gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL

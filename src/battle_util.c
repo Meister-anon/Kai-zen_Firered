@@ -10003,20 +10003,24 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
         {
         case HOLD_EFFECT_FLINCH:
 
-            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
-                atkHoldEffectParam *= 2;
-
-            if (gBattleMoveDamage != 0  // Need to have done damage
-                && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && TARGET_TURN_DAMAGED
-                && (Random() % 100) < atkHoldEffectParam
-                && gBattleMoves[gCurrentMove].flags & FLAG_KINGS_ROCK_AFFECTED
-                && gBattleMons[gBattlerTarget].hp)
+            if (gBattleMoves[gCurrentMove].effect != EFFECT_FLINCH_HIT) //change up setup as not quite right for what Ihad in mind
             {
-                gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-                BattleScriptPushCursor();
-                SetMoveEffect(FALSE, 0);
-                BattleScriptPop();
+
+                if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
+                    atkHoldEffectParam *= 2;
+
+                if (gBattleMoves[gCurrentMove].power    //extra protection move with power so non status
+                    && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+                    && TARGET_TURN_DAMAGED
+                    && (Random() % 100) < atkHoldEffectParam
+                    //&& gBattleMoves[gCurrentMove].flags & FLAG_KINGS_ROCK_AFFECTED //since I'm retooling flinch effects 
+                    && gBattleMons[gBattlerTarget].hp) //and applying to all moves rather than the selective application that was in gen 3, don't need flag
+                {
+                    gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
+                    BattleScriptPushCursor();
+                    SetMoveEffect(FALSE, 0);
+                    BattleScriptPop();
+                }
             }
             break;
         case HOLD_EFFECT_BLUNDER_POLICY:

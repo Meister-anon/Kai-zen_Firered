@@ -1918,6 +1918,55 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //so thinking of having a tm list around 120,
   would need to setup all hms so rock climb as well so around 128 or 130 values total
 
+
+ //revising logic for tm choice
+  RavePossum — Today at 12:02 PM
+  I feel like you can address that by locking strong TMs to the late game though. Continuing my example from before, if you put flamethrower in victory road (or even the post game!) it would address that quite a bit since learnsets are largely nearing their end by that point 
+  Meister_anon — Today at 12:03 PM
+  yeah definitely true,  guess I"m not crazy for thinking this then, so I should try to add variety and accessiblity but
+  I need to also think of how strong something is like you said how valuable it is comparitive to everything 
+
+  RavePossum — Today at 12:21 PM
+  this is random as hell and reductive as fuck but for moves with no downsides:
+  early game - no more than 50-60 effective BP
+  mid game - no more than 70-80 effective BP
+  late game and post game - go nuts idk
+
+  Meister_anon — Today at 12:10 PM
+ so what i'm working with rn is uhh, the base gen 3  list,
+ I planned to add gen 4 as it was, and then  slotting in some gen 7 8 and 9 stuff as I saw fit,
+ after these talks gonna go back and rework/filter what I had with this logic to come up with something better balanced
+  //I can leave some of that stuff in learnsets instead and it'll help keep the total tm list from getting too big
+
+  
+  -can keep elemental punchs and fangs as tms bp 65 also is just easier to keep them there rather than
+  bloating the learnset but for sake of gampelay wont put bunch of strong moves without drawbacks into tms
+  keep trap as tms, remove future sight from tm list   can safely add status stuff, but no strong moves above like 75 for the most part
+
+  -modern games evolved the tm list so everything you could possibly want would be accessible via tm, this was done for the benefit of competitive 
+  which is good for them, but it has a large effect on the normal gameplay loop, making things more reliant on that
+  and the level up set less relevant
+
+  What do I want tms to be?
+  My fav was gen 7 for the tm list, the moves they gave left me with so many options
+  I want tms to be for options and variety not just for raw power,
+  if its bloated to put something in the level learnset but I want it to be accessible,
+  it makes sense to put it into the tm list  like the elemental punches
+
+  for tm etc. making so kings rock affecs flinch moves, and flag will be on all moves that do damage, but will cap flinch chance at 20%
+  for all moves that aren't very weak like astonish
+
+  made new move end effect for two turn moves MOVE_END_TWOTURN_MOVES to attempt balance sky attack changes as part of flinch adjustments
+  need to test and add text to it, ok added text, still need test
+
+  rebalnced flinch chance, and in process adjusted pixilate to also encompass sound moves
+
+*/
+ goto TM_EXPANSION
+
+
+ /*
+
   //just learned because of the stupid items.json all tmhm values need their move descriptions to match this exact format
   gMoveDescription_moveId    aka gMoveDescription_RockClimb,  which I didn't do, to save time during porting
 

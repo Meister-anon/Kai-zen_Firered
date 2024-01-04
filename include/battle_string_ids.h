@@ -815,6 +815,7 @@
 #define STRINGID_SUN 673
 #define STRINGID_SAND 674
 #define STRINGID_HAIL 675
+#define STRINGID_STATWENTBACKDOWN 676  //mostly used for sky attack but could be for other move effects that I want to drop stats back after raising them
 
 
 #define STRINGID_TRAINER2CLASS BATTLESTRINGS_COUNT + 1 // cutoff point. was able to confirm this does properly define
@@ -829,7 +830,7 @@
 #define STRINGID_TRAINER1MON2COMEBACK BATTLESTRINGS_COUNT + 10
 #define STRINGID_TRAINER1MON1AND2COMEBACK BATTLESTRINGS_COUNT + 11
 
-#define BATTLESTRINGS_COUNT     STRINGID_HAIL
+#define BATTLESTRINGS_COUNT     STRINGID_STATWENTBACKDOWN
 #define BATTLESTRINGS_TABLE_START  STRINGID_TRAINER1LOSETEXT
 
 #endif // GUARD_BATTLE_STRING_IDS_H

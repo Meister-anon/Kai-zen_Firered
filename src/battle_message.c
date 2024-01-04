@@ -833,6 +833,7 @@ static const u8 sText_PkmnTookTargetHigh[] = _("{B_ATK_NAME_WITH_PREFIX} took {B
 static const u8 sText_TargetTooHeavy[] = _("But the target\nwas too heavy!");
 static const u8 sText_MeteorBeamCharging[] = _("{B_ATK_NAME_WITH_PREFIX} is overflowing\nwith space energy!");
 static const u8 sText_HeatingUpBeak[] = _("{B_ATK_NAME_WITH_PREFIX} started\nheating up its beak!");
+static const u8 sText_StatWentBackDown[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1} went back down!"); //main use revert sky drop evasion boost, want specific stat tobe in buffer
 
 //default values
 static const u8 sText_YouThrowABallNowRight[] = _("You throw a BALL now, right?\nI… I'll do my best!");
@@ -1515,6 +1516,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_SUN   - BATTLESTRINGS_TABLE_START]                         = sText_Sun, 
     [STRINGID_SAND   - BATTLESTRINGS_TABLE_START]                        = sText_Sand, 
     [STRINGID_HAIL   - BATTLESTRINGS_TABLE_START]                        = sText_Hail, 
+    [STRINGID_STATWENTBACKDOWN  - BATTLESTRINGS_TABLE_START]             = sText_StatWentBackDown,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,

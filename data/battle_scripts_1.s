@@ -3454,13 +3454,13 @@ BattleScript_EffectRazorWind::
 
 @check if things stil use this with removal of two turn effect, 
 @still ahve skyu attack skull bash but they go different places I tihnk?
+@think all still use this
 BattleScript_TwoTurnMovesSecondTurn::
 	attackcanceler
 	setmoveeffect MOVE_EFFECT_CHARGING
 	setbyte sB_ANIM_TURN, 1
-	clearstatusfromeffect BS_ATTACKER
+	clearstatusfromeffect BS_ATTACKER	@clears STATUS2_MULTIPLETURNS, so can use as moveend filter for sky attack
 	orword gHitMarker, HITMARKER_NO_PPDEDUCT
-	@argumenttomoveeffect		@think this is fine?  or would it be an issue when it runs into other argument command in effecthit
 	goto BattleScript_HitFromAccCheck	@nah think because this goes to hit, rather than ending, can just use the command in hit
 
 BattleScriptFirstChargingTurn::
@@ -9092,6 +9092,15 @@ BattleScript_TargetAbilityStatRaiseOnMoveEnd::
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	printstring STRINGID_ABILITYRAISEDSTATDRASTICALLY
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_SkyattackMoveEndStatDrop::
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_NOT_PROTECT_AFFECTED | MOVE_EFFECT_CERTAIN, NULL
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	waitanimation
+	printstring STRINGID_STATWENTBACKDOWN
 	waitmessage B_WAIT_TIME_LONG
 	return
 

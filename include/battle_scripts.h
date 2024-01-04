@@ -392,6 +392,7 @@ extern const u8 BattleScript_GooeyActivates[];
 extern const u8 BattleScript_TargetsStatWasMaxedOut[];
 extern const u8 BattleScript_BattlerAbilityStatRaiseOnSwitchIn[];
 extern const u8 BattleScript_TargetAbilityStatRaiseOnMoveEnd[];
+extern const u8 BattleScript_SkyattackMoveEndStatDrop[];
 extern const u8 BattleScript_WeakArmorActivates[];
 extern const u8 BattleScript_WeakArmorDefAnim[];
 extern const u8 BattleScript_WeakArmorActivatesSpeed[];

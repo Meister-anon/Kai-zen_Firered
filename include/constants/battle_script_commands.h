@@ -314,7 +314,9 @@
 #define MOVE_END_MOVE_EFFECTS2					   15     //extra stuff from setmoveffect that has to be set later 
 #define MOVE_END_ITEM_EFFECTS_ALL                  16
 #define MOVE_END_KINGSROCK						   17  //item effect need to be bfore kingsrock for things like rocky helm I guess
-#define MOVE_END_SUBSTITUTE                        18
+#define MOVE_END_SUBSTITUTE                        18 
+#define MOVE_END_TWOTURN_MOVES                      34 //for now using to remove evasion boost from sky attack STATUS2_MULTIPLETURNS keep this as filter only triger if status not present
+//only triger if curr move is a two turn move i guess
 #define MOVE_END_GROUND_TARGET                     19 //put here so cancel sky drop stuff
 #define MOVE_END_SKY_DROP_CONFUSE				   20
 #define MOVE_END_UPDATE_LAST_MOVES                 21
@@ -331,9 +333,9 @@
 #define MOVE_END_EMERGENCY_EXIT					   31
 #define MOVE_END_SYMBIOSIS						   32
 #define MOVE_END_INFATUATION                       33  //to setup for attract hit effect, just need set STRINGID_PKMNFELLINLOVE
-#define MOVE_END_NEXT_TARGET                       34 //was last value before count, in base firered
-#define MOVE_END_CLEAR_BITS						   35
-#define MOVE_END_COUNT							   36
+#define MOVE_END_NEXT_TARGET                       35 //was last value before count, in base firered
+#define MOVE_END_CLEAR_BITS						   36
+#define MOVE_END_COUNT							   37
 
 // switch cases - PORTED right now not used, adding red card only for now
 #define B_SWITCH_NORMAL     0

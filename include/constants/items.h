@@ -416,6 +416,21 @@
 #define ITEM_TM49_SNATCH ITEM_TM49
 #define ITEM_TM50_OVERHEAT ITEM_TM50 //expand and add onto list at bottom of file
 
+
+//keep in mind also expanding learnsets
+//so more moves will be there too
+//can't put too much in tms  or learnsets wont feel unique
+
+//I can leave some of that stuff in learnsets instead and it'll help keep the total tm list from getting too big
+//keep roost in tms but revise gen 4 list and plans for gen 7 8 9 stuff
+//on note from pcg in rhh discord, plan group things of similar category together i.e trap moves  elemental punches and fangs together
+//moves of similar category or power
+//with razor leaf now added to list of elemental slashes as the grass slash, put those together  w shadow claw night slash etc.
+//cross poison , pycho cut , x scissor
+//think will order this list based off of the categories of the gen 4 list,
+//ex. when get to slash moves put all my stuff there
+//make dual wingbeat a tm
+#define TM_EXPANSION
 //razor leaf
 //infestation
 //sandtomb
@@ -463,15 +478,82 @@
 //bug bite
 //knock off
 //haze
-//future sight
+//future sight - not making tm too good
 //dual wing
 //MOVE_HONE_CLAWS
 //uproar
 //gravity
 
-//keep in mind also expanding learnsets
-//so more moves will be there too
-//can't put too much in tms  or learnsets wont feel unique
+//gen 4 list
+//++ to add  (nvm just use remove)
+//-- to remove
+/*  //could put wild charge here, to mesh w overheat nowbeing recoil
+51* Wild charge     Electric Physical
+52*	Roost	Flying	Status
+--52	Focus Blast	Fighting	Special fit into learnsets instead
+++ could put electro ball here?
+53	Energy Ball	Grass	Special
+54	False Swipe	Normal	Physical
+55	Brine	Water	Special
+56	Fling	Dark	Physical
+57	Charge Beam	Electric	Special
+58	Endure	Normal	Status
+59	Dragon Pulse	Dragon	Special
+60	Drain Punch	Fighting	Physical
+++ punches
+61	Will-O-Wisp	Fire	Status
+62	Silver Wind	Bug	Special
+++ ominous wind
+63	Embargo	Dark	Status
+++ think put fangs here close to slashes
+64	Explosion	Normal	Physical
+65	Shadow Claw	Ghost	Physical
+++ slashes - inclues false swipe last
+66	Payback	Dark	Physical
+--67	Recycle	Normal	Status //put together w embargo
+++put heal block after I think
+68	Giga Impact	Normal	Physical
+69	Rock Polish	Rock	Status
+--70	Flash	Normal	Status
+71	Stone Edge	Rock	Physical
+++ revenge
+72	Avalanche	Ice	Physical
+73	Thunder Wave	Electric	Status
+74	Gyro Ball	Steel	Physical
+75	Swords Dance	Normal	Status
+76	Stealth Rock	Rock	Status
+++ think put traps here
+77	Psych Up	Normal	Status
+78	Captivate	Normal	Status
+79	Dark Pulse	Dark	Special -keep cuz few special dark moves
+80	Rock Slide	Rock	Physical
+++ add rock throw, as accessible rock move to groud flying
+--81	X-Scissor	Bug	Physical  
+move lower w other slash moves
+
+82	Sleep Talk	Normal	Status
+++ snore
+83	Natural Gift	Normal	Physical
+--84	Poison Jab	Poison	Physical
+move down w elemental punches
+++  u-turn can go here
+++ volt switch //hmm might keep volt switch for learnset
+?? think same for other u-turn likes I made 
+//nah I'll add them all, to tms, I want tms to be utility moves so fits
+-?85	Dream Eater	Psychic	Special -think would prefer keepin learnset
+86	Grass Knot	Grass	Special
+87	Swagger	Normal	Status
+88	Pluck	Flying	Physical
+89	U-turn	Bug	Physical
+90	Substitute	Normal	Status
+91	Flash Cannon	Steel	Special
+92	Trick Room	Psychic	Status
+++ room effects
+++draining kiss
+
+ */
+
+
 
 #define ITEM_HM01_CUT ITEM_HM01
 #define ITEM_HM02_FLY ITEM_HM02

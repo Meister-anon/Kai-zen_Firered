@@ -309,7 +309,7 @@ extern const struct BattleMove gBattleMoves[];
 #define FLAG_MAGIC_COAT_AFFECTED    (1 << 2)
 #define FLAG_SNATCH_AFFECTED        (1 << 3)
 #define FLAG_MIRROR_MOVE_AFFECTED   (1 << 4)
-#define FLAG_KINGS_ROCK_AFFECTED    (1 << 5)
+//#define FLAG_KINGS_ROCK_AFFECTED    (1 << 5)  udpated to modern use, works on all dmg moves not just selected ones, so dont need this
 #define FLAG_HIGH_CRIT              (1 << 6)
 #define FLAG_RECKLESS_BOOST         (1 << 7)
 #define FLAG_IRON_FIST_BOOST        (1 << 8)    //1 byte
@@ -339,7 +339,7 @@ extern const struct BattleMove gBattleMoves[];
 
 //thaw user and two strikes can be removed, FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING  can also be removed 
 //also flags are u32, so I beleive I can go up to 32 with this
-//have 4 spaces left
+//have 4 spaces left - removed kings rock flag use, so has 5 spaces now
 
 #define SPINDA_SPOT_HEIGHT 16
 
