@@ -1961,9 +1961,29 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   rebalnced flinch chance, and in process adjusted pixilate to also encompass sound moves
 
+
+
+  //with removal of battle ai port realize need to redo stealth rock rebalance...
 */
  goto TM_EXPANSION
+  //point of seom tm set is to have them so its easier and I dont have to put them in learnsets
+  //as they are variation moves of the same effect but no idea where to put them in overworld
+  //so instead think I'll just have to give them at the very start of the game
+  //via the mom, think have her run up as you're leaving same as oak, does the first time
+  //and have her give the player a supply pack she's been saving for you
+  //make it quick and brief as she doesn't want to hold you up/
+  //will be punchign tms  fang tms and some berries
+  //idk how to do this and not ruin teh early game balance curve...
+  //could instead give the punches at saffron fighting gym
+  //can add to theme each trainer is a master of a different punch
+  //give on extra pokemon that has that punch move
 
+  //guess I can give the fangs at start since only rattata could use it anyway
+  //and they are relatively low power, also gives the rodents a little more staying power
+  //progression wise
+
+  //u-turns guess would just have to leave in open world
+  //around safari zone I Guess and  2 island park
 
  /*
 
