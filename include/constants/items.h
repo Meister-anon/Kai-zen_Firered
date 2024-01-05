@@ -383,7 +383,7 @@
 #define ITEM_TM16_LIGHT_SCREEN ITEM_TM16
 #define ITEM_TM17_PROTECT ITEM_TM17
 #define ITEM_TM18_RAIN_DANCE ITEM_TM18
-#define ITEM_TM19_GIGA_DRAIN ITEM_TM19
+#define ITEM_TM19_GIGA_DRAIN ITEM_TM19  //potentialy replace w mega drain since buffed
 #define ITEM_TM20_SAFEGUARD ITEM_TM20
 #define ITEM_TM21_FRUSTRATION ITEM_TM21
 #define ITEM_TM22_SOLARBEAM ITEM_TM22
@@ -449,8 +449,8 @@
 //megapunch
 //mega kick
 //teleport - for when update teleport effect
-//double edge
-//magic guard
+//double edge   - just add to learnsets
+//magic guard -magic gaurd is ability the move is magic coat, and  thnk its too strong to be tm
 //add gen 4 tms above 50 about 100 total
 //work up
 //venoshock
@@ -477,79 +477,134 @@
 //smack down
 //bug bite
 //knock off
-//haze
+//haze - think made too strong, to be tm
 //future sight - not making tm too good
 //dual wing
 //MOVE_HONE_CLAWS
 //uproar
 //gravity
 
-//gen 4 list
+//gen 4 list - customized
 //++ to add  (nvm just use remove)
 //-- to remove
 /*  //could put wild charge here, to mesh w overheat nowbeing recoil
 51* Wild charge     Electric Physical
 52*	Roost	Flying	Status
---52	Focus Blast	Fighting	Special fit into learnsets instead
-++ could put electro ball here?
-53	Energy Ball	Grass	Special
+    teleport
+--53	Energy Ball	Grass	Special
+    quash
+    hone claws
 54	False Swipe	Normal	Physical
 55	Brine	Water	Special
-56	Fling	Dark	Physical
 57	Charge Beam	Electric	Special
 58	Endure	Normal	Status
 59	Dragon Pulse	Dragon	Special
+    Thunder Punch
+    Fire Punch
+    Ice Punch
+    Shadow Punch
+    Poison Jab
 60	Drain Punch	Fighting	Physical
+    Comet Punch -instaed of mega punch mega kick, keep those to learnset
 ++ punches
 61	Will-O-Wisp	Fire	Status
 62	Silver Wind	Bug	Special
 ++ ominous wind
+56	Fling	Dark	Physical
 63	Embargo	Dark	Status
-++ think put fangs here close to slashes
+++	Recycle	Normal	Status //put together w embargo
+++  Heal Block
+    Thunder Fang
+    Fire Fang
+    Ice Fang
+    Psychic Fangs
 64	Explosion	Normal	Physical
 65	Shadow Claw	Ghost	Physical
-++ slashes - inclues false swipe last
+    Night Slash
+    Razor Leaf
+    X scissor
+    Cross Poison
+    Psycho Cut
+    False Swipe
 66	Payback	Dark	Physical
---67	Recycle	Normal	Status //put together w embargo
-++put heal block after I think
-68	Giga Impact	Normal	Physical
+68	Giga Impact	Normal	Physical  -game corner
 69	Rock Polish	Rock	Status
---70	Flash	Normal	Status
+    MOVE_MUD_SPORT
+    MOVE_WATER_SPORT
+    aurora veil
 71	Stone Edge	Rock	Physical
 ++ revenge
 72	Avalanche	Ice	Physical
 73	Thunder Wave	Electric	Status
+glare
 74	Gyro Ball	Steel	Physical
+    electro ball
 75	Swords Dance	Normal	Status
+++  Power Trick
+    Power Shift
+    power swap
+    guard swap
+    speed swap
 76	Stealth Rock	Rock	Status
-++ think put traps here
+    spikes
+    toxic spikes --think cant make this tm
+    bind -think still need small bit of work on this? supposed to do encore or make them struggle? or use random move something, works if slower, odd if faster i think
+    wrap - I could add these two but every mon I could give it too would alerady learn it
+    fire spin
+    sand tomb
+    whirlpool
+    swarm - previously infestation
 77	Psych Up	Normal	Status
 78	Captivate	Normal	Status
+    confide - make universal like attract
+    fake tears
+    acid spray
+    
+++ more status stuff i.e confide etc.
 79	Dark Pulse	Dark	Special -keep cuz few special dark moves
 80	Rock Slide	Rock	Physical
-++ add rock throw, as accessible rock move to groud flying
---81	X-Scissor	Bug	Physical  
-move lower w other slash moves
-
+++ rock throw, as accessible rock move to groud flying
 82	Sleep Talk	Normal	Status
 ++ snore
 83	Natural Gift	Normal	Physical
---84	Poison Jab	Poison	Physical
-move down w elemental punches
-++  u-turn can go here
-++ volt switch //hmm might keep volt switch for learnset
-?? think same for other u-turn likes I made 
-//nah I'll add them all, to tms, I want tms to be utility moves so fits
--?85	Dream Eater	Psychic	Special -think would prefer keepin learnset
 86	Grass Knot	Grass	Special
 87	Swagger	Normal	Status
 88	Pluck	Flying	Physical
+    Bug Bite
 89	U-turn	Bug	Physical
+    volt switch
+    flip turn
+    uproot
+    dive bomb
 90	Substitute	Normal	Status
 91	Flash Cannon	Steel	Special
 92	Trick Room	Psychic	Status
-++ room effects
+    MOVE_MAGIC_ROOM
+    MOVE_WONDER_ROOM
+    gravity
 ++draining kiss
+    leech life
+    frost breath - replace w freeze dry?  yeah
+    weather ball
+    flame charge
+    MOVE_DUAL_WINGBEAT
+    knock off
+    beat up
+    rage 
+    rock tomb    
+    icicle spear
+    acrobatics
+    assurance
+    solar blade
+    icy wind
+    hold back  - fill in for mon that cant learn falase swipe
+    headbutt  - for rock head users
+    hi-jump kick
+    snow ball
+    Celebrate - item description Something Might Happen! -set as last tm everyone can learn
+
+
+
 
  */
 
@@ -839,7 +894,7 @@ move down w elemental punches
 #define LAST_BERRY_INDEX ITEM_ENIGMA_BERRY
 #define ITEM_TO_BERRY(itemId)(((itemId - FIRST_BERRY_INDEX) + 1))
 
-#define NUM_TECHNICAL_MACHINES 50 //change to 120 later  / or more plan to add on to tms I think for ease spreading certain moves
+#define NUM_TECHNICAL_MACHINES 156 //change to 120 later  / or more plan to add on to tms I think for ease spreading certain moves
 #define NUM_HIDDEN_MACHINES     9
 
 //copy from emerald for replacing the numerical values in type field in items.json
