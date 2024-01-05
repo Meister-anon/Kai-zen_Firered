@@ -435,6 +435,9 @@ gBattleScriptsForBattleEffects::	@must match order of battle_effects.h file
 	.4byte BattleScript_EffectAttackUpUserAlly        @ EFFECT_ATTACK_UP_USER_ALLY
 	.4byte BattleScript_EffectTargetTypeBasedDmg	  @ EFFECT_TARGET_TYPE_DAMAGE  @ bug status / dont need effect for can use moveeffect  instaed w arg to move effect
 	.4byte BattleScript_EffectTrenchrun				  @ EFFECT_TRENCH_RUN
+	.4byte BattleScript_EffectHitSetEntryHazard		  @ EFFECT_HIT_SET_ENTRY_HAZARD
+	.4byte BattleScript_EffectHit					  @ EFFECT_SNOWBALL
+	.4byte BattleScript_EffectCelebrate				  @ EFFECT_CELEBRATE	
 
 BattleScript_EffectAlwaysCrit:
 BattleScript_EffectFellStinger:
@@ -802,6 +805,7 @@ BattleScript_EffectLaserFocus:
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+@vsonic double check this
  @not complete need setup evasion boost (2 stage boost) and make sure its removed if status on air i.e flying/skydrop donethat part
  @also need to put back logic that grounded flying types dont take super from electricity etc. 
 BattleScript_EffectTrenchrun::
@@ -2571,6 +2575,7 @@ BattleScript_HitFromAccCheck::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 BattleScript_HitFromAtkString::
 	jumpifability BS_ATTACKER, ABILITY_MULTI_TASK, BattleScript_MultiHitFromAtkString
+	variablepowercalc		@this for return frustration and snowball
 	ppreduce
 BattleScript_SkyDropHitFromAtkString::
 	attackstring	
@@ -3209,7 +3214,8 @@ BattleScript_DoMultiHit::
 	movevaluescleanup		@this directly clears move effect, not sMULTIHIT_EFFECT, its needed to keep every hit from critting etc.
 	@copybyte cEFFECT_CHOOSER, sMULTIHIT_EFFECT	@copies multihi_effect to effect choosesr don't know what that does with it after, something to do with gbattlecommunication + 3?
 	getmoveeffect
-	furycuttercalc
+	@furycuttercalc
+	variablepowercalc
 	presentdamagecalculation BattleScript_NewPresentHealMulti @if heal, I would need to skip passed crit calc etc then jump to play attack animation and do heal animation and text, then return in place to loop again
 	critcalc			@plan set curr instr to BattleScript_MultiHitEndMessage  then do jump to and return from present heal logic (may need pushcursor call back?)
 	damagecalc			@potentially do other way around, do push cursor call back to heal, from present dmg calc, and then set curr instruct to BattleScript_MultiHitEndMessage
@@ -3606,12 +3612,6 @@ BattleScript_TripleArrowsMoveEnd:
 	tryfaintmon BS_TARGET, 0, NULL
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectRecoil::
-	setmoveeffect MOVE_EFFECT_RECOIL_25 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	jumpifnotmove MOVE_STRUGGLE, BattleScript_EffectHit
-	incrementgamestat GAME_STAT_USED_STRUGGLE
-	goto BattleScript_EffectHit
-
 BattleScript_EffectConfuse::
 	attackcanceler
 	attackstring
@@ -3874,7 +3874,8 @@ BattleScript_MoveUsedMustRecharge::
 BattleScript_EffectRage::
 	attackcanceler
 	accuracycheck BattleScript_RageMiss, ACC_CURR_MOVE
-	rageboostcalc
+	@rageboostcalc
+	variablepowercalc
 	setmoveeffect MOVE_EFFECT_RAGE
 	seteffectprimary
 	setmoveeffect 0	@dont know why this is here	
@@ -3933,12 +3934,22 @@ BattleScript_EffectSplash::
 	attackcanceler
 	attackstring
 	ppreduce
+BattleScript_SplashFromAtkAnimation:
 	attackanimation
 	waitanimation
 	incrementgamestat GAME_STAT_USED_SPLASH
 	printstring STRINGID_BUTNOTHINGHAPPENED
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
+
+BattleScript_EffectCelebrate::
+	attackcanceler
+	attackstring
+	pause 0x20
+	ppreduce
+	printstring STRINGID_CELEBRATE
+	waitmessage B_WAIT_TIME_SHORT
+	goto BattleScript_SplashFromAtkAnimation
 
 BattleScript_EffectDisable::
 	attackcanceler
@@ -3973,19 +3984,6 @@ BattleScript_EffectPsywave::
 	psywavedamageeffect
 	adjustsetdamage
 	goto BattleScript_HitFromAtkAnimation	@skips dmg calc command
-
-@psywave effect except, it is affected by typing, so can be super
-@kept for notes not used just using psywave put flinch in argument
-BattleScript_EffectSnowball::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	typecalc
-	bicbyte gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE	@with buff to psywavedmg realized need keep this, cant do stab or super would be too strong
-	psywavedamageeffect	@balance by giving flinch chance, psywave doesnt need  extra effect but this is losing offense ability of ice type
-	adjustsetdamage				
-	goto BattleScript_HitFromAtkAnimation
 
 BattleScript_EffectCounter::
 	attackcanceler
@@ -4404,6 +4402,12 @@ BattleScript_ProtectLikeAtkString::
 	waitmessage 0x40
 	goto BattleScript_MoveEnd
 
+BattleScript_StealthRockActivates::
+	setstealthrock BattleScript_MoveEnd
+	printfromtable gDmgHazardsStringIds
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 @for stone axe, similar to my set for spiky shield but reversed
 @potentially take to clean up my setup?  - vsonic still to add for stone axe
 BattleScript_EffectHitSetEntryHazard::
@@ -4659,7 +4663,7 @@ BattleScript_EffectAttractHit::
 BattleScript_EffectReturn::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	happinesstodamagecalculation
+	@happinesstodamagecalculation
 	goto BattleScript_HitFromAtkString
 
 BattleScript_EffectTargetTypeBasedDmg::
@@ -4696,7 +4700,8 @@ BattleScript_EffectMagnitude::
 	attackstring
 	ppreduce
 	selectfirstvalidtarget
-	magnitudedamagecalculation
+	@magnitudedamagecalculation
+	variablepowercalc
 	pause 0x20
 	printstring STRINGID_MAGNITUDESTRENGTH
 	waitmessage 0x40
@@ -5898,6 +5903,12 @@ BattleScript_EffectStrengthUpHit::
 
 BattleScript_EffectSecretPower::
 	getsecretpowereffect
+	goto BattleScript_EffectHit
+
+BattleScript_EffectRecoil::
+	setmoveeffect MOVE_EFFECT_RECOIL_25 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	jumpifnotmove MOVE_STRUGGLE, BattleScript_EffectHit
+	incrementgamestat GAME_STAT_USED_STRUGGLE
 	goto BattleScript_EffectHit
 
 BattleScript_EffectDoubleEdge::

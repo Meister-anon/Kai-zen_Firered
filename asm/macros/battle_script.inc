@@ -1418,6 +1418,13 @@
 	callnative BS_Multihit_resultmessage
 	.endm
 
+	@consolidates multiple effects that use gDynamicBasePower and dont jump
+	@furycuttercalc rageboostcalc happinesstodamagecalculation magnitudedamagecalculation  snowball /cant do rollout cuz acc check order
+	@put all future effects here
+	.macro variablepowercalc
+	callnative BS_VariablePowerCalc
+	.endm
+
 	.macro getmoveeffect
 	callnative BS_getmoveeffect
 	.endm

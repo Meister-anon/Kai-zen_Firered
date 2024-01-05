@@ -2130,7 +2130,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     #endif
     .effect = EFFECT_PARALYZE,
     .power = 0,
-    .type = TYPE_NORMAL,
+    .type = TYPE_DARK,
     .pp = 30,
     .secondaryEffectChance = 0,
     .target = MOVE_TARGET_SELECTED,
@@ -2188,7 +2188,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_BALLISTIC,
     .split = SPLIT_PHYSICAL,
     .argument = MOVE_EFFECT_DEF_MINUS_1,
-    .argumentEffectChance = 10,
+    .argumentEffectChance = 15,
 }, //exegcuttor line siganture , test may make 100 acc,  balance acc w effect chance
 
 [MOVE_LEECH_LIFE] =
@@ -2203,8 +2203,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     .priority = 0,
     .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
     .split = SPLIT_PHYSICAL,
-    .argument = MOVE_EFFECT_INFESTATION,
-},
+    .argument = 0, // restores 75% HP instead of 50% HP
+    .argumentEffectChance = 100, //removed infest chance to boost healing, to compete with mega drain
+}, //check balance
 
 [MOVE_LOVELY_KISS] =
 {
@@ -4747,7 +4748,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_SNATCH_AFFECTED,
         .split = SPLIT_STATUS,
-    },
+    }, //could make tm, but then no one would use rest
 
     [MOVE_HYPER_VOICE] =
     {
@@ -4768,7 +4769,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_TOXIC_FANG] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_6
-            .secondaryEffectChance = 50,
+            .secondaryEffectChance = 40,    //was 50
         #else
             .secondaryEffectChance = 30,
         #endif
@@ -4781,7 +4782,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
         .split = SPLIT_PHYSICAL,
-    },
+    }, //potentially lower this? since I changed poison this is technically even easier to set toxic with
 
     [MOVE_CRUSH_CLAW] =
     {
@@ -6534,7 +6535,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_STATUS,
-    },
+    }, //teach this
 
     [MOVE_GIGA_IMPACT] =
     {
@@ -6992,7 +6993,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_OPPONENTS_FIELD,
         .priority = 0,
         .split = SPLIT_STATUS,
-    },
+    },//check for how I adjusted stealth rock think I rebalanced it?
 
     [MOVE_GRASS_KNOT] =
     {
@@ -7035,9 +7036,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_JUDGMENT] =
     {
-        .effect = EFFECT_CHANGE_TYPE_ON_ITEM,
+        .effect = EFFECT_HIT_PREVENT_ESCAPE, //I LIKe this  a Lot better
         .power = 100,
-        .type = TYPE_NORMAL,
+        .type = TYPE_MYSTERY,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0,
@@ -7045,8 +7046,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_SPECIAL,
-        .argument = HOLD_EFFECT_PLATE,
-    },
+    }, //thinik add message passed judgement def can no longer escape!
+    //vsonic
 
     [MOVE_BUG_BITE] =
     {
@@ -7113,7 +7114,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_BUG,
         .accuracy = 100,
         .pp = 15,
-        .secondaryEffectChance = 10,
+        .secondaryEffectChance = 30, //was 10
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_HIGH_CRIT,
@@ -8141,7 +8142,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
         .argument = MOVE_EFFECT_INFESTATION,
-    },
+    }, //hm so is this guaranteed both?if so its VERY good now, yup looks like it
+    //put this exclusively in pre evo bug learnset not full evo
+    //ex caterpie, not kakuna and butterfree
 
     [MOVE_BULLDOZE] =
     {
@@ -9135,7 +9138,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_SPECIAL_ATTACK_DOWN,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_SOUND,
         .accuracy = 0,
         .pp = 20,
         .secondaryEffectChance = 0,
@@ -9253,7 +9256,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
-    },
+    }, //teach bellowsom etc.
 
     [MOVE_EERIE_IMPULSE] =
     {
@@ -9369,7 +9372,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_CELEBRATE] =
     {
-        .effect = EFFECT_SPLASH,
+        .effect = EFFECT_CELEBRATE,
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 0,
@@ -9383,17 +9386,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_HOLD_HANDS] =
     {
-        .effect = EFFECT_SPLASH,
+        .effect = EFFECT_SPLASH, //give its own effect
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 0,
         .pp = 40,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 40, //potentailly 30 or 33% for serene grace etc.
         .target = MOVE_TARGET_USER,
         .priority = 0,
         .flags = 0,
         .split = SPLIT_STATUS,
-    },
+    },//buff two different strings, /normal string when does nothing "ally was happy"
+    // when rolls effect  "ally got excited! all stats went up" then set all stats go up
 
     [MOVE_BABY_DOLL_EYES] =
     {
@@ -9430,12 +9434,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 40,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 15,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_PHYSICAL,
-    },
+        .argument = MOVE_EFFECT_DEF_MINUS_1
+    }, //make early level move for more professional style fighting mon i.e hitmon chan lee, hariyama sawk medicham
 
     [MOVE_SWARM] =
     {
@@ -10141,7 +10146,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 15,
-        .secondaryEffectChance = 30,
+        .secondaryEffectChance = 25,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_STRONG_JAW_BOOST,
@@ -11196,7 +11201,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_SPECIAL,
-    }, //buffed was given explosion effect defense stat drop
+    }, //buffed was given explosion effect defense stat drop (will drop sp def)
 
     [MOVE_GRASSY_GLIDE] =
     {
@@ -11589,7 +11594,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_STONE_AXE] =
     {
-        .effect = EFFECT_HIT, // EFFECT_STONE_AXE,  //is done in emerald can take
+        .effect = EFFECT_HIT_SET_ENTRY_HAZARD, // EFFECT_STONE_AXE,  //is done in emerald can take
         .power = 65,
         .type = TYPE_ROCK,
         .accuracy = 90,
@@ -11599,9 +11604,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,// | FLAG_SLICING_MOVE,
         .split = SPLIT_PHYSICAL,
+        .argument = MOVE_EFFECT_STEALTH_ROCK
         //.zMovePower = 120,
         //.zMoveEffect = Z_EFFECT_NONE,
-    },
+    }, //need test
 
     [MOVE_SPRINGTIDE_STORM] =
     {
@@ -11646,7 +11652,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .power = 90,
         #endif
-        .effect = EFFECT_RAMPAGE,
+        .effect = EFFECT_RAMPAGE, //outrage,
         .type = TYPE_FIRE,
         .accuracy = 100,
         .pp = 10,
@@ -11666,7 +11672,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .power = 75,
         #endif
-        .effect = EFFECT_RECOIL,
+        .effect = EFFECT_DOUBLE_EDGE,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 10,
@@ -11677,7 +11683,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         //.zMovePower = 140,
         //.zMoveEffect = Z_EFFECT_NONE,
-    },
+    },//so they turned it from wter take down to water double edge, but the recoil is still less
+    //*idea rampage plus recoil, potentially no confusion,
 
     [MOVE_CHLOROBLAST] =
     {
@@ -12107,7 +12114,7 @@ use wonder gaurd logic to determine its super effective
     [MOVE_SONIC_BOOM] =
     {
         .effect = EFFECT_SPEED_UP_HIT,
-        .power = 70,
+        .power = 65,
         .type = TYPE_FLYING,
         .accuracy = 100,
         .pp = 20,
@@ -12122,7 +12129,7 @@ use wonder gaurd logic to determine its super effective
 
     [MOVE_OVER_MAX_POWER] =
     {
-        .effect = EFFECT_LOSETYPE_HIT,
+        .effect = EFFECT_LOSETYPE_HIT, //remember plan to set this up for entire battle 
         .power = 150,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -12271,11 +12278,11 @@ use wonder gaurd logic to determine its super effective
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_IRON_FIST_BOOST,
         .split = SPLIT_PHYSICAL,
         //.zMoveEffect = Z_EFFECT_NONE,
-    },
+    },//vsonic
 
     [MOVE_SNOWBALL] =
     {
-        .effect = EFFECT_PSYWAVE,
+        .effect = EFFECT_SNOWBALL,  //changed
         .power = 1,
         .type = TYPE_ICE,
         .accuracy = 100,
@@ -12284,10 +12291,10 @@ use wonder gaurd logic to determine its super effective
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-        .split = SPLIT_PHYSICAL, //unsure if shold be physical? ok yeah its, a boobytrap bomb, if explosion is physical this should be too
+        .split = SPLIT_PHYSICAL,
         .argument = MOVE_EFFECT_FLINCH,
         .argumentEffectChance = 15,
-    },
+    }, //still need get animatino how I want to change sprite size with ppower
 
     [MOVE_TRENCH_RUN] =
     {

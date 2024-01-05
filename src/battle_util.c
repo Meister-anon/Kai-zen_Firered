@@ -10001,9 +10001,11 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)   //updated
         // Occur on each hit of a multi-strike move
         switch (atkHoldEffect)
         {
-        case HOLD_EFFECT_FLINCH:
+        case HOLD_EFFECT_FLINCH:    //need adjust to fit argument as well
 
-            if (gBattleMoves[gCurrentMove].effect != EFFECT_FLINCH_HIT) //change up setup as not quite right for what Ihad in mind
+            if (gBattleMoves[gCurrentMove].effect != EFFECT_FLINCH_HIT
+            || (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE
+            && gBattleMoves[gCurrentMove].argument != MOVE_EFFECT_FLINCH)) //vsonic unsure if right
             {
 
                 if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
@@ -11735,7 +11737,8 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
         }
 
     }*/
-    if (move == MOVE_GLARE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST)) //can keep this line
+    if (move == MOVE_GLARE && (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST)
+    || IS_BATTLER_OF_TYPE(battlerDef, TYPE_DARK))) //can keep this line
     {
         modifier = UQ_4_12(0.0);
     }

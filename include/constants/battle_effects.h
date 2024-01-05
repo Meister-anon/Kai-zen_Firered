@@ -417,7 +417,10 @@
 #define EFFECT_TEATIME                      404
 #define EFFECT_ATTACK_UP_USER_ALLY          405 // Howl 8th Gen ver.
 #define EFFECT_TARGET_TYPE_DAMAGE       406 //right now rock smash & cut,  
-#define EFFECT_TRENCH_RUN               407
+#define EFFECT_TRENCH_RUN               407  //ujnsure if done, know still needs message string
+#define EFFECT_HIT_SET_ENTRY_HAZARD 408     //for now just for stone axe
+#define EFFECT_SNOWBALL 409 //separated from psywave effect do variable pwr intsead of flat damage
+#define EFFECT_CELEBRATE 410
 
 /*MOVE_FIRE_SPIN, //increases burn chance //serenge grace is effect *2 by requires no setup, I think I can get away w * 3 here actually do more to near guarantee 50-60%
 MOVE_CLAMP,     //no extra wrap effect,  but give flich chance on hit //changed mind you're staying clamped on them, so for duration statused target has chance to flinch when attacking

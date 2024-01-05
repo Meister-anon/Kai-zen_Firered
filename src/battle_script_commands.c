@@ -4287,17 +4287,24 @@ void SetMoveEffect(bool32 primary, u32 certain)
     bool32 statusChanged = FALSE;
     s32 affectsUser, byTwo, i = 0; // 0x40 otherwise
     bool32 mirrorArmorReflected = ((GetBattlerAbility(gBattlerTarget) == ABILITY_MIRROR_ARMOR) || (GetBattlerAbility(gBattlerTarget) == ABILITY_EMPATH));
-    
+    bool8 activateAfterFaint = FALSE;
 
     switch (gBattleScripting.moveEffect) // Set move effects which happen later on
-    {
+    {//ported but don't know why need, knock off works without moveeffect2 by default? -its a change for modern item effects, to make sure effects trigger after item effect
     case MOVE_EFFECT_KNOCK_OFF:
     //case MOVE_EFFECT_SMACK_DOWN:
     case MOVE_EFFECT_REMOVE_STATUS:
         gBattleStruct->moveEffect2 = gBattleScripting.moveEffect;
         ++gBattlescriptCurrInstr;
         return;
-    } //ported but don't know why need, knock off works without moveeffect2 by default? -its a change for modern item effects, to make sure effects trigger after item effect
+    case MOVE_EFFECT_STEALTH_ROCK:  //test
+    //case MOVE_EFFECT_SPIKES:
+    case MOVE_EFFECT_PAYDAY:
+    case MOVE_EFFECT_STEAL_ITEM:
+    case MOVE_EFFECT_BUG_BITE:
+        activateAfterFaint = TRUE;
+        break;
+    } 
 
     if (gBattleScripting.moveEffect & MOVE_EFFECT_AFFECTS_USER)  //because of bit logic  and value of affects user, this means if given move effect does not return 0, make affect user return true, meant to always return non 0 value
     {
@@ -4345,14 +4352,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER)
         INCREMENT_RESET_RETURN
 
-    if (gBattleMons[gEffectBattler].hp == 0
-     && gBattleScripting.moveEffect != MOVE_EFFECT_PAYDAY
-     && gBattleScripting.moveEffect != MOVE_EFFECT_BUG_BITE
-     && gBattleScripting.moveEffect != MOVE_EFFECT_STEAL_ITEM)
-    {
-        ++gBattlescriptCurrInstr;
-        return;
-    }
+    if (gBattleMons[gEffectBattler].hp == 0 && !activateAfterFaint)
+        INCREMENT_RESET_RETURN
 
     if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER)
         INCREMENT_RESET_RETURN
@@ -5514,7 +5515,16 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 TryUpdateRoundTurnOrder(); // If another Pok�mon uses Round before the user this turn, the user will use Round directly after it
                 gBattlescriptCurrInstr++;
                 break;
+            case MOVE_EFFECT_STEALTH_ROCK:
+                if (!(gSideStatuses[GetBattlerSide(gEffectBattler)] & SIDE_STATUS_STEALTH_ROCK))
+                {
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_POINTEDSTONESFLOAT;
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = BattleScript_StealthRockActivates;
+                }
+                break;
             }
+            
         }
     }//end of move effect checks
     gBattleScripting.moveEffect = 0;
@@ -5534,7 +5544,7 @@ static void atk15_setmoveeffectwithchance(void) //occurs to me that fairy moves 
     //hey old me, that ish is all wrong, without secondary chance, effects won't apply, and that's dealt with in battle_moves file
     //
     u32 percentChance,argumentChance;
-    u8 atkHoldEffectParam = GetBattlerHoldEffectParam(gBattlerAttacker);
+    u8 atkHoldEffectParam = GetBattlerHoldEffectParam(gBattlerAttacker); //for kings rock
     if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
     {
 
@@ -11656,7 +11666,9 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         return;//think need if here to exclude two_type_moves as its not meant to read the argument as a move effect
     case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:   //argumenttomoveeffect works with seconaryeffectchance can prob also do like move effect set certain or effect user
-        if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
+        //if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
+        if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE                
+        && gBattleMoves[gCurrentMove].effect != EFFECT_LOSETYPE_HIT)
             gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument; //potentially need make argument field for bs. as well vsonic
         break;  //I think what this does is, pass the argument to move effect? and then it gets read by seteffectwithchance function?
     case VARIOUS_SPECTRAL_THIEF:
@@ -15046,29 +15058,6 @@ static void atkB2_trysetperishsong(void)
         gBattlescriptCurrInstr += 5;
 }
 
-static void atkB3_rolloutdamagecalculation(void)
-{
-
-    s32 i;
-
-    if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)) // first hit
-    {
-        gDisableStructs[gBattlerAttacker].rolloutTimer = 5;
-        gDisableStructs[gBattlerAttacker].rolloutTimerStartValue = 5;
-        gBattleMons[gBattlerAttacker].status2 |= STATUS2_MULTIPLETURNS;
-        gLockedMoves[gBattlerAttacker] = gCurrentMove;
-    }
-    if (--gDisableStructs[gBattlerAttacker].rolloutTimer == 0) // last hit
-        gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_MULTIPLETURNS);
-    gDynamicBasePower = gBattleMoves[gCurrentMove].power;
-    for (i = 1; i < (5 - gDisableStructs[gBattlerAttacker].rolloutTimer); ++i)
-        gDynamicBasePower *= 2;
-    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_DEFENSE_CURL)
-        gDynamicBasePower *= 2;
-    ++gBattlescriptCurrInstr;
-
-}
-
 static void atkB4_jumpifconfusedandstatmaxed(void)
 {
     if (gBattleMons[gBattlerTarget].status2 & STATUS2_CONFUSION
@@ -15076,69 +15065,6 @@ static void atkB4_jumpifconfusedandstatmaxed(void)
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 2);
     else
         gBattlescriptCurrInstr += 6;
-}
-
-static void atkB5_furycuttercalc(void)
-{
-    u32 i;
-
-    if (gCurrentMove == MOVE_FURY_CUTTER) //changing script to just use the multi-hit bs, need to add this to its loop though,
-        //so to ensure it doesn't trigger for other moves, made the entire thing contingent on move fury cutter, 
-        //will need to find & test other multi hit (try spearow fury attack,) to ensure I didn't break it.
-    {
-        
-        gDynamicBasePower = gBattleMoves[gCurrentMove].power; //it's working now.
-
-
-        for (i = 0; i < (gMultiTask - gMultiHitCounter); ++i) //...changed this and damage multiplier actually works -_-
-        {                 
-            //if (gMultiHitCounter == (gMultiTask - 1)) //should only trigger on 4th hit if you roll the 4th hit
-              //  gDynamicBasePower *= 2;  //change do nothing, so it stops boosting dmg after 3 hits //still equates to a base 110 move
-            //else
-                gDynamicBasePower += 10;  //rebalance, raise base power to 15, change to additive boost, higher scale on early hits slightly lower on end
-                                            //new rebalance
-                //new note what this does is loop dmg multiplier to ensure dmg is boosted based on how high couter is
-            // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
-                //berserker /= 4; 
-        }//dizzyegg confirms doing this way also works for establishing 3/4
-        //++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
-
-    }
-    ++gBattlescriptCurrInstr;// had to move to accuracy function battlescript was below the accuracy check if done here
-} //don't know if i'm just unlucky but it seeems to be hitting every time, so I'm still unsure
-//if the accuracy reduction on hit is working  ok did test, accuracy reduction or accuracy checks just aren't working at all.
-
-void BS_rageboostcalc(void)
-{
-    NATIVE_ARGS();
-    u8 rageCounter = gDisableStructs[gBattlerAttacker].rageCounter;
-
-    if (gCurrentMove == MOVE_RAGE)
-    {
-
-        if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-        {
-            gDisableStructs[gBattlerAttacker].rageCounter = 0;
-            gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE);
-            gBattlescriptCurrInstr = BattleScript_MoveMissedPause; //create custom message rage abated 
-        }
-        else
-        {
-            gDynamicBasePower = (gBattleMoves[gCurrentMove].power + (10 * rageCounter)); //douesn't boost power till take hit or use move again
-
-            gBattlescriptCurrInstr = cmd->nextInstr;
-        }
-    }
-    gBattlescriptCurrInstr = cmd->nextInstr;
-}
-
-static void atkB6_happinesstodamagecalculation(void)
-{
-    if (gBattleMoves[gCurrentMove].effect == EFFECT_RETURN)
-        gDynamicBasePower = 10 * (gBattleMons[gBattlerAttacker].friendship) / 25;
-    else // EFFECT_FRUSTRATION
-        gDynamicBasePower = 10 * (255 - gBattleMons[gBattlerAttacker].friendship) / 25;
-    ++gBattlescriptCurrInstr;
 }
 
 static void atkB7_presentdamagecalculation(void) //setup logic to jump ptr if heal
@@ -15220,6 +15146,92 @@ static void atkB8_setsafeguard(void)
     ++gBattlescriptCurrInstr;
 }
 
+static void atkB3_rolloutdamagecalculation(void)
+{
+
+    s32 i;
+
+    if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)) // first hit
+    {
+        gDisableStructs[gBattlerAttacker].rolloutTimer = 5;
+        gDisableStructs[gBattlerAttacker].rolloutTimerStartValue = 5;
+        gBattleMons[gBattlerAttacker].status2 |= STATUS2_MULTIPLETURNS;
+        gLockedMoves[gBattlerAttacker] = gCurrentMove;
+    }
+    if (--gDisableStructs[gBattlerAttacker].rolloutTimer == 0) // last hit
+        gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_MULTIPLETURNS);
+    gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+    for (i = 1; i < (5 - gDisableStructs[gBattlerAttacker].rolloutTimer); ++i)
+        gDynamicBasePower *= 2;
+    if (gBattleMons[gBattlerAttacker].status2 & STATUS2_DEFENSE_CURL)
+        gDynamicBasePower *= 2;
+    ++gBattlescriptCurrInstr;
+
+}
+
+static void atkB5_furycuttercalc(void)
+{
+    u32 i;
+
+    if (gCurrentMove == MOVE_FURY_CUTTER) //changing script to just use the multi-hit bs, need to add this to its loop though,
+        //so to ensure it doesn't trigger for other moves, made the entire thing contingent on move fury cutter, 
+        //will need to find & test other multi hit (try spearow fury attack,) to ensure I didn't break it.
+    {
+        
+        gDynamicBasePower = gBattleMoves[gCurrentMove].power; //it's working now.
+
+
+        for (i = 0; i < (gMultiTask - gMultiHitCounter); ++i) //...changed this and damage multiplier actually works -_-
+        {                 
+            //if (gMultiHitCounter == (gMultiTask - 1)) //should only trigger on 4th hit if you roll the 4th hit
+              //  gDynamicBasePower *= 2;  //change do nothing, so it stops boosting dmg after 3 hits //still equates to a base 110 move
+            //else
+                gDynamicBasePower += 10;  //rebalance, raise base power to 15, change to additive boost, higher scale on early hits slightly lower on end
+                                            //new rebalance
+                //new note what this does is loop dmg multiplier to ensure dmg is boosted based on how high couter is
+            // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
+                //berserker /= 4; 
+        }//dizzyegg confirms doing this way also works for establishing 3/4
+        //++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
+
+    }
+    ++gBattlescriptCurrInstr;// had to move to accuracy function battlescript was below the accuracy check if done here
+} //don't know if i'm just unlucky but it seeems to be hitting every time, so I'm still unsure
+//if the accuracy reduction on hit is working  ok did test, accuracy reduction or accuracy checks just aren't working at all.
+
+void BS_rageboostcalc(void)
+{
+    NATIVE_ARGS();
+    u8 rageCounter = gDisableStructs[gBattlerAttacker].rageCounter;
+
+    if (gCurrentMove == MOVE_RAGE)
+    {
+
+        if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+        {
+            gDisableStructs[gBattlerAttacker].rageCounter = 0;
+            gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE);
+            gBattlescriptCurrInstr = BattleScript_MoveMissedPause; //create custom message rage abated 
+        }
+        else
+        {
+            gDynamicBasePower = (gBattleMoves[gCurrentMove].power + (10 * rageCounter)); //douesn't boost power till take hit or use move again
+
+            gBattlescriptCurrInstr = cmd->nextInstr;
+        }
+    }
+    gBattlescriptCurrInstr = cmd->nextInstr;
+}
+
+static void atkB6_happinesstodamagecalculation(void)
+{
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_RETURN)
+        gDynamicBasePower = 10 * (gBattleMons[gBattlerAttacker].friendship) / 25;
+    else // EFFECT_FRUSTRATION
+        gDynamicBasePower = 10 * (255 - gBattleMons[gBattlerAttacker].friendship) / 25;
+    ++gBattlescriptCurrInstr;
+}
+
 static void atkB9_magnitudedamagecalculation(void)
 {
     s32 magnitude = Random() % 100;
@@ -15264,6 +15276,127 @@ static void atkB9_magnitudedamagecalculation(void)
         if (gBattlerTarget != gBattlerAttacker && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget])) // a valid target was found
             break;
     ++gBattlescriptCurrInstr;
+}
+
+//consolidate moves with varied power that dont require a jump here
+//will be return frustration magnitude, and snowball, since decide want to keep type on that
+//could also be rage & fury cutter it seems
+void BS_VariablePowerCalc(void) 
+{
+    NATIVE_ARGS();
+    s32 magnitude = Random() % 100;
+    s32 snowball = Random() % 30;
+    u8 rageCounter = gDisableStructs[gBattlerAttacker].rageCounter;
+    u32 i;
+
+    switch (gBattleMoves[gCurrentMove].effect)
+    {
+        case EFFECT_MAGNITUDE:
+        {
+            if (magnitude < 5)
+            {
+                gDynamicBasePower = 10;
+                magnitude = 4;
+            }
+            else if (magnitude < 15)
+            {
+                gDynamicBasePower = 30;
+                magnitude = 5;
+            }
+            else if (magnitude < 35)
+            {
+                gDynamicBasePower = 50;
+                magnitude = 6;
+            }
+            else if (magnitude < 65)
+            {
+                gDynamicBasePower = 70;
+                magnitude = 7;
+            }
+            else if (magnitude < 85)
+            {
+                gDynamicBasePower = 90;
+                magnitude = 8;
+            }
+            else if (magnitude < 95)
+            {
+                gDynamicBasePower = 110;
+                magnitude = 9;
+            }
+            else
+            {
+                gDynamicBasePower = 150;
+                magnitude = 10;
+            }
+            PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 2, magnitude)
+            for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; ++gBattlerTarget)
+            {
+                if (gBattlerTarget != gBattlerAttacker && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget])) // a valid target was found
+                    break;
+            }
+            //gBattlescriptCurrInstr = cmd->nextInstr;
+        
+        }
+        break;
+        case EFFECT_RAGE:
+        if (gCurrentMove == MOVE_RAGE)
+        {
+
+            if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+            {
+                gDisableStructs[gBattlerAttacker].rageCounter = 0;
+                gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RAGE);
+                gBattlescriptCurrInstr = BattleScript_MoveMissedPause; //create custom message rage abated 
+            }
+            else
+            {
+                gDynamicBasePower = (gBattleMoves[gCurrentMove].power + (10 * rageCounter)); //douesn't boost power till take hit or use move again
+
+                //gBattlescriptCurrInstr = cmd->nextInstr;
+            }
+        }
+        break;
+        case EFFECT_RETURN:
+        gDynamicBasePower = 10 * (gBattleMons[gBattlerAttacker].friendship) / 25;
+        break;
+        case EFFECT_FRUSTRATION:
+        gDynamicBasePower = 10 * (255 - gBattleMons[gBattlerAttacker].friendship) / 25;
+        break;
+        case EFFECT_FURY_CUTTER:
+        if (gCurrentMove == MOVE_FURY_CUTTER) //changing script to just use the multi-hit bs, need to add this to its loop though,
+        //so to ensure it doesn't trigger for other moves, made the entire thing contingent on move fury cutter, 
+        //will need to find & test other multi hit (try spearow fury attack,) to ensure I didn't break it.
+        {
+            
+            gDynamicBasePower = gBattleMoves[gCurrentMove].power; //it's working now.
+
+
+            for (i = 0; i < (gMultiTask - gMultiHitCounter); ++i) //...changed this and damage multiplier actually works -_-
+            {                 
+                gDynamicBasePower += 10;  //rebalance, raise base power to 15, change to additive boost, higher scale on early hits slightly lower on end
+                                                //new rebalance
+                    //new note what this does is loop dmg multiplier to ensure dmg is boosted based on how high couter is
+                // berserker *= 3;  //change from 3 to 1, for large test, should reduce accuracy by 4 each hit if its working
+                    //berserker /= 4; 
+            }//dizzyegg confirms doing this way also works for establishing 3/4
+            //++gBattlescriptCurrInstr; // if done right power should double and accuracy should drop off by a fourth each hti
+
+            // had to move to accuracy function battlescript was below the accuracy check if done here
+
+        }
+        break;
+        case EFFECT_SNOWBALL:
+        {
+            if (snowball < 8) //pwr 45  65  80
+                gDynamicBasePower = 45;
+            else if (snowball < 21)
+                gDynamicBasePower = 65;
+            else
+                gDynamicBasePower = 80;
+        }   
+        break;
+    }
+    gBattlescriptCurrInstr = cmd->nextInstr;
 }
 
 static void atkBA_jumpifnopursuitswitchdmg(void)
@@ -17608,7 +17741,9 @@ bool32 IsTelekinesisBannedSpecies(u16 species)
 void BS_setargumenteffectwithchance(void) //different effect for in hit, where actually setting effect
 {
     NATIVE_ARGS();
-    if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
+    //if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE)
+    if (gBattleMoves[gCurrentMove].effect != EFFECT_TWO_TYPED_MOVE                
+        && gBattleMoves[gCurrentMove].effect != EFFECT_LOSETYPE_HIT)
     {
         gBattleScripting.moveEffect = gBattleMoves[gCurrentMove].argument; //potentially need make argument field for bs. as well vsonic
         atk15_setmoveeffectwithchance(); //looks weird but believe its necessary with my setup of argumenttomoveeffect

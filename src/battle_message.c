@@ -368,7 +368,7 @@ static const u8 sText_TwoWildFled[] = _("{PLAY_SE SE_FLEE}{B_LINK_OPPONENT1_NAME
 static const u8 sText_NoRunningFromTrainers[] = _("No! There's no running\nfrom a TRAINER battle!\p");
 static const u8 sText_CantEscape[] = _("Can't escape!\p");
 static const u8 sText_EmptyString5[] = _("");   //sText_DontLeaveBirch in pokeem
-static const u8 sText_ButNothingHappened[] = _("But nothing happened!");
+static const u8 sText_ButNothingHappened[] = _("…\nBut nothing happened!");
 static const u8 sText_ButItFailed[] = _("But it failed!");
 static const u8 sText_ItHurtConfusion[] = _("It hurt itself in its\nconfusion!");
 static const u8 sText_MirrorMoveFailed[] = _("The MIRROR MOVE failed!");
@@ -834,6 +834,7 @@ static const u8 sText_TargetTooHeavy[] = _("But the target\nwas too heavy!");
 static const u8 sText_MeteorBeamCharging[] = _("{B_ATK_NAME_WITH_PREFIX} is overflowing\nwith space energy!");
 static const u8 sText_HeatingUpBeak[] = _("{B_ATK_NAME_WITH_PREFIX} started\nheating up its beak!");
 static const u8 sText_StatWentBackDown[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1} went back down!"); //main use revert sky drop evasion boost, want specific stat tobe in buffer
+static const u8 sText_CelebrateTrollString[] = _("{B_ATK_NAME_WITH_PREFIX} began to dance strangely!");
 
 //default values
 static const u8 sText_YouThrowABallNowRight[] = _("You throw a BALL now, right?\nI… I'll do my best!");
@@ -1517,6 +1518,7 @@ const u8 *const gBattleStringsTable[] = {
     [STRINGID_SAND   - BATTLESTRINGS_TABLE_START]                        = sText_Sand, 
     [STRINGID_HAIL   - BATTLESTRINGS_TABLE_START]                        = sText_Hail, 
     [STRINGID_STATWENTBACKDOWN  - BATTLESTRINGS_TABLE_START]             = sText_StatWentBackDown,
+    [STRINGID_CELEBRATE  - BATTLESTRINGS_TABLE_START]                    = sText_CelebrateTrollString,
 
     [STRINGID_TRAINER2CLASS - BATTLESTRINGS_TABLE_START]                 = sText_Trainer2Class,
     [STRINGID_TRAINER2NAME - BATTLESTRINGS_TABLE_START]                  = sText_Trainer2Name,
@@ -2030,7 +2032,10 @@ const u16 gHealingWishStringIds[] =
 
 const u16 gDmgHazardsStringIds[] =
 {
-    STRINGID_PKMNHURTBYSPIKES, STRINGID_STEALTHROCKDMG
+    [B_MSG_PKMNHURTBYSPIKES]   = STRINGID_PKMNHURTBYSPIKES,
+    [B_MSG_STEALTHROCKDMG]     = STRINGID_STEALTHROCKDMG,
+    [B_MSG_POINTEDSTONESFLOAT] = STRINGID_POINTEDSTONESFLOAT,
+    [B_MSG_SPIKESSCATTERED]    = STRINGID_SPIKESSCATTERED
 };
 
 const u8 gText_PkmnIsEvolving[] = _("What?\n{STR_VAR_1} is evolving!");

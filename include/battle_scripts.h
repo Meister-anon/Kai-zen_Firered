@@ -398,6 +398,7 @@ extern const u8 BattleScript_WeakArmorDefAnim[];
 extern const u8 BattleScript_WeakArmorActivatesSpeed[];
 extern const u8 BattleScript_WeakArmorSpeedAnim[];
 extern const u8 BattleScript_WeakArmorActivatesEnd[];
+extern const u8 BattleScript_StealthRockActivates[];
 extern const u8 BattleScript_FellStingerRaisesStat[];
 extern const u8 BattleScript_FellStingerRaisesAtkEnd[];
 extern const u8 BattleScript_FriskMsgWithPopup[];

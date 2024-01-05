@@ -6,6 +6,7 @@
 #include "task.h"
 #include "trig.h"
 #include "constants/battle_anim.h"
+#include "constants/battle_effects.h"
 
 struct HailStruct
 {
@@ -1554,7 +1555,18 @@ static void AnimIceBallParticle(struct Sprite *sprite)
 void AnimTask_GetRolloutCounter(u8 taskId)
 {
     u8 arg = gBattleAnimArgs[0];
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_ROLLOUT)
+        gBattleAnimArgs[arg] = gAnimDisableStructPtr->rolloutTimerStartValue - gAnimDisableStructPtr->rolloutTimer - 1;
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_SNOWBALL)
+    {
+        if (gDynamicBasePower == 45)
+            gBattleAnimArgs[arg] = 0;
+        else if (gDynamicBasePower == 45)
+            gBattleAnimArgs[arg] = 2;
+        else
+            gBattleAnimArgs[arg] = 4; //if works potentially use 3 instead
 
-    gBattleAnimArgs[arg] = gAnimDisableStructPtr->rolloutTimerStartValue - gAnimDisableStructPtr->rolloutTimer - 1;
+    }
+        
     DestroyAnimVisualTask(taskId);
 }

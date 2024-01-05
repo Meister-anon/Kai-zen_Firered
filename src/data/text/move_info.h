@@ -136,7 +136,7 @@ const u8 gMoveDescription_Amnesia[MOVE_DESCRIPTION_LENGTH + 5] = _("Forgets abou
 const u8 gMoveDescription_Kinesis[MOVE_DESCRIPTION_LENGTH + 5] = _("The user distracts\nthe foe by bending\na spoon. It may\nlower accuracy.");
 const u8 gMoveDescription_SoftBoiled[MOVE_DESCRIPTION_LENGTH + 5] = _("Heals the user by\nup to half its full\nHP. It can be used\nto heal an ally.");
 const u8 gMoveDescription_HiJumpKick[MOVE_DESCRIPTION_LENGTH + 5] = _("A strong jumping\nknee kick. If it\nmisses, the user is\nhurt.");
-const u8 gMoveDescription_Glare[MOVE_DESCRIPTION_LENGTH + 5] = _("The user intimidates\nthe foe with the\ndesign on its belly\nto cause paralysis.");
+const u8 gMoveDescription_Glare[MOVE_DESCRIPTION_LENGTH + 5] = _("The user intimidates\nthe foe with a leer\nshocking the foe into\nparalysis.");
 const u8 gMoveDescription_DreamEater[MOVE_DESCRIPTION_LENGTH + 5] = _("Absorbs half the\ndamage it inflicted\non a sleeping foe\nto restore HP.");
 const u8 gMoveDescription_PoisonGas[MOVE_DESCRIPTION_LENGTH + 5] = _("The foe is sprayed\nwith a cloud of\ntoxic gas that may\npoison the foe.");
 const u8 gMoveDescription_Barrage[MOVE_DESCRIPTION_LENGTH + 5] = _("Round objects are\nhurled at the foe\nto strike two to\nfive times.\nMay lower Defense.");
@@ -392,7 +392,7 @@ const u8 gMoveDescription_LastResort[MOVE_DESCRIPTION_LENGTH + 5] = _("Can only 
 const u8 gMoveDescription_WorrySeed[MOVE_DESCRIPTION_LENGTH + 5] = _("Plants a seed on the foe\ngiving it Insomnia.");
 const u8 gMoveDescription_SuckerPunch[MOVE_DESCRIPTION_LENGTH + 5] = _("Strikes first if the foe\nis preparing an attack.");
 const u8 gMoveDescription_BackStab[MOVE_DESCRIPTION_LENGTH + 5] = _("Sneakily strikes at\nthe foe's weak point\nwhen least expected.\nIt always hits first.\nIt has a high\ncritical-hit ratio.");
-
+const u8 gMoveDescription_HoldBack[MOVE_DESCRIPTION_LENGTH + 5] = _("A restrained attack\nto make foe lower\ntheir guard. Always\nleaves the foe with\nat least 1 HP.\nMay lower defense.");
 const u8 gTOXIC_SPIKESDescription
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Sets spikes that poison a\nfoe switching in.");
 
@@ -988,7 +988,7 @@ const u8 gDAZZLING_GLEAMDescription
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Damages foes by emitting\na bright flash.");
 
 const u8 gCELEBRATEDescription 
-    [MOVE_DESCRIPTION_LENGTH + 5] = _("Congratulates you on your\nspecial day.");
+    [MOVE_DESCRIPTION_LENGTH + 5] = _("As the user performs\nthis euphoric dance,\nsomething special\nmight happen!");
 
 const u8 gHOLD_HANDSDescription 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("The user and ally hold hands\nmaking them happy.");
@@ -1463,7 +1463,7 @@ const u8 gMoveDescription_PlasmaRailgun[MOVE_DESCRIPTION_LENGTH + 5] = _("");
 const u8 gMoveDescription_Boltbeam[MOVE_DESCRIPTION_LENGTH + 5] = _("");
 const u8 gMoveDescription_Pounce[MOVE_DESCRIPTION_LENGTH + 5] = _("");
 const u8 gMoveDescription_CheapShot[MOVE_DESCRIPTION_LENGTH + 5] = _("The user throws\nan unexpected\ndelayed punch\nand then retreats.");
-const u8 gMoveDescription_Snowball[MOVE_DESCRIPTION_LENGTH + 5] = _("The user throws\nan compact ball\nof snow and ice\nof varying size\nand power at\nthe target.");
+const u8 gMoveDescription_Snowball[MOVE_DESCRIPTION_LENGTH + 5] = _("The user throws\nan compact ball\nof snow and ice\nof varying size\nand power that may\nmake the foe flinch.");
 const u8 gMoveDescription_Spindash[MOVE_DESCRIPTION_LENGTH + 5] = _("..");
 
 
@@ -2081,7 +2081,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_HOLD_HANDS ] = gHOLD_HANDSDescription,
     [ MOVE_BABY_DOLL_EYES ] = gBABYDOLL_EYESDescription,
     [ MOVE_NUZZLE ] = gNUZZLEDescription,
-    [ MOVE_HOLD_BACK ] = gMoveDescription_FalseSwipe,
+    [ MOVE_HOLD_BACK ] = gMoveDescription_HoldBack,
     [ MOVE_SWARM ] = gSWARMDescription,
     [ MOVE_POWER_UP_PUNCH ] = gPOWER_UP_PUNCHDescription,
     [ MOVE_OBLIVION_WING ] = gDRAINING_KISSDescription,
@@ -3008,17 +3008,17 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_METEOR_ASSAULT] = _("MeteorAssalt"),
     [MOVE_ETERNABEAM] = _("Eternabeam"),
     [MOVE_STEEL_BEAM] = _("Steel Beam"),
-    [MOVE_EXPANDING_FORCE] = _("ExpandngForc"),
+    [MOVE_EXPANDING_FORCE] = _("Expanding Force"),
     [MOVE_STEEL_ROLLER] = _("Steel Roller"),
     [MOVE_SCALE_SHOT] = _("Scale Shot"),
     [MOVE_METEOR_BEAM] = _("Meteor Beam"),
     [MOVE_SHELL_SIDE_ARM] = _("ShellSideArm"),
-    [MOVE_MISTY_EXPLOSION] = _("MstyExplsion"),
+    [MOVE_MISTY_EXPLOSION] = _("MistyExplosion"),
     [MOVE_GRASSY_GLIDE] = _("Grassy Glide"),
-    [MOVE_RISING_VOLTAGE] = _("RisngVoltage"),
+    [MOVE_RISING_VOLTAGE] = _("Rising Voltage"),
     [MOVE_TERRAIN_PULSE] = _("TerrainPulse"),
     [MOVE_SKITTER_SMACK] = _("SkitterSmack"),
-    [MOVE_BURNING_JEALOUSY] = _("BrningJelosy"),
+    [MOVE_BURNING_JEALOUSY] = _("BurningJealousy"),
     [MOVE_LASH_OUT] = _("Lash Out"),
     [MOVE_POLTERGEIST] = _("Poltergeist"),
     [MOVE_CORROSIVE_GAS] = _("CorrosiveGas"),
@@ -3026,17 +3026,17 @@ const u8 gLowerMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_FLIP_TURN] = _("Flip Turn"),
     [MOVE_TRIPLE_AXEL] = _("Triple Axel"),
     [MOVE_DUAL_WINGBEAT] = _("DualWingbeat"),
-    [MOVE_SCORCHING_SANDS] = _("ScorchngSnds"),
+    [MOVE_SCORCHING_SANDS] = _("ScorchingSands"),
     [MOVE_JUNGLE_HEALING] = _("JungleHealng"),
     [MOVE_WICKED_BLOW] = _("Wicked Blow"),
-    [MOVE_SURGING_STRIKES] = _("SurgngStrkes"),
+    [MOVE_SURGING_STRIKES] = _("Surging Strikes"),
     [MOVE_THUNDER_CAGE] = _("Thunder Cage"),
-    [MOVE_DRAGON_ENERGY] = _("DragonEnergy"),
-    [MOVE_FREEZING_GLARE] = _("FreezngGlare"),
+    [MOVE_DRAGON_ENERGY] = _("Dragon Energy"),
+    [MOVE_FREEZING_GLARE] = _("Freezing Glare"),
     [MOVE_FIERY_WRATH] = _("Fiery Wrath"),
-    [MOVE_THUNDEROUS_KICK] = _("ThnderusKick"),
-    [MOVE_GLACIAL_LANCE] = _("GlacialLance"),
-    [MOVE_ASTRAL_BARRAGE] = _("AstrlBarrage"),
+    [MOVE_THUNDEROUS_KICK] = _("Thnderous Kick"),
+    [MOVE_GLACIAL_LANCE] = _("Glacial Lance"),
+    [MOVE_ASTRAL_BARRAGE] = _("Astral Barrage"),
     [MOVE_EERIE_SPELL] = _("Eerie Spell"),
 
     [MOVE_DIRE_CLAW] = _("Dire Claw"),
