@@ -354,16 +354,125 @@
 #define ITEM_TM48 336
 #define ITEM_TM49 337
 #define ITEM_TM50 338
-#define ITEM_HM01 339 //end of tms
-#define ITEM_HM02 340
-#define ITEM_HM03 341
-#define ITEM_HM04 342
-#define ITEM_HM05 343
-#define ITEM_HM06 344
-#define ITEM_HM07 345
-#define ITEM_HM08 346
-#define ITEM_HM09 347
-#define ITEM_15C 348
+//tm Expansion
+#define ITEM_TM51 339
+#define ITEM_TM52 340
+#define ITEM_TM53 341
+#define ITEM_TM54 342
+#define ITEM_TM55 343
+#define ITEM_TM56 344
+#define ITEM_TM57 345
+#define ITEM_TM58 346
+#define ITEM_TM59 347
+#define ITEM_TM60 348
+#define ITEM_TM61 349
+#define ITEM_TM62 350
+#define ITEM_TM63 351
+#define ITEM_TM64 352
+#define ITEM_TM65 353
+#define ITEM_TM66 354
+#define ITEM_TM67 355
+#define ITEM_TM68 356
+#define ITEM_TM69 357
+#define ITEM_TM70 358
+#define ITEM_TM71 359
+#define ITEM_TM72 360
+#define ITEM_TM73 361
+#define ITEM_TM74 362
+#define ITEM_TM75 363
+#define ITEM_TM76 364
+#define ITEM_TM77 365
+#define ITEM_TM78 366
+#define ITEM_TM79 367
+#define ITEM_TM80 368
+#define ITEM_TM81 369
+#define ITEM_TM82 370
+#define ITEM_TM83 371
+#define ITEM_TM84 372
+#define ITEM_TM85 373
+#define ITEM_TM86 374
+#define ITEM_TM87 375
+#define ITEM_TM88 376
+#define ITEM_TM89 377
+#define ITEM_TM90 378
+#define ITEM_TM91 379
+#define ITEM_TM92 380
+#define ITEM_TM93 381
+#define ITEM_TM94 382
+#define ITEM_TM95 383
+#define ITEM_TM96 384
+#define ITEM_TM97 385
+#define ITEM_TM98 386
+#define ITEM_TM99 387
+#define ITEM_TM100 388
+#define ITEM_TM101 389
+#define ITEM_TM102 390
+#define ITEM_TM103 391
+#define ITEM_TM104 392
+#define ITEM_TM105 393
+#define ITEM_TM106 394
+#define ITEM_TM107 395
+#define ITEM_TM108 396
+#define ITEM_TM109 397
+#define ITEM_TM110 398
+#define ITEM_TM111 399
+#define ITEM_TM112 400
+#define ITEM_TM113 401
+#define ITEM_TM114 402
+#define ITEM_TM115 403
+#define ITEM_TM116 404
+#define ITEM_TM117 405
+#define ITEM_TM118 406
+#define ITEM_TM119 407
+#define ITEM_TM120 408
+#define ITEM_TM121 409
+#define ITEM_TM122 410
+#define ITEM_TM123 411
+#define ITEM_TM124 412
+#define ITEM_TM125 413
+#define ITEM_TM126 414
+#define ITEM_TM127 415
+#define ITEM_TM128 416
+#define ITEM_TM129 417
+#define ITEM_TM130 418
+#define ITEM_TM131 419
+#define ITEM_TM132 420
+#define ITEM_TM133 421
+#define ITEM_TM134 422
+#define ITEM_TM135 423
+#define ITEM_TM136 424
+#define ITEM_TM137 425
+#define ITEM_TM138 426
+#define ITEM_TM139 427
+#define ITEM_TM140 428
+#define ITEM_TM141 429
+#define ITEM_TM142 430
+#define ITEM_TM143 431
+#define ITEM_TM144 432
+#define ITEM_TM145 433
+#define ITEM_TM146 434
+#define ITEM_TM147 435
+#define ITEM_TM148 436
+#define ITEM_TM149 437
+#define ITEM_TM150 438
+#define ITEM_TM151 439
+#define ITEM_TM152 440
+#define ITEM_TM153 441
+#define ITEM_TM154 442
+#define ITEM_TM155 443
+#define ITEM_TM156 444
+#define ITEM_TM157 445  //end of tms   +107
+
+#define ITEM_HM01 446 
+#define ITEM_HM02 447
+#define ITEM_HM03 448
+#define ITEM_HM04 449
+#define ITEM_HM05 450
+#define ITEM_HM06 451
+#define ITEM_HM07 452
+#define ITEM_HM08 453
+#define ITEM_HM09 454
+#define ITEM_15C 455    
 
 #define ITEM_TM01_FOCUS_PUNCH ITEM_TM01
 #define ITEM_TM02_DRAGON_CLAW ITEM_TM02
@@ -431,183 +540,114 @@
 //ex. when get to slash moves put all my stuff there
 //make dual wingbeat a tm
 #define TM_EXPANSION
-//razor leaf
-//infestation
-//sandtomb
-//fire spin
-//whirlpool
-//FIRE PUnch
-//thunder punch
-//ice punch
-//shadow punch
-//fire fang
-//thunder fang
-//ice fang
-//tri-attack
-//solar blade
-//rage
-//megapunch
-//mega kick
-//teleport - for when update teleport effect
-//double edge   - just add to learnsets
-//magic guard -magic gaurd is ability the move is magic coat, and  thnk its too strong to be tm
-//add gen 4 tms above 50 about 100 total
-//work up
-//venoshock
-//sleep talk 
-//snore
-//volt switch
-//rock polish
-//aurora veil
-//dazzling gleam
-//confide
-//wild charge
-//all elemental slash variants
-//frost breath
-//flame charge ?
-//solar blade
-//rock tomb
-//icicle spear
-//fake tears
-//weather ball?
-//beat up
-//heat wave  i.e fire surf
-//pledge moves
-//terrain moves
-//smack down
-//bug bite
-//knock off
-//haze - think made too strong, to be tm
-//future sight - not making tm too good
-//dual wing
-//MOVE_HONE_CLAWS
-//uproar
-//gravity
 
-//gen 4 list - customized
-//++ to add  (nvm just use remove)
-//-- to remove
-/*  //could put wild charge here, to mesh w overheat nowbeing recoil
-51* Wild charge     Electric Physical
-52*	Roost	Flying	Status
-    teleport
---53	Energy Ball	Grass	Special
-    quash
-    hone claws
-54	False Swipe	Normal	Physical
-55	Brine	Water	Special
-57	Charge Beam	Electric	Special
-58	Endure	Normal	Status
-59	Dragon Pulse	Dragon	Special
-    Thunder Punch
-    Fire Punch
-    Ice Punch
-    Shadow Punch
-    Poison Jab
-60	Drain Punch	Fighting	Physical
-    Comet Punch -instaed of mega punch mega kick, keep those to learnset
-++ punches
-61	Will-O-Wisp	Fire	Status
-62	Silver Wind	Bug	Special
-++ ominous wind
-56	Fling	Dark	Physical
-63	Embargo	Dark	Status
-++	Recycle	Normal	Status //put together w embargo
-++  Heal Block
-    Thunder Fang
-    Fire Fang
-    Ice Fang
-    Psychic Fangs
-64	Explosion	Normal	Physical
-65	Shadow Claw	Ghost	Physical
-    Night Slash
-    Razor Leaf
-    X scissor
-    Cross Poison
-    Psycho Cut
-    False Swipe
-66	Payback	Dark	Physical
-68	Giga Impact	Normal	Physical  -game corner
-69	Rock Polish	Rock	Status
-    MOVE_MUD_SPORT
-    MOVE_WATER_SPORT
-    aurora veil
-71	Stone Edge	Rock	Physical
-++ revenge
-72	Avalanche	Ice	Physical
-73	Thunder Wave	Electric	Status
-glare
-74	Gyro Ball	Steel	Physical
-    electro ball
-75	Swords Dance	Normal	Status
-++  Power Trick
-    Power Shift
-    power swap
-    guard swap
-    speed swap
-76	Stealth Rock	Rock	Status
-    spikes
-    toxic spikes --think cant make this tm
-    bind -think still need small bit of work on this? supposed to do encore or make them struggle? or use random move something, works if slower, odd if faster i think
-    wrap - I could add these two but every mon I could give it too would alerady learn it
-    fire spin
-    sand tomb
-    whirlpool
-    swarm - previously infestation
-77	Psych Up	Normal	Status
-78	Captivate	Normal	Status
-    confide - make universal like attract
-    fake tears
-    acid spray
-    
-++ more status stuff i.e confide etc.
-79	Dark Pulse	Dark	Special -keep cuz few special dark moves
-80	Rock Slide	Rock	Physical
-++ rock throw, as accessible rock move to groud flying
-82	Sleep Talk	Normal	Status
-++ snore
-83	Natural Gift	Normal	Physical
-86	Grass Knot	Grass	Special
-87	Swagger	Normal	Status
-88	Pluck	Flying	Physical
-    Bug Bite
-89	U-turn	Bug	Physical
-    volt switch
-    flip turn
-    uproot
-    dive bomb
-90	Substitute	Normal	Status
-91	Flash Cannon	Steel	Special
-92	Trick Room	Psychic	Status
-    MOVE_MAGIC_ROOM
-    MOVE_WONDER_ROOM
-    gravity
-++draining kiss
-    leech life
-    frost breath - replace w freeze dry?  yeah
-    weather ball
-    flame charge
-    MOVE_DUAL_WINGBEAT
-    knock off
-    beat up
-    rage 
-    rock tomb    
-    icicle spear
-    acrobatics
-    assurance
-    solar blade
-    icy wind
-    hold back  - fill in for mon that cant learn falase swipe
-    headbutt  - for rock head users
-    hi-jump kick
-    snow ball
-    Celebrate - item description Something Might Happen! -set as last tm everyone can learn
-
-
-
-
- */
-
+#define ITEM_TM51_WILD_CHARGE   ITEM_TM51
+#define ITEM_TM52_ROOST ITEM_TM52
+#define ITEM_TM53_TELEPORT ITEM_TM53
+#define ITEM_TM54_QUASH ITEM_TM54
+#define ITEM_TM55_HONE_CLAWS ITEM_TM55
+#define ITEM_TM56_BRINE ITEM_TM56
+#define ITEM_TM57_CHARGE_BEAM ITEM_TM57
+#define ITEM_TM58_ENDURE ITEM_TM58
+#define ITEM_TM59_DRAGON_PULSE ITEM_TM59
+#define ITEM_TM60_THUNDER_PUNCH ITEM_TM60
+#define ITEM_TM61_FIRE_PUNCH ITEM_TM61
+#define ITEM_TM62_ICE_PUNCH ITEM_TM62
+#define ITEM_TM63_SHADOW_PUNCH ITEM_TM63
+#define ITEM_TM64_POISON_JAB ITEM_TM64
+#define ITEM_TM65_DRAIN_PUNCH ITEM_TM65
+#define ITEM_TM66_COMET_PUNCH ITEM_TM66
+#define ITEM_TM67_WILL_O_WISP ITEM_TM67
+#define ITEM_TM68_MEMENTO ITEM_TM68
+#define ITEM_TM69_SILVER_WIND ITEM_TM69
+#define ITEM_TM70_OMINOUS_WIND ITEM_TM70
+#define ITEM_TM71_FLING ITEM_TM71
+#define ITEM_TM72_EMBARGO ITEM_TM72
+#define ITEM_TM73_RECYCLE ITEM_TM73
+#define ITEM_TM74_HEAL_BLOCK ITEM_TM74
+#define ITEM_TM75_THUNDER_FANG ITEM_TM75
+#define ITEM_TM76_FIRE_FANG ITEM_TM76
+#define ITEM_TM77_ICE_FANG ITEM_TM77
+#define ITEM_TM78_EXPLOSION ITEM_TM78
+#define ITEM_TM79_SHADOW_CLAW ITEM_TM79
+#define ITEM_TM80_NIGHT_SLASH ITEM_TM80
+#define ITEM_TM81_RAZOR_LEAF ITEM_TM81
+#define ITEM_TM82_X_SCISSOR ITEM_TM82
+#define ITEM_TM83_CROSS_POISON ITEM_TM83
+#define ITEM_TM84_PSYCHO_CUT ITEM_TM84
+#define ITEM_TM85_FALSE_SWIPE ITEM_TM85
+#define ITEM_TM86_PAYBACK ITEM_TM86
+#define ITEM_TM87_GIGA_IMPACT ITEM_TM87
+#define ITEM_TM88_ROCK_POLISH ITEM_TM88
+#define ITEM_TM89_MUD_SPORT ITEM_TM89
+#define ITEM_TM90_WATER_SPORT ITEM_TM90
+#define ITEM_TM91_AURORA_VEIL ITEM_TM91
+#define ITEM_TM92_STONE_EDGE ITEM_TM92
+#define ITEM_TM93_REVENGE ITEM_TM93
+#define ITEM_TM94_AVALANCHE ITEM_TM94
+#define ITEM_TM95_THUNDER_WAVE ITEM_TM95
+#define ITEM_TM96_GLARE ITEM_TM96
+#define ITEM_TM97_GYRO_BALL ITEM_TM97
+#define ITEM_TM98_ELECTRO_BALL ITEM_TM98
+#define ITEM_TM99_SWORDS_DANCE ITEM_TM99
+#define ITEM_TM100_POWER_TRICK ITEM_TM100
+#define ITEM_TM101_POWER_SHIFT ITEM_TM101
+#define ITEM_TM102_POWER_SWAP ITEM_TM102
+#define ITEM_TM103_GUARD_SWAP ITEM_TM103
+#define ITEM_TM104_SPEED_SWAP ITEM_TM104
+#define ITEM_TM105_STEALTH_ROCK ITEM_TM105
+#define ITEM_TM106_SPIKES ITEM_TM106
+#define ITEM_TM107_FIRE_SPIN ITEM_TM107
+#define ITEM_TM108_SAND_TOMB ITEM_TM108
+#define ITEM_TM109_WHIRLPOOL ITEM_TM109
+#define ITEM_TM110_SWARM ITEM_TM110
+#define ITEM_TM111_PSYCH_UP ITEM_TM111
+#define ITEM_TM112_CAPTIVATE ITEM_TM112
+#define ITEM_TM113_CONFIDE ITEM_TM113
+#define ITEM_TM114_FAKE_TEARS ITEM_TM114
+#define ITEM_TM115_ACID_SPRAY ITEM_TM115
+#define ITEM_TM116_DARK_PULSE ITEM_TM116
+#define ITEM_TM117_ROCK_THROW ITEM_TM117
+#define ITEM_TM118_POWER_GEM ITEM_TM118
+#define ITEM_TM119_SLEEP_TALK ITEM_TM119
+#define ITEM_TM120_SNORE ITEM_TM120
+#define ITEM_TM121_NATURAL_GIFT ITEM_TM121
+#define ITEM_TM122_GRASS_KNOT ITEM_TM122
+#define ITEM_TM123_SWAGGER ITEM_TM123
+#define ITEM_TM124_PLUCK ITEM_TM124
+#define ITEM_TM125_BUG_BITE ITEM_TM125
+#define ITEM_TM126_U_TURN ITEM_TM126
+#define ITEM_TM127_VOLT_SWITCH ITEM_TM127
+#define ITEM_TM128_FLIP_TURN ITEM_TM128
+#define ITEM_TM129_UP_ROOT ITEM_TM129
+#define ITEM_TM130_DIVE_BOMB ITEM_TM130
+#define ITEM_TM131_SUBSTITUTE ITEM_TM131
+#define ITEM_TM132_FLASH_CANNON ITEM_TM132
+#define ITEM_TM133_AGILITY ITEM_TM133
+#define ITEM_TM134_TRICK_ROOM ITEM_TM134
+#define ITEM_TM135_MAGIC_ROOM ITEM_TM135
+#define ITEM_TM136_WONDER_ROOM ITEM_TM136
+#define ITEM_TM137_GRAVITY ITEM_TM137
+#define ITEM_TM138_DRAINING_KISS ITEM_TM138
+#define ITEM_TM139_LEECH_LIFE ITEM_TM139
+#define ITEM_TM140_FROST_BREATH ITEM_TM140
+#define ITEM_TM141_WEATHER_BALL ITEM_TM141
+#define ITEM_TM142_FLAME_CHARGE ITEM_TM142
+#define ITEM_TM143_DUAL_WINGBEAT ITEM_TM143
+#define ITEM_TM144_KNOCK_OFF ITEM_TM144
+#define ITEM_TM145_BEAT_UP ITEM_TM145
+#define ITEM_TM146_RAGE ITEM_TM146
+#define ITEM_TM147_ROCK_TOMB ITEM_TM147
+#define ITEM_TM148_ICICLE_SPEAR ITEM_TM148
+#define ITEM_TM149_ACROBATICS ITEM_TM149
+#define ITEM_TM150_ASSURANCE ITEM_TM150
+#define ITEM_TM151_SOLAR_BLADE ITEM_TM151
+#define ITEM_TM152_ICY_WIND ITEM_TM152
+#define ITEM_TM153_HOLD_BACK ITEM_TM153
+#define ITEM_TM154_HEADBUTT ITEM_TM154
+#define ITEM_TM155_HI_JUMP_KICK ITEM_TM155
+#define ITEM_TM156_SNOWBALL ITEM_TM156
+#define ITEM_TM157_CELEBRATE ITEM_TM157
 
 
 #define ITEM_HM01_CUT ITEM_HM01
@@ -618,101 +658,101 @@ glare
 #define ITEM_HM06_ROCK_SMASH ITEM_HM06
 #define ITEM_HM07_WATERFALL ITEM_HM07
 #define ITEM_HM08_DIVE ITEM_HM08 //can add rock climb right after this simple enough
-#define ITEM_HM08_ROCK_CLIMB ITEM_HM09
+#define ITEM_HM09_ROCK_CLIMB ITEM_HM09
 
 // FireRed/LeafGreen  believe this is key items actually maybe..?
-#define ITEM_OAKS_PARCEL 349
-#define ITEM_POKE_FLUTE 350
-#define ITEM_SECRET_KEY 351
-#define ITEM_BIKE_VOUCHER 352
-#define ITEM_GOLD_TEETH 353
-#define ITEM_OLD_AMBER 354		//aerodactyl
-#define ITEM_CARD_KEY 355
-#define ITEM_LIFT_KEY 356
-#define ITEM_HELIX_FOSSIL 357	//omanyte
-#define ITEM_DOME_FOSSIL 358	//kabuto
-#define ITEM_SILPH_SCOPE 359
-#define ITEM_BICYCLE 360
-#define ITEM_TOWN_MAP 361
-#define ITEM_VS_SEEKER 362
-#define ITEM_FAME_CHECKER 363
-#define ITEM_TM_CASE 364
-#define ITEM_BERRY_POUCH 365
-#define ITEM_TEACHY_TV 366
-#define ITEM_LINK_KEY 367 //NEW IDEA make key item call link key, trade evos can level up evolve long as yuo have this item //remove later don' tneed
-#define ITEM_TRI_PASS 368 //  AND they meet whatever other condition they have
-#define ITEM_RAINBOW_PASS 369
-#define ITEM_TEA 370
-#define ITEM_MYSTIC_TICKET 371
-#define ITEM_AURORA_TICKET 372 /*
-#define ITEM_POWDER_JAR 372 */
-#define ITEM_MAGMA_EMBLEM 373
-#define ITEM_OLD_SEA_MAP 374
-#define ITEM_RUBY 375
-#define ITEM_SAPPHIRE 376
-#define ITEM_ULTIMA_BRACE 377
-#define ITEM_EV_SHACKLES  378
+#define ITEM_OAKS_PARCEL 456
+#define ITEM_POKE_FLUTE 457
+#define ITEM_SECRET_KEY 458
+#define ITEM_BIKE_VOUCHER 459
+#define ITEM_GOLD_TEETH 460
+#define ITEM_OLD_AMBER 461		//aerodactyl
+#define ITEM_CARD_KEY 462
+#define ITEM_LIFT_KEY 463
+#define ITEM_HELIX_FOSSIL 464	//omanyte
+#define ITEM_DOME_FOSSIL 465	//kabuto
+#define ITEM_SILPH_SCOPE 466
+#define ITEM_BICYCLE 467
+#define ITEM_TOWN_MAP 468
+#define ITEM_VS_SEEKER 469
+#define ITEM_FAME_CHECKER 470
+#define ITEM_TM_CASE 471
+#define ITEM_BERRY_POUCH 472
+#define ITEM_TEACHY_TV 473
+#define ITEM_LINK_KEY 474 //NEW IDEA make key item call link key, trade evos can level up evolve long as yuo have this item //remove later don' tneed
+#define ITEM_TRI_PASS 475 //  AND they meet whatever other condition they have
+#define ITEM_RAINBOW_PASS 476
+#define ITEM_TEA 477
+#define ITEM_MYSTIC_TICKET 478
+#define ITEM_AURORA_TICKET 479 /*
+#define ITEM_POWDER_JAR 479 */
+#define ITEM_MAGMA_EMBLEM 480
+#define ITEM_OLD_SEA_MAP 481
+#define ITEM_RUBY 482
+#define ITEM_SAPPHIRE 483
+#define ITEM_ULTIMA_BRACE 484
+#define ITEM_EV_SHACKLES  485
 // Secondary Set of Use items  (mostly for evo) 
-#define ITEM_UP_GRADE 379  //need to change these items in items.json so they are evo items.
-#define ITEM_ELECTIRIZER 380 //don't forget to list in evolutions table as well
-#define ITEM_MAGMARIZER 381
-#define ITEM_DUBIOUS_DISC 382
-#define ITEM_REAPER_CLOTH 383
-#define ITEM_METAL_COAT 384
-//#define ITEM_LINK_CABLE 383 	// not gonna need this, if can just make use whatever item I want
+#define ITEM_UP_GRADE 486  //need to change these items in items.json so they are evo items.
+#define ITEM_ELECTIRIZER 487 //don't forget to list in evolutions table as well
+#define ITEM_MAGMARIZER 488
+#define ITEM_DUBIOUS_DISC 489
+#define ITEM_REAPER_CLOTH 490
+#define ITEM_METAL_COAT 491
+//#define ITEM_LINK_CABLE 490 	// not gonna need this, if can just make use whatever item I want
 
-#define ITEM_ABOMASITE 385
-#define ITEM_ABSOLITE 386
-#define ITEM_AERODACTYLITE 387
-#define ITEM_AGGRONITE 388
-#define ITEM_ALAKAZITE 389
-#define ITEM_ALTARIANITE 390
-#define ITEM_AMPHAROSITE 391
-#define ITEM_AUDINITE 392
-#define ITEM_BANETTITE 393
-#define ITEM_BEEDRILLITE 394
-#define ITEM_BLASTOISINITE 395
-#define ITEM_BLAZIKENITE 396
-#define ITEM_CAMERUPTITE 397
-#define ITEM_CHARIZARDITE_X 398
-#define ITEM_CHARIZARDITE_Y 399
-#define ITEM_DIANCITE 400
-#define ITEM_GALLADITE 401
-#define ITEM_GARCHOMPITE 402
-#define ITEM_GARDEVOIRITE 403
-#define ITEM_GENGARITE 404
-#define ITEM_GLALITITE 405
-#define ITEM_GYARADOSITE 406
-#define ITEM_HERACRONITE 407
-#define ITEM_HOUNDOOMINITE 408
-#define ITEM_KANGASKHANITE 409
-#define ITEM_LATIASITE 410
-#define ITEM_LATIOSITE 411
-#define ITEM_LOPUNNITE 412
-#define ITEM_LUCARIONITE 413
-#define ITEM_MANECTITE 414
-#define ITEM_MAWILITE 415
-#define ITEM_MEDICHAMITE 416
-#define ITEM_METAGROSSITE 417
-#define ITEM_MEWTWONITE_X 418
-#define ITEM_MEWTWONITE_Y 419
-#define ITEM_PIDGEOTITE 420
-#define ITEM_PINSIRITE 421
-#define ITEM_SABLENITE 422
-#define ITEM_SALAMENCITE 423
-#define ITEM_SCEPTILITE 424
-#define ITEM_SCIZORITE 425
-#define ITEM_SHARPEDONITE 426
-#define ITEM_SLOWBRONITE 427
-#define ITEM_STEELIXITE 428
-#define ITEM_SWAMPERTITE 429
-#define ITEM_TYRANITARITE 430
-#define ITEM_VENUSAURITE 431 //extra new megas below
-#define ITEM_TORTERRAITE 432
-#define ITEM_MAROWAKONITE 433//end of mega
+#define ITEM_ABOMASITE 492
+#define ITEM_ABSOLITE 493
+#define ITEM_AERODACTYLITE 494
+#define ITEM_AGGRONITE 495
+#define ITEM_ALAKAZITE 496
+#define ITEM_ALTARIANITE 497
+#define ITEM_AMPHAROSITE 498
+#define ITEM_AUDINITE 499
+#define ITEM_BANETTITE 500
+#define ITEM_BEEDRILLITE 501
+#define ITEM_BLASTOISINITE 502
+#define ITEM_BLAZIKENITE 503
+#define ITEM_CAMERUPTITE 504
+#define ITEM_CHARIZARDITE_X 505
+#define ITEM_CHARIZARDITE_Y 506
+#define ITEM_DIANCITE 507
+#define ITEM_GALLADITE 508
+#define ITEM_GARCHOMPITE 509
+#define ITEM_GARDEVOIRITE 510
+#define ITEM_GENGARITE 511
+#define ITEM_GLALITITE 512
+#define ITEM_GYARADOSITE 513
+#define ITEM_HERACRONITE 514
+#define ITEM_HOUNDOOMINITE 515
+#define ITEM_KANGASKHANITE 516
+#define ITEM_LATIASITE 517
+#define ITEM_LATIOSITE 518
+#define ITEM_LOPUNNITE 519
+#define ITEM_LUCARIONITE 520
+#define ITEM_MANECTITE 521
+#define ITEM_MAWILITE 522
+#define ITEM_MEDICHAMITE 523
+#define ITEM_METAGROSSITE 524
+#define ITEM_MEWTWONITE_X 525
+#define ITEM_MEWTWONITE_Y 526
+#define ITEM_PIDGEOTITE 527
+#define ITEM_PINSIRITE 528
+#define ITEM_SABLENITE 529
+#define ITEM_SALAMENCITE 530
+#define ITEM_SCEPTILITE 531
+#define ITEM_SCIZORITE 532
+#define ITEM_SHARPEDONITE 533
+#define ITEM_SLOWBRONITE 534
+#define ITEM_STEELIXITE 535
+#define ITEM_SWAMPERTITE 536
+#define ITEM_TYRANITARITE 537
+#define ITEM_VENUSAURITE 538 //extra new megas below
+#define ITEM_TORTERRAITE 539
+#define ITEM_MAROWAKONITE 540//end of mega
 //K looks like it doesn't matter where I put it except the use items,
 // because effects and bag placement are set in the items.h file.
-#define ITEM_MEGA_BRACELET 434 // should move set as key item.  //updated json item data should match
+#define ITEM_MEGA_BRACELET 541 // should move set as key item.  //updated json item data should match
 /*
 //More hold items
 // Z Crystals
@@ -773,12 +813,10 @@ glare
 #define ITEM_TOXIC_ORB 283
 #define ITEM_FLAME_ORB 284
 #define ITEM_STICKY_BARB 285
-#define ITEM_BLACK_SLUDGE 286
 #define ITEM_IRON_BALL 287
 #define ITEM_LAGGING_TAIL 288
 #define ITEM_SHED_SHELL 289
 #define ITEM_BIG_ROOT 290
-#define 
 #define ITEM_FLOAT_STONE 292
 #define ITEM_ROCKY_HELMET 293
 #define ITEM_AIR_BALLOON 294
@@ -802,10 +840,10 @@ glare
 #define ITEM_GRASSY_SEED 312*/
 //END of 2nd set of Use items
 // Incenses
-#define ITEM_SEA_INCENSE 435//385 
-#define ITEM_LAX_INCENSE 436
-#define ITEM_BLACK_SLUDGE 437
-#define ITEM_BAD_ONION 438 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
+#define ITEM_SEA_INCENSE 542//385 
+#define ITEM_LAX_INCENSE 543
+#define ITEM_BLACK_SLUDGE 544
+#define ITEM_BAD_ONION 545 //  ok these new values for incense are actually better, since they aren't supposed to be for use, just hold.
 /*#define ITEM_ODD_INCENSE 386
 #define ITEM_ROCK_INCENSE 387
 #define ITEM_FULL_INCENSE 388
@@ -883,7 +921,7 @@ glare
 #define ITEM_ADAMANT_ORB
 #define ITEM_LUSTROUS_ORB
 #define ITEM_GRISEOUS_ORB */
-#define ITEM_N_A 439 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
+#define ITEM_N_A 546 // keep this as last item value, needs be +1 last defined item value   emerald stuff needs to be a separate value, otherwise seems to make duplicate error
 #define ITEMS_COUNT ITEM_N_A +1
 #define ITEM_FIELD_ARROW ITEM_N_A//field arrow isn't defined as an item, it just end of item_menu_icons.c list
 // Emerald   BUT based on list from vanilla its actually ID was equal to items N_A, circumventing that equation.
@@ -894,7 +932,7 @@ glare
 #define LAST_BERRY_INDEX ITEM_ENIGMA_BERRY
 #define ITEM_TO_BERRY(itemId)(((itemId - FIRST_BERRY_INDEX) + 1))
 
-#define NUM_TECHNICAL_MACHINES 156 //change to 120 later  / or more plan to add on to tms I think for ease spreading certain moves
+#define NUM_TECHNICAL_MACHINES 157 //change to 120 later  / or more plan to add on to tms I think for ease spreading certain moves
 #define NUM_HIDDEN_MACHINES     9
 
 //copy from emerald for replacing the numerical values in type field in items.json

@@ -140,7 +140,7 @@ const u8 gMoveDescription_Glare[MOVE_DESCRIPTION_LENGTH + 5] = _("The user intim
 const u8 gMoveDescription_DreamEater[MOVE_DESCRIPTION_LENGTH + 5] = _("Absorbs half the\ndamage it inflicted\non a sleeping foe\nto restore HP.");
 const u8 gMoveDescription_PoisonGas[MOVE_DESCRIPTION_LENGTH + 5] = _("The foe is sprayed\nwith a cloud of\ntoxic gas that may\npoison the foe.");
 const u8 gMoveDescription_Barrage[MOVE_DESCRIPTION_LENGTH + 5] = _("Round objects are\nhurled at the foe\nto strike two to\nfive times.\nMay lower Defense.");
-const u8 gMoveDescription_LeechLife[MOVE_DESCRIPTION_LENGTH + 5] = _("An attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.");
+const u8 gMoveDescription_LeechLife[MOVE_DESCRIPTION_LENGTH + 5] = _("An attack that\nabsorbs all the\ndamage it inflicted\nto restore HP.");
 const u8 gMoveDescription_LovelyKiss[MOVE_DESCRIPTION_LENGTH + 5] = _("The user forces a\nkiss on the foe\nwith a scary face\nthat induces sleep.");
 const u8 gMoveDescription_SkyAttack[MOVE_DESCRIPTION_LENGTH + 5] = _("The user raises its\nevasiveness in the\n1st turn, then\nattacks in the 2nd\nwith heightend crit.\nThe foe may flinch.");
 const u8 gMoveDescription_Transform[MOVE_DESCRIPTION_LENGTH + 5] = _("The user transforms\ninto a copy of the\nfoe with even the\nsame move set.\nKeeps EVs and nature");
@@ -1451,7 +1451,7 @@ const u8 gMoveDescription_ShieldBash
     [MOVE_DESCRIPTION_LENGTH + 5] = _("The user blocks\nwith a shield, and\ncounters if hit with\na physical move.\nDmg is based on DEFENSE.");
 
 
-const u8 gMoveDescription_UpRoot[MOVE_DESCRIPTION_LENGTH + 5] = _("Does damage then switches\nout the user.");
+const u8 gMoveDescription_UpRoot[MOVE_DESCRIPTION_LENGTH + 5] = _("Pulls up ingrained\nroots to attack\nthen switches\nout the user.");
 const u8 gMoveDescription_DiveBomb[MOVE_DESCRIPTION_LENGTH + 5] = _("Does damage then switches\nout the user.");
     //name tbd - done
 const u8 gMoveDescription_Nettle_Whip[MOVE_DESCRIPTION_LENGTH + 5] = _("Attacks the target\nwith a vine covered\nin Nettle bristles.\nIf not a GRASS type,\nIt may leave the\nfoe with a burn.");
@@ -1466,7 +1466,9 @@ const u8 gMoveDescription_CheapShot[MOVE_DESCRIPTION_LENGTH + 5] = _("The user t
 const u8 gMoveDescription_Snowball[MOVE_DESCRIPTION_LENGTH + 5] = _("The user throws\nan compact ball\nof snow and ice\nof varying size\nand power that may\nmake the foe flinch.");
 const u8 gMoveDescription_Spindash[MOVE_DESCRIPTION_LENGTH + 5] = _("..");
 
-
+const u8 gMoveDescription_Avalanche[MOVE_DESCRIPTION_LENGTH + 5] = _("A crushing attack\nthat grows stronger\nif the user has\ntaken damage.");
+const u8 gMoveDescription_BugBite[MOVE_DESCRIPTION_LENGTH + 5] = _("A biting attack.\nIf the foe is\nholding a Berry,\nthe user eats it\nand gains its effect.");
+const u8 gMoveDescription_VoltSwitch[MOVE_DESCRIPTION_LENGTH + 5] = _("The user charges up\nthen tackles the foe\nswitching out\nas they pass.");
     //Description can hold 5 line breaks (so 6 lines total) given current space post expansion!  at approx 19 chars per line// so 114 max ( + 5 for escape chars)
 
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
@@ -1890,7 +1892,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_GIGA_IMPACT ] = gMoveDescription_HyperBeam,
     [ MOVE_NASTY_PLOT ] = gNASTY_PLOTDescription,
     [ MOVE_BULLET_PUNCH ] = gBULLET_PUNCHDescription,
-    [ MOVE_AVALANCHE ] = gMoveDescription_Revenge,
+    [ MOVE_AVALANCHE ] = gMoveDescription_Avalanche,
     [ MOVE_ICE_SHARD ] = gICE_SHARDDescription,
     [ MOVE_SHADOW_CLAW ] = gSHADOW_CLAWDescription,
     [ MOVE_THUNDER_FANG ] = gTHUNDER_FANGDescription,
@@ -1921,7 +1923,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_GRASS_KNOT ] = gGRASS_KNOTDescription,
     [ MOVE_CHATTER ] = gCHATTERDescription,
     [ MOVE_JUDGMENT ] = gJUDGMENTDescription,
-    [ MOVE_BUG_BITE ] = gMoveDescription_Pluck,
+    [ MOVE_BUG_BITE ] = gMoveDescription_BugBite,
     [ MOVE_CHARGE_BEAM ] = gCHARGE_BEAMDescription,
     [ MOVE_WOOD_HAMMER ] = gWOOD_HAMMERDescription,
     [ MOVE_AQUA_JET ] = gAQUA_JETDescription,
@@ -1992,7 +1994,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT] = {
     [ MOVE_WATER_PLEDGE ] = gWATER_PLEDGEDescription,
     [ MOVE_FIRE_PLEDGE ] = gFIRE_PLEDGEDescription,
     [ MOVE_GRASS_PLEDGE ] = gGRASS_PLEDGEDescription,
-    [ MOVE_VOLT_SWITCH ] = gMoveDescription_U_turn,
+    [ MOVE_VOLT_SWITCH ] = gMoveDescription_VoltSwitch,
     [ MOVE_STRUGGLE_BUG ] = gSTRUGGLE_BUGDescription,
     [ MOVE_BULLDOZE ] = gBULLDOZEDescription,
     [ MOVE_FROST_BREATH ] = gSTORM_THROWDescription,
