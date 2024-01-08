@@ -1387,23 +1387,42 @@ static void atk00_attackcanceler(void) //vsonic
         return;
     }
 
-    if (GetBattlerAbility(gBattlerTarget) == ABILITY_IRON_WILL
+    if ((GetBattlerAbility(gBattlerTarget) == ABILITY_IRON_WILL
+        || GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE) //remove flinch affect for  pressure just give dmg drop
         && IsBlackFogNotOnField()
         && !gProtectStructs[gBattlerAttacker].ironwill //sinceit returns needs value to allow skip so doesnt loop
         && gBattlerTarget != gBattlerAttacker) //need to ensure not self target
+        {
+            if ((Random() % 5 < 2) //40% 
+            && gBattleMoves[gCurrentMove].power) //only non status moves
             {
-                if ((Random() % 5 < 2) //40% 
-                && gBattleMoves[gCurrentMove].power) //only non status moves
-                {
-                    gProtectStructs[gBattlerAttacker].ironwill++;
-                    gDynamicBasePower = gBattleMoves[gCurrentMove].power;
-                    gDynamicBasePower = (gDynamicBasePower * 75) / 100;
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_AbilityEffectIronWill;
-                    return;
-                } //should do dmg drop but not cancel move
+                gProtectStructs[gBattlerAttacker].ironwill++;
+                gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+                gDynamicBasePower = (gDynamicBasePower * 75) / 100;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AbilityEffectIronWill;
+                return;
+            } //should do dmg drop but not cancel move
 
-            } //moved effect out here, as otherwise caused freeze
+        } //moved effect out here, as otherwise caused freeze
+
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_HI_PRESSURE
+        && IsBlackFogNotOnField()
+        && !gProtectStructs[gBattlerAttacker].ironwill //sinceit returns needs value to allow skip so doesnt loop
+        && gBattlerTarget != gBattlerAttacker)
+    {
+        if (((Random() % 3) == 1) //40% 
+        && gBattleMoves[gCurrentMove].power) //only non status moves
+        {
+            gProtectStructs[gBattlerAttacker].ironwill++;
+            gDynamicBasePower = gBattleMoves[gCurrentMove].power;
+            gDynamicBasePower = (gDynamicBasePower * 75) / 100;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_AbilityEffectIronWill;
+            return;
+        } //should do dmg drop but not cancel move
+
+    } 
 
     if (TryAegiFormChange())
         return;
@@ -2635,7 +2654,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
                 || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
                     && (argument != TYPE_NORMAL && argument != TYPE_MYSTERY)))
             {
-                gBattleMoveDamage = gBattleMoveDamage * 125;
+                gBattleMoveDamage = gBattleMoveDamage * 115; //on recomendation uploading cut power back
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
         } //changed joat to be non inclusive with stab
@@ -3110,7 +3129,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                 || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
                     && (argument != TYPE_NORMAL && argument != TYPE_MYSTERY)))
             {
-                gBattleMoveDamage = gBattleMoveDamage * 125;
+                gBattleMoveDamage = gBattleMoveDamage * 115; //cut back on recomendation
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
         }//changed joat to be non inclusive with stab
@@ -3121,7 +3140,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                 || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
                     && (argument == TYPE_ROCK)))
             {
-                gBattleMoveDamage = gBattleMoveDamage * 125;
+                gBattleMoveDamage = gBattleMoveDamage * 115;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
         }
@@ -9171,6 +9190,7 @@ static void atk52_switchineffects(void) //important, think can put ability reset
     //will make new battle script to be called, identical to intimidate but switching target with attacker
     
     // Neutralizing Gas announces itself before hazards
+    //potentialy should hvae swapped this for abilitybattleeffects  neutralizing gas case, idk.
     if (gBattleMons[gActiveBattler].ability == ABILITY_NEUTRALIZING_GAS && gSpecialStatuses[gActiveBattler].announceNeutralizingGas == 0)
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
@@ -10887,7 +10907,7 @@ static void atk76_various(void) //will need to add all these emerald various com
         {
             gBattleOutcome = B_OUTCOME_MON_TELEPORTED;
         }
-        break;//this isnt in base firered so switch in stuff is handled elsewhere typically
+        break;//this isnt in base firered so switch in stuff is handled elsewhere typically  -battle startfunctino in main *facepalm
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlescriptCurrInstr += 3;
         AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
@@ -13760,7 +13780,7 @@ static void atk8F_forcerandomswitch(void)
 
 // randomly changes user's type to one of its moves' type
 //incomplete still working on
-static void atk90_tryconversiontypechange(void) 
+static void atk90_tryconversiontypechange(void) //ok haven't actually changed this yet its still default
 {
     u8 validMoves = 0;
     u8 moveChecked;
@@ -13777,7 +13797,7 @@ static void atk90_tryconversiontypechange(void)
         moveType = gBattleMoves[gBattleMons[gBattlerAttacker].moves[moveChecked]].type;
         if (moveType == TYPE_MYSTERY)
         {
-            if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
+            if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST)) //dumb if they are already ghost it would do nothing
                 moveType = TYPE_GHOST;
             else
                 moveType = TYPE_NORMAL;
@@ -14616,7 +14636,13 @@ static void atkA5_painsplitdmgcalc(void)
     }
 }
 
-static void atkA6_settypetorandomresistance(void) // conversion 2   /keep eye on this and compare to emerald version, for ditto new transform effect //vsonic important
+//keep eye on this and compare to emerald version, for ditto new transform effect //vsonic important
+//think would reference pickup logic for setting up what to loop over
+//could roll a random number below mega data, and just decrement or increment (only increment if until value end species i.e would not go into megas)
+//think what i'll do is roll random number, then random % 2 to either increment or decrement, (if /else if base on value)
+//and go until find a mon that matches the rolled resisting type, or just do decrement if I go through species list that way,
+//higher chance of encounting a full evolved form than a baby form, which is more valuable
+static void atkA6_settypetorandomresistance(void) // conversion 2   
 {
     if (gLastLandedMoves[gBattlerAttacker] == MOVE_NONE
      || gLastLandedMoves[gBattlerAttacker] == 0xFFFF)
@@ -14632,7 +14658,7 @@ static void atkA6_settypetorandomresistance(void) // conversion 2   /keep eye on
     {
         s32 i, j, rands;
 
-        for (rands = 0; rands < 1000; ++rands)
+        for (rands = 0; rands < 1000; ++rands) //now that adjusted typing can use EE setup for this,  vsonic
         {
             while (((i = (Random() & 0x7F)) > sizeof(gTypeEffectiveness) / 3));
             i *= 3;
@@ -18159,6 +18185,8 @@ void BS_call_if(void) //comparing to jumpifholdeffect
                 gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
             else if (gCurrentMove == MOVE_FREEZE_SHOCK)
                 gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+            else if (gCurrentMove == MOVE_BOLTBEAM)
+                gBattleScripting.moveEffect = MOVE_EFFECT_FREEZE;
             else if (gCurrentMove == MOVE_ICE_BURN)
                 gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
                 gBattlescriptCurrInstr = cmd->nextInstr;

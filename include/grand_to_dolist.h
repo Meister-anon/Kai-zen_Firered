@@ -1961,6 +1961,32 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   rebalnced flinch chance, and in process adjusted pixilate to also encompass sound moves
 
+  forwarn glitched when switching in first?
+  //tested with intimidate, that works correctly, forewarn (and I assume anticipation)
+  is missing sommething that makes it wait to activate until it has a viable target, i.e something 
+  is on the otehr side, to activate
+
+  think fouind it, intimidate tracce etc. are switchin abilities,
+  but the part that triggers on switch in, is the setup not the actual ability
+  that part has its own ability effect OUTSIDE of switchin
+
+  -need setup like trace & intimidate2  case
+  also of note, umm fix conversion move effects so it update mon typing in menus
+  //potentially change to only change type 1 rather than pure change?
+
+  if I can just change switchin to by default not activate until there is a mon on both sides of the field,
+  that should fix everything?  but idk how that woudl interact with turn order stuff
+
+  -fixed changed bs script made separate faint switcin script for switch mode, when chose to
+  swap on after fainting enemy, prevents canceling switch, so less free, which is good,
+  and now puts all switch  in stuff in that scenario to occur after new foe appears, preventing any glitches,
+
+
+  re-evaluate how want conversion and conversion 2 to work,
+  could be initial plan, or they work the same but one changes type 1 teh other changes type 2?
+  ok original mvoes suckes, need find what my plans for it were, they're onthe bs commands for them ni bs commands.c
+
+  pressure changed no flinch just take iron will dmg drop still working ods
 
 
   //with removal of battle ai port realize need to redo stealth rock rebalance...
@@ -5524,12 +5550,16 @@ goto ABILITYBATTLE_FUNCTION	//	battle_util.c function other more complex ability
 * new logic, like trace/intimidate pick a random target on enemy side,  if type 1 & 2 are the same use that
 * otherwise loop one type then the other, and look for  a type that overlaps, that would result in a not very effective result
 * if it finds a match for both use that, otherwise randomly chose from the combined typings and make mon mono type that
+*
+* -WITH ADDITION of ee logic for type chart just use that function, which should auto check overall type effectiveness
+* actually in battle_main? or field_player_avatar ro something I made functions (in starter setup file) for checking effectiveness
+* should be able to just use those
 * 
 * that would be new conversion effect,   conversion 2 would look for immunities and if found set as type 2, allowing mon to maintain stab.
 * after fixing that, set conversion effct as logic for imposter, and then add a species check as well.
 * 
 * nother idea from jrppoketraier98  make move magiccoat work like a screen, where it lasts 3 turns etc.
-*  after doing add to screencleaner, and list of effects brick break can shatter
+*  after doing add to screencleaner, and list of effects brick break can shatter - done
 * 
 * tweaked costume pikachu based on radical red, where each is a different type.
 * plan for distribution is, in mongeneration function for wild battles if species would be species pikachu, have 5% chance to swap and generate

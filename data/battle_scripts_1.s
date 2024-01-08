@@ -6286,17 +6286,38 @@ BattleScript_FaintedMonTryChooseAnother::
 	printstring STRINGID_ENEMYABOUTTOSWITCHPKMN
 	setbyte gBattleCommunication, 0
 	yesnobox
-	jumpifbyte CMP_EQUAL, gBattleCommunication + 1, 1, BattleScript_FaintedMonChooseAnother
-	@ 1 above means jump if player selects no on switching if they switch pokemon
+	@jumpifbyte CMP_EQUAL, gBattleCommunication + 1, 1, BattleScript_FaintedMonChooseAnother
+	@ 1 above means jump if player selects no on switching if they switch pokemon	@could change switch effect ot jump if 0 to say yes to switch but need to make so cant just press b to not switchout, 
+	jumpifbyte CMP_EQUAL, gBattleCommunication + 1, 0, BattleScript_FaintedMonSwitchinEffects	@changed as above
+BattleScript_FaintedMonChooseAnother::
+	drawpartystatussummary BS_FAINTED
+	getswitchedmondata BS_FAINTED
+	switchindataupdate BS_FAINTED
+	hpthresholds BS_FAINTED
+	printstring STRINGID_SWITCHINMON
+	hidepartystatussummary BS_FAINTED
+	switchinanim BS_FAINTED, 0
+	waitstate
+	resetplayerfainted BS_ATTACKER 
+	switchineffects BS_FAINTED
+	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_FaintedMonEnd
+	cancelallactions
+BattleScript_FaintedMonEnd::
+	end2
+
+@new script made for activating switchin effects 
+@for fainting enemy mon ensure works after they switch back in
+BattleScript_FaintedMonSwitchinEffects::
 	setatktoplayer0
-	openpartyscreen BS_ATTACKER | OPEN_PARTY_ALLOW_CANCEL, BattleScript_FaintedMonChooseAnother
+	@openpartyscreen BS_ATTACKER | OPEN_PARTY_ALLOW_CANCEL, BattleScript_FaintedMonChooseAnother	@...oh literally just remove the allow cancel part
+	openpartyscreen BS_ATTACKER, BattleScript_FaintedMonChooseAnother
 	switchhandleorder BS_ATTACKER, 2
 	jumpifbyte CMP_EQUAL, gBattleCommunication, 6, BattleScript_FaintedMonChooseAnother
 	atknameinbuff1
 	resetintimidatetracebits BS_ATTACKER  @check what this means think it allows intimidate to cast again if sent out
 	hpthresholds2 BS_ATTACKER
 	printstring STRINGID_RETURNMON
-	switchoutabilities BS_ATTACKER
+	switchoutabilities BS_ATTACKER	@why should this be here? if I fainted the enemy and am switching via set there's nothing there to effect? well regenerate I guess
 	waitstate
 	returnatktoball
 	waitstate
@@ -6308,9 +6329,9 @@ BattleScript_FaintedMonTryChooseAnother::
 	hidepartystatussummary BS_ATTACKER
 	switchinanim BS_ATTACKER, 0
 	waitstate
-	switchineffects BS_ATTACKER
+	@switchineffects BS_ATTACKER
+	@switchinabilities BS_ATTACKER	@added test first thiogouht
 	resetsentmonsvalue
-BattleScript_FaintedMonChooseAnother::
 	drawpartystatussummary BS_FAINTED
 	getswitchedmondata BS_FAINTED
 	switchindataupdate BS_FAINTED
@@ -6320,11 +6341,12 @@ BattleScript_FaintedMonChooseAnother::
 	switchinanim BS_FAINTED, 0
 	waitstate
 	resetplayerfainted BS_ATTACKER
+	switchineffects BS_ATTACKER	@added test	should work but test potentially use switchineffects instead, to do all effects
 	switchineffects BS_FAINTED
 	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_FaintedMonEnd
 	cancelallactions
-BattleScript_FaintedMonEnd::
 	end2
+
 
 BattleScript_LinkBattleHandleFaint::
 	openpartyscreen BS_FAINTED_LINK_MULTIPLE_1, .+4
@@ -8204,8 +8226,8 @@ BattleScript_TraceActivates::
 	pause 0x20
 	printstring STRINGID_PKMNTRACED
 	waitmessage 0x40
-	healthbarupdate BS_ATTACKER  @? why??
-	datahpupdate BS_ATTACKER
+	@healthbarupdate BS_ATTACKER  @? why??
+	@datahpupdate BS_ATTACKER		@added this for shedinjaability steal but never set it up right smh
 	end3
 
 BattleScript_ReceiverActivates::	
