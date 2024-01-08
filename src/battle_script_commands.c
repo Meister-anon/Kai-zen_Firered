@@ -2654,21 +2654,21 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
                 || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
                     && (argument != TYPE_NORMAL && argument != TYPE_MYSTERY)))
             {
-                gBattleMoveDamage = gBattleMoveDamage * 115; //on recomendation uploading cut power back
+                gBattleMoveDamage = gBattleMoveDamage * 117; //on recomendation uploading cut power back
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
         } //changed joat to be non inclusive with stab
 
-        else if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)) //BONUS for groud mon, to balance changes
+        /*else if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)) //BONUS for groud mon, to balance changes
         {
             if ((moveType == TYPE_ROCK)
                 || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
                     && (argument == TYPE_ROCK)))
             {
-                gBattleMoveDamage = gBattleMoveDamage * 125;
+                gBattleMoveDamage = gBattleMoveDamage * 115;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
-        }
+        }*/
 
         //alt terra, terra is glorified 3rd type, so my idea  is just make it change type 3
         //but would also need to add the part where terra of same type as mon doubles stab.
@@ -3129,12 +3129,12 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                 || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
                     && (argument != TYPE_NORMAL && argument != TYPE_MYSTERY)))
             {
-                gBattleMoveDamage = gBattleMoveDamage * 115; //cut back on recomendation
+                gBattleMoveDamage = gBattleMoveDamage * 117; //cut back on recomendation
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
         }//changed joat to be non inclusive with stab
 
-        else if (IS_BATTLER_OF_TYPE(attacker, TYPE_GROUND)) //BONUS for groud mon, to balance changes
+        /*else if (IS_BATTLER_OF_TYPE(attacker, TYPE_GROUND)) //BONUS for groud mon, to balance changes
         {
             if ((moveType == TYPE_ROCK)
                 || (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE
@@ -3143,7 +3143,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
                 gBattleMoveDamage = gBattleMoveDamage * 115;
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
-        }
+        }*/
 
     }
 
