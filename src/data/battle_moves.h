@@ -187,7 +187,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_HIGH_CRIT | FLAG_WIND_MOVE,
         .effect = EFFECT_TWO_TYPED_MOVE,
         .power = 80,
-        .type = TYPE_NORMAL,
+        .type = TYPE_NORMAL, //since joat change, this doesn't do much other than just giving stab since move is mostly for normal types
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0,
@@ -5166,7 +5166,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_MUDDY_WATER] =
     {
         .power = 65, //95
-        .effect = EFFECT_TWO_TYPED_MOVE,  //EFFECT_TWO_TYPED_MOVE    EFFECT_ACCURACY_DOWN_HIT
+        .effect = EFFECT_TWO_TYPED_MOVE,  //    EFFECT_ACCURACY_DOWN_HIT
         .type = TYPE_WATER,
         .accuracy = 85,
         .pp = 10,
@@ -8589,11 +8589,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FREEZE_SHOCK] =
     {
         .effect = EFFECT_TWO_TYPED_MOVE,
-        .power = 140,
+        .power = 90,
         .type = TYPE_ICE,
-        .accuracy = 90,
+        .accuracy = 95,
         .pp = 5,
-        .secondaryEffectChance = 30,
+        .secondaryEffectChance = 50,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
@@ -8604,17 +8604,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ICE_BURN] =
     {
         .effect = EFFECT_TWO_TYPED_MOVE,
-        .power = 140,
+        .power = 90,
         .type = TYPE_ICE,
-        .accuracy = 90,
+        .accuracy = 95,
         .pp = 5,
-        .secondaryEffectChance = 30,
+        .secondaryEffectChance = 50,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
         .argument = TYPE_FIRE,
     },//will still burn
+    //think these are just kyurem black/white moves
 
     [MOVE_SNARL] =
     {
@@ -10393,7 +10394,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_TWO_TYPED_MOVE,      //changed two a dual typed move with paralyze chance. lol i made it more op than ever
         .power = 90,        //something between discharge and surf, discharge is base 80,  surf is base 95
         .type = TYPE_WATER,
-        .accuracy = 100,
+        .accuracy = 95,
         .pp = 15,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_FOES_AND_ALLY,    //lol its a giant electrified surf, that is gonna have to hit everyone, you can't avoid that XD
@@ -12191,16 +12192,16 @@ use wonder gaurd logic to determine its super effective
     [MOVE_BOLTBEAM] =
     {
         #if B_UPDATED_MOVE_DATA >= GEN_8
-            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+            .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         #else
             .flags = FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         #endif
         .effect = EFFECT_TWO_TYPED_MOVE,
         .power = 90,
         .type = TYPE_ICE,
-        .accuracy = 100,
+        .accuracy = 95,
         .pp = 10,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .split = SPLIT_SPECIAL,

@@ -311,7 +311,9 @@ void PressurePPLoseOnUsingPerishSong(u8 attacker)
 
     for (i = 0; i < gBattlersCount; ++i)
     {
-        if (gBattleMons[i].ability == ABILITY_PRESSURE && i != attacker)
+        if ((gBattleMons[i].ability == ABILITY_PRESSURE|| 
+        gBattleMons[i].ability == ABILITY_UNNERVE || gBattleMons[i].ability ==  ABILITY_AS_ONE_ICE_RIDER 
+        || gBattleMons[i].ability == ABILITY_AS_ONE_SHADOW_RIDER) && i != attacker)
         {
             for (j = 0; j < MAX_MON_MOVES && gBattleMons[attacker].moves[j] != MOVE_PERISH_SONG; ++j);
             if (j != MAX_MON_MOVES)
@@ -3685,7 +3687,7 @@ enum
     CANCELLER_IMPRISONED,
     CANCELLER_CONFUSED,
     CANCELLER_PARALYZED,
-    CANCELLER_PRESSURE,
+    //CANCELLER_PRESSURE,
     CANCELLER_SPIRIT_LOCKED,
     CANCELLER_IRON_WILL,
     CANCELLER_GHOST,
@@ -4090,8 +4092,8 @@ u8 AtkCanceller_UnableToUseMove(void)
                 effect = 1;
             }
             ++gBattleStruct->atkCancellerTracker;
-            break;
-        case CANCELLER_PRESSURE: // new pressure effect
+            break; //too broken un fun
+        /*case CANCELLER_PRESSURE: // new pressure effect
             if (((GetBattlerAbility(gBattlerTarget) == ABILITY_PRESSURE)
                 && (Random() % 4) == 1) //1 - 5
                 && IsBlackFogNotOnField()
@@ -4129,7 +4131,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 effect = 1;
             }
             ++gBattleStruct->atkCancellerTracker;
-            break;
+            break;*/
         case CANCELLER_SPIRIT_LOCKED: //spirit lock
             if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_SPIRIT_LOCK) && (Random() % 4) == 2) //just an extra precaution in case this and paralysis would use the same counter
             {
@@ -5239,8 +5241,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         switch (caseID)
         {
         case ABILITYEFFECT_ON_SWITCHIN: // 0
-            /*if (gBattlerAttacker >= gBattlersCount)// this line makes it switch in I think?
-                gBattlerAttacker = battler;*/  //this was issue in forewarn text
+            //if (gBattlerAttacker >= gBattlersCount)// this line makes it switch in I think?
+            //    gBattlerAttacker = battler;*/  //this was issue in forewarn text
                 gBattleScripting.battler = battler; //swapped for emerald line
             switch (gLastUsedAbility) //guessing but I think...that each abiltiy switch case is based off the ability getting logged in glastusedability 
             {
@@ -6092,7 +6094,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gSpecialStatuses[battler].switchInAbilityDone = TRUE;
                     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                     ++effect;
-                }//for some reason use of battler her is what's causing issue, if this is wron gthey may all be wrong, so look into how battler is different from EE
+                }
                 if (effect)
                     gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = TRUE;
                 
@@ -8213,7 +8215,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
             break; //think may be able to use transform targetting logic to swap target to reactivate?
-        case ABILITYEFFECT_INTIMIDATE2: // 10
+        case ABILITYEFFECT_INTIMIDATE2: // 10   //this is the switchin version, one I Need for anticipation forewarn fix
             for (i = 0; i < gBattlersCount; ++i) //any battler
             {//with intimidate and status 3 intimidate pokes
                 if (gBattleMons[i].ability == ABILITY_INTIMIDATE && (gStatuses3[i] & STATUS3_INTIMIDATE_POKES))
@@ -8239,10 +8241,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break; //I'm assumig one is for battle start and one is for switch in... confirmed
                 }
             }
-            break;
+            break; //since case isn't called anywhere, think I can safely rename and make category for switch in to activate after everyone is in battle here
         case ABILITYEFFECT_NEUTRALIZINGGAS:
-            // Prints message only. separate from ABILITYEFFECT_ON_SWITCHIN bc activates before entry hazards
-            for (i = 0; i < gBattlersCount; i++)
+            // Prints message only. separate from ABILITYEFFECT_ON_SWITCHIN bc msg activates before entry hazards, but don't think I'm using THIS for intro message?
+            for (i = 0; i < gBattlersCount; i++) //yeah I have practically this copied, in bs commands.c but its not actually using the abilityeffect function at all...
             {
                 if (gBattleMons[i].ability == ABILITY_NEUTRALIZING_GAS && !(gBattleResources->flags->flags[i] & RESOURCE_FLAG_NEUTRALIZING_GAS))
                 {
@@ -10989,7 +10991,7 @@ bool32 IsNeutralizingGasOnField(void)   //not used anymore, but still here if wa
     return FALSE;
 }
 
-bool8 IsBlackFogNotOnField(void)
+bool8 IsBlackFogNotOnField(void) //still setting up black fog effect /haze
 {
     if (!(gFieldStatuses & STATUS_FIELD_BLACK_FOG))
         return TRUE;
@@ -11004,9 +11006,9 @@ u32 GetBattlerAbility(u8 battlerId)  //Deokishishu in pret mentioned there is a 
     if (gStatuses3[battlerId] & STATUS3_GASTRO_ACID) //only added this, because focusing abilities should work
         return ABILITY_NONE;
     //if (IsNeutralizingGasOnField() && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
-    if (DoesSideHaveAbility(BATTLE_OPPOSITE(battlerId), ABILITY_NEUTRALIZING_GAS) && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
+    else if (DoesSideHaveAbility(BATTLE_OPPOSITE(battlerId), ABILITY_NEUTRALIZING_GAS) && !IsNeutralizingGasBannedAbility(gBattleMons[battlerId].ability))
         return ABILITY_NONE;//I don't need to subtract 1 from Id because my function isn't doing anything with the id returned by the function
-    if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
+    else if ((((gBattleMons[gBattlerAttacker].ability == ABILITY_MOLD_BREAKER
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TERAVOLT
         || gBattleMons[gBattlerAttacker].ability == ABILITY_TURBOBLAZE)
         && !(gStatuses3[gBattlerAttacker] & STATUS3_GASTRO_ACID))

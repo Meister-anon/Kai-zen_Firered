@@ -832,10 +832,10 @@ const u8 gFIERY_DANCEDescription
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Dances cloaked in flames.\nMay raise Sp. Atk.");
 
 const u8 gFREEZE_SHOCKDescription 
-    [MOVE_DESCRIPTION_LENGTH + 5] = _("A powerful 2-turn move that\nmay paralyze the foe.");
+    [MOVE_DESCRIPTION_LENGTH + 5] = _("A powerful fusion move\nthat deals Ice and\nElectric damage\nIt has a high chance\nto paralyze the foe.");
 
 const u8 gICE_BURNDescription 
-    [MOVE_DESCRIPTION_LENGTH + 5] = _("A powerful 2-turn move that\nmay inflict a burn.");
+    [MOVE_DESCRIPTION_LENGTH + 5] = _("A powerful fusion move\nthat deals Fire and\nIce damage.\nIt has a high chance\nto inflict a burn.");
 
 const u8 gSNARLDescription 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Yells and rants at the foe\nlowering its Sp. Atk.");
