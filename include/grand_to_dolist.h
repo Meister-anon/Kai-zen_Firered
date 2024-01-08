@@ -1988,6 +1988,13 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   pressure changed no flinch just take iron will dmg drop still working ods
 
+  *note add a release optino party menu so can remove caught mon,
+  without needing to go to pc, also confirmation so not done on accident
+  -when setup task for getting items from releasing mon, so it works from
+
+  remember still haven't fixed all palette indecees for post gen mon?
+  then need to change icons so fit menu
+  
 
   //with removal of battle ai port realize need to redo stealth rock rebalance...
 */

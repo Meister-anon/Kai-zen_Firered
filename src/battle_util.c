@@ -2043,6 +2043,8 @@ u8 DoFieldEndTurnEffects(void)
                     && gWishFutureKnock.forecastedNextWeather
                     && (gWishFutureKnock.forecastedNextWeather != gWishFutureKnock.forecastedCurrWeather)) //extra filter so this only triggers
                     //when you have separate weather conidtions predicted, so it doesn't repeat weather
+                    //ok so found issue 2nd weather constantly gets reset, issue was I never leared the value
+                    //so just needs to do that after it gets set
                 { 
                     
                     //make this function activate only if weather timer is 0, so it'll set new weather long as no one else has set weather
@@ -2058,6 +2060,7 @@ u8 DoFieldEndTurnEffects(void)
                             //if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_DAMP_ROCK)
                             //unique bs, weather predit long time
                             //else
+                            gWishFutureKnock.forecastedNextWeather = 0;
                             gBattlescriptCurrInstr = BattleScript_PredictedRain;//change to forecast predict weather script
                             gBattleScripting.battler = gActiveBattler; //make say something like predicted weather start, then use print weather strings
                             //++effect; //remove check for battler just replace w scritp that doesnt use name firled just use forecasted weather
@@ -2067,6 +2070,7 @@ u8 DoFieldEndTurnEffects(void)
                     {
                         if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
+                            gWishFutureKnock.forecastedNextWeather = 0;
                             gBattlescriptCurrInstr = BattleScript_PredictedSand;
                             gBattleScripting.battler = gActiveBattler;
                             //++effect;
@@ -2076,6 +2080,7 @@ u8 DoFieldEndTurnEffects(void)
                     {
                         if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
+                            gWishFutureKnock.forecastedNextWeather = 0;
                             gBattlescriptCurrInstr = BattleScript_PredictedSun;
                             gBattleScripting.battler = gActiveBattler;
                             //++effect;
@@ -2085,6 +2090,7 @@ u8 DoFieldEndTurnEffects(void)
                     {
                         if (TryChangeBattleWeather(gActiveBattler, gWishFutureKnock.forecastedNextWeather, TRUE))
                         {
+                            gWishFutureKnock.forecastedNextWeather = 0;
                             gBattlescriptCurrInstr = BattleScript_PredictedHail;
                             gBattleScripting.battler = gActiveBattler;
                             //++effect;
