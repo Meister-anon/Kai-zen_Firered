@@ -1994,6 +1994,29 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   remember still haven't fixed all palette indecees for post gen mon?
   then need to change icons so fit menu
+
+  -fix onix dex entry
+
+  IMPORTANT DAMNIT I FORGOT ABOUT MOVE LEARN GLITCH *facepalm*
+  need check level up as well but for sure evo move learn doesnt work correctly, not loading
+  I can['t] remember if I fixed it...evolved caterpie i didn't fix it
+
+  //need look into bide leech seed combo, potential bug there, hmmm or not, if i use leech seed and don't get hit
+  it doesnt activate so taht means it isn't counting that as damage, the effect is just strong, 
+
+  issue iss with lvl 0 moves not displaying in menu when learned i think
+
+  confirmed issue si just with evo move learn, normal move learn doesn't have issue
+  compare and figure out where exactly its wrong, prob something w lvl 0 move returns
+
+  for function Task_EvolutionScene, checked it even reverted to default and it didn't change effect
+  if I use MonTryLearningNewMove as opposed to teh evo function it seems to work correctly so not sure what's going on?
+  No that's wrong, it doesn't work regardles of which function I use,
+  so issue is somehwere else...
+
+  ok  putting lvl0 logic on MonTryLearningNewMove and go through move learn from normal battle,
+  and taht works with no issue properly displaying moves, somehow its only the evo version that has issues
+  but I can't identify WHERE the issue is
   
 
   //with removal of battle ai port realize need to redo stealth rock rebalance...

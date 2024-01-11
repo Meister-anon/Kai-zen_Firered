@@ -5081,7 +5081,7 @@ static void ItemUseCB_LearnedMove(u8 taskId, UNUSED TaskFunc func)
     Task_LearnedMove(taskId);
 }
 
-static void Task_LearnedMove(u8 taskId) //tm learn move
+static void Task_LearnedMove(u8 taskId) //tm learn move  /or just move learn in general?
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     s16 *move = &gPartyMenu.data1;
@@ -5443,7 +5443,7 @@ static void DisplayLevelUpStatsPg2(u8 taskId)
     ScheduleBgCopyTilemapToVram(2);
 }
 
-static void Task_TryLearnNewMoves(u8 taskId)
+static void Task_TryLearnNewMoves(u8 taskId) //think for rare candy out of battle level up
 {
     u16 learnMove;
 
@@ -5472,7 +5472,7 @@ static void Task_TryLearnNewMoves(u8 taskId)
 
 static void Task_TryLearningNextMove(u8 taskId)
 {
-    u16 result = MonTryLearningNewMove(&gPlayerParty[gPartyMenu.slotId], FALSE);
+    u16 result = MonTryLearningNewMove(&gPlayerParty[gPartyMenu.slotId], FALSE); //actual move learn is here, rest is dialogues
 
     switch (result)
     {

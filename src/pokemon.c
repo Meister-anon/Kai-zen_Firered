@@ -3289,9 +3289,10 @@ static u16 GiveMoveToBoxMon(struct BoxPokemon *boxMon, u16 move)
             return move;
         }
         if (existingMove == move)
-            return -2;
+            return MON_ALREADY_KNOWS_MOVE;
     }
-    return -1;
+    return MON_HAS_MAX_MOVES; //changed from -2 and -1 but overall no diff, it would just roll over to those value anyway
+    //since its u16 subtracting from 2 from 0 would set me to 0xfffe so no actually difference besides readability
 }
 
 u16 GiveMoveToBattleMon(struct BattlePokemon *mon, u16 move)
@@ -3356,8 +3357,8 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon) //important can use thi
 
         moveLevel = (gLevelUpLearnsets[species][i].level);
 
-        //if (moveLevel == 0) actually I think this means skip the moves if they are lvl 0, so its only for player learn, don't need that
-         //   continue; //ok this line means after evo move learning code changes are in, still need test if works
+        if (moveLevel == 0) //makes wild mon skip lvl 0 moves
+           continue; //ok this line means after evo move learning code changes are in, still need test if works
 
         if (moveLevel > level) // prevents learnign moves above level
             break;
@@ -3396,12 +3397,12 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove) //edited to try 
         }
         sLearningMoveTableID++;
     }
-    return retVal; //but anyway lvl 0 move learn works now
+    return retVal;//ok so this seems to work butnot the lvl 0 evo stuff?  //ok nvm so evomove doesn't work even without lvl 0, so its a problem with the function
 }
 
 //just using in evolution_scene.c not good to use for all move learn
 //think that caused glitch learning
-u16 MonTryLearningEvoMove(struct Pokemon *mon, bool8 firstMove)
+u16 MonTryLearningEvoMove(struct Pokemon *mon, bool8 firstMove) //ok there's just something missing with the task of setting move somehow, ist not a lvl 0 issue
 {
     u32 retVal = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -3416,14 +3417,13 @@ u16 MonTryLearningEvoMove(struct Pokemon *mon, bool8 firstMove)
         sLearningMoveTableID = 0;
     }
 
-    while(gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END)
+    while(gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END) 
     {
-        u16 moveLevel;
-        moveLevel = (gLevelUpLearnsets[species][sLearningMoveTableID].level);
+        u16 moveLevel = (gLevelUpLearnsets[species][sLearningMoveTableID].level);
         while (moveLevel == 0 || moveLevel == level) //this is bad practice its say while while is true?
         {
             gMoveToLearn = (gLevelUpLearnsets[species][sLearningMoveTableID].move); //can make uniform, have this only do lvl 0 moves, but this covers more cases
-            sLearningMoveTableID++;     //for evo methods that don't involve level, 
+            sLearningMoveTableID++;    //dont know what this for
             return GiveMoveToMon(mon, gMoveToLearn);
         }
         sLearningMoveTableID++;

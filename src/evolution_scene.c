@@ -581,6 +581,51 @@ static void CreateShedinja(u16 preEvoSpecies, struct Pokemon* mon)
     }
 }
 
+// States for the main switch in Task_EvolutionScene
+enum {
+    EVOSTATE_FADE_IN,
+    EVOSTATE_INTRO_MSG,
+    EVOSTATE_INTRO_MON_ANIM,
+    EVOSTATE_INTRO_SOUND,
+    EVOSTATE_START_MUSIC,
+    EVOSTATE_START_BG_AND_SPARKLE_SPIRAL,
+    EVOSTATE_SPARKLE_ARC,
+    EVOSTATE_CYCLE_MON_SPRITE,
+    EVOSTATE_WAIT_CYCLE_MON_SPRITE,
+    EVOSTATE_SPARKLE_CIRCLE,
+    EVOSTATE_SPARKLE_SPRAY,
+    EVOSTATE_EVO_SOUND,
+    EVOSTATE_RESTORE_SCREEN,
+    EVOSTATE_EVO_MON_ANIM,
+    EVOSTATE_SET_MON_EVOLVED,
+    EVOSTATE_TRY_LEARN_MOVE,
+    EVOSTATE_END,
+    EVOSTATE_CANCEL,
+    EVOSTATE_CANCEL_MON_ANIM,
+    EVOSTATE_CANCEL_MSG,
+    EVOSTATE_LEARNED_MOVE,
+    EVOSTATE_TRY_LEARN_ANOTHER_MOVE,
+    EVOSTATE_REPLACE_MOVE,
+};
+
+// States for the switch in EVOSTATE_REPLACE_MOVE
+enum {
+    MVSTATE_INTRO_MSG_1,
+    MVSTATE_INTRO_MSG_2,
+    MVSTATE_INTRO_MSG_3,
+    MVSTATE_PRINT_YES_NO,
+    MVSTATE_HANDLE_YES_NO,
+    MVSTATE_SHOW_MOVE_SELECT,
+    MVSTATE_HANDLE_MOVE_SELECT,
+    MVSTATE_FORGET_MSG_1,
+    MVSTATE_FORGET_MSG_2,
+    MVSTATE_LEARNED_MOVE,
+    MVSTATE_ASK_CANCEL,
+    MVSTATE_CANCEL,
+    MVSTATE_RETRY_AFTER_HM,
+};
+
+
 static void Task_EvolutionScene(u8 taskId)
 {
     u32 var;
@@ -739,7 +784,7 @@ static void Task_EvolutionScene(u8 taskId)
         {
             HelpSystem_Enable();
             var = MonTryLearningEvoMove(mon, gTasks[taskId].tLearnsFirstMove);
-            if (var != 0 && !gTasks[taskId].tEvoWasStopped)
+            if (var != MOVE_NONE && !gTasks[taskId].tEvoWasStopped)
             {
                 u8 text[20];
 
@@ -751,7 +796,7 @@ static void Task_EvolutionScene(u8 taskId)
                 GetMonData(mon, MON_DATA_NICKNAME, text);
                 StringCopy_Nickname(gBattleTextBuff1, text);
 
-            if (var == MON_HAS_MAX_MOVES)
+                if (var == MON_HAS_MAX_MOVES)
                     gTasks[taskId].tState = 22;
                 else if (var == MON_ALREADY_KNOWS_MOVE)
                     break;
@@ -850,7 +895,7 @@ static void Task_EvolutionScene(u8 taskId)
         case 2:
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {
-                BufferMoveToLearnIntoBattleTextBuff2();
+                BufferMoveToLearnIntoBattleTextBuff2(); //needed add this cuz I jump here rather than to learnmove 1 I think?,used for confirm forget move task
                 BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_TRYTOLEARNMOVE3 - BATTLESTRINGS_ID_ADDER]);
                 BattlePutTextOnWindow(gDisplayedStringBattle, 0);
                 gTasks[taskId].tData7 = 5;
@@ -887,18 +932,18 @@ static void Task_EvolutionScene(u8 taskId)
                 HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
                 PlaySE(SE_SELECT);
 
-                if (sEvoCursorPos != 0) //no to learn move
+                if (sEvoCursorPos != 0) //said no to learn move
                 {
-                    gTasks[taskId].tLearnMoveState = gTasks[taskId].tData8; //should be case 10
+                    gTasks[taskId].tLearnMoveState = gTasks[taskId].tData8; //should be case 10 /or whatever is set to t8
                 }
-                else //yes to learn move
+                else //said yes to learn move
                 {
                     gTasks[taskId].tLearnMoveState = gTasks[taskId].tData7; //should be case 5
                     if (gTasks[taskId].tLearnMoveState == 5) //fade then goes to open summar screen
                         BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
                 }
             }
-            if (JOY_NEW(B_BUTTON)) //no to learn move, add confirm dont learn move to yes no box
+            if (JOY_NEW(B_BUTTON)) //said no to learn move, add confirm dont learn move to yes no box
             {
                 HandleBattleWindow(0x17, 8, 0x1D, 0xD, WINDOW_CLEAR);
                 PlaySE(SE_SELECT);
@@ -911,20 +956,20 @@ static void Task_EvolutionScene(u8 taskId)
                 FreeAllWindowBuffers();
                 ShowSelectMovePokemonSummaryScreen(gPlayerParty, gTasks[taskId].tPartyId,
                             gPlayerPartyCount - 1, CB2_EvolutionSceneLoadGraphics,
-                            gMoveToLearn);
+                            gMoveToLearn);  //gMovetolearn setby case 15  MonTryLearningEvoMove
                 gTasks[taskId].tLearnMoveState++;
             }
             break;
-        case 6:
+        case 6: //CB2_EvolutionSceneLoadGraphics goes into  CB2_EvolutionSceneUpdate
             if (!gPaletteFade.active && gMain.callback2 == CB2_EvolutionSceneUpdate)
             {
                 var = GetMoveSlotToReplace();
                 
-                if (moveLearning == MAX_MON_MOVES)
+                if (var == MAX_MON_MOVES) //if select 4th slot aka move trying to learn
                 {
-                    gTasks[taskId].tLearnMoveState = 10;
+                    gTasks[taskId].tLearnMoveState = 10; //confirm stop trying to learning move
                 }
-                else
+                else //if select an move slot where a move is, issue is occuring somewhere before here, its not filling moves, learned before you get here
                 {
                     u16 move = GetMonData(mon, var + MON_DATA_MOVE1);
                     /*if (IsHMMove2(move))
@@ -937,10 +982,12 @@ static void Task_EvolutionScene(u8 taskId)
                     {*/
                         PREPARE_MOVE_BUFFER(gBattleTextBuff2, move)
 
-                        //RemoveMonPPBonus(mon, var);
-                        //SetMonMoveSlot(mon, gMoveToLearn, var);
-                        gTasks[taskId].tLearnMoveState = 13; //should be confirm forget move?
-                    //}
+                        /*RemoveMonPPBonus(mon, var);
+                        SetMonMoveSlot(mon, gMoveToLearn, var);                        
+                        gTasks[taskId].tLearnMoveState++;*/
+
+                        gTasks[taskId].tLearnMoveState = 13; //should be confirm forget move?  //think this is only diffrence between mine and EE?
+                    //} //tried didn't matter still had same effect no idea what the hell is wrong
                 }
             }
             break;
@@ -963,7 +1010,7 @@ static void Task_EvolutionScene(u8 taskId)
                 BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_ANDELLIPSIS - BATTLESTRINGS_ID_ADDER]);
                 BattlePutTextOnWindow(gDisplayedStringBattle, 0);
                 RemoveMonPPBonus(mon, moveLearning);
-                SetMonMoveSlot(mon, gMoveToLearn, moveLearning);
+                SetMonMoveSlot(mon, gMoveToLearn, moveLearning); //I think this line isn't  working? it works after task closes, but while its up, moves don't change
                 gTasks[taskId].tState = 20;
             }
             break;
@@ -972,8 +1019,8 @@ static void Task_EvolutionScene(u8 taskId)
             BattlePutTextOnWindow(gDisplayedStringBattle, 0);
             gTasks[taskId].tData7 = 11; //yes
             gTasks[taskId].tData8 = 0; //no
-            gTasks[taskId].tLearnMoveState = 3;
-            break;
+            gTasks[taskId].tLearnMoveState = 3; //what is this and is it necessary? //because pretty sure the 2 above are case jumps, yes goes to case directly below
+            break; //ok I think I set 3 here so it generates a yes no box, but I can change the 0 to a 2 if I want for faster turn around on confirmation? or not
         case 11:
             BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_DIDNOTLEARNMOVE - BATTLESTRINGS_ID_ADDER]);
             BattlePutTextOnWindow(gDisplayedStringBattle, 0);
@@ -1102,7 +1149,7 @@ static void Task_TradeEvolutionScene(u8 taskId) //don't need to hcange this ther
          * BUG: This check causes the evolved Pokemon's cry to play over the sfx.
          * Negate the below condition.
          */
-        if (IsSEPlaying())
+        if (!IsSEPlaying()) //think this is what they meant?
         {
 //            Free(sEvoMovingBgPtr);
            PlayCry_Normal(gTasks[taskId].tPostEvoSpecies, 0);
@@ -1200,7 +1247,7 @@ static void Task_TradeEvolutionScene(u8 taskId) //don't need to hcange this ther
         }
         break;
     case 19:
-        if (!IsTextPrinterActive(0) && IsFanfareTaskInactive() == TRUE && --gTasks[taskId].tLearnsFirstMove == 0)
+        if (!IsTextPrinterActive(0) && IsFanfareTaskInactive() == TRUE && --gTasks[taskId].tLearnsFirstMove == 0) //teach move and loop back to move learn
             gTasks[taskId].tState = 13;
         break;
     case 20:

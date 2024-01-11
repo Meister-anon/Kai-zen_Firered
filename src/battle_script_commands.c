@@ -9450,7 +9450,7 @@ static void atk58_returntoball(void)
     gBattlescriptCurrInstr += 2;
 }
 
-static void atk59_handlelearnnewmove(void)
+static void atk59_handlelearnnewmove(void) //specific to in battle move learn?
 {
     CMD_ARGS(const u8 *learnedMovePtr, const u8 *nothingToLearnPtr, bool8 isFirstMove);
     const u8 *learnedMovePtr = cmd->learnedMovePtr; //1st ptr
@@ -9474,7 +9474,7 @@ static void atk59_handlelearnnewmove(void)
         if (gBattlerPartyIndexes[gActiveBattler] == gBattleStruct->expGetterMonId
          && !(gBattleMons[gActiveBattler].status2 & STATUS2_TRANSFORMED)) //with transform change think can remove this condition
         {
-            GiveMoveToBattleMon(&gBattleMons[gActiveBattler], learnMove);
+            GiveMoveToBattleMon(&gBattleMons[gActiveBattler], learnMove); //oh wait no this just means don't add the move to the mon in battle, so yeah keep transform block
         }
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         {
