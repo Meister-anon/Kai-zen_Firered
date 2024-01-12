@@ -1990,7 +1990,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   *note add a release optino party menu so can remove caught mon,
   without needing to go to pc, also confirmation so not done on accident
-  -when setup task for getting items from releasing mon, so it works from
+  make sure it defaults to teh no option not the yes optino, for people speed clicking
+  (hopefully keep same pc animation of icon shrinking goodbye text, and then after animation done blank slot)
+  -when setup task for getting items from releasing mon, so it works from there
 
   remember still haven't fixed all palette indecees for post gen mon?
   then need to change icons so fit menu
@@ -2017,6 +2019,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   ok  putting lvl0 logic on MonTryLearningNewMove and go through move learn from normal battle,
   and taht works with no issue properly displaying moves, somehow its only the evo version that has issues
   but I can't identify WHERE the issue is
+
+  ok issue was evolution scene wasn't actually setting the moves, it set the moves but it needed to also set it to the battlemon
+  for it to display,  looked at bs commands version and somehow got it working...
+  -DONE
   
 
   //with removal of battle ai port realize need to redo stealth rock rebalance...

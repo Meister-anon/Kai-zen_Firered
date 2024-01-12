@@ -1436,7 +1436,7 @@ const u8 gEERIE_SPELLDescription
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Attacks with psychic\npower.\nFoe's last move has\na varying amount\nof PP cut.");
 
 const u8 gMoveDescription_Cocoon 
-    [MOVE_DESCRIPTION_LENGTH + 5] = _("The PKMN wraps\nitself in silk etc.\nRaising its Defense\nand Sp Defense.\nBut lowering speed.");
+    [MOVE_DESCRIPTION_LENGTH + 5] = _("The PKMN wraps\nitself in silk etc.\nRaising its Defense\nand Sp Defense.\nBut harshly lowers\nspeed.");
 
 const u8 gMoveDescription_Monotype 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("This move copies\nthe move last used\nby the foe, then\ndisappears.");

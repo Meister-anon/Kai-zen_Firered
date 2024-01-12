@@ -170,18 +170,17 @@ static const struct LevelUpMove sCaterpieLevelUpLearnset[] = {
 static const struct LevelUpMove sMetapodLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_HARDEN),
     LEVEL_UP_MOVE(0, MOVE_BIDE),
-   // LEVEL_UP_MOVE(1, MOVE_COCOON),
     LEVEL_UP_MOVE(1, MOVE_LEECH_SEED),
     LEVEL_UP_MOVE(1, MOVE_ENDURE),
     LEVEL_UP_MOVE(7, MOVE_HARDEN),
-   // LEVEL_UP_MOVE(7, MOVE_COCOON),
     LEVEL_UP_MOVE(7, MOVE_LEECH_SEED),
+    LEVEL_UP_MOVE(7, MOVE_COCOON),
     LEVEL_UP_END
 };
 
 static const struct LevelUpMove sButterfreeLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_CONFUSION),
-    LEVEL_UP_MOVE(10, MOVE_CONFUSION),
+    LEVEL_UP_MOVE(10, MOVE_SILVER_WIND),
     LEVEL_UP_MOVE(13, MOVE_POISON_POWDER),
     LEVEL_UP_MOVE(14, MOVE_STUN_SPORE),
     LEVEL_UP_MOVE(15, MOVE_SLEEP_POWDER),
@@ -197,15 +196,14 @@ static const struct LevelUpMove sButterfreeLevelUpLearnset[] = {
 static const struct LevelUpMove sWeedleLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_POISON_STING),
     LEVEL_UP_MOVE(1, MOVE_STRING_SHOT),
-    LEVEL_UP_END
+        LEVEL_UP_END
 };
 
 static const struct LevelUpMove sKakunaLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_HARDEN),
-    LEVEL_UP_MOVE(0, MOVE_COCOON), //forgot I hadn't fixed this?
     LEVEL_UP_MOVE(0, MOVE_LEECH_SEED),
     LEVEL_UP_MOVE(7, MOVE_ENDURE),
-    //LEVEL_UP_MOVE(7, MOVE_COCOON),
+    LEVEL_UP_MOVE(7, MOVE_COCOON),
     LEVEL_UP_MOVE(12, MOVE_LEECH_SEED),
     LEVEL_UP_END
 };
@@ -3996,13 +3994,13 @@ static const struct LevelUpMove sWurmpleLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
     LEVEL_UP_MOVE(1, MOVE_STRING_SHOT),
     LEVEL_UP_MOVE(5, MOVE_POISON_STING),
-    LEVEL_UP_END
+        LEVEL_UP_END
 };
 
 static const struct LevelUpMove sSilcoonLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_HARDEN),
-    LEVEL_UP_MOVE(7, MOVE_HARDEN),
+    LEVEL_UP_MOVE(0, MOVE_HARDEN), //forgot with change wildmon wouldn't get lvl 0 moves, so undid that
     LEVEL_UP_MOVE(7, MOVE_BIDE),
+    LEVEL_UP_MOVE(7, MOVE_COCOON),
     LEVEL_UP_END
 };//silcoon ironically CAN move lol so can give this bide
 
@@ -4021,9 +4019,9 @@ static const struct LevelUpMove sBeautiflyLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sCascoonLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_HARDEN),
-    LEVEL_UP_MOVE(7, MOVE_HARDEN),//WANT TO buff like metapod kakuna but dex entry explicitly states they never move but also never forget who hurt them while cacooned
+    LEVEL_UP_MOVE(0, MOVE_HARDEN),//WANT TO buff like metapod kakuna but dex entry explicitly states they never move but also never forget who hurt them while cacooned
     LEVEL_UP_MOVE(7, MOVE_DRYADS_CURSE),
+    LEVEL_UP_MOVE(7, MOVE_COCOON),
     LEVEL_UP_END    //so nEW move idea, dryad's curse  effectively ghost curse, but instead of losing hp, its a multi stat drop
 };//i'm thinking offense defense stats all drop one stage to curse the last target to hit it.  look at copy cat logic for targetting. wll be self target
 //actually copy bide, it already works on last enemy to attack  //move will be fore grass bug & fairy
@@ -4041,7 +4039,7 @@ static const struct LevelUpMove sDustoxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(34, MOVE_SILVER_WIND),
     LEVEL_UP_MOVE(38, MOVE_TOXIC),
     LEVEL_UP_END
-};
+}; ///differntiate beautifly and dustox more vai moveset, think already adjusted stats
 
 static const struct LevelUpMove sLotadLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_ASTONISH),

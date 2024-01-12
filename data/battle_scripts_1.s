@@ -6095,8 +6095,8 @@ BattleScript_CocoonTrySpDef::
 	printfromtable gStatUpStringIds
 	waitmessage 0x40
 BattleScript_CocoonTrySpeed::
-	setstatchanger STAT_SPEED, 1, TRUE		@used on bug mid evos really slow ealready so doesnt effect them, unsure if change to lower 1, yeah changed to 1.
-	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_CocoonEnd
+	setstatchanger STAT_SPEED, 2, TRUE		@used on bug mid evos really slow ealready so doesnt effect them, unsure if change to lower 1, yeah changed to 1.
+	statbuffchange STAT_CHANGE_BS_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_CocoonEnd	@to better balance effect dropped speed 2
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 2, BattleScript_CocoonEnd
 	printfromtable gStatDownStringIds
 	waitmessage 0x40
