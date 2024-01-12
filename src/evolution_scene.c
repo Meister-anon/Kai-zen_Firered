@@ -864,6 +864,10 @@ static void Task_EvolutionScene(u8 taskId)
             PlayFanfare(MUS_LEVEL_UP);
             BattleStringExpandPlaceholdersToDisplayedString(gBattleStringsTable[STRINGID_PKMNLEARNEDMOVE - BATTLESTRINGS_ID_ADDER]);
             BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+
+
+               GiveMoveToBattleMon(&gBattleMons[0], gMoveToLearn); //ok so regardless of actual position using battlemons[0] somehow ALWAYS works...
+
             gTasks[taskId].tLearnsFirstMove = 0x40; // re-used as a counter
             gTasks[taskId].tState++;
         }
@@ -1011,6 +1015,10 @@ static void Task_EvolutionScene(u8 taskId)
                 BattlePutTextOnWindow(gDisplayedStringBattle, 0);
                 RemoveMonPPBonus(mon, moveLearning);
                 SetMonMoveSlot(mon, gMoveToLearn, moveLearning); //I think this line isn't  working? it works after task closes, but while its up, moves don't change
+
+                    RemoveBattleMonPPBonus(&gBattleMons[0], moveLearning);
+                    SetBattleMonMoveSlot(&gBattleMons[0], gMoveToLearn, moveLearning);
+
                 gTasks[taskId].tState = 20;
             }
             break;
@@ -1036,7 +1044,7 @@ static void Task_EvolutionScene(u8 taskId)
             gTasks[taskId].tData7 = 7; //yes
             gTasks[taskId].tData8 = 2; //no
             gTasks[taskId].tLearnMoveState = 3; 
-            break; //consulted battle_script_commands move learn and works now.
+            break; //consulted battle_script_commands move learn and works now. / the transitions thats what works
         }
         break;
     }
