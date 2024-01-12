@@ -571,12 +571,12 @@ const u8 gGengarPokedexText[] = _(
     "It is actually a Gengar running past\n"
     "you, pretending to be your shadow.");
 
-    //add some comment about speed 50mph
+
 const u8 gOnixPokedexText[] = _(
     "There is a magnet in its brain that\n"
-    "prevents an Onix from losing direction\n"
-    "while tunneling. As it grows older, its body\n"
-    "becomes steadily rounder and smoother.");
+    "prevents an Onix from losing direction.\n"
+    "While tunneling it can reach up to 50 mph.\n"
+    "Its body grows steadily smoother with age.");
 
 const u8 gDrowzeePokedexText[] = _(
     "If your nose becomes itchy while you are\n"

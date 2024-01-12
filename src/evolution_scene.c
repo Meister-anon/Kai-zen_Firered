@@ -1016,7 +1016,7 @@ static void Task_EvolutionScene(u8 taskId)
                 RemoveMonPPBonus(mon, moveLearning);
                 SetMonMoveSlot(mon, gMoveToLearn, moveLearning); //I think this line isn't  working? it works after task closes, but while its up, moves don't change
 
-                    RemoveBattleMonPPBonus(&gBattleMons[0], moveLearning);
+                    RemoveBattleMonPPBonus(&gBattleMons[0], moveLearning); //above line worked for adding but wouldn't appear on sum screen without these lines
                     SetBattleMonMoveSlot(&gBattleMons[0], gMoveToLearn, moveLearning);
 
                 gTasks[taskId].tState = 20;
