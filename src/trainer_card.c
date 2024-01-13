@@ -919,7 +919,7 @@ static void SetDataFromTrainerCard(void)
     sTrainerCardDataPtr->var_F = FALSE;
     sTrainerCardDataPtr->hasTrades = FALSE;
 
-    memset(sTrainerCardDataPtr->hasBadge, FALSE, sizeof(sTrainerCardDataPtr->hasBadge));
+    memset(sTrainerCardDataPtr->hasBadge, FALSE, sizeof(sTrainerCardDataPtr->hasBadge)); //think this resets hasBadge to 0
     if (sTrainerCardDataPtr->trainerCard.rse.hasPokedex)
         sTrainerCardDataPtr->hasPokedex++;
 
@@ -946,10 +946,10 @@ u8 GetNumberofBadges(void) //vsonic need test
 {
     u8 i;
     u8 NumBadges = 0;
-    for (i = 0; i <= 8; i++)
+    for (i = 0; i < 8; i++)
     {
-        if (sTrainerCardDataPtr->hasBadge[i] == TRUE)
-            NumBadges++; //can potentially use to easily check badge count, think increment is for setting true, not canging i, so cehck if i is true loop 8 times
+        if (FlagGet(FLAG_BADGE01_GET + i)) //chnaged to hopefully get more accurate rep, yup much better
+            NumBadges++; //changed, still works how want, increment for everybadge has, not caring about order
     }
     return NumBadges;
 }

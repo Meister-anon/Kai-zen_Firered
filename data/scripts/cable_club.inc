@@ -588,8 +588,11 @@ Movement_PlayerEnterMinigameRoom:: @ 81BB8A2
 	walk_up
 	step_end
 
+@had to search think this is second tablet on 2nd floor pk center yup thsi fixed
 CableClub_EventScript_ShowBattleRecords:: @ 81BB8A7
 	goto_if_questlog EventScript_ReleaseEnd
+	goto CableClub_EventScript_NotReadyYet
+	goto CableClub_EventScript_AbortLinkConnectionError
 	lockall
 	fadescreen FADE_TO_BLACK
 	setvar VAR_0x8004, 0
@@ -851,6 +854,7 @@ CableClub_EventScript_DirectCornerAttendant:: @ 81BBB9C
 	special QuestLog_CutRecording
 	lock
 	faceplayer
+	goto CableClub_EventScript_WirelessClubAdjustements
 	goto_if_unset FLAG_SYS_POKEDEX_GET, CableClub_EventScript_WirelessClubAdjustements
 	specialvar VAR_RESULT, IsBadEggInParty
 	compare VAR_RESULT, TRUE

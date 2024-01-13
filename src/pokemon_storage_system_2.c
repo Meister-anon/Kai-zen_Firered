@@ -484,12 +484,15 @@ void UpdatePokemonStorageSystemMonExp(void)
     gSaveBlock1Ptr->oakRanchStepCounter = 0; //after give exp reset counter
 }
 
-u8 CanBoxMonGainExp(struct BoxPokemon *mon) //lvl cap works
+u8 CanBoxMonGainExp(struct BoxPokemon *mon) //lvl cap works - didnt actually work before, badge count function was off, but now is correct
 {
     struct Pokemon dst;
-    BoxMonToMon(mon, &dst);
-    //if num badges <= 6 and mon level <= 41  yes else no
-    if (GetNumberofBadges() < 6
+    BoxMonToMon(mon, &dst); //num badge function is countering wrong after getting brock badge its returning 0
+    
+    if (GetNumberofBadges() < 1 && (GetMonData(&dst, MON_DATA_LEVEL) >= 12)) //mostly just for pidgey, shuold be before first badge
+        return FALSE;
+     //if num badges <= 6 and mon level <= 41  yes else no
+    else if (GetNumberofBadges() <= 6
     && (GetMonData(&dst, MON_DATA_LEVEL) < 41)) //should freeze box exp gain at lvl 41 until you get sabrina's badge
         return TRUE;
     else

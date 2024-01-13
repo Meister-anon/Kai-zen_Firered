@@ -1873,6 +1873,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   -going back and forth on this, for now keeping argument absorbption 
 
+  -found issue with badge counting for oak ranch exp gain, now fixed
+
+   - adjusted cable club script addressed that issue that could cause freeze now fine
+
   -new note, create new task setup, for catching,  rather than mon goes to x box
    open holding mon just caught in box, i.e from cursor selection,
    so you can just put mon wherever you want instead of having to oranize later
@@ -1997,7 +2001,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   remember still haven't fixed all palette indecees for post gen mon?
   then need to change icons so fit menu
 
-  -fix onix dex entry
+  -fix onix dex entry -think Done
+
+  all exisiting items are defined again - making new patch
 
   IMPORTANT DAMNIT I FORGOT ABOUT MOVE LEARN GLITCH *facepalm*
   need check level up as well but for sure evo move learn doesnt work correctly, not loading
@@ -2016,7 +2022,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   No that's wrong, it doesn't work regardles of which function I use,
   so issue is somehwere else...
 
-  ok  putting lvl0 logic on MonTryLearningNewMove and go through move learn from normal battle,
+  ok  putting lvl 0 logic on MonTryLearningNewMove and go through move learn from normal battle,
   and taht works with no issue properly displaying moves, somehow its only the evo version that has issues
   but I can't identify WHERE the issue is
 
@@ -3181,7 +3187,7 @@ goto COMPARISON_FILE  //file added for keeping track of things to port to this n
 
 goto CHECK_THIS //something potentially relevant for future multi battle/triple etc.
 
-goto BOX_EXP_GAIN //setup box exp gain w help from kurausukuun and shiiny
+goto BOX_EXP_GAIN //setup box exp gain w help from kurausukuun and shiiny  oak ranch
 
 goto HIDDENPOWER_CALC //changes made to hidden power dmg calc in bs commands c
 
