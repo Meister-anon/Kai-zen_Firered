@@ -2387,7 +2387,8 @@ s8 DexScreen_GetSetPokedexFlag(u16 nationalDexNo, u8 caseId, bool8 indexIsSpecie
         gSaveBlock2Ptr->pokedex.owned[index] |= mask;
         break;
     }
-    return retVal;
+    //return retVal;
+    return 1;
 }
 
 static u16 sub_8104BBC(u8 caseId, bool8 whichDex)
