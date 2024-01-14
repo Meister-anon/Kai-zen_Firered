@@ -23,8 +23,8 @@ PalletTown_PlayersHouse_2F_FirstWarpIn:: @ 8168CC8
 
 PalletTown_PlayersHouse_2F_EventScript_NES:: @ 8168CD2
 	msgbox PalletTown_PlayersHouse_2F_Text_PlayedWithNES, MSGBOX_SIGN
-	@givemon SPECIES_SCRAGGY, 5, ITEM_NONE @for early game testing, now testing palette indecees
-	@givemon2 SPECIES_CASTFORM, 5, ITEM_NONE @for early game testing, testing castform forecast changes
+	@givemon SPECIES_HATENNA, 5, ITEM_NONE @for early game testing, now testing palette indecees
+	@givemon2 SPECIES_MORGREM, 5, ITEM_NONE @for early game testing, testing castform forecast changes
 	@givemon2 SPECIES_NIDOQUEEN, 40, ITEM_NONE @for early game testing, @distro move commit test
 	end    @remember still need these to fix pallete indicees etc.
 

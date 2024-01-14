@@ -19,7 +19,10 @@ static void Task_SmoothBlendLayers(u8 taskId);//front_pic_coordinates.h
  //based on InitItemIconSpriteState function last 2 values are also some form of x y
  //so 0, 1 are an xy pair, and 3, 4 are also an xy pair, used for slightly different things?
  //thoughts these, all use front sprite, so may be able to reverse engineer a macro to replace these with,
- //thinking something based
+ //thinking something based  - based on height and mon elevation..?
+ //or front pic coord table, size & y offset elevation, assuming both are using the same image
+
+ //confirmed it uses gMonFrontPicTable
 static const u8 sMonSpriteAnchorCoords[][5] = {
     [SPECIES_BULBASAUR       - 1] = {0x16, 0x1b, 0x30, 0x16, 0x29},
     [SPECIES_IVYSAUR         - 1] = {0x14, 0x1b, 0x30, 0x15, 0x2a},

@@ -763,12 +763,12 @@ void ListMenuSetUnkIndicatorsStructField(u8 taskId, u8 field, s32 value)
     }
 }
 
-void sub_8107CD8(u8 palOffset, u16 speciesId)
+void ListMenu_LoadMonIconPalette(u8 palOffset, u16 speciesId)
 {
     LoadPalette(GetValidMonIconPalettePtr(speciesId), palOffset, 0x20);
 }
 
-void sub_8107CF8(u8 windowId, u16 speciesId, u32 personality, u16 x, u16 y)
+void ListMenu_DrawMonIconGraphics(u8 windowId, u16 speciesId, u32 personality, u16 x, u16 y)
 {
     BlitBitmapToWindow(windowId, GetMonIconPtr(speciesId, personality, 1), x, y, 32, 32);
 }
@@ -793,4 +793,6 @@ void ListMenuLoadStdPalAt(u8 palOffset, u8 palId)
 void BlitMoveInfoIcon(u8 windowId, u8 iconId, u16 x, u16 y)
 {
     BlitBitmapRectToWindow(windowId, &gFireRedMenuElements_Gfx[sMoveMenuInfoIcons[iconId].offset * TILE_SIZE_4BPP], 0, 0, 128, 256, x, y, sMoveMenuInfoIcons[iconId].width, sMoveMenuInfoIcons[iconId].height);
-}
+}//gFireRedMenuElements_Gfx is ex_caught_pokeball_and_pokemon_types file, default file dimmension is 128 x 128 which is source width height
+//so I think if my file is ever extended I just need change those values to be able to read it?
+//doubled checked in kai zen my file is extended to 256, lol apparently I added seraph type and just forgot, lol borderlands

@@ -20,7 +20,7 @@
 * .move effect constants update  -      done
 * . then port battle moves back -       done
 * .summary screen ui -                  done
-* .battle ui
+* .battle ui -                          done
 * .name expansion -					partial
 * pokedex ui.
 * removal of lg pokedex entries.
@@ -60,10 +60,10 @@
 * #elif defined(LEAFGREEN)
 * #endif		-use these  they are defined at run time, so don't need to use both and be equal
 * 
-* .move effects
-* .ability effects
-* .battle script
-* .move animations
+* .move effects     -done -mostly
+* .ability effects  -done -mostly
+* .battle script    -done
+* .move animations - done
 * . attempt setup sMonSpriteAnchorCoords x y & placement of mon sprite on pokedex screen w constants
 * based on height and mon elevation will put exact arrays here shortly 
 * -do this after pokedex port
