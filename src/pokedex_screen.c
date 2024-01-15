@@ -3033,7 +3033,7 @@ void DexScreen_DrawMonFootprint(u8 a0, u16 species, u8 a2, u8 a3)
 
     if (!(DexScreen_GetSetPokedexFlag(species, 1, 1)))
         return;
-    footprint = (u8 *)(gMonFootprintTable[species]);
+    footprint = (u8 *)(gMonFootprint_None);
     buffer = gDecompressionBuffer;
     unused = 0;
     v3 = 0;
@@ -3054,6 +3054,7 @@ void DexScreen_DrawMonFootprint(u8 a0, u16 species, u8 a2, u8 a3)
     }
     BlitBitmapRectToWindow(a0, buffer, 0, 0, 16, 16, a2, a3, 16, 16);
 }
+
 #define END_LIST 0XFFFF
 //when have error defined in text discarded in data
 //for in array thats an issue of not using const, when I should

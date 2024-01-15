@@ -1911,7 +1911,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   need to add and find etc.  found it, its gPokedexEntries[speciesId].pokemonOffset
 
   will need to further adjust pokedex, categories will remain as they are and be just for the kanto mon,
-  with that, no need to adjust the window sizes, so that's less work done.
+  with that, no need to adjust the window sizes, so that's less work done. -want to do this next, will be a major saver
 
   but I do need to adjust the mon offsets in the entries page for it to look right,
   then change the search option so it takes you to the dex entry page, NOT the category page.
@@ -1923,11 +1923,17 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -done, also revised, made define for no footprint, so can reuse single graphic instead of making one for each,
   saves about 200 uses of said files, so hopefully saves good deal of space,
   also removed byte defines of those files, replced w gMonFootprint_None curr rom size 19,479 kb  after  19450 kb,  seems bad but
-  I did add a bunch of values I didn't have so it offset the savings, but they are still there
+  I did add a bunch of values I didn't have so it offset the savings, but they are still there...without footprints its 19729???
+  //oh nvm I'm just retarded and dyslexic as usual *facepalm it said 19749  FACEPALM  ok so I did save space, and complete removal of footprint went even further
+  //saving 4 more kb, new size is 19724   thank god I made a screenshot to compare against smh
+
+  since I did that had idea just remove all footrints, its not really useful and just looks kinda ugly on dex page
+  so deleted all footprints, replaced only kept blank zubat footprint, to just useful for everything
+
 */
  goto DEX_SCALING_AND_OFFSET  //pokedex_entries.h
   //pkscale/trainer scale,  then previous solution/pkOffset ot get converted value?  i.e 2.11/20 is approx 0
-  //seems proper value, is about 10x found solution?  tested seems to about work, nut sure about negative values though
+  //seems proper value, is about 10x found solution?  tested seems to about work, nut sure about negative values though -still to do
 
  goto FOOTPRINT_TABLE //table for dex footprint values
  goto POKEMON_GRAPHIC_DEFINES //footprint icons pics palettes etc.
