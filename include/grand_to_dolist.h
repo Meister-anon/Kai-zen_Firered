@@ -1903,6 +1903,28 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   -forecsat complete
 
+  -need fix celesteela background, think just revert previous change made to it
+
+  //fixed pic height in dex, but realized, same issue in size chart, w trainer comparison, need raise those, that aren't
+  in array, not sure how ot raise as can't just make window, need to actually elevate them, since need raise jutst the mon not teh trainer
+  - seems may not be an issue, as some are already floating, think value may have elevations built in, issue just post gen stuff
+  need to add and find etc.  found it, its gPokedexEntries[speciesId].pokemonOffset
+
+  will need to further adjust pokedex, categories will remain as they are and be just for the kanto mon,
+  with that, no need to adjust the window sizes, so that's less work done.
+
+  but I do need to adjust the mon offsets in the entries page for it to look right,
+  then change the search option so it takes you to the dex entry page, NOT the category page.
+  and seems need to fix the az anme search as doesn't seem to include everyone?
+
+  =also need fix type2 window width for  area page -done
+
+  -need take footprint graphics from EE repo, and update table for those
+*/
+ goto DEX_SCALING_AND_OFFSET  //pokedex_entries.h
+  //pkscale/trainer scale,  then previous solution/pkOffset ot get converted value?  i.e 2.11/20 is approx 0
+  //seems proper value, is about 10x found solution?  tested seems to about work, nut sure about negative values though
+/*
   - TMHM Expansion base setup complete, need actually add on to tm list now
   Wanted to make comprehensive list for better list,
   think what I want is mix of gen 1 tms,

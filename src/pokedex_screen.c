@@ -122,7 +122,7 @@ void DexScreen_DexPageZoomEffectFrame(u8 a0, u8 a1);
 u8 DexScreen_DrawMonDexPage(u8 a0);
 u8 RemoveDexPageWindows(void);
 u8 DexScreen_DrawMonAreaPage(void);
-bool8 sub_8106838(u8 category, u8 a1);
+bool8 DexScreen_CanShowMonInCategory(u8 category, u8 a1);
 u8 DexScreen_IsCategoryUnlocked(u8 a0);
 u8 DexScreen_GetPageLimitsForCategory(u8 category);
 bool8 DexScreen_LookUpCategoryBySpecies(u16 a0);
@@ -714,7 +714,7 @@ const struct WindowTemplate sWindowTemplate_AreaMap_MonTypes = {
     .bg = 2,
     .tilemapLeft = 5,
     .tilemapTop = 6,
-    .width = 8,
+    .width = 9,
     .height = 2,
     .paletteNum = 11,
     .baseBlock = 0x01fd
@@ -1427,7 +1427,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
         {
             if (((sPokedexScreenData->characteristicMenuInput >> 16) & 1) && !DexScreen_LookUpCategoryBySpecies(sPokedexScreenData->characteristicMenuInput))
             {
-                RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
+                RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId); //potentailly along with remove category search above
                 BeginNormalPaletteFade(0xFFFF7FFF, 0, 0, 16, RGB_WHITEALPHA);
                 sPokedexScreenData->state = 7;
             }
@@ -1445,7 +1445,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
         CopyBgTilemapBufferToVram(1);
         DexScreen_RemoveWindow(&sPokedexScreenData->numericalOrderWindowId);
         sPokedexScreenData->parentOfCategoryMenu = 1;
-        gTasks[taskId].func = Task_DexScreen_CategorySubmenu;
+        gTasks[taskId].func = Task_DexScreen_CategorySubmenu; //think this is what need to change,
         sPokedexScreenData->state = 0;
         break;
     }
@@ -1501,7 +1501,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 a0)
         }
         break;
     case DEX_ORDER_ATOZ:
-        for (i = 0; i < SPECIES_CHIMECHO; i++)
+        for (i = 0; i < SPECIES_CALYREX; i++) //this was issue with limit, it used chimecho for some dumb reason, rather than species or something smh
         {
             ndex_num = gPokedexOrder_Alphabetical[i];
             if (ndex_num <= max_n)
@@ -1512,13 +1512,13 @@ static u16 DexScreen_CountMonsInOrderedList(u8 a0)
                 {
                     sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
                     sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                    ret++;
+                    ret++; //need 
                 }
             }
         }
         break;
     case DEX_ORDER_TYPE:
-        for (i = 0; i < NUM_SPECIES - 1; i++)
+        for (i = 0; i < SPECIES_CALYREX; i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
         {
             ndex_num = SpeciesToNationalPokedexNum(gPokedexOrder_Type[i]);
             if (ndex_num <= max_n)
@@ -1535,7 +1535,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 a0)
         }
         break;
     case DEX_ORDER_LIGHTEST:
-        for (i = 0; i < NATIONAL_DEX_COUNT; i++)
+        for (i = 0; i < SPECIES_CALYREX; i++) //for (i = 0; i < NATIONAL_DEX_COUNT; i++) same reason as above //all below share same original value
         {
             ndex_num = gPokedexOrder_Weight[i];
             if (ndex_num <= max_n)
@@ -1552,7 +1552,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 a0)
         }
         break;
     case DEX_ORDER_SMALLEST:
-        for (i = 0; i < NATIONAL_DEX_COUNT; i++)
+        for (i = 0; i < SPECIES_CALYREX; i++)
         {
             ndex_num = gPokedexOrder_Height[i];
             if (ndex_num <= max_n)
@@ -1569,7 +1569,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 a0)
         }
         break;
     case DEX_ORDER_NUMERICAL_NATIONAL:
-        for (i = 0; i < NATIONAL_DEX_COUNT; i++)
+        for (i = 0; i < SPECIES_CALYREX; i++)
         {
             ndex_num = i + 1;
             seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, 0);
@@ -1782,7 +1782,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
             while (sPokedexScreenData->pageNum > sPokedexScreenData->firstPageInCategory)
             {
                 sPokedexScreenData->pageNum--;
-                if (sub_8106838(sPokedexScreenData->category, sPokedexScreenData->pageNum))
+                if (DexScreen_CanShowMonInCategory(sPokedexScreenData->category, sPokedexScreenData->pageNum))
                 {
                     sPokedexScreenData->state = 8;
                     break;
@@ -1795,7 +1795,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
             while (sPokedexScreenData->pageNum < sPokedexScreenData->lastPageInCategory - 1)
             {
                 sPokedexScreenData->pageNum++;
-                if (sub_8106838(sPokedexScreenData->category, sPokedexScreenData->pageNum))
+                if (DexScreen_CanShowMonInCategory(sPokedexScreenData->category, sPokedexScreenData->pageNum))
                 {
                     sPokedexScreenData->state = 10;
                     break;
@@ -3579,7 +3579,7 @@ u8 DexScreen_DrawMonAreaPage(void)
         gSprites[sPokedexScreenData->windowIds[14]].oam.affineMode = 1;
         gSprites[sPokedexScreenData->windowIds[14]].oam.matrixNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.priority = 1;
-        gSprites[sPokedexScreenData->windowIds[14]].pos2.y = gPokedexEntries[speciesId].pokemonOffset;
+        gSprites[sPokedexScreenData->windowIds[14]].pos2.y = gPokedexEntries[speciesId].pokemonOffset; //this is elevation of mon pic
         SetOamMatrix(2, gPokedexEntries[speciesId].pokemonScale, 0, 0, gPokedexEntries[speciesId].pokemonScale);
         sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId_Debug(gSaveBlock2Ptr->playerGender, 1), 1, 80, 104, 0, 65535);
         gSprites[sPokedexScreenData->windowIds[15]].oam.paletteNum = 2;
@@ -3642,7 +3642,7 @@ int DexScreen_CanShowMonInDex(u16 species)
     return TRUE; //change so all mon can show in dex
 }
 
-u8 sub_8106838(u8 categoryNum, u8 pageNum)
+u8 DexScreen_CanShowMonInCategory(u8 categoryNum, u8 pageNum)
 {
     int i, count;
     u16 species;
@@ -3669,7 +3669,7 @@ u8 DexScreen_IsCategoryUnlocked(u8 categoryNum)
     count = gDexCategories[categoryNum].count;
 
     for (i = 0; i < count; i++)
-        if (sub_8106838(categoryNum, i))
+        if (DexScreen_CanShowMonInCategory(categoryNum, i))
             return 1;
 
     return 0;
@@ -3706,7 +3706,7 @@ u8 DexScreen_GetPageLimitsForCategory(u8 category)
     v3 = 0xff;
 
     for (i = 0; i < count; i++)
-        if (sub_8106838(category, i))
+        if (DexScreen_CanShowMonInCategory(category, i))
         {
             if (v2 == 0xff)
                 v2 = i;
@@ -3760,7 +3760,7 @@ u8 sub_8106AF8(u16 a0)
     int i, v1;
 
     for (i = 0, v1 = 0; i < a0; i++)
-        if (sub_8106838(sPokedexScreenData->category, i))
+        if (DexScreen_CanShowMonInCategory(sPokedexScreenData->category, i))
             v1++;
 
     return v1 + 1;

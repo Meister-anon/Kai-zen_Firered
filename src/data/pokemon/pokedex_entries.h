@@ -1,3 +1,4 @@
+#define DEX_SCALING_AND_OFFSET
 const struct PokedexEntry gPokedexEntries[] =
 {   //need to make additions here and then think just add to species file but not pokedex orders so they only show the main pookemon entry
     //but if I'm filtering by type and have found the pokemon variant I want it to show up in types
@@ -14,6 +15,9 @@ const struct PokedexEntry gPokedexEntries[] =
 
     //offset appars to be a y vaue, mon at scale 256 or lower seem to use offset 0
     //offset should decrease as scale decreases. i.e as mon gets bigger scale gets lower
+
+    //ok seems 256 is min value used for scale? lower number means bigger, so if mon is bigger trainerscale is higher, and trainer offset must be raised
+    //rather than pokemon offset
 
     [NATIONAL_DEX_NONE] =
     {
@@ -466,8 +470,8 @@ const struct PokedexEntry gPokedexEntries[] =
         .weight = 99,
         .description = gVulpixPokedexText,
         .pokemonScale = 542,
-        .pokemonOffset = 19,
-        .trainerScale = 256,
+        .pokemonOffset = 19, //think translates to, pkscale/trainer scale,  then previous solution/pkOffset ot get converted value?  i.e 2.11/20 is approx 0, so this is on ground?
+        .trainerScale = 256,        //or it could mean proper value, is about 10x found divisor?  tried with  other value seems about right? but doesn't account for why some are negative?
         .trainerOffset = 0,
     },
 
@@ -2506,7 +2510,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .weight = 648,
         .description = gGligarPokedexText,
         .pokemonScale = 350,
-        .pokemonOffset = -1,
+        .pokemonOffset = -1, //says negative 1, but its uni not s, so this is actualy 0xfffe?
         .trainerScale = 256,
         .trainerOffset = 0,
     },
@@ -2519,7 +2523,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .description = gSteelixPokedexText,
         .pokemonScale = 256,
         .pokemonOffset = 0,
-        .trainerScale = 516,
+        .trainerScale = 516, //ok seems 256 is min value used for scale? lower number means bigger, so if mon is bigger trainerscale is higher, and trainer offset must be raised
         .trainerOffset = 13,
     },
 
