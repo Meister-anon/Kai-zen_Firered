@@ -1720,18 +1720,18 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         break;
     case 4: //believe for accessing category from within pokedex
         sPokedexScreenData->scrollArrowsTaskId = DexScreen_CreateCategoryMenuScrollArrows();
-        if (StringLength(gSpeciesNames[species]) <= 11)
-        {
+        //if (StringLength(gSpeciesNames[species]) <= 11)
+        //{
             sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_SmallCategoryPage, 0);
-        }
-        else if (StringLength(gSpeciesNames[species]) == 12)
+        //}
+        /*else if (StringLength(gSpeciesNames[species]) == 12)
         {
             sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_MediumCategoryPage, 0);
         }
         else if (StringLength(gSpeciesNames[species]) == 13)//CAN'T remember logic but potentially loweer these by 1, bcuz stringlength read logic
         {
             sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_LargeCategoryPage, 0);
-        }
+        }*/
         //sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_MediumCategoryPage, 0);
         sPokedexScreenData->state = 5;
         break;//cursor is not changing with each mon, even though bg window does even though that doesn't have loop either
@@ -2451,8 +2451,24 @@ bool8 DexScreen_DrawMonPicInCategoryPage(u16 species, u8 slot, u8 numSlots)
             template.tilemapLeft = sCategoryPageIconCoords[numSlots][slot][2];
             template.tilemapTop = sCategoryPageIconCoords[numSlots][slot][3];
             template.baseBlock = slot * 40 + 0x108;
+
             sPokedexScreenData->categoryMonInfoWindowIds[slot] = AddWindow(&template);
             CopyToWindowPixelBuffer(sPokedexScreenData->categoryMonInfoWindowIds[slot], sCategoryMonInfoBgTiles, 0, 0);
+            /*if (StringLength(gSpeciesNames[species]) <= 11)
+            {
+                //sPokedexScreenData->categoryMonInfoWindowIds[slot] = AddWindow(&template); //still unsure if this need be here or not?
+                CopyToWindowPixelBuffer(sPokedexScreenData->categoryMonInfoWindowIds[slot], sCategoryMonInfoBgTiles, 0, 0);
+            }
+            else if (StringLength(gSpeciesNames[species]) == 12) 
+            {
+                CopyToWindowPixelBuffer(sPokedexScreenData->categoryMonInfoWindowIds[slot], sCategoryMonMediumInfoBgTiles, 0, 0);
+            }
+
+            else if (StringLength(gSpeciesNames[species]) == 13) 
+            {
+                CopyToWindowPixelBuffer(sPokedexScreenData->categoryMonInfoWindowIds[slot], sCategoryMonLargeInfoBgTiles, 0, 0);
+            }*/
+
             DexScreen_PrintMonDexNo(sPokedexScreenData->categoryMonInfoWindowIds[slot], 0, species, 12, 0);
             DexScreen_AddTextPrinterParameterized(sPokedexScreenData->categoryMonInfoWindowIds[slot], 2, gSpeciesNames[species], 2, 13, 0);
             if (DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE))
@@ -3041,132 +3057,333 @@ void DexScreen_DrawMonFootprint(u8 a0, u16 species, u8 a2, u8 a3)
 #define END_LIST 0XFFFF
 //when have error defined in text discarded in data
 //for in array thats an issue of not using const, when I should
-const u32 sLargeMon[] =
+//when done make global and move to .h file
+const u32 sDexAdjusting[] =
 {
-    SPECIES_VENUSAUR,
-    SPECIES_CHARMELEON,
-    SPECIES_CHARIZARD,
+    SPECIES_BULBASAUR,
+    SPECIES_IVYSAUR,
+    SPECIES_CHARMANDER,
+    SPECIES_SQUIRTLE,
     SPECIES_WARTORTLE,
-    SPECIES_BLASTOISE,
-    SPECIES_BUTTERFREE,
-    SPECIES_PIDGEOTTO,
-    SPECIES_PIDGEOT,
-    //SPECIES_RATICATE,
-    SPECIES_FEAROW,
-    SPECIES_ARBOK,
-    SPECIES_RAICHU,
-    SPECIES_SANDSLASH,
-    //SPECIES_NIDORINA,
-    SPECIES_NIDOQUEEN,
-    SPECIES_NIDORINO,
-    SPECIES_NIDOKING,
-    SPECIES_CLEFABLE,
-    SPECIES_NINETALES,
-    SPECIES_WIGGLYTUFF,
-    SPECIES_ZUBAT,
-    SPECIES_GOLBAT,
-    SPECIES_GLOOM,
-    SPECIES_VENOMOTH,
-    SPECIES_PSYDUCK, //maybe
-    SPECIES_GOLDUCK,
-    SPECIES_PRIMEAPE,
-    SPECIES_ARCANINE,
-    SPECIES_POLIWRATH,
-    SPECIES_KADABRA,
-    SPECIES_ALAKAZAM,
-    SPECIES_MACHOKE,
-    SPECIES_MACHAMP,
-    SPECIES_VICTREEBEL,
-    SPECIES_TENTACOOL,
-    SPECIES_TENTACRUEL,
-    SPECIES_GOLEM,
-    SPECIES_PONYTA,
-    SPECIES_RAPIDASH,
-    SPECIES_SLOWBRO,
-    SPECIES_MAGNETON,
-    SPECIES_DODUO,
-    SPECIES_DODRIO,
-    SPECIES_DEWGONG,
-    SPECIES_CLOYSTER,
-    SPECIES_GASTLY,
-    SPECIES_HAUNTER,
-    SPECIES_GENGAR,
-    SPECIES_ONIX,
-    SPECIES_DROWZEE,
-    SPECIES_HYPNO,
-    SPECIES_KINGLER,
-    SPECIES_EXEGGUTOR,
-    SPECIES_HITMONLEE,
-    SPECIES_HITMONCHAN,
-    SPECIES_RHYDON,
-    SPECIES_CHANSEY,
-    SPECIES_KANGASKHAN,
-    SPECIES_HORSEA,
-    SPECIES_SEADRA,
-    SPECIES_KINGDRA,
-    SPECIES_GOLDEEN,
-    SPECIES_SEAKING,
-    SPECIES_STARMIE,
-    SPECIES_MR_MIME,
-    SPECIES_SCYTHER,
-    SPECIES_ELECTABUZZ,
-    SPECIES_MAGMAR,
-    SPECIES_PINSIR,
-    SPECIES_TAUROS,
-    SPECIES_MAGIKARP,
-    SPECIES_GYARADOS,
-    SPECIES_LAPRAS,
-    SPECIES_VAPOREON,
-    SPECIES_KABUTOPS,
-    SPECIES_AERODACTYL,
-    SPECIES_SNORLAX,
-    SPECIES_ARTICUNO,
-    SPECIES_ZAPDOS,
-    SPECIES_MOLTRES,
-    SPECIES_DRAGONAIR,
-    SPECIES_DRAGONITE,
-    SPECIES_MEWTWO,
+    SPECIES_CATERPIE,
+    SPECIES_METAPOD,
+    SPECIES_WEEDLE,
+    SPECIES_KAKUNA,
+    SPECIES_PIDGEY,
+    SPECIES_RATTATA,
+    SPECIES_SPEAROW,
+    SPECIES_EKANS,
+    SPECIES_SANDSHREW,
+    SPECIES_NIDORAN_F,
+    SPECIES_NIDORAN_M,
+    SPECIES_CLEFAIRY,
+    SPECIES_VULPIX,
+    SPECIES_JIGGLYPUFF,
+    SPECIES_ODDISH,
+    SPECIES_VILEPLUME,
+    SPECIES_PARAS,
+    SPECIES_PARASECT,
+    SPECIES_VENONAT,
+    SPECIES_DIGLETT,
+    SPECIES_DUGTRIO,
+    SPECIES_MEOWTH,
+    SPECIES_PERSIAN,
+    SPECIES_MANKEY,
+    SPECIES_GROWLITHE,
+    SPECIES_POLIWAG,
+    SPECIES_POLIWHIRL,
+    SPECIES_ABRA,
+    SPECIES_MACHOP,
+    SPECIES_BELLSPROUT,
+    SPECIES_WEEPINBELL,
+    SPECIES_GEODUDE,
+    SPECIES_GRAVELER,
+    SPECIES_SLOWPOKE,
+    SPECIES_MAGNEMITE,
+    SPECIES_FARFETCHD,
+    SPECIES_SEEL,
+    SPECIES_GRIMER,
+    SPECIES_MUK,
+    SPECIES_SHELLDER,
+    SPECIES_KRABBY,
+    SPECIES_VOLTORB,
+    SPECIES_ELECTRODE,
+    SPECIES_EXEGGCUTE,
+    SPECIES_CUBONE,
+    SPECIES_MAROWAK,
+    SPECIES_RHYHORN,
+    SPECIES_TANGELA,
+    SPECIES_STARYU,
+    SPECIES_JYNX,
+    SPECIES_DITTO,
+    SPECIES_EEVEE,
+    SPECIES_JOLTEON,
+    SPECIES_FLAREON,
+    SPECIES_PORYGON,
+    SPECIES_OMANYTE,
+    SPECIES_OMASTAR,
+    SPECIES_KABUTO,
+    SPECIES_DRATINI,
+    SPECIES_MEW,
+
+    
     //gen 2
-    SPECIES_BAYLEEF,
-    SPECIES_MEGANIUM,
-    SPECIES_QUILAVA,
-    SPECIES_TYPHLOSION,
-    SPECIES_CROCONAW,
-    SPECIES_FERALIGATOR,
-    SPECIES_SENTRET,
-    SPECIES_FURRET,
-    SPECIES_NOCTOWL,
-    SPECIES_LEDYBA,
-    SPECIES_LEDIAN,
-    SPECIES_ARIADOS,
-    SPECIES_CROBAT,
-    SPECIES_XATU,
-    SPECIES_FLAAFFY,
-    SPECIES_AMPHAROS,
-    SPECIES_AZUMARILL,
-    SPECIES_SUDOWOODO,
-    SPECIES_POLITOED,
-    SPECIES_HOPPIP,
-    SPECIES_SKIPLOOM,
-    SPECIES_JUMPLUFF,
-    SPECIES_AIPOM,
-    SPECIES_SUNKERN,
-    SPECIES_SUNFLORA,
-    SPECIES_QUAGSIRE,
-    SPECIES_ESPEON, //kind of like it low?
-    SPECIES_UMBREON, //same
-    SPECIES_SLOWKING,
-    SPECIES_MISDREAVUS,
-    SPECIES_WOBBUFFET,
-    SPECIES_GIRAFARIG,
-    SPECIES_PINECO,
-    SPECIES_FORRETRESS,
-    SPECIES_GLIGAR,
-    SPECIES_STEELIX,
+    SPECIES_CHIKORITA,
+    SPECIES_CYNDAQUIL,
+    SPECIES_TOTODILE,
+    SPECIES_HOOTHOOT,
+    SPECIES_SPINARAK,
+    SPECIES_CHINCHOU,
+    SPECIES_LANTURN,
+    SPECIES_PICHU,
+    SPECIES_CLEFFA,
+    SPECIES_IGGLYBUFF,
+    SPECIES_TOGEPI,
+    SPECIES_TOGETIC,
+    SPECIES_NATU,
+    SPECIES_MAREEP,
+    SPECIES_BELLOSSOM,
+    SPECIES_MARILL,
+    SPECIES_YANMA,
+    SPECIES_WOOPER,
+    SPECIES_MURKROW,
+    SPECIES_UNOWN,
+    SPECIES_DUNSPARCE,
+    SPECIES_SNUBBULL,
+    SPECIES_SHUCKLE,
+    SPECIES_TEDDIURSA,
+    SPECIES_SLUGMA,
+    SPECIES_MAGCARGO,
+    SPECIES_SWINUB,
+    SPECIES_PILOSWINE,
+    SPECIES_CORSOLA,
+    SPECIES_REMORAID,
+    SPECIES_OCTILLERY,
+    SPECIES_HOUNDOUR,
+    SPECIES_PHANPY,
+    SPECIES_PORYGON2,
+    SPECIES_SMOOCHUM,
+    SPECIES_ELEKID,
+    SPECIES_MAGBY,
+    //GEN 3
+    SPECIES_MUDKIP,
+    SPECIES_POOCHYENA,
+    SPECIES_ZIGZAGOON,
+    SPECIES_WURMPLE,
+    SPECIES_SILCOON,
+    SPECIES_CASCOON,
+    SPECIES_LOTAD,
+    SPECIES_LOMBRE,
+    SPECIES_SEEDOT,
+    SPECIES_TAILLOW,
+    SPECIES_WINGULL,
+    SPECIES_RALTS,
+    SPECIES_SURSKIT,
+    SPECIES_SHROOMISH,
+    SPECIES_SLAKOTH,
+    SPECIES_NINCADA,
+    SPECIES_WHISMUR,
+    SPECIES_MAKUHITA,
+    SPECIES_AZURILL,
+    SPECIES_NOSEPASS,
+    SPECIES_SKITTY,
+    SPECIES_SABLEYE,
+    SPECIES_MAWILE,
+    SPECIES_ARON,
+    SPECIES_LAIRON,
+    SPECIES_ELECTRIKE,
+    SPECIES_GULPIN,
+    SPECIES_NUMEL,
+    SPECIES_CAMERUPT,
+    SPECIES_TRAPINCH,
+    SPECIES_VIBRAVA,
+    SPECIES_CACNEA,
+    SPECIES_SWABLU,
+    SPECIES_SEVIPER,
+    SPECIES_BARBOACH,
+    SPECIES_CORPHISH,
+    SPECIES_BALTOY,
+    SPECIES_ANORITH,
+    SPECIES_FEEBAS,
+    SPECIES_SHUPPET,
+    SPECIES_WYNAUT,
+    SPECIES_SPHEAL,
+    SPECIES_SEALEO,
+    SPECIES_CLAMPERL,
+    SPECIES_LUVDISC,
+    SPECIES_BAGON,
+    SPECIES_SHELGON,
+    SPECIES_METAGROSS,
+    SPECIES_JIRACHI,
+    //GEN 4,
+    SPECIES_TURTWIG,
+    SPECIES_CHIMCHAR,
+    SPECIES_PIPLUP,
+    SPECIES_STARLY,
+    SPECIES_STARAVIA,
+    SPECIES_BIDOOF,
+    SPECIES_SHINX,
+    SPECIES_LUXIO,
+    SPECIES_BUDEW,
+    SPECIES_CRANIDOS,
+    SPECIES_SHIELDON,
+    SPECIES_BURMY,
+    SPECIES_PACHIRISU,
+    SPECIES_BUIZEL,
+    SPECIES_CHERUBI,
+    SPECIES_SHELLOS,
+    SPECIES_AMBIPOM,
+    SPECIES_CHINGLING,
+    SPECIES_STUNKY,
+    SPECIES_BONSLY,
+    SPECIES_HAPPINY,
+    SPECIES_CHATOT,
+    SPECIES_MUNCHLAX,
+    SPECIES_RIOLU,
+    SPECIES_HIPPOPOTAS,
+    SPECIES_HIPPOWDON,
+    SPECIES_SNOVER,
+    SPECIES_GLACEON,
+    SPECIES_FROSLASS,
+    SPECIES_SHAYMIN,
+    //GEN 5
+    SPECIES_SNIVY,
+    SPECIES_TEPIG,
+    SPECIES_OSHAWOTT,
+    SPECIES_PATRAT,
+    SPECIES_LILLIPUP,
+    SPECIES_PURRLOIN,
+    SPECIES_PANSAGE,
+    SPECIES_PANPOUR,
+    SPECIES_PANSEAR,
+    SPECIES_MUNNA,
+    SPECIES_PIDOVE,
+    SPECIES_ROGGENROLA,
+    SPECIES_BOLDORE,
+    SPECIES_TIMBURR,
+    SPECIES_CONKELDURR,
+    SPECIES_TYMPOLE,
+    SPECIES_PALPITOAD,
+    SPECIES_SEWADDLE,
+    SPECIES_SWADLOON,
+    SPECIES_VENIPEDE,
+    SPECIES_COTTONEE,
+    SPECIES_BASCULIN,
+    SPECIES_SANDILE,
+    SPECIES_DARUMAKA,
+    SPECIES_DWEBBLE,
+    SPECIES_SCRAGGY,
+    SPECIES_ARCHEN,
+    SPECIES_TRUBBISH,
+    SPECIES_ZORUA,
+    SPECIES_DUCKLETT,
+    SPECIES_VANILLITE,
+    SPECIES_DEERLING,
+    SPECIES_EMOLGA,
+    SPECIES_KARRABLAST,
+    SPECIES_FOONGUS,
+    SPECIES_JOLTIK,
+    SPECIES_GALVANTULA,
+    SPECIES_KLINK,
+    SPECIES_TYNAMO,
+    SPECIES_ELGYEM,
+    SPECIES_AXEW,
+    SPECIES_CUBCHOO,
+    SPECIES_SHELMET,
+    SPECIES_STUNFISK,
+    SPECIES_MIENFOO,
+    SPECIES_PAWNIARD,
+    SPECIES_RUFFLET,
+    SPECIES_DURANT,
+    SPECIES_DEINO,
+    SPECIES_LARVESTA,
+    SPECIES_MELOETTA,
+    //GEN 6
+    SPECIES_CHESPIN,
+    SPECIES_QUILLADIN,
+    SPECIES_FENNEKIN,
+    SPECIES_FROAKIE,
+    SPECIES_FLETCHLING,
+    SPECIES_FLETCHINDER,
+    SPECIES_SCATTERBUG,
+    SPECIES_SPEWPA,
+    SPECIES_LITLEO,
+    SPECIES_FLABEBE,
+    SPECIES_PANCHAM,
+    SPECIES_ESPURR,
+    SPECIES_SPRITZEE,
+    SPECIES_BINACLE,
+    SPECIES_SKRELP,
+    SPECIES_CLAUNCHER,
+    SPECIES_CLAWITZER,
+    SPECIES_HELIOPTILE,
+    SPECIES_TYRUNT,
+    SPECIES_HAWLUCHA,
+    SPECIES_DEDENNE,
+    SPECIES_CARBINK,
+    SPECIES_GOOMY,
+    SPECIES_PHANTUMP,
+    SPECIES_PUMPKABOO,
+    SPECIES_BERGMITE,
+    //GEN 7
+    SPECIES_ROWLET,
+    SPECIES_LITTEN,
+    SPECIES_POPPLIO,
+    SPECIES_PIKIPEK,
+    SPECIES_YUNGOOS,
+    SPECIES_GRUBBIN,
+    SPECIES_CHARJABUG,
+    SPECIES_ROCKRUFF,
+    SPECIES_WISHIWASHI,
+    SPECIES_MAREANIE,
+    SPECIES_DEWPIDER,
+    SPECIES_FOMANTIS,
+    SPECIES_SALANDIT,
+    SPECIES_STUFFUL,
+    SPECIES_BOUNSWEET,
+    SPECIES_WIMPOD,
+    SPECIES_SANDYGAST,
+    SPECIES_KOMALA,
+    SPECIES_TOGEDEMARU,
+    SPECIES_MIMIKYU,
+    SPECIES_MELTAN,
+    //GEN 8
+    SPECIES_GROOKEY,
+    SPECIES_SOBBLE,
+    SPECIES_ROOKIDEE,
+    SPECIES_BLIPBUG,
+    SPECIES_DOTTLER,
+    SPECIES_NICKIT,
+    SPECIES_GOSSIFLEUR,
+    SPECIES_WOOLOO,
+    SPECIES_CHEWTLE,
+    SPECIES_YAMPER,
+    SPECIES_ROLYCOLY,
+    SPECIES_APPLIN,
+    SPECIES_SILICOBRA,
+    SPECIES_SANDACONDA,
+    SPECIES_ARROKUDA,
+    SPECIES_BARRASKEWDA,
+    SPECIES_TOXEL,
+    SPECIES_SIZZLIPEDE,
+    SPECIES_CLOBBOPUS,
+    SPECIES_SINISTEA,
+    SPECIES_HATENNA,
+    SPECIES_IMPIDIMP,
+    SPECIES_MILCERY,
+    SPECIES_FALINKS,
+    SPECIES_PINCURCHIN,
+    SPECIES_SNOM,
+    SPECIES_INDEEDEE,
+    SPECIES_MORPEKO,
+    SPECIES_CUFANT,
+    SPECIES_DREEPY, //cephireon and fraejta need be added before truly done but otherwise done
+
 
 
     END_LIST,
-};
+}; //way list is turning out, it'd be a better idea, to instead use exceptions rather than additions,
+//would greatly save time
 
 #define CREATE_POKEDEX_PAGE
 u8 DexScreen_DrawMonDexPage(bool8 a0)
@@ -3177,12 +3394,12 @@ u8 DexScreen_DrawMonDexPage(bool8 a0)
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
 
-    for (i = 0; sLargeMon[i] != END_LIST; i++)
+    for (i = 0; sDexAdjusting[i] != END_LIST; i++)
     {
-        if (sPokedexScreenData->dexSpecies == sLargeMon[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
+        if (sPokedexScreenData->dexSpecies == sDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
             break;
     }
-    if (sPokedexScreenData->dexSpecies == sLargeMon[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
+    if (sPokedexScreenData->dexSpecies != sDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic2_Large);
     else
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic);   //sWindowTemplate_DexEntry_MonPic2_Large
@@ -3628,18 +3845,18 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId)
         break;
     case 5: //think for when mon first caught
         gTasks[taskId].data[0] = 30;
-        if (StringLength(gSpeciesNames[species]) <= 11)
-        {
+        //if (StringLength(gSpeciesNames[species]) <= 11)
+        //{
             sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_SmallCategoryPage, 0);
-        }
-        else if (StringLength(gSpeciesNames[species]) == 12)
+        //}
+        /*else if (StringLength(gSpeciesNames[species]) == 12)
         {
             sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_MediumCategoryPage, 0);
         }
         else if (StringLength(gSpeciesNames[species]) == 13)
         {
             sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_LargeCategoryPage, 0);
-        }
+        }*/
         sPokedexScreenData->state = 6;
         break;
     case 6:

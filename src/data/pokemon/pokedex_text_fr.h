@@ -1,6 +1,12 @@
 //ported dex entries kinda suck
 //may check pokemondb for something better.
 //or take something from bulbapedia info
+
+//these need to be adjusted for those that are too long across,
+//as that breaks formatting,
+//also need add hisuian entries if I'm gonna include forms
+//alolan etc.
+
 const u8 gDummyPokedexText[] = _(
     "This is a newly discovered Pokémon.\n"
     "It is currently under investigation.\n"
