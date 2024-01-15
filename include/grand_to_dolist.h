@@ -1920,10 +1920,17 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   =also need fix type2 window width for  area page -done
 
   -need take footprint graphics from EE repo, and update table for those
+  -done, also revised, made define for no footprint, so can reuse single graphic instead of making one for each,
+  saves about 200 uses of said files, so hopefully saves good deal of space,
+  also removed byte defines of those files, replced w gMonFootprint_None curr rom size 19,479 kb  after  19450 kb,  seems bad but
+  I did add a bunch of values I didn't have so it offset the savings, but they are still there
 */
  goto DEX_SCALING_AND_OFFSET  //pokedex_entries.h
   //pkscale/trainer scale,  then previous solution/pkOffset ot get converted value?  i.e 2.11/20 is approx 0
   //seems proper value, is about 10x found solution?  tested seems to about work, nut sure about negative values though
+
+ goto FOOTPRINT_TABLE //table for dex footprint values
+ goto POKEMON_GRAPHIC_DEFINES //footprint icons pics palettes etc.
 /*
   - TMHM Expansion base setup complete, need actually add on to tm list now
   Wanted to make comprehensive list for better list,
