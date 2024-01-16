@@ -608,13 +608,13 @@ bool8 IsSpecialSEPlaying(void)
     return TRUE;
 }
 
-void sub_8072474(u16 volume)
+void SetBGMVolume_SuppressHelpSystemReduction(u16 volume)
 {
     gUnknown_203F174 = 1;
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, volume);
 }
 
-void sub_807249C(void)
+void BGMVolumeMax_EnableHelpSystemReduction(void)
 {
     gUnknown_203F174 = 0;
     m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 256);

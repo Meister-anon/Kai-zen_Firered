@@ -79,6 +79,12 @@
 
 #define TOTAL_OBJ_TILE_COUNT 1024
 
+#define PLTT_SIZEOF(n) ((n) * sizeof(u16))
+#define PLTT_SIZE_4BPP PLTT_SIZEOF(16)
+#define PLTT_SIZE_8BPP PLTT_SIZEOF(256)
+
+#define PLTT_OFFSET_4BPP(n) ((n) * PLTT_SIZE_4BPP) //below stuff I put there, port form ee?
+
 #define RGB(r, g, b) ((r) | ((g) << 5) | ((b) << 10))
 #define RGB2(r, g, b) (((b) << 10) | ((g) << 5) | (r))
 #define _RGB(r, g, b) ((((b) & 0x1F) << 10) + (((g) & 0x1F) << 5) + ((r) & 0x1F))
