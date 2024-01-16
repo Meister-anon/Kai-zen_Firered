@@ -1913,6 +1913,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   will need to further adjust pokedex, categories will remain as they are and be just for the kanto mon,
   with that, no need to adjust the window sizes, so that's less work done. -want to do this next, will be a major saver
 
+  -ok but first, fix category page - DONE
+  -also updated values to current pret standard
+
   but I do need to adjust the mon offsets in the entries page for it to look right,
   then change the search option so it takes you to the dex entry page, NOT the category page.
   and seems need to fix the az anme search as doesn't seem to include everyone?
@@ -1929,6 +1932,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   since I did that had idea just remove all footrints, its not really useful and just looks kinda ugly on dex page
   so deleted all footprints, replaced only kept blank zubat footprint, to just useful for everything
+
 
 */
  goto DEX_SCALING_AND_OFFSET  //pokedex_entries.h
