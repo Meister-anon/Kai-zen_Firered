@@ -1117,7 +1117,7 @@ static void Task_PokedexScreen(u8 taskId)
                 sPokedexScreenData->dexOrderId = sPokedexScreenData->modeSelectInput - DEX_CATEGORY_COUNT;
                 sPokedexScreenData->characteristicOrderMenuItemsAbove = sPokedexScreenData->characteristicOrderMenuCursorPos = 0;
                 BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
-                sPokedexScreenData->state = 8;
+                sPokedexScreenData->state = 9; //...welp it was as simple as changing this  to 9 and now goes to dex page not cat page
                 break;
             }
             break;

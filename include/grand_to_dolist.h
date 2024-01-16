@@ -1916,6 +1916,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -ok but first, fix category page - DONE
   -also updated values to current pret standard
 
+  next - need see about making national stuff load faster
+  and change searh filters to go to dex entry not cat page ...-DONE was as simple as changing a single value, found it by accident
+
   but I do need to adjust the mon offsets in the entries page for it to look right,
   then change the search option so it takes you to the dex entry page, NOT the category page.
   and seems need to fix the az anme search as doesn't seem to include everyone?
