@@ -139,15 +139,17 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 
 #include "data/pokemon_graphics/footprint_table.h"
 
-#ifdef SPECIES_NAME_EXPANSION
+//const u8 sCategoryMonInfoBgTiles[] = INCBIN_U8("graphics/pokedex/unk_8440124.bin.lz"); //think was previous category image
+
+/*#ifdef SPECIES_NAME_EXPANSION
 const u32 sCategoryMonLargeInfoBgTiles[] = INCBIN_U32("graphics/pokedex/large_mini_page.4bpp.lz");
 const u32 sCategoryMonMediumInfoBgTiles[] = INCBIN_U32("graphics/pokedex/medium_mini_page.4bpp.lz");
 const u32 sCategoryMonInfoBgTiles[] = INCBIN_U32("graphics/pokedex/mini_page.4bpp.lz");
 #else
 const u32 sCategoryMonInfoBgTiles[] = INCBIN_U32("graphics/pokedex/mini_page.4bpp.lz");
-#endif // SPECIES_NAME_EXPANSION
+#endif // SPECIES_NAME_EXPANSION */
 
-//const u8 sCategoryMonInfoBgTiles[] = INCBIN_U8("graphics/pokedex/mini_page.bin.lz");
+const u8 sCategoryMonInfoBgTiles[] = INCBIN_U8("graphics/pokedex/mini_page.bin.lz");
 const u8 sKantoDexTiles[] = INCBIN_U8("graphics/pokedex/unk_8440274.4bpp.lz");
 const u8 sNatDexTiles[] = INCBIN_U8("graphics/pokedex/unk_84403AC.4bpp.lz");
 const u16 sKantoDexPalette[] = INCBIN_U16("graphics/pokedex/unk_84404C8.gbapal");
@@ -1669,11 +1671,7 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, s32 itemId, u8 y)
 #define POKEDEX_CATEGORY_CURSOR_DATA
 static void Task_DexScreen_CategorySubmenu(u8 taskId)
 {
-    u8 i;
-    u8 j;
-    u16 species = gDexCategories[sPokedexScreenData->category].page[sPokedexScreenData->pageNum].species[i]; //no idea if work
-    //I think I need a variable for page too,  put [j] after pageNum I think may build
-    //believe need a loop to check page
+
     int pageFlipCmd;
     u8 *ptr;
     switch (sPokedexScreenData->state)
@@ -1720,19 +1718,9 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         break;
     case 4: //believe for accessing category from within pokedex
         sPokedexScreenData->scrollArrowsTaskId = DexScreen_CreateCategoryMenuScrollArrows();
-        //if (StringLength(gSpeciesNames[species]) <= 11)
-        //{
-            sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_SmallCategoryPage, 0);
-        //}
-        /*else if (StringLength(gSpeciesNames[species]) == 12)
-        {
-            sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_MediumCategoryPage, 0);
-        }
-        else if (StringLength(gSpeciesNames[species]) == 13)//CAN'T remember logic but potentially loweer these by 1, bcuz stringlength read logic
-        {
-            sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_LargeCategoryPage, 0);
-        }*/
-        //sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_MediumCategoryPage, 0);
+
+        sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_SmallCategoryPage, 0);
+
         sPokedexScreenData->state = 5;
         break;//cursor is not changing with each mon, even though bg window does even though that doesn't have loop either
         //I'm guessing without loop its only checking the species on the first page of the category, testing next
@@ -2773,7 +2761,7 @@ void DexScreen_DexPageZoomEffectFrame(u8 bg, u8 scale)
         top = 2;
 
     //either adjust this or height value
-    divY = (top + 1) + ((height / 2) - 1);// The horizontal divider    //this determines space for dex entries 
+    divY = (top + 1) + ((height / 2) - 1);// The horizontal divider    //this determines space for dex entries/ this was my change to give more room for text space
             //to keep dividing line where it is,  changes to tilemap top, must be contrasted by double the change by height, in the opposite
             //i.e if I decrease top by 1 I must increase height by 2
     // Top edge
@@ -3033,7 +3021,7 @@ void DexScreen_DrawMonFootprint(u8 a0, u16 species, u8 a2, u8 a3)
 
     if (!(DexScreen_GetSetPokedexFlag(species, 1, 1)))
         return;
-    footprint = (u8 *)(gMonFootprint_None);
+    footprint = (u8 *)(gMonFootprint_None); //this is what where replaced  gfootprint stuff
     buffer = gDecompressionBuffer;
     unused = 0;
     v3 = 0;
@@ -3846,18 +3834,8 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId)
         break;
     case 5: //think for when mon first caught
         gTasks[taskId].data[0] = 30;
-        //if (StringLength(gSpeciesNames[species]) <= 11)
-        //{
-            sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_SmallCategoryPage, 0);
-        //}
-        /*else if (StringLength(gSpeciesNames[species]) == 12)
-        {
-            sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_MediumCategoryPage, 0);
-        }
-        else if (StringLength(gSpeciesNames[species]) == 13)
-        {
-            sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_LargeCategoryPage, 0);
-        }*/
+
+        sPokedexScreenData->categoryPageCursorTaskId = ListMenuAddCursorObjectInternal(&sCursorStruct_SmallCategoryPage, 0);
         sPokedexScreenData->state = 6;
         break;
     case 6:
