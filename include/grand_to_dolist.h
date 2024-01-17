@@ -1916,6 +1916,12 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -ok but first, fix category page - DONE
   -also updated values to current pret standard
 
+  finished up adjusting dex entires
+
+  -clean up fairy icon, next, - think done
+  -about have my fairy icon how I want it, need remember to eventually add the default fairy icon for those that
+  want it
+
   next - need see about making national stuff load faster
   and change searh filters to go to dex entry not cat page ...-DONE was as simple as changing a single value, found it by accident
 
