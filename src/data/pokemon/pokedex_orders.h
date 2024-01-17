@@ -3043,7 +3043,7 @@ const u16 gPokedexOrder_Height[] =
 };
 
 //TYPE list goes in this order starts mono, then second types, starting back at beginning, so normal|normal first,
-/*TYPE_NORMAL,   0x00
+/*      TYPE_NORMAL,   0x00
 	.set TYPE_FIGHTING, 0x01
 	.set TYPE_FLYING,   0x02
 	.set TYPE_POISON,   0x03
@@ -3062,6 +3062,10 @@ const u16 gPokedexOrder_Height[] =
 	.set TYPE_DRAGON,   0x10
 	.set TYPE_DARK,     0x11
 	.set TYPE_FAIRY,	0x12*/
+    //would need reorder this or find new way to build automatically with logic
+    //double loop, type 1 loop of order of list,  if species type 1 matches loop value
+    //inner loop type 2 loop over order of list,    go to inner loop, if species type 2 matches loop value add to list
+    //only add to list from within type 2 loop, - can't build auto, would be extremel lossy with a lot of relooping
 const u16 gPokedexOrder_Type[] =
 {
     SPECIES_RATTATA, //NORMAL

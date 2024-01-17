@@ -1903,7 +1903,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   -forecsat complete
 
-  -need fix celesteela background, think just revert previous change made to it
+  -need fix celesteela background, think just revert previous change made to it - Done
 
   //fixed pic height in dex, but realized, same issue in size chart, w trainer comparison, need raise those, that aren't
   in array, not sure how ot raise as can't just make window, need to actually elevate them, since need raise jutst the mon not teh trainer

@@ -1438,7 +1438,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
             sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
         }
         break;
-    case DEX_ORDER_ATOZ:
+    case DEX_ORDER_ATOZ: //look into making this load in sections?, think issue is would need to continuously retrigger this function?, not az but all national lists
         for (i = 0; i < SPECIES_CALYREX; i++) //this was issue with limit, it used chimecho for some dumb reason, rather than species or something smh
         {
             ndex_num = gPokedexOrder_Alphabetical[i];
@@ -1455,7 +1455,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
             }
         }
         break;
-    case DEX_ORDER_TYPE:
+    case DEX_ORDER_TYPE: //can't build automatically would need to loop entire species list MANY times, so would take forever
         for (i = 0; i < SPECIES_CALYREX; i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
         {
             ndex_num = SpeciesToNationalPokedexNum(gPokedexOrder_Type[i]);
@@ -1471,7 +1471,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
                 }
             }
         }
-        break;
+        break; //order by type and weight, just wouldn't work with my changes/species expansion would require, going through and creating list by hand
     case DEX_ORDER_LIGHTEST:
         for (i = 0; i < SPECIES_CALYREX; i++) //for (i = 0; i < NATIONAL_DEX_COUNT; i++) same reason as above //all below share same original value
         {

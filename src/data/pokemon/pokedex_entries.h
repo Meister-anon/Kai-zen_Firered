@@ -19,6 +19,8 @@ const struct PokedexEntry gPokedexEntries[] =
     //ok seems 256 is min value used for scale? lower number means bigger, so if mon is bigger trainerscale is higher, and trainer offset must be raised
     //rather than pokemon offset
 
+    //loose formula pkscale/trainer scale * 10 , doesnt always work? would need to go over this later
+
     [NATIONAL_DEX_NONE] =
     {
         .categoryName = _("Unknown"),
@@ -4262,7 +4264,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .weight = 23,
         .description = gShuppetPokedexText,
         .pokemonScale = 440,
-        .pokemonOffset = 20,
+        .pokemonOffset = 17,//20
         .trainerScale = 256,
         .trainerOffset = 0,
     },
