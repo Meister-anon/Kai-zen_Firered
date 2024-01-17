@@ -642,6 +642,19 @@ const struct WindowTemplate sWindowTemplate_DexEntry_MonPic2_Large = {
     .height = 8,
     .paletteNum = 9,
     .baseBlock = 0x02d8
+}; //need make 3rd window for mon still too long, think just 3 elves
+//uxie mespirit and azelf
+//thinkm can just put a conditional where using first list to continue if species matches any of those 3
+//or just put otehr window there..
+
+const struct WindowTemplate sWindowTemplate_DexEntry_MonPic3_Highest = {
+    .bg = 1,
+    .tilemapLeft = 19,
+    .tilemapTop = 1,
+    .width = 8,
+    .height = 8,
+    .paletteNum = 9,
+    .baseBlock = 0x0348
 };
 
 const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesStats = {
@@ -1365,7 +1378,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
         {
             if (((sPokedexScreenData->characteristicMenuInput >> 16) & 1) && !DexScreen_LookUpCategoryBySpecies(sPokedexScreenData->characteristicMenuInput))
             {
-                RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);//potentailly along with remove category search above
+                RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
                 BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
                 sPokedexScreenData->state = 7;
             }
@@ -1383,7 +1396,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
         CopyBgTilemapBufferToVram(1);
         DexScreen_RemoveWindow(&sPokedexScreenData->numericalOrderWindowId);
         sPokedexScreenData->parentOfCategoryMenu = 1;
-        gTasks[taskId].func = Task_DexScreen_CategorySubmenu; //think this is what need to change,/for makking default to dex page not cat.
+        gTasks[taskId].func = Task_DexScreen_CategorySubmenu; 
         sPokedexScreenData->state = 0;
         break;
     }
@@ -3313,8 +3326,14 @@ u32 i;
         if (sPokedexScreenData->dexSpecies == sDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
             break;
     }
-    if (sPokedexScreenData->dexSpecies != sDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
+    if (sPokedexScreenData->dexSpecies == SPECIES_AZELF 
+    || sPokedexScreenData->dexSpecies == SPECIES_MESPRIT 
+    || sPokedexScreenData->dexSpecies == SPECIES_UXIE)
+        sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic3_Highest); //works
+
+    else if (sPokedexScreenData->dexSpecies != sDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic2_Large);
+        
     else
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic);   //sWindowTemplate_DexEntry_MonPic2_Large
 
