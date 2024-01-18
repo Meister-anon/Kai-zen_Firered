@@ -222,6 +222,6 @@ s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fi
 // percent in UQ_4_12 format
 extern const u16 gPercentToModifier[101];
 
-extern const u16 gFloatingSpecies[159];
+extern const u16 gFloatingSpecies[177]; //added heracros + probopass to list
 
 #endif // GUARD_BATTLE_UTIL_H

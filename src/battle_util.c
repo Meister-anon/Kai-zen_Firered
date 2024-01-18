@@ -4513,7 +4513,16 @@ u8 AtkCanceller_UnableToUseMove2(void)
 //i.e porygon and magnemite line, may be others
 //delete value in bracket to see actual list total w intellisense to make sure total is correct before final save
 //update define in battle_util.h if diff
-const u16 gFloatingSpecies[159] = {
+//hmm so logically dialga palkia most legendaries should be here,
+//since most all of them can fly, but while logical, would pretty much destroy ground types...
+//ok then think will exclude the non obvious flying legendaries from this lsit then,
+//but still give them flight - ...WELL since darkrai and arceus are already onthis
+//might as well just add dialga and palkia...
+//idk for now just do it and figure out what to do with it later,
+//so adding victini to list,
+//decied exclude klink klang etc from this...nvm sigh
+//sigh think with all these will need to bring back rock boost for ground types
+const u16 gFloatingSpecies[177] = {
     SPECIES_BUTTERFREE,
     SPECIES_BEAUTIFLY,
     SPECIES_VIVILLON,
@@ -4536,8 +4545,21 @@ const u16 gFloatingSpecies[159] = {
     SPECIES_GASTLY,
     SPECIES_HAUNTER,
     SPECIES_GENGAR,
-    SPECIES_DUNSPARCE,
-    SPECIES_AERODACTYL,
+    SPECIES_DUNSPARCE, //add questionable ones below here, for easy removal if decide to
+    SPECIES_KLINK,
+    SPECIES_KLANG,
+    SPECIES_KLINKLANG,
+    SPECIES_HERACROSS, //seems like odd pick but does have wings, and been shown to be able to fly
+    SPECIES_LITWICK, //unsure about adding all this floating mon to ground immunity
+    SPECIES_LAMPENT,    //thinking they can float but not high or easily enough to avoid all ground moves
+    SPECIES_CHANDELURE,
+    SPECIES_TAPU_BULU,
+    SPECIES_TAPU_FINI,
+    SPECIES_TAPU_KOKO,
+    SPECIES_TAPU_LELE, //rare diety mon can all fly
+    SPECIES_BUZZWOLE, //
+    SPECIES_DRAMPA, //dragon normal, but can fly, and learn fly
+    SPECIES_AERODACTYL, //ABOVE this
     SPECIES_AERODACTYL_MEGA,
     SPECIES_MEW,
     SPECIES_MEWTWO,
@@ -4547,6 +4569,7 @@ const u16 gFloatingSpecies[159] = {
     SPECIES_SCIZOR,
     SPECIES_LEDYBA,
     SPECIES_LEDIAN,
+    SPECIES_CHIMECHO,
     SPECIES_CELEBI,
     SPECIES_TOGETIC,
     SPECIES_ALTARIA,
@@ -4568,6 +4591,7 @@ const u16 gFloatingSpecies[159] = {
     SPECIES_LATIOS,
     SPECIES_BRONZOR,
     SPECIES_BRONZONG,
+    SPECIES_PROBOPASS,
     SPECIES_YANMEGA,
     SPECIES_MAGNEMITE,
     SPECIES_MAGNETON,
@@ -4593,6 +4617,7 @@ const u16 gFloatingSpecies[159] = {
     SPECIES_DARKRAI,
     SPECIES_VIBRAVA,
     SPECIES_FLYGON,
+    SPECIES_VICTINI,
     SPECIES_HYDREIGON,
     SPECIES_VOLCARONA,
     SPECIES_TYNAMO,
@@ -4670,6 +4695,8 @@ const u16 gFloatingSpecies[159] = {
     SPECIES_DRAKLOAK,
     SPECIES_DRAGAPULT,
     SPECIES_REGIDRAGO,
+    SPECIES_DIALGA,
+    SPECIES_PALKIA,
     SPECIES_ARCEUS,
     SPECIES_ETERNATUS,
     SPECIES_ETERNATUS_ETERNAMAX

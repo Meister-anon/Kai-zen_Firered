@@ -2192,6 +2192,7 @@ static const u16 sMagnetonTMHMLearnset[] = {
                                         ITEM_TM42_FACADE,
                                         ITEM_TM43_SECRET_POWER,
                                         ITEM_TM44_REST,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -3662,6 +3663,7 @@ static const u16 sPorygonTMHMLearnset[] = {
                                         ITEM_TM43_SECRET_POWER,
                                         ITEM_TM44_REST,
                                         ITEM_TM46_THIEF,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -4072,6 +4074,7 @@ static const u16 sMewtwoTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM48_SKILL_SWAP,
                                         ITEM_TM49_SNATCH,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM04_STRENGTH,
                                         ITEM_HM05_FLASH,
                                         ITEM_HM06_ROCK_SMASH,
@@ -4493,6 +4496,7 @@ static const u16 sLedianTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -4788,7 +4792,7 @@ static const u16 sNatuTMHMLearnset[] = {
                                         ITEM_TM48_SKILL_SWAP,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
-};
+};//cant fly canonincally
 
 static const u16 sXatuTMHMLearnset[] = {
   ITEM_TM04_CALM_MIND,
@@ -5191,6 +5195,7 @@ static const u16 sYanmaTMHMLearnset[] = {
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
                                         ITEM_TM47_STEEL_WING,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -5399,12 +5404,14 @@ static const u16 sMisdreavusTMHMLearnset[] = {
                                         ITEM_TM46_THIEF,
                                         ITEM_TM48_SKILL_SWAP,
                                         ITEM_TM49_SNATCH,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
 
 static const u16 sUnownTMHMLearnset[] = {
     MOVE_HIDDEN_POWER,
+    ITEM_HM02_FLY,
     TMHM_LEARNSET_END
 };
 
@@ -5706,6 +5713,7 @@ static const u16 sScizorTMHMLearnset[] = {
                                         ITEM_TM46_THIEF,
                                         ITEM_TM47_STEEL_WING,
                                         ITEM_HM01_CUT,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM04_STRENGTH,
                                         ITEM_HM06_ROCK_SMASH,
     TMHM_LEARNSET_END
@@ -5757,10 +5765,11 @@ static const u16 sHeracrossTMHMLearnset[] = {
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
                                         ITEM_HM01_CUT,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM04_STRENGTH,
                                         ITEM_HM06_ROCK_SMASH,
     TMHM_LEARNSET_END
-};
+}; //has wings can fly, later dex entires mention not good at flying, but flies in show
 
 static const u16 sSneaselTMHMLearnset[] = {
   ITEM_TM01_FOCUS_PUNCH,
@@ -6269,9 +6278,10 @@ static const u16 sPorygon2TMHMLearnset[] = {
                                         ITEM_TM43_SECRET_POWER,
                                         ITEM_TM44_REST,
                                         ITEM_TM46_THIEF,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
-};
+};//apparently can't fly? but is always floating..adding anyway
 
 static const u16 sStantlerTMHMLearnset[] = {
  ITEM_TM04_CALM_MIND,
@@ -6793,6 +6803,7 @@ static const u16 sCelebiTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM48_SKILL_SWAP,
                                         ITEM_HM01_CUT,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -7446,6 +7457,7 @@ static const u16 sNinjaskTMHMLearnset[] = {
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
                                         ITEM_HM01_CUT,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -7472,7 +7484,7 @@ static const u16 sShedinjaTMHMLearnset[] = {
                                         ITEM_HM01_CUT,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
-};
+};//intentinonally left off fly, think makes sense
 
 static const u16 sTaillowTMHMLearnset[] = {
   ITEM_TM06_TOXIC,
@@ -7906,6 +7918,7 @@ static const u16 sClaydolTMHMLearnset[] = {
                                         ITEM_TM43_SECRET_POWER,
                                         ITEM_TM44_REST,
                                         ITEM_TM48_SKILL_SWAP,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM04_STRENGTH,
                                         ITEM_HM05_FLASH,
                                         ITEM_HM06_ROCK_SMASH,
@@ -8665,9 +8678,10 @@ static const u16 sLunatoneTMHMLearnset[] = {
                                         ITEM_TM43_SECRET_POWER,
                                         ITEM_TM44_REST,
                                         ITEM_TM48_SKILL_SWAP,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
-};
+};//fae worship moon, so think give some fairy moves
 
 static const u16 sSolrockTMHMLearnset[] = {
   ITEM_TM04_CALM_MIND,
@@ -8695,6 +8709,7 @@ static const u16 sSolrockTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM48_SKILL_SWAP,
                                         ITEM_TM50_OVERHEAT,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -9468,9 +9483,10 @@ static const u16 sShuppetTMHMLearnset[] = {
                                         ITEM_TM46_THIEF,
                                         ITEM_TM48_SKILL_SWAP,
                                         ITEM_TM49_SNATCH,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
-};
+}; //same exception I made for gastly, mostly because high evo level here
 
 static const u16 sBanetteTMHMLearnset[] = {
   ITEM_TM04_CALM_MIND,
@@ -9497,6 +9513,7 @@ static const u16 sBanetteTMHMLearnset[] = {
                                         ITEM_TM46_THIEF,
                                         ITEM_TM48_SKILL_SWAP,
                                         ITEM_TM49_SNATCH,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -9717,6 +9734,7 @@ static const u16 sCastformTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -9746,6 +9764,7 @@ static const u16 sVolbeatTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -9775,6 +9794,7 @@ static const u16 sIllumiseTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -10076,6 +10096,7 @@ static const u16 sMetangTMHMLearnset[] = {
                                         ITEM_TM43_SECRET_POWER,
                                         ITEM_TM44_REST,
                                         ITEM_HM01_CUT,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM04_STRENGTH,
                                         ITEM_HM05_FLASH,
                                         ITEM_HM06_ROCK_SMASH,
@@ -10106,11 +10127,12 @@ static const u16 sMetagrossTMHMLearnset[] = {
                                         ITEM_TM43_SECRET_POWER,
                                         ITEM_TM44_REST,
                                         ITEM_HM01_CUT,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM04_STRENGTH,
                                         ITEM_HM05_FLASH,
                                         ITEM_HM06_ROCK_SMASH,
     TMHM_LEARNSET_END
-};
+}; //scar viol dex literally says it folds its wings while flying
 
 static const u16 sRegirockTMHMLearnset[] = {
   ITEM_TM01_FOCUS_PUNCH,
@@ -10411,6 +10433,7 @@ static const u16 sJirachiTMHMLearnset[] = {
                                         ITEM_TM43_SECRET_POWER,
                                         ITEM_TM44_REST,
                                         ITEM_TM48_SKILL_SWAP,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
 };
@@ -10451,6 +10474,7 @@ static const u16 sDeoxysTMHMLearnset[] = {
                                         ITEM_TM48_SKILL_SWAP,
                                         ITEM_TM49_SNATCH,
                                         ITEM_HM01_CUT,
+                                        ITEM_HM02_FLY,
                                         ITEM_HM04_STRENGTH,
                                         ITEM_HM05_FLASH,
                                         ITEM_HM06_ROCK_SMASH,
@@ -10483,7 +10507,7 @@ static const u16 sChimechoTMHMLearnset[] = {
                                         ITEM_TM49_SNATCH,
                                         ITEM_HM05_FLASH,
     TMHM_LEARNSET_END
-}; 
+}; //added to floating as missed, but not giving fly
 
 static const u16 sTurtwigTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
@@ -11196,6 +11220,7 @@ static const u16 sMothimTMHMLearnset[] = {
                                             ITEM_TM45_ATTRACT,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_HM05_FLASH,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM19_GIGA_DRAIN,
@@ -11218,6 +11243,7 @@ static const u16 sMothimTMHMLearnset[] = {
 };
 
 static const u16 sCombeeTMHMLearnset[] = {
+  ITEM_HM02_FLY,
     TMHM_LEARNSET_END
 };//add on to this later
 
@@ -11225,6 +11251,7 @@ static const u16 sVespiquenTMHMLearnset[] = {
   ITEM_TM40_AERIAL_ACE,
                                             ITEM_TM45_ATTRACT,
                                             ITEM_HM01_CUT,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
@@ -11464,6 +11491,7 @@ static const u16 sDrifloonTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM17_PROTECT,
@@ -11595,6 +11623,7 @@ static const u16 sMismagiusTMHMLearnset[] = {
                                             ITEM_TM25_THUNDER,
                                             ITEM_TM24_THUNDERBOLT,
                                             ITEM_TM41_TORMENT,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
 };
@@ -12519,6 +12548,7 @@ static const u16 sMagnezoneTMHMLearnset[] = {
   ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -12764,6 +12794,7 @@ static const u16 sYanmegaTMHMLearnset[] = {
                                             ITEM_TM47_STEEL_WING,
                                             ITEM_TM11_SUNNY_DAY,
                                             ITEM_TM46_THIEF,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
 };
@@ -12851,6 +12882,7 @@ static const u16 sGliscorTMHMLearnset[] = {
                                             ITEM_TM12_TAUNT,
                                             ITEM_TM46_THIEF,
                                             ITEM_TM41_TORMENT,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
 };
@@ -12907,6 +12939,7 @@ static const u16 sPorygonZTMHMLearnset[] = {
                                             ITEM_TM46_THIEF,
                                             ITEM_TM25_THUNDER,
                                             ITEM_TM24_THUNDERBOLT,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
 };
@@ -12975,7 +13008,7 @@ static const u16 sProbopassTMHMLearnset[] = {
                                             ITEM_TM41_TORMENT,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
-};
+}; //made floating but think will exclude from flying mon?
 
 static const u16 sDusknoirTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
@@ -13064,13 +13097,16 @@ static const u16 sRotomTMHMLearnset[] = {
                                             ITEM_TM24_THUNDERBOLT,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
-};
+}; //rotom is a livign livewire, think would exclude from flight except rotom fan
+//...oh never made separate learnsets for rotom forms, ok need remember to do that
+//then give fly to rotom fan
 
 static const u16 sUxieTMHMLearnset[] = {
   ITEM_TM04_CALM_MIND,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -13104,6 +13140,7 @@ static const u16 sMespritTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -13137,6 +13174,7 @@ static const u16 sAzelfTMHMLearnset[] = {
                                             ITEM_TM38_FIRE_BLAST,
                                             ITEM_TM35_FLAMETHROWER,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -13177,6 +13215,7 @@ static const u16 sDialgaTMHMLearnset[] = {
                                             ITEM_TM38_FIRE_BLAST,
                                             ITEM_TM35_FLAMETHROWER,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -13215,6 +13254,7 @@ static const u16 sPalkiaTMHMLearnset[] = {
                                             ITEM_TM42_FACADE,
                                             ITEM_TM38_FIRE_BLAST,
                                             ITEM_TM35_FLAMETHROWER,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM01_FOCUS_PUNCH,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM07_HAIL,
@@ -13334,6 +13374,7 @@ static const u16 sCresseliaTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -13416,6 +13457,7 @@ static const u16 sDarkraiTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM01_FOCUS_PUNCH,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -13478,6 +13520,7 @@ static const u16 sVictiniTMHMLearnset[] = {
                                             ITEM_TM38_FIRE_BLAST,
                                             ITEM_TM35_FLAMETHROWER,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -14143,7 +14186,7 @@ static const u16 sMunnaTMHMLearnset[] = {
                                             ITEM_TM41_TORMENT,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
-};
+}; //floats think can't fly as its always sleeping?
 
 static const u16 sMusharnaTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
@@ -15391,7 +15434,9 @@ static const u16 sArcheopsTMHMLearnset[] = {
                                             ITEM_TM41_TORMENT,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
-};
+};//archen archeops line effectively flightless,
+//removed fly, as dex states requires a 2 mile headstart just to be able to fly minimum
+//sigh, giving fly back, just for sake of access
 
 static const u16 sTrubbishTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
@@ -15666,6 +15711,7 @@ static const u16 sDuosionTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM16_LIGHT_SCREEN,
@@ -15693,6 +15739,7 @@ static const u16 sReuniclusTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM01_FOCUS_PUNCH,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -15883,6 +15930,7 @@ static const u16 sEmolgaTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM23_IRON_TAIL,
@@ -16562,6 +16610,7 @@ static const u16 sCryogonalTMHMLearnset[] = {
                                             ITEM_TM14_BLIZZARD,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM07_HAIL,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -16707,6 +16756,7 @@ static const u16 sDruddigonTMHMLearnset[] = {
                                             ITEM_TM26_EARTHQUAKE,
                                             ITEM_TM42_FACADE,
                                             ITEM_TM35_FLAMETHROWER,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -17917,6 +17967,7 @@ static const u16 sVivillonTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -19432,6 +19483,7 @@ static const u16 sRowletTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -19451,6 +19503,7 @@ static const u16 sDartrixTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -19470,6 +19523,7 @@ static const u16 sDecidueyeTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -19766,6 +19820,7 @@ static const u16 sVikavoltTMHMLearnset[] = {
                                             ITEM_TM28_DIG,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -19877,6 +19932,7 @@ static const u16 sRibombeeTMHMLearnset[] = {
                                             ITEM_TM04_CALM_MIND,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM16_LIGHT_SCREEN,
@@ -19892,7 +19948,7 @@ static const u16 sRibombeeTMHMLearnset[] = {
                                             ITEM_TM46_THIEF,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
-};
+}; //gets fly because pidgey do
 
 static const u16 sRockruffTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
@@ -20827,6 +20883,7 @@ static const u16 sTapuLeleTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_TM21_FRUSTRATION,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
                                             ITEM_TM16_LIGHT_SCREEN,
@@ -20853,6 +20910,7 @@ static const u16 sTapuBuluTMHMLearnset[] = {
                                             ITEM_TM04_CALM_MIND,
                                             ITEM_TM42_FACADE,
                                             ITEM_TM01_FOCUS_PUNCH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -20877,6 +20935,7 @@ static const u16 sTapuFiniTMHMLearnset[] = {
                                             ITEM_TM04_CALM_MIND,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -20932,7 +20991,7 @@ static const u16 sSolgaleoTMHMLearnset[] = {
                                             ITEM_TM24_THUNDERBOLT,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
-};
+};//doesn't exactly fly more warps space
 
 static const u16 sLunalaTMHMLearnset[] = {
   ITEM_TM40_AERIAL_ACE,
@@ -20966,6 +21025,7 @@ static const u16 sLunalaTMHMLearnset[] = {
 static const u16 sNihilegoTMHMLearnset[] = {
   ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM16_LIGHT_SCREEN,
@@ -20989,6 +21049,7 @@ static const u16 sBuzzwoleTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM26_EARTHQUAKE,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM01_FOCUS_PUNCH,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
@@ -20996,10 +21057,11 @@ static const u16 sBuzzwoleTMHMLearnset[] = {
                                             ITEM_TM44_REST,
                                             ITEM_TM27_RETURN,
                                             ITEM_TM39_ROCK_TOMB,
+                                            ITEM_HM04_STRENGTH,
                                             ITEM_TM12_TAUNT,
                                             ITEM_TM06_TOXIC,
     TMHM_LEARNSET_END
-};
+};//NO IDea wy this didn't learn strenght before
 
 static const u16 sPheromosaTMHMLearnset[] = {
   ITEM_TM14_BLIZZARD,
@@ -21109,6 +21171,7 @@ static const u16 sNecrozmaTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM26_EARTHQUAKE,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM15_HYPER_BEAM,
@@ -21167,6 +21230,7 @@ static const u16 sMarshadowTMHMLearnset[] = {
 
 static const u16 sPoipoleTMHMLearnset[] = {
   ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM10_HIDDEN_POWER,
                                             ITEM_TM23_IRON_TAIL,
@@ -21507,6 +21571,7 @@ static const u16 sOrbeetleTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
                                             ITEM_TM04_CALM_MIND,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM15_HYPER_BEAM,
                                             ITEM_TM16_LIGHT_SCREEN,
@@ -22166,6 +22231,7 @@ static const u16 sFrosmothTMHMLearnset[] = {
                                             ITEM_TM14_BLIZZARD,
                                             ITEM_TM04_CALM_MIND,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM07_HAIL,
                                             ITEM_TM15_HYPER_BEAM,
@@ -22353,15 +22419,17 @@ static const u16 sDreepyTMHMLearnset[] = {
   ITEM_TM45_ATTRACT,
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM17_PROTECT,
                                             ITEM_TM44_REST,
     TMHM_LEARNSET_END
-};
+}; //if pidgey can get fly than this should too
 
 static const u16 sDrakloakTMHMLearnset[] = {
  ITEM_TM45_ATTRACT,
                                             ITEM_HM08_DIVE,
                                             ITEM_TM42_FACADE,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM38_FIRE_BLAST,
                                             ITEM_TM35_FLAMETHROWER,
                                             ITEM_TM17_PROTECT,
@@ -23579,6 +23647,7 @@ static const u16 sShayminSkyTMHMLearnset[] = {
                                             ITEM_TM32_DOUBLE_TEAM,
                                             ITEM_TM42_FACADE,
                                             ITEM_HM05_FLASH,
+                                            ITEM_HM02_FLY,
                                             ITEM_TM21_FRUSTRATION,
                                             ITEM_TM19_GIGA_DRAIN,
                                             ITEM_TM10_HIDDEN_POWER,
