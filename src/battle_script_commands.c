@@ -2089,6 +2089,8 @@ static void atk01_accuracycheck(void)
                 gBattleCommunication[MISS_TYPE] = B_MSG_MISSED;
 
             gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;  //reset if miss
+            gMultiHitCounter = 0; //if miss reset to 0, think this was reason, grouded stuff wasn't triggering, has check for counter being 0
+            //unsure if needed but keeping for now
 
             //potentially put forewarn anticipation stuff here, realized what I'm doing is making it miss, 
             //nto canceling the attack
@@ -7540,7 +7542,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
         case MOVE_END_GROUND_TARGET: //for some reason retriggering so think, grounded isn't being set right?
             if (!(IsBattlerGrounded(gBattlerTarget)) 
             && IsBattlerAlive(gBattlerTarget) 
-            && gMultiHitCounter == 0 
+            //&& gMultiHitCounter == 0  //removing this line seemed to fix issue of not dispalying, didn't need as should only trigger if 0/move complete
             //&& !gMoveResultFlags & (MOVE_RESULT_NO_EFFECT)
             && TARGET_TURN_DAMAGED)// !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)) //should make sure doesn't trigger till end of multihit
             {           //result no effect didn't work so replace w target must take dmg
@@ -7753,6 +7755,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             gMultiHitCounter = 0;
             gSpecialStatuses[gBattlerAttacker].parentalBondState = PARENTAL_BOND_OFF;
             gSpecialStatuses[gBattlerAttacker].multiHitOn = 0;*/
+            gMultiHitCounter = 0;
             ++gBattleScripting.atk49_state;
             break;
         }
