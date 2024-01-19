@@ -30,4 +30,7 @@ extern const struct PokedexEntry gPokedexEntries[];
 void CB2_OpenPokedexFromStartMenu(void);
 s8 DexScreen_GetSetPokedexFlag(u16 nationalDexNo, u8 caseId, bool8 indexIsSpecies);
 
+#define END_LIST 0XFFFF
+
+
 #endif //GUARD_POKEDEX_SCREEN_H

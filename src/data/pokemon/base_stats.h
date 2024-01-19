@@ -1197,17 +1197,19 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
+    //moveset special case, mostly bug, then physical ghost moves, grass moves only special
+    // as mushroom attacks indirectly
     [SPECIES_PARASECT] =
     { 
            //hp, atk, def, spd, spatk, spdef
-         STATS(88, 95, 115, 30, 60, 88),
-        .type1 = TYPE_BUG,  //think prefer grass for mushroom, as bug is dead the mushroom is the only thing left to be affected
+         STATS(88, 107, 115, 30, 60, 88),
+        .type1 = TYPE_GRASS,  //think prefer grass for mushroom, as bug is dead the mushroom is the only thing left to be affected
         .type2 = TYPE_GHOST,    //changed back,its the body of a bug its abilities can represent the mushroom effect, plus type strength is about same
         .catchRate = 75,    //still waffling on this, bug grass have similar weaknesses, bug gets confusion immunity, but the bug is dead
         .expYield = 142,    //grass gets the fairy immunity, and powder move immunity, which the mushroom would have
         //.evYield_Attack = 2,      //think keeping bug grass it has more defense strength
-        //.evYield_Defense = 1,
-        //.item1 = ITEM_TINY_MUSHROOM,
+        //.evYield_Defense = 1, //making grass/ ghost, loses dark quad resist, and electric/poison resist
+        //.item1 = ITEM_TINY_MUSHROOM,  //boosting attak as losing bug stab and most moves are bug, since body is bug
         //.item2 = ITEM_BIG_MUSHROOM,
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,

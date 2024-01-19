@@ -4872,7 +4872,7 @@ static const struct LevelUpMove sLunatoneLevelUpLearnset[] = {
     LEVEL_UP_MOVE(43, MOVE_FUTURE_SIGHT),
     LEVEL_UP_MOVE(49, MOVE_EXPLOSION),
     LEVEL_UP_END
-};
+};//need give fairy moves fae worship moon, also moonblast is so obvious
 
 static const struct LevelUpMove sSolrockLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
@@ -4886,7 +4886,7 @@ static const struct LevelUpMove sSolrockLevelUpLearnset[] = {
     LEVEL_UP_MOVE(43, MOVE_SOLAR_BEAM),
     LEVEL_UP_MOVE(49, MOVE_EXPLOSION),
     LEVEL_UP_END
-};
+}; //add on more fire moves etc. when do learnset update
 
 static const struct LevelUpMove sAzurillLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_BUBBLE),

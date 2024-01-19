@@ -1922,6 +1922,60 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -about have my fairy icon how I want it, need remember to eventually add the default fairy icon for those that
   want it
 
+  -think still have issue w floatnig text, when done from switch in
+  ok so issue is, if I damage it with a mon, than switch to a different mon, and use a knock down move,
+  it doesn't trigger the text?
+  ...seems very specific case, it just happens after using multihit? 
+  I'm using fury attack with my beedrill, than switching to pidgey and using gust
+
+  did somestuff not 100% but the issue seemed to have been, the condition for it to trigger only 
+  when gmultihitcounter was 0, and I didn't have something clearing it for certain,
+  I just assumed it cleared when move ended ie finish decrement, but the move could miss and not fully decrement to 0. etc.
+  so I removed that condition, and added some extra counter clears, it seemed to fix it for the example I had, so for now am satisfied
+
+  adjusting tmhm learnsets for floating mon expanding fly access
+  -DONE  
+
+  updated floating mon list at same time, 
+  considering removing some or rehashing ground type rock move boost
+  with so many ground exclusions.
+
+  //potential idea revise or get more cohesive idea of what floating mon shoudl be
+  and why they are immune to ground, thought being they can fly and get away at a moments notcie easily
+  but I think? somemon just float, (because legless design) and aren't necessarily
+  adept flyers or able to go much higher.
+
+  like some are floating do to magnetism, more for an explanation for its design,
+  idk how much of that translates to actual flight, and ability to reach higher than 
+  apparent elevation.
+
+  *note original idea was replacement for ability levitate, so started with mon that had levitate
+  than thought of pokemon movie scene where a bunch of non-flying mon were used to fly people across ocean.
+  gengar being one of them, so expanded idea to, lots of non flying mon are capable of flight and therefore being used to ferry people.
+
+  need to go in further detail figure how to balance that
+
+  also need fix guzzlord dex entry, it sounds stupid, pull something
+  better to replace the last lines
+
+  also noted issue with later gen mon having grossly high evo levels,
+  dreepy being a first stage not evolving til 50 is a horrific example of such
+
+  then work on dex efficiency issue got help from rhh
+
+  AsparagusEduardo — Today at 12:52 PM
+  it might just be that it's loading the entire list at once, instead of how Emerald does it, where it's loaded based on where on the list it is
+  can't help you there, it's fundamentally flawed and needs a rewrite
+
+  so from what he said, emerald already works how I wanted mine to go,
+  so I can canibalize those and make something to fix firered
+
+  gf just wrote bad code istead reusing the better existing code from rse
+
+  add wrap around to dex pages,  i.e press up at top to go to bottom,
+  can pull functionality from start menu page as it already has that
+  i.e press start,then press up on pokedex and it'll take you to bottom at Exit
+
   next - need see about making national stuff load faster
   and change searh filters to go to dex entry not cat page ...-DONE was as simple as changing a single value, found it by accident
 

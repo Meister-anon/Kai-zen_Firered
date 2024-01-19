@@ -398,8 +398,8 @@ static const struct ListMenuTemplate sListMenuTemplate_NatDexModeSelect = {
     .moveCursorFunc = MoveCursorFunc_DexModeSelect,
     .itemPrintFunc = ItemPrintFunc_DexModeSelect,
     .totalItems = NELEMS(sListMenuItems_NatDexModeSelect),
-    .maxShowed = 9,
-    .windowId = 0,
+    .maxShowed = 9, //max seen on page, and amount moved by when moving left and right
+    .windowId = 0, //oh wait thats in geneeral not just for the mon dex page, it only shows 9 lines in general
     .header_X = 0,
     .item_X = 12,
     .cursor_X = 4,
@@ -522,7 +522,7 @@ static const struct ListMenuTemplate sListMenuTemplate_OrderedListMenu = {
     .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
     .itemPrintFunc = ItemPrintFunc_OrderedListMenu,
     .totalItems = 0,
-    .maxShowed = 9,
+    .maxShowed = 9, //ok THIS is actually for the dex list page
     .windowId = 0,
     .header_X = 0,
     .item_X = 56,
@@ -928,7 +928,7 @@ void CB2_PokedexScreen(void)
     }
 }
 
-void DexScreen_LoadResources(void)
+void DexScreen_LoadResources(void) //look into equiv emerald function, may be what I need
 {
     bool8 natDex;
     u8 taskId;
@@ -959,9 +959,9 @@ void DexScreen_LoadResources(void)
     sPokedexScreenData = Alloc(sizeof(struct PokedexScreenData));
     *sPokedexScreenData = sDexScreenDataInitialState;
     sPokedexScreenData->taskId = taskId;
-    sPokedexScreenData->listItems = Alloc(NATIONAL_DEX_COUNT * sizeof(struct ListMenuItem));
-    sPokedexScreenData->numSeenNational = DexScreen_GetDexCount(FLAG_GET_SEEN, 1);
-    sPokedexScreenData->numOwnedNational = DexScreen_GetDexCount(FLAG_GET_CAUGHT, 1);
+    sPokedexScreenData->listItems = Alloc(NATIONAL_DEX_COUNT * sizeof(struct ListMenuItem)); //AsparagusEduardo from rhh mentnioed this could be problamatic
+    sPokedexScreenData->numSeenNational = DexScreen_GetDexCount(FLAG_GET_SEEN, 1);  //need look into how ee (actualy basic emerald logic) does the dex it loads in pieces
+    sPokedexScreenData->numOwnedNational = DexScreen_GetDexCount(FLAG_GET_CAUGHT, 1);//rather than all at once, which is what I had in mind
     sPokedexScreenData->numSeenKanto = DexScreen_GetDexCount(FLAG_GET_SEEN, 0);
     sPokedexScreenData->numOwnedKanto = DexScreen_GetDexCount(FLAG_GET_CAUGHT, 0);
     SetBGMVolume_SuppressHelpSystemReduction(0x80);
@@ -2981,337 +2981,6 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
     BlitBitmapRectToWindow(windowId, buffer, 0, 0, 16, 16, x, y, 16, 16);
 }
 
-#define END_LIST 0XFFFF
-//when have error defined in text discarded in data
-//for in array thats an issue of not using const, when I should
-//when done make global and move to .h file
-const u32 sDexAdjusting[] =
-{
-    SPECIES_BULBASAUR,
-    SPECIES_IVYSAUR,
-    SPECIES_CHARMANDER,
-    SPECIES_SQUIRTLE,
-    SPECIES_WARTORTLE,
-    SPECIES_CATERPIE,
-    SPECIES_METAPOD,
-    SPECIES_WEEDLE,
-    SPECIES_KAKUNA,
-    SPECIES_PIDGEY,
-    SPECIES_RATTATA,
-    SPECIES_SPEAROW,
-    SPECIES_EKANS,
-    SPECIES_SANDSHREW,
-    SPECIES_NIDORAN_F,
-    SPECIES_NIDORAN_M,
-    SPECIES_CLEFAIRY,
-    SPECIES_VULPIX,
-    SPECIES_JIGGLYPUFF,
-    SPECIES_ODDISH,
-    SPECIES_VILEPLUME,
-    SPECIES_PARAS,
-    SPECIES_PARASECT,
-    SPECIES_VENONAT,
-    SPECIES_DIGLETT,
-    SPECIES_DUGTRIO,
-    SPECIES_MEOWTH,
-    SPECIES_PERSIAN,
-    SPECIES_MANKEY,
-    SPECIES_GROWLITHE,
-    SPECIES_POLIWAG,
-    SPECIES_POLIWHIRL,
-    SPECIES_ABRA,
-    SPECIES_MACHOP,
-    SPECIES_BELLSPROUT,
-    SPECIES_WEEPINBELL,
-    SPECIES_GEODUDE,
-    SPECIES_GRAVELER,
-    SPECIES_SLOWPOKE,
-    SPECIES_MAGNEMITE,
-    SPECIES_FARFETCHD,
-    SPECIES_SEEL,
-    SPECIES_GRIMER,
-    SPECIES_MUK,
-    SPECIES_SHELLDER,
-    SPECIES_KRABBY,
-    SPECIES_VOLTORB,
-    SPECIES_ELECTRODE,
-    SPECIES_EXEGGCUTE,
-    SPECIES_CUBONE,
-    SPECIES_MAROWAK,
-    SPECIES_RHYHORN,
-    SPECIES_TANGELA,
-    SPECIES_STARYU,
-    SPECIES_JYNX,
-    SPECIES_DITTO,
-    SPECIES_EEVEE,
-    SPECIES_JOLTEON,
-    SPECIES_FLAREON,
-    SPECIES_PORYGON,
-    SPECIES_OMANYTE,
-    SPECIES_OMASTAR,
-    SPECIES_KABUTO,
-    SPECIES_DRATINI,
-    SPECIES_MEW,
-
-    
-    //gen 2
-    SPECIES_CHIKORITA,
-    SPECIES_CYNDAQUIL,
-    SPECIES_TOTODILE,
-    SPECIES_HOOTHOOT,
-    SPECIES_SPINARAK,
-    SPECIES_CHINCHOU,
-    SPECIES_LANTURN,
-    SPECIES_PICHU,
-    SPECIES_CLEFFA,
-    SPECIES_IGGLYBUFF,
-    SPECIES_TOGEPI,
-    SPECIES_TOGETIC,
-    SPECIES_NATU,
-    SPECIES_MAREEP,
-    SPECIES_BELLOSSOM,
-    SPECIES_MARILL,
-    SPECIES_YANMA,
-    SPECIES_WOOPER,
-    SPECIES_MURKROW,
-    SPECIES_UNOWN,
-    SPECIES_DUNSPARCE,
-    SPECIES_SNUBBULL,
-    SPECIES_SHUCKLE,
-    SPECIES_TEDDIURSA,
-    SPECIES_SLUGMA,
-    SPECIES_MAGCARGO,
-    SPECIES_SWINUB,
-    SPECIES_PILOSWINE,
-    SPECIES_CORSOLA,
-    SPECIES_REMORAID,
-    SPECIES_OCTILLERY,
-    SPECIES_HOUNDOUR,
-    SPECIES_PHANPY,
-    SPECIES_PORYGON2,
-    SPECIES_SMOOCHUM,
-    SPECIES_ELEKID,
-    SPECIES_MAGBY,
-    //GEN 3
-    SPECIES_MUDKIP,
-    SPECIES_POOCHYENA,
-    SPECIES_ZIGZAGOON,
-    SPECIES_WURMPLE,
-    SPECIES_SILCOON,
-    SPECIES_CASCOON,
-    SPECIES_LOTAD,
-    SPECIES_LOMBRE,
-    SPECIES_SEEDOT,
-    SPECIES_TAILLOW,
-    SPECIES_WINGULL,
-    SPECIES_RALTS,
-    SPECIES_SURSKIT,
-    SPECIES_SHROOMISH,
-    SPECIES_SLAKOTH,
-    SPECIES_NINCADA,
-    SPECIES_WHISMUR,
-    SPECIES_MAKUHITA,
-    SPECIES_AZURILL,
-    SPECIES_NOSEPASS,
-    SPECIES_SKITTY,
-    SPECIES_SABLEYE,
-    SPECIES_MAWILE,
-    SPECIES_ARON,
-    SPECIES_LAIRON,
-    SPECIES_ELECTRIKE,
-    SPECIES_GULPIN,
-    SPECIES_NUMEL,
-    SPECIES_CAMERUPT,
-    SPECIES_TRAPINCH,
-    SPECIES_VIBRAVA,
-    SPECIES_CACNEA,
-    SPECIES_SWABLU,
-    SPECIES_SEVIPER,
-    SPECIES_BARBOACH,
-    SPECIES_CORPHISH,
-    SPECIES_BALTOY,
-    SPECIES_ANORITH,
-    SPECIES_FEEBAS,
-    SPECIES_SHUPPET,
-    SPECIES_WYNAUT,
-    SPECIES_SPHEAL,
-    SPECIES_SEALEO,
-    SPECIES_CLAMPERL,
-    SPECIES_LUVDISC,
-    SPECIES_BAGON,
-    SPECIES_SHELGON,
-    SPECIES_METAGROSS,
-    SPECIES_JIRACHI,
-    //GEN 4,
-    SPECIES_TURTWIG,
-    SPECIES_CHIMCHAR,
-    SPECIES_PIPLUP,
-    SPECIES_STARLY,
-    SPECIES_STARAVIA,
-    SPECIES_BIDOOF,
-    SPECIES_SHINX,
-    SPECIES_LUXIO,
-    SPECIES_BUDEW,
-    SPECIES_CRANIDOS,
-    SPECIES_SHIELDON,
-    SPECIES_BURMY,
-    SPECIES_PACHIRISU,
-    SPECIES_BUIZEL,
-    SPECIES_CHERUBI,
-    SPECIES_SHELLOS,
-    SPECIES_AMBIPOM,
-    SPECIES_CHINGLING,
-    SPECIES_STUNKY,
-    SPECIES_BONSLY,
-    SPECIES_HAPPINY,
-    SPECIES_CHATOT,
-    SPECIES_MUNCHLAX,
-    SPECIES_RIOLU,
-    SPECIES_HIPPOPOTAS,
-    SPECIES_HIPPOWDON,
-    SPECIES_SNOVER,
-    SPECIES_GLACEON,
-    SPECIES_FROSLASS,
-    SPECIES_SHAYMIN,
-    //GEN 5
-    SPECIES_SNIVY,
-    SPECIES_TEPIG,
-    SPECIES_OSHAWOTT,
-    SPECIES_PATRAT,
-    SPECIES_LILLIPUP,
-    SPECIES_PURRLOIN,
-    SPECIES_PANSAGE,
-    SPECIES_PANPOUR,
-    SPECIES_PANSEAR,
-    SPECIES_MUNNA,
-    SPECIES_PIDOVE,
-    SPECIES_ROGGENROLA,
-    SPECIES_BOLDORE,
-    SPECIES_TIMBURR,
-    SPECIES_CONKELDURR,
-    SPECIES_TYMPOLE,
-    SPECIES_PALPITOAD,
-    SPECIES_SEWADDLE,
-    SPECIES_SWADLOON,
-    SPECIES_VENIPEDE,
-    SPECIES_COTTONEE,
-    SPECIES_BASCULIN,
-    SPECIES_SANDILE,
-    SPECIES_DARUMAKA,
-    SPECIES_DWEBBLE,
-    SPECIES_SCRAGGY,
-    SPECIES_ARCHEN,
-    SPECIES_TRUBBISH,
-    SPECIES_ZORUA,
-    SPECIES_DUCKLETT,
-    SPECIES_VANILLITE,
-    SPECIES_DEERLING,
-    SPECIES_EMOLGA,
-    SPECIES_KARRABLAST,
-    SPECIES_FOONGUS,
-    SPECIES_JOLTIK,
-    SPECIES_GALVANTULA,
-    SPECIES_KLINK,
-    SPECIES_TYNAMO,
-    SPECIES_ELGYEM,
-    SPECIES_AXEW,
-    SPECIES_CUBCHOO,
-    SPECIES_SHELMET,
-    SPECIES_STUNFISK,
-    SPECIES_MIENFOO,
-    SPECIES_PAWNIARD,
-    SPECIES_RUFFLET,
-    SPECIES_DURANT,
-    SPECIES_DEINO,
-    SPECIES_LARVESTA,
-    SPECIES_MELOETTA,
-    //GEN 6
-    SPECIES_CHESPIN,
-    SPECIES_QUILLADIN,
-    SPECIES_FENNEKIN,
-    SPECIES_FROAKIE,
-    SPECIES_FLETCHLING,
-    SPECIES_FLETCHINDER,
-    SPECIES_SCATTERBUG,
-    SPECIES_SPEWPA,
-    SPECIES_LITLEO,
-    SPECIES_FLABEBE,
-    SPECIES_PANCHAM,
-    SPECIES_ESPURR,
-    SPECIES_SPRITZEE,
-    SPECIES_BINACLE,
-    SPECIES_SKRELP,
-    SPECIES_CLAUNCHER,
-    SPECIES_CLAWITZER,
-    SPECIES_HELIOPTILE,
-    SPECIES_TYRUNT,
-    SPECIES_HAWLUCHA,
-    SPECIES_DEDENNE,
-    SPECIES_CARBINK,
-    SPECIES_GOOMY,
-    SPECIES_PHANTUMP,
-    SPECIES_PUMPKABOO,
-    SPECIES_BERGMITE,
-    //GEN 7
-    SPECIES_ROWLET,
-    SPECIES_LITTEN,
-    SPECIES_POPPLIO,
-    SPECIES_PIKIPEK,
-    SPECIES_YUNGOOS,
-    SPECIES_GRUBBIN,
-    SPECIES_CHARJABUG,
-    SPECIES_ROCKRUFF,
-    SPECIES_WISHIWASHI,
-    SPECIES_MAREANIE,
-    SPECIES_DEWPIDER,
-    SPECIES_FOMANTIS,
-    SPECIES_SALANDIT,
-    SPECIES_STUFFUL,
-    SPECIES_BOUNSWEET,
-    SPECIES_WIMPOD,
-    SPECIES_SANDYGAST,
-    SPECIES_KOMALA,
-    SPECIES_TOGEDEMARU,
-    SPECIES_MIMIKYU,
-    SPECIES_MELTAN,
-    //GEN 8
-    SPECIES_GROOKEY,
-    SPECIES_SOBBLE,
-    SPECIES_ROOKIDEE,
-    SPECIES_BLIPBUG,
-    SPECIES_DOTTLER,
-    SPECIES_NICKIT,
-    SPECIES_GOSSIFLEUR,
-    SPECIES_WOOLOO,
-    SPECIES_CHEWTLE,
-    SPECIES_YAMPER,
-    SPECIES_ROLYCOLY,
-    SPECIES_APPLIN,
-    SPECIES_SILICOBRA,
-    SPECIES_SANDACONDA,
-    SPECIES_ARROKUDA,
-    SPECIES_BARRASKEWDA,
-    SPECIES_TOXEL,
-    SPECIES_SIZZLIPEDE,
-    SPECIES_CLOBBOPUS,
-    SPECIES_SINISTEA,
-    SPECIES_HATENNA,
-    SPECIES_IMPIDIMP,
-    SPECIES_MILCERY,
-    SPECIES_FALINKS,
-    SPECIES_PINCURCHIN,
-    SPECIES_SNOM,
-    SPECIES_INDEEDEE,
-    SPECIES_MORPEKO,
-    SPECIES_CUFANT,
-    SPECIES_DREEPY, //cephireon and fraejta need be added before truly done but otherwise done
-
-
-
-    END_LIST,
-}; //way list is turning out, it'd be a better idea, to instead use exceptions rather than additions,
-//would greatly save time
-
 #define CREATE_POKEDEX_PAGE
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
@@ -3321,9 +2990,9 @@ u32 i;
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
 
-    for (i = 0; sDexAdjusting[i] != END_LIST; i++)
+    for (i = 0; gDexAdjusting[i] != END_LIST; i++)
     {
-        if (sPokedexScreenData->dexSpecies == sDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
+        if (sPokedexScreenData->dexSpecies == gDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
             break;
     }
     if (sPokedexScreenData->dexSpecies == SPECIES_AZELF 
@@ -3331,7 +3000,7 @@ u32 i;
     || sPokedexScreenData->dexSpecies == SPECIES_UXIE)
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic3_Highest); //works
 
-    else if (sPokedexScreenData->dexSpecies != sDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
+    else if (sPokedexScreenData->dexSpecies != gDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic2_Large);
         
     else
@@ -3501,7 +3170,7 @@ u8 DexScreen_DrawMonAreaPage(void)
     {
         BlitMoveInfoIcon(sPokedexScreenData->windowIds[12], 1 + gBaseStats[species].type1, 0, 1);
         if (gBaseStats[species].type1 != gBaseStats[species].type2)
-            BlitMoveInfoIcon(sPokedexScreenData->windowIds[12], 1 + gBaseStats[species].type2, 32, 1);
+            BlitMoveInfoIcon(sPokedexScreenData->windowIds[12], 1 + gBaseStats[species].type2, 34, 1);
     }
     PutWindowTilemap(sPokedexScreenData->windowIds[12]);
     CopyWindowToVram(sPokedexScreenData->windowIds[12], COPYWIN_GFX);

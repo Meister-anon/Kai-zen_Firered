@@ -147,7 +147,7 @@ const u8 gFearowPokedexText[] = _(
 
 const u8 gEkansPokedexText[] = _(
     "An Ekans curls itself up in a spiral while\n"
-    "it rests. This position allows it to quickly\n"
+    "it rests. This position lets it quickly\n"
     "respond to an enemy from any direction\n"
     "with a threat from its upraised head.");
 
@@ -268,8 +268,8 @@ const u8 gGolbatPokedexText[] = _(
 const u8 gOddishPokedexText[] = _(
     "This Pokémon grows by absorbing moonlight.\n"
     "During the daytime, it buries itself in the\n"
-    "ground, leaving only its leaves exposed to\n"
-    "avoid detection by its enemies.");
+    "ground, leaving only its leaves exposed\n"
+    "to avoid detection by its enemies.");
 
 const u8 gGloomPokedexText[] = _(
     "A horribly noxious honey drools from its\n"
@@ -280,20 +280,20 @@ const u8 gGloomPokedexText[] = _(
 const u8 gVileplumePokedexText[] = _(
     "In seasons when it produces more pollen,\n"
     "the air around a Vileplume turns yellow\n"
-    "with the powder as it walks. The pollen is\n"
-    "highly toxic and causes paralysis.");
+    "with the powder as it walks. The pollen\n"
+    "is highly toxic and causes paralysis.");
 
 const u8 gParasPokedexText[] = _(
     "A Paras has parasitic tochukaso\n"
     "mushrooms growing on its back. They grow\n"
     "by drawing nutrients from the host. They\n"
-    "are valued as a medicine for long life.");
+    "are valued as a medicine for longevity.");
 
 const u8 gParasectPokedexText[] = _(
-    "Parasect are known to infest the roots of\n"
-    "large trees en masse and drain nutrients.\n"
-    "When an infested tree dies, they move\n"
-    "onto another tree all at once.");
+    "The bug is mostly dead, drained of life.\n"
+    "It stays mostly in dark, damp places,\n"
+    "as the mushroom prefers them. If the\n"
+    "mushroom comes off, the bug stops moving.");
 
 const u8 gVenonatPokedexText[] = _(
     "Its coat of thin, stiff hair that covers\n"
@@ -435,9 +435,9 @@ const u8 gWeepinbellPokedexText[] = _(
 
 const u8 gVictreebelPokedexText[] = _(
     "The long vine extending from its head is\n"
-    "waved about as if it were a living thing to\n"
-    "attract prey. When an unsuspecting victim\n"
-    "approaches, it is swallowed whole.");
+    "waved about as if it were a living thing\n"
+    "to attract prey. When an unsuspecting\n"
+    "victim approaches, it is swallowed whole.");
 
 const u8 gTentacoolPokedexText[] = _(
     "Its body is almost entirely composed of\n"
@@ -454,8 +454,8 @@ const u8 gTentacruelPokedexText[] = _(
 const u8 gGeodudePokedexText[] = _(
     "It climbs mountain paths using only the\n"
     "power of its arms. Because they look just\n"
-    "like boulders lining paths, hikers may step\n"
-    "on them without noticing.");
+    "like boulders lining paths, hikers may\n"
+    "step on them without noticing.");
 
 const u8 gGravelerPokedexText[] = _(
     "They descend from mountains by tumbling\n"
@@ -483,9 +483,9 @@ const u8 gRapidashPokedexText[] = _(
 
 const u8 gSlowpokePokedexText[] = _(
     "It catches prey by dipping its tail in\n"
-    "water at the side of a river. But it often\n"
-    "forgets what it is doing and spends entire\n"
-    "days just loafing at water's edge.");
+    "water at the side of a river. But it\n"
+    "often forgets what it is doing and spends\n"
+    "entire days just loafing at water's edge.");
 
 const u8 gSlowbroPokedexText[] = _(
     "Its tail has a Shellder firmly attached\n"
@@ -525,9 +525,9 @@ const u8 gDodrioPokedexText[] = _(
 
 const u8 gSeelPokedexText[] = _(
     "Seel hunt for prey in frigid, ice-covered\n"
-    "seas. When it needs to breathe, it punches\n"
-    "a hole through the ice with the sharply\n"
-    "protruding section of its head.");
+    "seas. When it needs to breathe, it\n"
+    "punches a hole through the ice with the\n"
+    "sharply protruding section of its head.");
 
 const u8 gDewgongPokedexText[] = _(
     "It loves to snooze on bitterly cold ice.\n"
@@ -652,8 +652,8 @@ const u8 gHitmonleePokedexText[] = _(
 
 const u8 gHitmonchanPokedexText[] = _(
     "A Hitmonchan is said to possess the\n"
-    "spirit of a boxer who aimed to become the\n"
-    "world champion. Having an indomitable\n"
+    "spirit of a boxer who aimed to become\n"
+    "the world champion. Having an indomitable\n"
     "spirit means that it will never give up.");
 
 const u8 gLickitungPokedexText[] = _(
@@ -696,7 +696,7 @@ const u8 gTangelaPokedexText[] = _(
     "Its vines snap off easily and painlessly\n"
     "if they are grabbed, allowing it to\n"
     "make a quick getaway. The lost vines are\n"
-    "replaced by new growth the very next day.");
+    "replaced with new ones by the next day.");
 
 const u8 gKangaskhanPokedexText[] = _(
     "If you come across a young Kangaskhan\n"
@@ -875,14 +875,14 @@ const u8 gSnorlaxPokedexText[] = _(
 const u8 gArticunoPokedexText[] = _(
     "Articuno is a legendary bird Pokémon that\n"
     "can control ice. The flapping of its wings\n"
-    "chills the air. As a result, it is said that\n"
+    "chills the air. As a result, it's said that\n"
     "when this Pokémon flies, snow will fall.");
 
 const u8 gZapdosPokedexText[] = _(
     "Zapdos is a legendary bird Pokémon that\n"
     "has the ability to control electricity.\n"
     "It usually lives in thunderclouds. It gains\n"
-    "power if it is stricken by lightning bolts.");
+    "power if stricken by lightning bolts.");
 
 const u8 gMoltresPokedexText[] = _(
     "Moltres is a legendary bird Pokémon that\n"
