@@ -2091,9 +2091,10 @@ static void atk01_accuracycheck(void)
             gDisableStructs[gBattlerAttacker].furyCutterCounter = 0;  //reset if miss
             gMultiHitCounter = 0; //if miss reset to 0, think this was reason, grouded stuff wasn't triggering, has check for counter being 0
             //unsure if needed but keeping for now
+            //removed encountered new glitch of move not ending
 
             //potentially put forewarn anticipation stuff here, realized what I'm doing is making it miss, 
-            //nto canceling the attack
+            //nto canceling the attack, ok issue was using this reset in move end multihit hmm
 
 
             //if (gBattleMoves[move].power)   //i ALREADY have a typecalc I don't need this to update move result flags I think?
@@ -7755,7 +7756,7 @@ static void atk49_moveend(void) //need to update this //equivalent Cmd_moveend  
             gMultiHitCounter = 0;
             gSpecialStatuses[gBattlerAttacker].parentalBondState = PARENTAL_BOND_OFF;
             gSpecialStatuses[gBattlerAttacker].multiHitOn = 0;*/
-            gMultiHitCounter = 0;
+            //gMultiHitCounter = 0;  //removing from acc check didn't undo issue so is it somehow this? yup this was the problem
             ++gBattleScripting.atk49_state;
             break;
         }
