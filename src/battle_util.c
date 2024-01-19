@@ -4010,7 +4010,8 @@ u8 AtkCanceller_UnableToUseMove(void)
 
                     if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) //&& !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG))
                     {// idea cammymealtee trying setup so tangled feet like bug gets confused but never hits themselves
-                        if (!(IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) && GetBattlerAbility(gBattlerAttacker) != ABILITY_TANGLED_FEET) //moved bug exclusion to here, so goes through animations
+                        if (!(IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_BUG)) && GetBattlerAbility(gBattlerAttacker) != ABILITY_TANGLED_FEET
+                        && GetBattlerAbility(gBattlerAttacker) != ABILITY_SIXTH_SENSE) //moved bug exclusion to here, so goes through animations
                         {
                             if ((Random() % 2) == 0) //chance confused but used move anyway   think 50% may equal random % 2 not 0
                             {
