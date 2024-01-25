@@ -4887,7 +4887,7 @@ const struct BaseStats gBaseStats[] =
            //hp, atk, def, spd, spatk, spdef
          STATS(100, 70, 70, 45, 65, 87),
         .type1 = TYPE_NORMAL,
-        .type2 = TYPE_POISON,
+        .type2 = TYPE_NORMAL,   //keeping poison would hurt without floating
         .catchRate = 190,
         .expYield = 145,
         //.evYield_HP = 1,
@@ -7693,7 +7693,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_OWN_TEMPO, ABILITY_CONTRARY},
-            .abilityHidden = {ABILITY_NORMALIZE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_NORMALIZE, ABILITY_TANGLED_FEET}, //don't know how I didn't think to give it this earlier
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
     },
@@ -18569,7 +18569,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SKILL_LINK},
-        .abilityHidden = {ABILITY_PICKUP, ABILITY_NONE},
+        .abilityHidden = {ABILITY_PICKUP, ABILITY_TANGLED_FEET},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -18599,7 +18599,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SKILL_LINK},
-        .abilityHidden = {ABILITY_PICKUP, ABILITY_NONE},
+        .abilityHidden = {ABILITY_PICKUP, ABILITY_TANGLED_FEET},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },
@@ -18629,7 +18629,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_FLYING,
         //#ifdef BATTLE_ENGINE
             .abilities = {ABILITY_KEEN_EYE, ABILITY_SKILL_LINK},
-            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_NONE},
+            .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_TANGLED_FEET},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },

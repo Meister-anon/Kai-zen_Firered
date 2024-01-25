@@ -922,7 +922,7 @@ const u8 gPLAY_ROUGHDescription
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Plays rough with the foe.\nMay lower Attack.");
 
 const u8 gFAIRY_WINDDescription 
-    [MOVE_DESCRIPTION_LENGTH + 5] = _("Stirs up a fairy wind to\nstrike the foe.");
+    [MOVE_DESCRIPTION_LENGTH + 5] = _("Stirs up an odd\nwind of fairy wisps\nto strike the foe.");
 
 const u8 gMOONBLASTDescription 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Attacks with the power of\nthe moon\nMay lower Sp. Atk.");

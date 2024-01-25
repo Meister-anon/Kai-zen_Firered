@@ -4523,7 +4523,14 @@ u8 AtkCanceller_UnableToUseMove2(void)
 //so adding victini to list,
 //decied exclude klink klang etc from this...nvm sigh
 //sigh think with all these will need to bring back rock boost for ground types
-const u16 gFloatingSpecies[177] = {
+
+//or tighten field, because this is bad, its most legendaries and a large amount of other mon,
+//at 177 amounts to more mon than gen 1...
+//think instead of can fly, should be natural state is floating/flying, with the clear ability to elevate higher
+//not just magnetism to float off the ground but required to stay at a set distance from the ground. hmm
+//like while most legendaries CAN fly, they are not by default attacking from the air, so dialga palkia etc.
+//can prob be kept grounded by that logic think can exclude, things like cresellia darkrai victiniee and prob arceus
+const u16 gFloatingSpecies[156] = {
     SPECIES_BUTTERFREE,
     SPECIES_BEAUTIFLY,
     SPECIES_VIVILLON,
@@ -4534,42 +4541,36 @@ const u16 gFloatingSpecies[177] = {
     SPECIES_MASQUERAIN,
     SPECIES_CRYOGONAL,
     SPECIES_NINJASK,
-    SPECIES_SHEDINJA,
+    //SPECIES_SHEDINJA, //doesn't really move, and would cause issues for dispirit guard
     SPECIES_VOLBEAT,
     SPECIES_ILLUMISE,
     SPECIES_VIKAVOLT,
-    SPECIES_DUSCLOPS,
-    SPECIES_DUSKNOIR,
-    SPECIES_DUSKULL,
+    //SPECIES_DUSCLOPS,
+    SPECIES_DUSKNOIR,   //no legs so give back
+    SPECIES_DUSKULL,    //had levitate evo lost it,
     SPECIES_CHARIZARD_MEGA_X,
     SPECIES_VENOMOTH,
     SPECIES_GASTLY,
     SPECIES_HAUNTER,
     SPECIES_GENGAR,
-    SPECIES_DUNSPARCE, //add questionable ones below here, for easy removal if decide to
-    SPECIES_KLINK,
-    SPECIES_KLANG,
-    SPECIES_KLINKLANG,
-    SPECIES_HERACROSS, //seems like odd pick but does have wings, and been shown to be able to fly
     SPECIES_LITWICK, //unsure about adding all this floating mon to ground immunity
     SPECIES_LAMPENT,    //thinking they can float but not high or easily enough to avoid all ground moves
     SPECIES_CHANDELURE,
     SPECIES_TAPU_BULU,
     SPECIES_TAPU_FINI,
     SPECIES_TAPU_KOKO,
-    SPECIES_TAPU_LELE, //rare diety mon can all fly
-    SPECIES_BUZZWOLE, //
-    SPECIES_DRAMPA, //dragon normal, but can fly, and learn fly
+    SPECIES_TAPU_LELE, //rare diety mon can all fly, and all float so think keep
     SPECIES_AERODACTYL, //ABOVE this
     SPECIES_AERODACTYL_MEGA,
     SPECIES_MEW,
-    SPECIES_MEWTWO,
+    //SPECIES_MEWTWO, //for more differentiation between the two
     SPECIES_LUGIA,
-    SPECIES_MEWTWO_MEGA_X,
+    //SPECIES_MEWTWO_MEGA_X,
     SPECIES_MEWTWO_MEGA_Y,
     SPECIES_SCIZOR,
     SPECIES_LEDYBA,
     SPECIES_LEDIAN,
+    SPECIES_CHINGLING, //via levitate
     SPECIES_CHIMECHO,
     SPECIES_CELEBI,
     SPECIES_TOGETIC,
@@ -4577,28 +4578,28 @@ const u16 gFloatingSpecies[177] = {
     SPECIES_ALTARIA_MEGA,
     SPECIES_NOCTOWL,
     SPECIES_LUNATONE,
-    SPECIES_SOLROCK,
+    SPECIES_SOLROCK,    //via levitate and lore showes them flying high
     SPECIES_MISDREAVUS,
     SPECIES_MISMAGIUS,
     SPECIES_BALTOY,
-    SPECIES_CLAYDOL,
+    SPECIES_CLAYDOL, // via levitate
     SPECIES_PORYGON,
     SPECIES_PORYGON2,
-    SPECIES_PORYGON_Z,
+    SPECIES_PORYGON_Z, //always floating and a little extra love
     SPECIES_BELDUM,
     SPECIES_METANG,
     SPECIES_METAGROSS,
     SPECIES_LATIAS,
     SPECIES_LATIOS,
     SPECIES_BRONZOR,
-    SPECIES_BRONZONG,
-    SPECIES_PROBOPASS,
+    SPECIES_BRONZONG, //via levitate
+    //SPECIES_PROBOPASS,
     SPECIES_YANMEGA,
     SPECIES_MAGNEMITE,
     SPECIES_MAGNETON,
     SPECIES_MAGNEZONE,
     SPECIES_CHATOT,
-    SPECIES_CARNIVINE,
+    SPECIES_CARNIVINE, // via levitate
     SPECIES_ROTOM,
     SPECIES_UXIE,
     SPECIES_AZELF,
@@ -4621,14 +4622,13 @@ const u16 gFloatingSpecies[177] = {
     SPECIES_VICTINI,
     SPECIES_HYDREIGON,
     SPECIES_VOLCARONA,
-    SPECIES_TYNAMO,
+    SPECIES_TYNAMO, //via levitate
     SPECIES_EELEKTRIK,
     SPECIES_EELEKTROSS,
     SPECIES_KOFFING,
     SPECIES_WEEZING,
     SPECIES_WEEZING_GALARIAN,
     SPECIES_RAICHU_ALOLAN,
-    SPECIES_BUZZWOLE,
     SPECIES_UNOWN,
     SPECIES_UNOWN_B,
     SPECIES_UNOWN_C,
@@ -4661,10 +4661,10 @@ const u16 gFloatingSpecies[177] = {
     SPECIES_CASTFORM_RAINY,
     SPECIES_CASTFORM_SNOWY,
     SPECIES_CASTFORM_SUNNY,
-    SPECIES_ROTOM_FAN,
-    SPECIES_ROTOM_WASH,
+    //SPECIES_ROTOM_FAN, //rotom fan is alraedy flyign type
+    SPECIES_ROTOM_WASH,  //only makes sense for fan to be in flight
     SPECIES_ROTOM_FROST,
-    SPECIES_ROTOM_MOW,
+    SPECIES_ROTOM_MOW,  //well nvm, had levitate
     SPECIES_ROTOM_HEAT,
     SPECIES_CUTIEFLY,
     SPECIES_RIBOMBEE,
@@ -4673,11 +4673,11 @@ const u16 gFloatingSpecies[177] = {
     SPECIES_REUNICLUS,
     SPECIES_COMFEY,
     SPECIES_BEEDRILL_MEGA,
-    SPECIES_RESHIRAM,
-    SPECIES_ZEKROM,
-    SPECIES_KYUREM,
-    SPECIES_KYUREM_WHITE,
-    SPECIES_KYUREM_BLACK,
+    //SPECIES_RESHIRAM, ? capable of flight but flying si not their default state
+    //SPECIES_ZEKROM,
+    //SPECIES_KYUREM,
+    //SPECIES_KYUREM_WHITE,
+    //SPECIES_KYUREM_BLACK,
     SPECIES_COSMOG,
     SPECIES_COSMOEM,
     SPECIES_LUNALA,
@@ -4695,9 +4695,9 @@ const u16 gFloatingSpecies[177] = {
     SPECIES_DREEPY,
     SPECIES_DRAKLOAK,
     SPECIES_DRAGAPULT,
-    SPECIES_REGIDRAGO,
-    SPECIES_DIALGA,
-    SPECIES_PALKIA,
+    //SPECIES_REGIDRAGO,
+    //SPECIES_DIALGA,
+    //SPECIES_PALKIA,
     SPECIES_ARCEUS,
     SPECIES_ETERNATUS,
     SPECIES_ETERNATUS_ETERNAMAX

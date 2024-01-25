@@ -658,7 +658,7 @@
 #define ITEM_HM06_ROCK_SMASH ITEM_HM06
 #define ITEM_HM07_WATERFALL ITEM_HM07
 #define ITEM_HM08_DIVE ITEM_HM08 //can add rock climb right after this simple enough
-#define ITEM_HM09_ROCK_CLIMB ITEM_HM09
+#define ITEM_HM09_ROCK_CLIMB ITEM_HM09 //will add, plan use rock climb to revolutionize cave mapping/travel, same as surf can be used as map transition
 
 // FireRed/LeafGreen  believe this is key items actually maybe..?
 #define ITEM_OAKS_PARCEL 456
