@@ -66,7 +66,7 @@ struct ListMenuOverride gListMenuOverride;
 struct ListMenuTemplate gMultiuseListMenuTemplate;
 
 static u8 ListMenuInitInternal(const struct ListMenuTemplate *listMenuTemplate, u16 cursorPos, u16 itemsAbove);
-static bool8 ListMenuChangeSelection(struct ListMenu *list, bool8 updateCursorAndCallCallback, u8 count, bool8 movingDown);
+//static bool8 ListMenuChangeSelection(struct ListMenu *list, bool8 updateCursorAndCallCallback, u8 count, bool8 movingDown);
 static void ListMenuPrintEntries(struct ListMenu *list, u16 startIndex, u16 yOffset, u16 count);
 static void ListMenuDrawCursor(struct ListMenu *list);
 static void ListMenuCallSelectionChangedCallback(struct ListMenu *list, u8 onInit);
@@ -350,7 +350,7 @@ u16 ListMenuGetYCoordForPrintingArrowCursor(u8 listTaskId)
 
 static u8 ListMenuInitInternal(const struct ListMenuTemplate *listMenuTemplate, u16 cursorPos, u16 itemsAbove)
 {
-    u8 listTaskId = CreateTask(ListMenuDummyTask, 0);
+    u8 listTaskId = CreateTask(ListMenuDummyTask, 0); //dummy function no return no value, so assume value 0? idk
     struct ListMenu *list = (struct ListMenu *)gTasks[listTaskId].data;
 
     list->template = *listMenuTemplate;
@@ -480,7 +480,7 @@ static u8 ListMenuUpdateSelectedRowIndexAndScrollOffset(struct ListMenu *list, b
     u16 newRow;
     u32 newScroll;
 
-    if (!movingDown)
+    if (!movingDown) //going up
     {
         if (list->template.maxShowed == 1)
             newRow = 0;
@@ -514,7 +514,7 @@ static u8 ListMenuUpdateSelectedRowIndexAndScrollOffset(struct ListMenu *list, b
             newScroll = cursorPos - 1;
         }
     }
-    else
+    else //going down
     {
         if (list->template.maxShowed == 1)
             newRow = 0;
@@ -593,7 +593,7 @@ static void ListMenuScroll(struct ListMenu *list, u8 count, bool8 movingDown)
     }
 }
 
-static bool8 ListMenuChangeSelection(struct ListMenu *list, bool8 updateCursorAndCallCallback, u8 count, bool8 movingDown)
+bool8 ListMenuChangeSelection(struct ListMenu *list, bool8 updateCursorAndCallCallback, u8 count, bool8 movingDown)
 {
     u16 oldSelectedRow;
     u8 selectionChange, i, cursorCount;

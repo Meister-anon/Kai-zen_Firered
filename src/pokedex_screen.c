@@ -23,6 +23,8 @@
 
 #define TAG_AREA_MARKERS 2001
 
+#define DEX_INITIAL_LOAD sListMenuTemplate_OrderedListMenu.maxShowed//9  //plan use for amount of mon to initially load, for speed sake, then expand on as scroll
+
 enum TextMode {
     TEXT_LEFT,
     TEXT_CENTER,
@@ -64,8 +66,10 @@ struct PokedexScreenData
     u8 numericalOrderWindowId;
     u8 orderedListMenuTaskId;
     u8 dexOrderId;
-    struct ListMenuItem * listItems;
+    struct ListMenuItem * listItems; //reverted for space saving, think otherwise its same affect, didn't affect load time, saves bout 10Kb of rom space
+   // struct ListMenuItem listItems[NATIONAL_DEX_COUNT + 1]; //making this lets me skip alloc in load resources, costs good deal of space, but hopefully will svae me elsewher
     u16 orderedDexCount;
+    u16 DexListMax; //added value to substitute for max dex value in place of ordereDexCount, plan increment list if ordereddexcount != DexListMax as scrolling
     u8 windowIds[0x10];
     u16 dexSpecies;
     u16 * bgBufsMem;
@@ -91,6 +95,7 @@ struct PokedexCategoryPage
     u8 count;
 };
 
+//equivalent of sPokedexScreenData in emerald meaning dexscreendata is = PokedexView
 EWRAM_DATA static struct PokedexScreenData * sPokedexScreenData = NULL;
 
 static void Task_PokedexScreen(u8 taskId);
@@ -137,6 +142,9 @@ static void ItemPrintFunc_DexModeSelect(u8 windowId, s32 itemId, u8 y);
 static void ItemPrintFunc_OrderedListMenu(u8 windowId, s32 itemId, u8 y);
 static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId);
 static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
+
+//new stuff
+static s32 DexScreen_ProcessInput(u8 listTaskId); //replace list menu input so can adjust separately
 
 #include "data/pokemon_graphics/footprint_table.h"
 
@@ -283,7 +291,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
 };
 
 static const struct PokedexScreenData sDexScreenDataInitialState = {
-    .modeSelectItemsAbove = 1,
+    .modeSelectItemsAbove = 1,  //this works like n-1 so value 1 always just means 0/top of list
     .modeSelectWindowId = -1,
     .selectionIconWindowId = -1,
     .dexCountsWindowId = -1,
@@ -354,7 +362,7 @@ static const struct ListMenuTemplate sListMenuTemplate_KantoDexModeSelect = {
     .moveCursorFunc = MoveCursorFunc_DexModeSelect,
     .itemPrintFunc = ItemPrintFunc_DexModeSelect,
     .totalItems = NELEMS(sListMenuItems_KantoDexModeSelect),
-    .maxShowed = 9,
+    .maxShowed = 9, //same as below but just withuot national dex stuff
     .windowId = 0,
     .header_X = 0,
     .item_X = 12,
@@ -399,7 +407,7 @@ static const struct ListMenuTemplate sListMenuTemplate_NatDexModeSelect = {
     .itemPrintFunc = ItemPrintFunc_DexModeSelect,
     .totalItems = NELEMS(sListMenuItems_NatDexModeSelect),
     .maxShowed = 9, //max seen on page, and amount moved by when moving left and right
-    .windowId = 0, //oh wait thats in geneeral not just for the mon dex page, it only shows 9 lines in general
+    .windowId = 0, //oh wait thats in geneeral not for the mon dex page, it only shows 9 lines in general
     .header_X = 0,
     .item_X = 12,
     .cursor_X = 4,
@@ -917,7 +925,7 @@ void CB2_PokedexScreen(void)
 {
     if (!gPaletteFade.active || IsDma3ManagerBusyWithBgCopy())
     {
-        RunTasks();
+        RunTasks(); //believe tasks are from DexScreen_loadResources
         RunTextPrinters();
         AnimateSprites();
         BuildOamBuffer();
@@ -955,17 +963,17 @@ void DexScreen_LoadResources(void) //look into equiv emerald function, may be wh
     m4aSoundVSyncOn();
     SetVBlankCallback(VBlankCB);
     EnableInterrupts(INTR_FLAG_VBLANK);
-    taskId = CreateTask(Task_PokedexScreen, 0);
-    sPokedexScreenData = Alloc(sizeof(struct PokedexScreenData));
+    taskId = CreateTask(Task_PokedexScreen, 0);//actually think its equiv to pokedexListf
+    sPokedexScreenData = Alloc(sizeof(struct PokedexScreenData)); //think  listItems equivalent to pokemonListCount  in EE, which is 0 at start and built w dex IMPORTANT
     *sPokedexScreenData = sDexScreenDataInitialState;
-    sPokedexScreenData->taskId = taskId;
+    sPokedexScreenData->taskId = taskId; //without below value graphic gets broken
     sPokedexScreenData->listItems = Alloc(NATIONAL_DEX_COUNT * sizeof(struct ListMenuItem)); //AsparagusEduardo from rhh mentnioed this could be problamatic
     sPokedexScreenData->numSeenNational = DexScreen_GetDexCount(FLAG_GET_SEEN, 1);  //need look into how ee (actualy basic emerald logic) does the dex it loads in pieces
     sPokedexScreenData->numOwnedNational = DexScreen_GetDexCount(FLAG_GET_CAUGHT, 1);//rather than all at once, which is what I had in mind
     sPokedexScreenData->numSeenKanto = DexScreen_GetDexCount(FLAG_GET_SEEN, 0);
     sPokedexScreenData->numOwnedKanto = DexScreen_GetDexCount(FLAG_GET_CAUGHT, 0);
-    SetBGMVolume_SuppressHelpSystemReduction(0x80);
-    ChangeBgX(0, 0, 0);
+    SetBGMVolume_SuppressHelpSystemReduction(0x80);//think I'm better understanding the listitem thing, it uses nationaldexcount to  make a list item and index for every mon
+    ChangeBgX(0, 0, 0);     //but think those values don't get populated until the later function getorderedlist count sometjhing
     ChangeBgY(0, 0, 0);
     ChangeBgX(1, 0, 0);
     ChangeBgY(1, 0, 0);
@@ -1036,7 +1044,7 @@ void CB2_ClosePokedex(void)
     }
 }
 
-static void Task_PokedexScreen(u8 taskId)
+static void Task_PokedexScreen(u8 taskId) //appears be top menu
 {
     int i;
     switch (sPokedexScreenData->state)
@@ -1080,13 +1088,13 @@ static void Task_PokedexScreen(u8 taskId)
             BeginNormalPaletteFade(~0x8000, 0, 16, 0, RGB_WHITEALPHA);  //was 0xFFFF7FFF
         sPokedexScreenData->state = 5;
         break;
-    case 5:
-        ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);
+    case 5: //can't tell where modeSelectCursorPosBak is getting a value from where it seems to only be set in places I'm not navigating too (now) or yet
+        ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL); //ah this funtion is  assignign it
         if (IsNationalPokedexEnabled())
             sPokedexScreenData->scrollArrowsTaskId = AddScrollIndicatorArrowPair(&sScrollArrowsTemplate_NatDex, &sPokedexScreenData->modeSelectCursorPosBak);
         else
             sPokedexScreenData->scrollArrowsTaskId = AddScrollIndicatorArrowPair(&sScrollArrowsTemplate_KantoDex, &sPokedexScreenData->modeSelectCursorPosBak);
-        sPokedexScreenData->state = 6;
+        sPokedexScreenData->state = 6;//think this is end of just displaying the main dex page, after this it takes inpputs for navigation
         break;
     case 6:
         sPokedexScreenData->modeSelectInput = ListMenu_ProcessInput(sPokedexScreenData->modeSelectListMenuId);
@@ -1126,11 +1134,11 @@ static void Task_PokedexScreen(u8 taskId)
             case DEX_MODE(TYPE):
             case DEX_MODE(LIGHTEST):
             case DEX_MODE(SMALLEST):
-                RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
-                sPokedexScreenData->dexOrderId = sPokedexScreenData->modeSelectInput - DEX_CATEGORY_COUNT;
+                RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId); //remove scroll arrow for previous menu, in prep loading next one
+                sPokedexScreenData->dexOrderId = sPokedexScreenData->modeSelectInput - DEX_CATEGORY_COUNT; //selects mode i.e which list generate based on selection
                 sPokedexScreenData->characteristicOrderMenuItemsAbove = sPokedexScreenData->characteristicOrderMenuCursorPos = 0;
                 BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
-                sPokedexScreenData->state = 9; //...welp it was as simple as changing this  to 9 and now goes to dex page not cat page
+                sPokedexScreenData->state = 9; //...welp it was as simple as changing this  to 9 and now goes to dex list page not cat page
                 break;
             }
             break;
@@ -1168,10 +1176,10 @@ static void Task_PokedexScreen(u8 taskId)
         DexScreen_RemoveWindow(&sPokedexScreenData->modeSelectWindowId);
         DexScreen_RemoveWindow(&sPokedexScreenData->selectionIconWindowId);
         DexScreen_RemoveWindow(&sPokedexScreenData->dexCountsWindowId);
-        gTasks[taskId].func = Task_DexScreen_NumericalOrder;
+        gTasks[taskId].func = Task_DexScreen_NumericalOrder; //this list function for setting up dex list
         sPokedexScreenData->state = 0;
         break;
-    }
+    }//removes all stuff for main page, then ends this function as you are moving away from front page of dex
 }
 
 static void DexScreen_InitGfxForTopMenu(void)
@@ -1186,17 +1194,17 @@ static void DexScreen_InitGfxForTopMenu(void)
     if (IsNationalPokedexEnabled())
     {
         listMenuTemplate = sListMenuTemplate_NatDexModeSelect;
-        listMenuTemplate.windowId = sPokedexScreenData->modeSelectWindowId;
+        listMenuTemplate.windowId = sPokedexScreenData->modeSelectWindowId; //assigns cursor pos and items above from this below in ListMenuInitInternal via ListMenuInit
         sPokedexScreenData->modeSelectListMenuId = ListMenuInit(&listMenuTemplate, sPokedexScreenData->modeSelectCursorPos, sPokedexScreenData->modeSelectItemsAbove);
-        FillWindowPixelBuffer(sPokedexScreenData->dexCountsWindowId, PIXEL_FILL(0));
-        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_Seen, 0, 2, 0);
-        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_Kanto, 8, 13, 0);
-        DexScreen_PrintNum3RightAlign(sPokedexScreenData->dexCountsWindowId, 0, sPokedexScreenData->numSeenKanto, 52, 13, 2);
-        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_National, 8, 24, 0);
-        DexScreen_PrintNum3RightAlign(sPokedexScreenData->dexCountsWindowId, 0, sPokedexScreenData->numSeenNational, 52, 24, 2);
-        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_Owned, 0, 37, 0);
-        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_Kanto, 8, 48, 0);
-        DexScreen_PrintNum3RightAlign(sPokedexScreenData->dexCountsWindowId, 0, sPokedexScreenData->numOwnedKanto, 52, 48, 2);
+        FillWindowPixelBuffer(sPokedexScreenData->dexCountsWindowId, PIXEL_FILL(0)); //ok this sets cursor pos, which is passed in the other function,
+        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_Seen, 0, 2, 0); //is where menu starts i.e what value it opens on
+        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_Kanto, 8, 13, 0); //i.e the row, I think itemsabove, shows 
+        DexScreen_PrintNum3RightAlign(sPokedexScreenData->dexCountsWindowId, 0, sPokedexScreenData->numSeenKanto, 52, 13, 2);//how many items in lilst to put above teh selection
+        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_National, 8, 24, 0);//if zero you are at top of list?
+        DexScreen_PrintNum3RightAlign(sPokedexScreenData->dexCountsWindowId, 0, sPokedexScreenData->numSeenNational, 52, 24, 2);//seems no? cant tell what items above does here
+        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_Owned, 0, 37, 0);//items above seems work same but at value of n-1
+        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_Kanto, 8, 48, 0); //if select 2 it will sart you 1 value lower?
+        DexScreen_PrintNum3RightAlign(sPokedexScreenData->dexCountsWindowId, 0, sPokedexScreenData->numOwnedKanto, 52, 48, 2);//ok I understand the effect now but not the purpose
         DexScreen_AddTextPrinterParameterized(sPokedexScreenData->dexCountsWindowId, FONT_SMALL, gText_National, 8, 59, 0);
         DexScreen_PrintNum3RightAlign(sPokedexScreenData->dexCountsWindowId, 0, sPokedexScreenData->numOwnedNational, 52, 59, 2);
     }
@@ -1249,6 +1257,7 @@ static void ItemPrintFunc_DexModeSelect(u8 windowId, s32 itemId, u8 y) //pret ev
         ListMenuOverrideSetColors(TEXT_DYNAMIC_COLOR_1, TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_2);
 }
 
+//vsonic IMPORTANT this is the function I need, it sets everyting for display of firered dex list
 static void Task_DexScreen_NumericalOrder(u8 taskId)
 {
     switch (sPokedexScreenData->state)
@@ -1256,8 +1265,8 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
     case 0:
         ListMenuLoadStdPalAt(BG_PLTT_ID(1), 0);
         ListMenuLoadStdPalAt(BG_PLTT_ID(2), 1);
-        sPokedexScreenData->orderedDexCount = DexScreen_CountMonsInOrderedList(sPokedexScreenData->dexOrderId);
-        sPokedexScreenData->state = 2;
+        sPokedexScreenData->orderedDexCount = DexScreen_CountMonsInOrderedList(sPokedexScreenData->dexOrderId); //needed to return list size, butalso to run funciton logic
+        sPokedexScreenData->state = 2;//countmons ^ used to tell size of list , changing thing itself didn't affet load times
         break;
     case 1:
         DexScreen_DestroyDexOrderListMenu(sPokedexScreenData->dexOrderId);
@@ -1267,7 +1276,7 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         sPokedexScreenData->state = 0;
         break;
     case 2:
-        DexScreen_InitGfxForNumericalOrderList();
+        DexScreen_InitGfxForNumericalOrderList();//orderedDexCount used here to make list count, actually building the list
         sPokedexScreenData->state = 3;
         break;
     case 3:
@@ -1280,29 +1289,30 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         BeginNormalPaletteFade(~0x8000, 0, 16, 0, RGB_WHITEALPHA); //same as before was 0xFFFF7FFF
         sPokedexScreenData->state = 5;
         break;
-    case 5:
-        ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);
-        sPokedexScreenData->scrollArrowsTaskId = DexScreen_CreateDexOrderScrollArrows();
+    case 5://modeSelectListMenuId set by ListMenuInit in DexScreen_InitGfxForTopMenu function paasses values cursor pos to the backup here
+        ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL); //but this uses cursorposbak, assuming a backup value?
+        sPokedexScreenData->scrollArrowsTaskId = DexScreen_CreateDexOrderScrollArrows();//idk why this ^ is in case 5 & 6 doesn't appear to do anything in 5?
         sPokedexScreenData->state = 6;
-        break;
-    case 6:
-        sPokedexScreenData->characteristicMenuInput = ListMenu_ProcessInput(sPokedexScreenData->orderedListMenuTaskId);
-        ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);
+        break;//yeah think that may be it
+    case 6://thinking need replace ListMenu_ProcessInput, to control how it would go from here? , without process input list doesn't scroll, Only B press works
+        //sPokedexScreenData->characteristicMenuInput = ListMenu_ProcessInput(sPokedexScreenData->orderedListMenuTaskId); //think this is end of dispaly then goes into navigation away from this page
+        sPokedexScreenData->characteristicMenuInput = DexScreen_ProcessInput(sPokedexScreenData->orderedListMenuTaskId);
+        ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);//creates top arrow?
         if (JOY_NEW(A_BUTTON))
         {
-            if ((sPokedexScreenData->characteristicMenuInput >> 16) & 1)
+            if ((sPokedexScreenData->characteristicMenuInput >> 16) & 1) //pretty much if actually selected someting, so only if pressed A
             {
                 sPokedexScreenData->dexSpecies = sPokedexScreenData->characteristicMenuInput;
                 RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
                 BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
-                sPokedexScreenData->state = 7;
+                sPokedexScreenData->state = 7; //go to mons dex entry
             }
         }
         else if (JOY_NEW(B_BUTTON))
         {
             RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
             BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
-            sPokedexScreenData->state = 1;
+            sPokedexScreenData->state = 1; //close dex list
         }
         break;
     case 7:
@@ -1316,26 +1326,109 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
     }
 }
 
-static void DexScreen_InitGfxForNumericalOrderList(void)
+/*
+// u16 ignored is passed but never used - /for port remove ignored, put this in place of ListMenu_ProcessInput think shold work,
+//functions used here ported to bottom of file
+static u16 TryDoPokedexScroll(u16 selectedMon) //vsonic IMPORTANT  //think equiv ListMenu_ProcessInput
+{
+    u8 scrollTimer;
+    u8 scrollMonIncrement;
+    u8 i;
+    u16 startingPos;
+    u8 scrollDir = 0;
+
+    if (JOY_HELD(DPAD_UP) && (selectedMon > 0)) //selected mon here is more position in the list, i.e not 0 and not end of list
+    {
+        scrollDir = 1;
+        selectedMon = GetNextPosition(1, selectedMon, 0, sPokedexScreenData->pokemonListCount - 1);
+        CreateScrollingPokemonSprite(1, selectedMon);
+        CreateMonListEntry(1, selectedMon); //put so list updates w scroll. ok makes sense
+        PlaySE(SE_DEX_SCROLL);//tested and this does indeed only preclude scrolling up and down with dpad not left and right
+        //createmonlistentry was the entry for updating based on scroll, so removing that stopped the list updating by not via moving left 
+    }
+    else if (JOY_HELD(DPAD_DOWN) && (selectedMon < sPokedexScreenData->pokemonListCount - 1))
+    {
+        scrollDir = 2;
+        selectedMon = GetNextPosition(0, selectedMon, 0, sPokedexScreenData->pokemonListCount - 1);
+        CreateScrollingPokemonSprite(2, selectedMon);
+        CreateMonListEntry(2, selectedMon);
+        PlaySE(SE_DEX_SCROLL);
+    }
+    else if (JOY_NEW(DPAD_LEFT) && (selectedMon > 0))
+    {
+        startingPos = selectedMon;
+
+        for (i = 0; i < 9; i++) //think this is somehow the update, 8 list per page on EE so think this it?
+            selectedMon = GetNextPosition(1, selectedMon, 0, sPokedexScreenData->pokemonListCount - 1);
+        sPokedexScreenData->pokeBallRotation += 16 * (selectedMon - startingPos);
+        ClearMonSprites();
+        CreateMonSpritesAtPos(selectedMon, 0xE); //this is the left right for createmonlistentry, function is called through this
+        PlaySE(SE_DEX_PAGE);
+    }
+    else if (JOY_NEW(DPAD_RIGHT) && (selectedMon < sPokedexScreenData->pokemonListCount - 1))
+    {
+        startingPos = selectedMon;
+        for (i = 0; i < 9; i++) //has left and right move by 7, in firered moves by 9
+            selectedMon = GetNextPosition(0, selectedMon, 0, sPokedexScreenData->pokemonListCount - 1);//for porting need top 3 lines and createmonlistentry for left right
+        sPokedexScreenData->pokeBallRotation += 16 * (selectedMon - startingPos);
+        ClearMonSprites();
+        CreateMonSpritesAtPos(selectedMon, 0xE); - replace these
+
+        CreateMonListEntry(0, selectedMon); //believe not needed? for emerald because it displays mon pick as scroll, so think skip this use of the function
+    SetGpuReg(REG_OFFSET_BG2VOFS, sPokedexScreenData->initialVOffset); //ok think was wrong PRETTY SURE THIS, is left right scroll and that first arg is scroll direction
+        //1 and 2 are up and down respectively, and zero is left right
+    sPokedexScreenData->listVOffset = 0;
+    sPokedexScreenData->listMovingVOffset = 0;    don't konw if need all, or just createmonlistentry 0
+
+        PlaySE(SE_DEX_PAGE);
+    }
+
+    if (scrollDir == 0)
+    {
+        // Left/right input just snaps up/down, no scrolling
+        sPokedexScreenData->scrollSpeed = 0;
+        return selectedMon;
+    }
+    //think most this below is irrelevant for port, along w scroll speed/increment stuff
+    //emerald speeds up to max, while firered has one constant max speed when held.
+    //so think can ignore everthing below other than the return?
+
+    scrollMonIncrement = sScrollMonIncrements[sPokedexScreenData->scrollSpeed / 4];
+    scrollTimer = sScrollTimers[sPokedexScreenData->scrollSpeed / 4];
+    sPokedexScreenData->scrollTimer = scrollTimer;
+    sPokedexScreenData->maxScrollTimer = scrollTimer;
+    sPokedexScreenData->scrollMonIncrement = scrollMonIncrement;
+    sPokedexScreenData->scrollDirection = scrollDir;
+    sPokedexScreenData->pokeBallRotationStep = scrollMonIncrement / 2;
+    UpdateDexListScroll(sPokedexScreenData->scrollDirection, sPokedexScreenData->scrollMonIncrement, sPokedexScreenData->maxScrollTimer);
+    if (sPokedexScreenData->scrollSpeed < 12) //^says dexList but seems has nothing to do w list and is just mon icons and the the pokeball when scrolling?
+        sPokedexScreenData->scrollSpeed++;
+    return selectedMon;
+}
+*/
+
+//vsonic IMPORTANT, what builds the dex list
+static void DexScreen_InitGfxForNumericalOrderList(void) //important
 {
     struct ListMenuTemplate template;
     FillBgTilemapBufferRect(3, 0x00E, 0, 0, 30, 20, 0);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
-    template = sListMenuTemplate_OrderedListMenu;
+    template = sListMenuTemplate_OrderedListMenu; //template info for displaying dex list mon
     template.items = sPokedexScreenData->listItems;
     template.windowId = sPokedexScreenData->numericalOrderWindowId;
-    template.totalItems = sPokedexScreenData->orderedDexCount;
-    DexScreen_InitListMenuForOrderedList(&template, sPokedexScreenData->dexOrderId);
+    template.totalItems = sPokedexScreenData->orderedDexCount; //changign this doesnt chagne load time
+    DexScreen_InitListMenuForOrderedList(&template, sPokedexScreenData->dexOrderId);//think this the important value //passes template to use to make page
     FillWindowPixelBuffer(0, PIXEL_FILL(15));
-    DexScreen_PrintStringWithAlignment(gText_PokemonListNoColor, TEXT_CENTER);
+    DexScreen_PrintStringWithAlignment(gText_PokemonListNoColor, TEXT_CENTER);//above line and this paired, fill buffer, than print onto space, same as two below
     FillWindowPixelBuffer(1, PIXEL_FILL(15));
     DexScreen_PrintControlInfo(gText_PickOKExit);
     CopyWindowToVram(0, COPYWIN_GFX);
-    CopyWindowToVram(1, COPYWIN_GFX);
+    CopyWindowToVram(1, COPYWIN_GFX); //then copies two windows to ram, meaning actual building part is DexScreen_InitListMenuForOrderedList
 }
 
-static void Task_DexScreen_CharacteristicOrder(u8 taskId)
+//changing list here does nothing, think becuase changed case for category to no longer go to list?
+static void Task_DexScreen_CharacteristicOrder(u8 taskId) //changes here also seemed to have no effect?
 {
     switch (sPokedexScreenData->state)
     {
@@ -1402,7 +1495,9 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
     }
 }
 
-static void DexScreen_CreateCharacteristicListMenu(void)
+//doesn't do anything, was potentially for other pages that used to go from category pages but I changed?
+//either way this isn't what I need to change I believe
+static void DexScreen_CreateCharacteristicListMenu(void) //vsonic like numericla dex lit but for teh non numerical lists i.e weight a-z type etc.
 {
     struct ListMenuTemplate template;
     FillBgTilemapBufferRect(3, 0x00E, 0, 0, 30, 20, 0);
@@ -1412,7 +1507,7 @@ static void DexScreen_CreateCharacteristicListMenu(void)
     template.items = sPokedexScreenData->listItems;
     template.windowId = sPokedexScreenData->numericalOrderWindowId;
     template.totalItems = sPokedexScreenData->orderedDexCount;
-    DexScreen_InitListMenuForOrderedList(&template, sPokedexScreenData->dexOrderId);
+    DexScreen_InitListMenuForOrderedList(&template, sPokedexScreenData->dexOrderId); //think this the important value,// removing this doesn't affect load times
     FillWindowPixelBuffer(0, PIXEL_FILL(15));
     DexScreen_PrintStringWithAlignment(gText_SearchNoColor, TEXT_CENTER);
     FillWindowPixelBuffer(1, PIXEL_FILL(15));
@@ -1421,127 +1516,280 @@ static void DexScreen_CreateCharacteristicListMenu(void)
     CopyWindowToVram(1, COPYWIN_GFX);
 }
 
+//vsonic IMPORTANT also relevant for dex change plans,
+//need make read like emerald load dex in pieces nto all mon
+//think equivalent to CreatePokedexList in EE
 static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
 {
-    s32 max_n = IsNationalPokedexEnabled() ? NATIONAL_DEX_COUNT : KANTO_DEX_COUNT;
+    //s32 max_n = IsNationalPokedexEnabled() ? NATIONAL_DEX_COUNT : KANTO_DEX_COUNT;
     u16 ndex_num;
     u16 ret = NATIONAL_DEX_NONE;
     s32 i;
-    bool8 caught;
+    bool8 caught;  //true false
     bool8 seen;
+    //s32 j;
+    u16 NumSeen = IsNationalPokedexEnabled() ? sPokedexScreenData->numSeenNational : sPokedexScreenData->numSeenKanto;
+    u16 NumCaught = IsNationalPokedexEnabled() ? sPokedexScreenData->numOwnedNational : sPokedexScreenData->numOwnedKanto;
+    //actually nvm on this, with how load works, only displays as move between "pages"on scroll so I still need to load dashes
+    //for a page that...wait no I'm not scrolling this is explicitly for when I DON'T have enough mon to need scrolling. 
 
     switch (orderIdx)
     {
     default:
     case DEX_ORDER_NUMERICAL_KANTO:
+    sPokedexScreenData->DexListMax = KANTO_DEX_COUNT;
         for (i = 0; i < KANTO_DEX_COUNT; i++)
         {
             ndex_num = i + 1;
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-            if (seen)
-            {
-                sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                ret = ndex_num;
-            }
-            else
-            {
-                sPokedexScreenData->listItems[i].label = gText_5Dashes;
-            }
-            sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-        }
-        break;
-    case DEX_ORDER_ATOZ: //look into making this load in sections?, think issue is would need to continuously retrigger this function?, not az but all national lists
-        for (i = 0; i < SPECIES_CALYREX; i++) //this was issue with limit, it used chimecho for some dumb reason, rather than species or something smh
-        {
-            ndex_num = gPokedexOrder_Alphabetical[i];
-            if (ndex_num <= max_n)
+            if (i < DEX_INITIAL_LOAD)
             {
                 seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
                 caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
                 if (seen)
                 {
-                    sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                    sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                    ret++; //need
+                    sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                    
                 }
+                else
+                {
+                    sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                }
+                sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                ret++;
+            }
+            else
+            {
+                sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                sPokedexScreenData->listItems[i].index = 0;
+                ret++;
             }
         }
         break;
+    case DEX_ORDER_ATOZ: //look into making this load in sections?, think issue is would need to continuously retrigger this function?, not az but all national lists
+    sPokedexScreenData->DexListMax = NELEMS(gPokedexOrder_Alphabetical);
+        for (i = 0; i < NELEMS(gPokedexOrder_Alphabetical); i++) //this was issue with limit, it used chimecho for some dumb reason, rather than species or something smh
+        {
+
+            ndex_num = gPokedexOrder_Alphabetical[i]; //don't know why, didn't just use nelms array to begin with rather than species, idk maybe expose errors if any
+            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+            //if (ndex_num <= max_n) //sListMenuTemplate_OrderedListMenu.maxShowed
+            if (NumSeen < DEX_INITIAL_LOAD)
+            {
+                if (i < NumSeen) //this works for making an initial load, that theoretically can update w scroll function, without breaking original order
+                {
+                    
+                    if (seen)
+                    {
+                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                        ret++; //need ,//listItems already set to nat count, but not filled in until here, ret is each individual value
+
+                    }
+                }
+            }
+            else
+            {
+            
+                if (i < DEX_INITIAL_LOAD) //this works for making an initial load, that theoretically can update w scroll function, without breaking original order
+                {
+                    
+                    if (seen)
+                    {
+                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                        ret++; //need ,//listItems already set to nat count, but not filled in until here, ret is each individual value
+
+                    }
+                }//since these are based on seen/caught do extra check for early game, change initial load to num seen/caught if lower than maxshown
+                else
+                {
+                    sPokedexScreenData->listItems[ret].label = gText_5Dashes;
+                    sPokedexScreenData->listItems[ret].index = 0;
+                    ret++;
+                }
+            }
+        }//only kanto and national dex list should fill empty space with dashes, rest are supposed to ONLY show number you've seen or caught based on their condition
+        break;
     case DEX_ORDER_TYPE: //can't build automatically would need to loop entire species list MANY times, so would take forever
-        for (i = 0; i < SPECIES_CALYREX; i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
+    sPokedexScreenData->DexListMax = NELEMS(gPokedexOrder_Type); //now that I'm saving time I MAY be able to build with a function
+        for (i = 0; i < NELEMS(gPokedexOrder_Type); i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
         {
             ndex_num = SpeciesToNationalPokedexNum(gPokedexOrder_Type[i]);
-            if (ndex_num <= max_n)
+            if (NumCaught < DEX_INITIAL_LOAD)
             {
-                seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-                caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-                if (caught)
+
+                if (i < NumCaught)
                 {
-                    sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                    sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                    seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+                    if (caught)
+                    {
+                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                        ret++;
+                    }
+                }
+            }
+            else
+            {
+                if (i < DEX_INITIAL_LOAD)
+                {
+                    seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+                    if (caught)
+                    {
+                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                        ret++;
+                    }
+                }
+                else
+                {
+                    sPokedexScreenData->listItems[ret].label = gText_5Dashes;
+                    sPokedexScreenData->listItems[ret].index = 0;
                     ret++;
                 }
             }
         }
         break; //order by type and weight, just wouldn't work with my changes/species expansion would require, going through and creating list by hand
     case DEX_ORDER_LIGHTEST:
-        for (i = 0; i < SPECIES_CALYREX; i++) //for (i = 0; i < NATIONAL_DEX_COUNT; i++) same reason as above //all below share same original value
+    sPokedexScreenData->DexListMax = NELEMS(gPokedexOrder_Weight);
+        for (i = 0; i < NELEMS(gPokedexOrder_Weight); i++) //for (i = 0; i < NATIONAL_DEX_COUNT; i++) same reason as above //all below share same original value
         {
-            ndex_num = gPokedexOrder_Weight[i];
-            if (ndex_num <= max_n)
+            ndex_num = gPokedexOrder_Weight[i]; //this is apparently missing one value compared to other lists?
+            if (NumCaught < DEX_INITIAL_LOAD)
             {
-                seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-                caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-                if (caught)
+
+                if (i < NumCaught)
                 {
-                    sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                    sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                    seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+                    if (caught)
+                    {
+                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                        ret++;
+                    }
+                }
+            }
+            else
+            {
+                if (i < DEX_INITIAL_LOAD)
+                {
+                    seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+                    if (caught)
+                    {
+                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                        ret++;
+                    }
+                }
+                else
+                {
+                    sPokedexScreenData->listItems[ret].label = gText_5Dashes;
+                    sPokedexScreenData->listItems[ret].index = 0;
                     ret++;
                 }
             }
         }
         break;
     case DEX_ORDER_SMALLEST:
-        for (i = 0; i < SPECIES_CALYREX; i++)
+    sPokedexScreenData->DexListMax = NELEMS(gPokedexOrder_Height);
+        for (i = 0; i < NELEMS(gPokedexOrder_Height); i++)
         {
             ndex_num = gPokedexOrder_Height[i];
-            if (ndex_num <= max_n)
+            if (NumCaught < DEX_INITIAL_LOAD)
             {
-                seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-                caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-                if (caught)
+
+                if (i < NumCaught)
                 {
-                    sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                    sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                    ret++;
+                    seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+                    if (caught)
+                    {
+                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                        ret++;
+                    }
                 }
             }
-        }
-        break;
-    case DEX_ORDER_NUMERICAL_NATIONAL:
-        for (i = 0; i < SPECIES_CALYREX; i++)
-        {
-            ndex_num = i + 1;
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-            if (seen)
+            else
             {
-                sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                ret = ndex_num;
+                if (i < DEX_INITIAL_LOAD)
+                {
+                    seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+                    if (caught)
+                    {
+                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                        ret++;
+                    }
+                }
+                else
+                {
+                    sPokedexScreenData->listItems[ret].label = gText_5Dashes;
+                    sPokedexScreenData->listItems[ret].index = 0;
+                    ret++;
+                }
+            }//think similar to how emerald works, full list is built, but not populated, just need to update and clear as I scroll, so, think make function similar
+            //but that doesn't return and then put in dexlist scroll that I made?
+        } //need dexlist count to be where I start, and think will need make +- 5 for when I re-enter the dex list, since I won't be at the spot.
+        //so initial load for starting from 0 point, then in another function, for when I reenter load plus minus from your position, think store value last species 
+        //but for scroll down set i, to DEX_INITIAL_LOAD + 1, then increment add fill in the listItems
+        //make new function take orderidx & direction, up down and 0, for neutral/left/right
+        //put conditionals for dpad so dont need to put logic within function itself
+        //place final function in DexScreen_ProcessInput, think also add "count" argument, so can match scroll function
+        //can easily see how much its increaseing
+        //think logic will be for (i = DEX_INITIAL_LOAD; i < DEX_INITIAL_LOAD + count; i++) for increasing listItems 
+        //where i sits in for ret above, well honestly its better to not use count, so there isn't errors
+        //as increases of 1, are only for directions up and down, value 0 should use maxshown
+        break;//just need to find "selectedMon", the palce stores last mon/list place I viewed to return to when I reopen the dex list
+    case DEX_ORDER_NUMERICAL_NATIONAL:
+    sPokedexScreenData->DexListMax = SPECIES_CALYREX;
+        for (i = 0; i < SPECIES_CALYREX; i++) //ok this changes load times, and num entries on list,
+        {
+            ndex_num = i + 1; //pok so replacing index num w a constant also greatly changed load time, but replaced w all one mon, so not a solution
+            if (i < DEX_INITIAL_LOAD)
+            {
+                seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE); //but that does confirm that this function populates the list, not just "count" it
+                if (seen)
+                {
+                    sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)]; //changig here affects only the names shown
+                     //even if changing this number, which affects number loaded, load time still un changed, potential number of loops go through is easy?
+                }   //changging ^ only affected num mon in list, not how long it toook to load
+                else
+                {
+                    sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                }
+                sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+                ret++;
             }
             else
             {
                 sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                sPokedexScreenData->listItems[i].index = 0;
+                ret++;
             }
-            sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-        }
-        break;
+
+        } //hmm ok so removing above line, GREATLY changed load time, but mon order doesn't display right? need to look into this, but also most of page doesn't load so...
+        break; //changing  index affects, species number displayed and mon type displayed, not the nmae
     }
+
+    /*for (i = 7; i < NATIONAL_DEX_COUNT; i++)
+    {
+        sPokedexScreenData->listItems[i].label = gText_5Dashes;
+        sPokedexScreenData->listItems[i].index = 0;
+    }*/
+
     return ret;
 }
 
-static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate * template, u8 order)
+//vsonic IMPORTANT
+static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate * template, u8 order) //belive this is actual dex list build, i.e what builds it at once
 {
     switch (order)
     {
@@ -1560,6 +1808,9 @@ static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate *
         break;
     }
 }
+/*
+want to put dex update scroll,
+*/
 
 static void DexScreen_DestroyDexOrderListMenu(u8 order)
 {
@@ -1781,7 +2032,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         sPokedexScreenData->state = 4;
         break;
     case 14:
-        DexScreen_DrawMonDexPage(FALSE);
+        DexScreen_DrawMonDexPage(FALSE); //from category page go to dex entry page
         sPokedexScreenData->state = 15;
         break;
     case 15:
@@ -1816,11 +2067,11 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
             sPokedexScreenData->state = 17;
         }
         break;
-    case 17:
-        if (JOY_NEW(A_BUTTON))
+    case 17: //navigation, think attempt put scrollmon vertical here, vsonic, hopefully simple as but need it to update cat page num as well
+        if (JOY_NEW(A_BUTTON)) //believe can'tuse tryscrollmon vertical, as that explicitly uses dex list stuff and not category org stuff
         {
             RemoveDexPageWindows();
-            FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 2, 30, 16);
+            FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 2, 30, 16);//but need compare w default to see how changed, if need make scroll logic
             CopyBgTilemapBufferToVram(1);
             sPokedexScreenData->state = 21;
         }
@@ -1910,7 +2161,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         sPokedexScreenData->state = 25;
         break;
     case 25:
-        DexScreen_DrawMonDexPage(FALSE);
+        DexScreen_DrawMonDexPage(FALSE); //pressing B return from Area page, in category menu/task
         CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
@@ -1961,7 +2212,7 @@ static int DexScreen_InputHandler_GetShoulderInput(void)
     }
 }
 
-static void Task_DexScreen_ShowMonPage(u8 taskId)
+static void Task_DexScreen_ShowMonPage(u8 taskId)//think task show dex entry from the scrolled list page, so possibly what I need  //vsonic
 {
     switch (sPokedexScreenData->state)
     {
@@ -1979,7 +2230,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         break;
     case 2:
         sPokedexScreenData->numMonsOnPage = 1;
-        DexScreen_DrawMonDexPage(FALSE);
+        DexScreen_DrawMonDexPage(FALSE); //believe selecting a mon from the numerical list, navigate to ex entry page?
         sPokedexScreenData->state = 3;
         break;
     case 3:
@@ -2011,13 +2262,13 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
             BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
             sPokedexScreenData->state = 1;
         }
-        else if (JOY_NEW(DPAD_UP) && DexScreen_TryScrollMonsVertical(1))
+        else if (JOY_NEW(DPAD_UP) && DexScreen_TryScrollMonsVertical(1)) //use of this function means if able to scroll in that direction
         {
             RemoveDexPageWindows();
             BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
             sPokedexScreenData->state = 6;
         }
-        else if (JOY_NEW(DPAD_DOWN) && DexScreen_TryScrollMonsVertical(0))
+        else if (JOY_NEW(DPAD_DOWN) && DexScreen_TryScrollMonsVertical(0)) //vsonic attempt use add scrolling between category dex entires
         {
             RemoveDexPageWindows();
             BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
@@ -2071,7 +2322,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         sPokedexScreenData->state = 11;
         break;
     case 11:
-        DexScreen_DrawMonDexPage(FALSE);
+        DexScreen_DrawMonDexPage(FALSE); //same as other, Press B return from area page
         CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
@@ -2087,7 +2338,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
     }
 }
 
-static bool32 DexScreen_TryScrollMonsVertical(u8 direction)
+//vsonic
+static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important think    seems equivalent of GetNextPosition but writes arguments instead of taking them
 {
     int selectedIndex;
     u16 *itemsAbove_p, *cursorPos_p;
@@ -2113,19 +2365,19 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction)
     }
 
     selectedIndex = *cursorPos_p + *itemsAbove_p;
-    if (direction) // Seek up
+    if (direction) // Seek up   //but think this applies to both up and left, since they both go in that direction based on emerald
     {
-        if (selectedIndex == 0)
-            return FALSE;
+        if (selectedIndex == 0) //ok has going up vs going down, but where is logic for the scroll from left right inputs?
+            return FALSE; //ok that's all handled in list menu file, done in ListMenu_ProcessInput function
 
-        selectedIndex--;
-        while (selectedIndex >= 0) //Should be while (--selectedIndex >= 0) without the selectedIndex-- in the body or before the while at all, but this is needed to match.
+        //selectedIndex--;
+        while (--selectedIndex >= 0) //Should be while (--selectedIndex >= 0) without the selectedIndex-- in the body or before the while at all, but this is needed to match.
         {
             if ((sPokedexScreenData->listItems[selectedIndex].index >> 16) & 1)
             {
                 break;
             }
-            selectedIndex--;
+            //selectedIndex--;
         }
 
         if (selectedIndex < 0)
@@ -2140,38 +2392,237 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction)
             return FALSE;
         }
 
-        selectedIndex++;
-        while (selectedIndex < sPokedexScreenData->orderedDexCount) //Should be while (++selectedIndex < sPokedexScreenData->orderedDexCount) without the selectedIndex++ in the body or before the while at all, but this is needed to match.
+        //selectedIndex++;
+        while (++selectedIndex < sPokedexScreenData->orderedDexCount) //Should be while (++selectedIndex < sPokedexScreenData->orderedDexCount) without the selectedIndex++ in the body or before the while at all, but this is needed to match.
         {
-            if ((sPokedexScreenData->listItems[selectedIndex].index >> 16) & 1)
+            /*if (sPokedexScreenData->orderedDexCount < sPokedexScreenData->DexListMax)
+            {
+                for (; sPokedexScreenData->orderedDexCount < dexIncrement; sPokedexScreenData->orderedDexCount++;)
+                {
+                    if (sPokedexScreenData->orderedDexCount == sPokedexScreenData->DexListMax)
+                        break; //should only break the for loop, not interupt what occurs below
+                }
+            } */
+             //but the issue of this being here, is this function doesn't apear to be called on the page where the list is, instead its called from within the dex entry?
+            //confusing
+
+            if ((sPokedexScreenData->listItems[selectedIndex].index >> 16) & 1) //I think should put the dpad loads within these loops?
                 break;
-            selectedIndex++;
+            //selectedIndex++;
         }
         if (selectedIndex >= sPokedexScreenData->orderedDexCount)
         {
             return FALSE;
         }
     }
-    sPokedexScreenData->characteristicMenuInput = sPokedexScreenData->listItems[selectedIndex].index;
+    sPokedexScreenData->characteristicMenuInput = sPokedexScreenData->listItems[selectedIndex].index; //the mon you're on
 
-    if (sPokedexScreenData->orderedDexCount > 9)
+    // as this part is CLEARLY only for being read on a list, hmm but removing it ONLY removed ability to scroll dex entries..
+    if (sPokedexScreenData->orderedDexCount > sListMenuTemplate_OrderedListMenu.maxShowed)//if can scroll, and total list longer than max shown
     {
-        if (selectedIndex < 4)
+        if (selectedIndex < 4) //both instances of 4, mean to scroll vertically when would be within 4 spaces/rows of max shown from either top or bottom
         {
             *cursorPos_p = 0;
             *itemsAbove_p = selectedIndex;
         }
-        else if (selectedIndex >= (sPokedexScreenData->orderedDexCount - 4))
+        else if (selectedIndex >= (sPokedexScreenData->orderedDexCount - 4)) //if can scroll i.e is not 4 away from end of list
         {
-            *cursorPos_p = (sPokedexScreenData->orderedDexCount - 9);
-            *itemsAbove_p = selectedIndex + 9 - (sPokedexScreenData->orderedDexCount);
+            *cursorPos_p = (sPokedexScreenData->orderedDexCount - sListMenuTemplate_OrderedListMenu.maxShowed); //changed from flat 9s
+            *itemsAbove_p = selectedIndex + sListMenuTemplate_OrderedListMenu.maxShowed - (sPokedexScreenData->orderedDexCount);
         }
         else
         {
             *cursorPos_p = selectedIndex - 4;
             *itemsAbove_p = 4;
+        } //ok so this isn't the right place for change I want, ok removing this just prevents changing dex entry shown as move up down, so not what I need.
+    } //uses orderedDexCount as max value, and that's set with funcntion, but with my change, dex count is dif from actual total size should be
+    //so think best to make other struct value to replace curent use of orderedDexCount in getcount function,
+    //so it'd show end of list,  or keep orderedDexCount as just amount loaded in list curr, but make new value to be what the max list should be
+    //rather than my preload value. DexListMax
+    else
+    {
+        *cursorPos_p = 0;
+        *itemsAbove_p = selectedIndex;
+    }
+    return TRUE;
+}
+
+//duplicate effect functions for port effect
+//vsonic Important, add on to this stuff to expand orderedDexCount
+//think need return
+static s32 DexScreen_ProcessInput(u8 listTaskId)//replace listmenu process input
+{
+    u16 ndex_num;
+    s32 i;
+    bool8 caught;
+    bool8 seen;
+    struct ListMenu *list = (struct ListMenu *)gTasks[listTaskId].data;
+    struct ListMenuTemplate template;
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        return list->template.items[list->cursorPos + list->itemsAbove].index;
+    }
+    else if (JOY_NEW(B_BUTTON))
+    {
+        return LIST_CANCEL;
+    }
+    else if (gMain.newAndRepeatedKeys & DPAD_UP)
+    {
+        ListMenuChangeSelection(list, TRUE, 1, FALSE); //count here seems to be how much to move by
+        return LIST_NOTHING_CHOSEN;
+    }
+    else if (gMain.newAndRepeatedKeys & DPAD_DOWN)
+    {
+
+        ListMenuChangeSelection(list, TRUE, 1, TRUE);
+        seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+                if (caught)
+                {
+                    sPokedexScreenData->listItems[DEX_INITIAL_LOAD].label = gSpeciesNames[NationalPokedexNumToSpecies(DEX_INITIAL_LOAD + 1)];
+                    sPokedexScreenData->listItems[DEX_INITIAL_LOAD].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(DEX_INITIAL_LOAD + 1);
+                }//because starts at 0, use base value not + 1 here^
+        return LIST_NOTHING_CHOSEN;//tested works, need add to tryscrollmon vertical as well
+    }
+    else // try to move by one window scroll
+    {
+        bool16 rightButton, leftButton;
+        switch (list->template.scrollMultiple)
+        {
+        case LIST_NO_MULTIPLE_SCROLL:
+        default:
+            leftButton = FALSE;
+            rightButton = FALSE;
+            break;
+        case LIST_MULTIPLE_SCROLL_DPAD:
+            leftButton = gMain.newAndRepeatedKeys & DPAD_LEFT;
+            rightButton = gMain.newAndRepeatedKeys & DPAD_RIGHT;
+            break;
+        case LIST_MULTIPLE_SCROLL_L_R:
+            leftButton = gMain.newAndRepeatedKeys & L_BUTTON;
+            rightButton = gMain.newAndRepeatedKeys & R_BUTTON;
+            break;
+        }
+        if (leftButton) //think take page from this setup  else if (JOY_NEW(DPAD_UP) && DexScreen_TryScrollMonsVertical(1))
+        {
+            ListMenuChangeSelection(list, TRUE, list->template.maxShowed, FALSE); //think count ishow much to move by, since this is 9 other is 1
+            return LIST_NOTHING_CHOSEN;
+        }
+        else if (rightButton)
+        {
+            ListMenuChangeSelection(list, TRUE, list->template.maxShowed, TRUE);
+            return LIST_NOTHING_CHOSEN;
+        }
+        else
+        {
+            return LIST_NOTHING_CHOSEN;
         }
     }
+}
+
+//since is only for moving between dex entries think this prob useless for plan port..
+//well I may use the orderId part to make new function
+static bool32 DexScreen_TryListScroll(u8 direction) //vsonic important think    seems equivalent of GetNextPosition but writes arguments instead of taking them
+{
+    int selectedIndex;
+    u16 *itemsAbove_p, *cursorPos_p;
+
+    switch (sPokedexScreenData->dexOrderId)
+    {
+    default:
+    case DEX_ORDER_NUMERICAL_KANTO:
+        cursorPos_p = &sPokedexScreenData->kantoOrderMenuCursorPos;
+        itemsAbove_p = &sPokedexScreenData->kantoOrderMenuItemsAbove;
+        break;
+    case DEX_ORDER_ATOZ:
+    case DEX_ORDER_TYPE:
+    case DEX_ORDER_LIGHTEST:
+    case DEX_ORDER_SMALLEST:
+        cursorPos_p = &sPokedexScreenData->characteristicOrderMenuCursorPos;
+        itemsAbove_p = &sPokedexScreenData->characteristicOrderMenuItemsAbove;
+        break;
+    case DEX_ORDER_NUMERICAL_NATIONAL:
+        cursorPos_p = &sPokedexScreenData->nationalOrderMenuCursorPos;
+        itemsAbove_p = &sPokedexScreenData->nationalOrderMenuItemsAbove;
+        break;
+    }
+
+    selectedIndex = *cursorPos_p + *itemsAbove_p;
+    if (direction) // Seek up   //but think this applies to both up and left, since they both go in that direction based on emerald
+    {
+        if (selectedIndex == 0) //ok has going up vs going down, but where is logic for the scroll from left right inputs?
+            return FALSE; //ok that's all handled in list menu file, done in ListMenu_ProcessInput function
+
+        //selectedIndex--;
+        while (--selectedIndex >= 0) //Should be while (--selectedIndex >= 0) without the selectedIndex-- in the body or before the while at all, but this is needed to match.
+        {
+            if ((sPokedexScreenData->listItems[selectedIndex].index >> 16) & 1)
+            {
+                break;
+            }
+            //selectedIndex--;
+        }
+
+        if (selectedIndex < 0)
+        {
+            return FALSE;
+        }
+    }
+    else // Seek down
+    {
+        if (selectedIndex == sPokedexScreenData->orderedDexCount - 1)
+        {
+            return FALSE;
+        }
+
+        //selectedIndex++;
+        while (++selectedIndex < sPokedexScreenData->orderedDexCount) //Should be while (++selectedIndex < sPokedexScreenData->orderedDexCount) without the selectedIndex++ in the body or before the while at all, but this is needed to match.
+        {
+            /*if (sPokedexScreenData->orderedDexCount < sPokedexScreenData->DexListMax)
+            {
+                for (; sPokedexScreenData->orderedDexCount < dexIncrement; sPokedexScreenData->orderedDexCount++;)
+                {
+                    if (sPokedexScreenData->orderedDexCount == sPokedexScreenData->DexListMax)
+                        break; //should only break the for loop, not interupt what occurs below
+                }
+            } */
+             //but the issue of this being here, is this function doesn't apear to be called on the page where the list is, instead its called from within the dex entry?
+            //confusing
+
+            if ((sPokedexScreenData->listItems[selectedIndex].index >> 16) & 1) //I think should put the dpad loads within these loops?
+                break;
+            //selectedIndex++;
+        }
+        if (selectedIndex >= sPokedexScreenData->orderedDexCount)
+        {
+            return FALSE;
+        }
+    }
+    sPokedexScreenData->characteristicMenuInput = sPokedexScreenData->listItems[selectedIndex].index; //the mon you're on
+
+    // as this part is CLEARLY only for being read on a list, hmm but removing it ONLY removed ability to scroll dex entries..
+    if (sPokedexScreenData->orderedDexCount > sListMenuTemplate_OrderedListMenu.maxShowed)//if can scroll, and total list longer than max shown
+    {
+        if (selectedIndex < 4) //both instances of 4, mean to scroll vertically when would be within 4 spaces/rows of max shown from either top or bottom
+        {
+            *cursorPos_p = 0;
+            *itemsAbove_p = selectedIndex;
+        }
+        else if (selectedIndex >= (sPokedexScreenData->orderedDexCount - 4)) //if can scroll i.e is not 4 away from end of list
+        {
+            *cursorPos_p = (sPokedexScreenData->orderedDexCount - sListMenuTemplate_OrderedListMenu.maxShowed); //changed from flat 9s
+            *itemsAbove_p = selectedIndex + sListMenuTemplate_OrderedListMenu.maxShowed - (sPokedexScreenData->orderedDexCount);
+        }
+        else
+        {
+            *cursorPos_p = selectedIndex - 4;
+            *itemsAbove_p = 4;
+        } //ok so this isn't the right place for change I want, ok removing this just prevents changing dex entry shown as move up down, so not what I need.
+    } //uses orderedDexCount as max value, and that's set with funcntion, but with my change, dex count is dif from actual total size should be
+    //so think best to make other struct value to replace curent use of orderedDexCount in getcount function,
+    //so it'd show end of list,  or keep orderedDexCount as just amount loaded in list curr, but make new value to be what the max list should be
+    //rather than my preload value. DexListMax
     else
     {
         *cursorPos_p = 0;
@@ -2982,7 +3433,7 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 }
 
 #define CREATE_POKEDEX_PAGE
-static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
+static u8 DexScreen_DrawMonDexPage(bool8 justRegistered) //should be able to usse this to breakdown dex navigation this will only exist from a place that lists the mon
 {
 u32 i;
     DexScreen_DexPageZoomEffectFrame(3, 6);
@@ -3400,6 +3851,8 @@ static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId)
     DestroyTask(taskId);
 }
 
+//for when catching mon, vsonic edit later for double wilds
+//think add some kind of loop/check if battle type double wild and caught both mon
 static void Task_DexScreen_RegisterMonToPokedex(u8 taskId)
 {
     switch (sPokedexScreenData->state)
@@ -3467,7 +3920,7 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId)
         sPokedexScreenData->state = 8;
         break;
     case 8:
-        DexScreen_DrawMonDexPage(TRUE);
+        DexScreen_DrawMonDexPage(TRUE); //display dex for just caught mon,
         sPokedexScreenData->state = 9;
         break;
     case 9:
@@ -3527,3 +3980,125 @@ void DexScreen_PrintStringWithAlignment(const u8 * str, s32 mode)
 
     DexScreen_AddTextPrinterParameterized(0, FONT_NORMAL, str, x, 2, 4);
 }
+
+//Emerald exclusive functions
+/*static u16 GetNextPosition(u8 direction, u16 position, u16 min, u16 max) //seems not needed
+{
+    switch (direction)
+    {
+    case 1: // Up/Left
+        if (position > min)
+            position--;
+        break;
+    case 0: // Down/Right
+        if (position < max)
+            position++;
+        break;
+    case 3: // Up/Left with loop (unused)
+        if (position > min)
+            position--;
+        else
+            position = max;
+        break;
+    case 2: // Down/Right with loop (unused)
+        if (position < max)
+            position++;
+        else
+            position = min;
+        break;
+    }
+    return position;
+}
+
+// u16 ignored is passed but never used -//remove ignored  /replace sPokedexScreenData with name used in this game struct at top
+static void CreateMonListEntry(u8 position, u16 b)//vsonic IMPORTANT belive relevant to load
+{                                                   //look at everything with ^ phrase. but this potential replace DexScreen_CountMonsInOrderedList in firered
+    s16 entryNum;
+    u16 i;
+    u16 vOffset;
+
+    switch (position)
+    {
+    case 0: // Initial
+    default:
+        entryNum = b - 5;       //b is selected mon, think place in the list while position is direction i.e up down
+        for (i = 0; i <= 10; i++) //believe is the 9 mon limit to display, so shows a full first page?
+        {
+            if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sPokedexScreenData->pokedexList[entryNum].dexNum == 0xFFFF)
+            {
+                ClearMonListEntry(17, i * 2);
+            }
+            else
+            {
+                ClearMonListEntry(17, i * 2);
+                if (sPokedexScreenData->pokedexList[entryNum].seen) //pokedexList seems substitute for use of list menu values/struct, also cuz emerald only has one dex list
+                {
+                    CreateMonDexNum(entryNum, 0x12, i * 2);
+                    CreateCaughtBall(sPokedexScreenData->pokedexList[entryNum].owned, 0x11, i * 2); //so I don't need to add pokedexList, just use the lists in firered
+                    CreateMonName(sPokedexScreenData->pokedexList[entryNum].dexNum, 0x16, i * 2);
+                }
+                else
+                {
+                    CreateMonDexNum(entryNum, 0x12, i * 2);
+                    CreateCaughtBall(FALSE, 0x11, i * 2);
+                    CreateMonName(0, 0x16, i * 2);
+                }
+            }
+            entryNum++;
+        }
+        break;
+    case 1: // Up
+        entryNum = b - 5;
+        if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sPokedexScreenData->pokedexList[entryNum].dexNum == 0xFFFF)
+        {
+            ClearMonListEntry(17, sPokedexScreenData->listVOffset * 2);
+        }
+        else
+        {
+            ClearMonListEntry(17, sPokedexScreenData->listVOffset * 2);
+            if (sPokedexScreenData->pokedexList[entryNum].seen)
+            {
+                CreateMonDexNum(entryNum, 18, sPokedexScreenData->listVOffset * 2);
+                CreateCaughtBall(sPokedexScreenData->pokedexList[entryNum].owned, 0x11, sPokedexScreenData->listVOffset * 2);
+                CreateMonName(sPokedexScreenData->pokedexList[entryNum].dexNum, 0x16, sPokedexScreenData->listVOffset * 2);
+            }
+            else
+            {
+                CreateMonDexNum(entryNum, 18, sPokedexScreenData->listVOffset * 2);
+                CreateCaughtBall(FALSE, 17, sPokedexScreenData->listVOffset * 2);
+                CreateMonName(0, 0x16, sPokedexScreenData->listVOffset * 2);
+            }
+        }
+        break;
+    case 2: // Down
+        entryNum = b + 5;
+        vOffset = sPokedexScreenData->listVOffset + 10;
+        if (vOffset >= LIST_SCROLL_STEP)
+            vOffset -= LIST_SCROLL_STEP;
+        if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sPokedexScreenData->pokedexList[entryNum].dexNum == 0xFFFF)
+            ClearMonListEntry(17, vOffset * 2);
+        else
+        {
+            ClearMonListEntry(17, vOffset * 2);
+            if (sPokedexScreenData->pokedexList[entryNum].seen)
+            {
+                CreateMonDexNum(entryNum, 18, vOffset * 2);
+                CreateCaughtBall(sPokedexScreenData->pokedexList[entryNum].owned, 0x11, vOffset * 2);
+                CreateMonName(sPokedexScreenData->pokedexList[entryNum].dexNum, 0x16, vOffset * 2);
+            }
+            else
+            {
+                CreateMonDexNum(entryNum, 18, vOffset * 2);
+                CreateCaughtBall(FALSE, 0x11, vOffset * 2);
+                CreateMonName(0, 0x16, vOffset * 2);
+            }
+        }
+        break;
+    }
+    CopyWindowToVram(0, COPYWIN_GFX);
+}
+
+static void ClearMonListEntry(u8 x, u8 y)
+{
+    FillWindowPixelRect(0, PIXEL_FILL(0), x * 8, y * 8, 0x60, 16);
+}*/

@@ -76,6 +76,7 @@ u32 DoMysteryGiftListMenu(const struct WindowTemplate *windowTemplate, const str
 u8 ListMenuInit(const struct ListMenuTemplate *listMenuTemplate, u16 cursorPos, u16 itemsAbove);
 u8 ListMenuInitInRect(const struct ListMenuTemplate *listMenuTemplate, const struct ListMenuWindowRect *rect, u16 cursorPos, u16 itemsAbove);
 s32 ListMenu_ProcessInput(u8 listTaskId);
+bool8 ListMenuChangeSelection(struct ListMenu *list, bool8 updateCursorAndCallCallback, u8 count, bool8 movingDown);
 void DestroyListMenuTask(u8 listTaskId, u16 *cursorPos, u16 *itemsAbove);
 void RedrawListMenu(u8 listTaskId);
 void ListMenuGetScrollAndRow(u8 listTaskId, u16 *cursorPos, u16 *itemsAbove);

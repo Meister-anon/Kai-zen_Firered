@@ -2189,10 +2189,10 @@ const u8 gVolbeatPokedexText[] = _(
     "pond water becomes dirty.");
 
 const u8 gIllumisePokedexText[] = _(
-    "A nocturnal Pokémon that becomes active\n"
-    "at nightfall. It leads a Volbeat swarm\n"
-    "to draw patterns in the night sky.\n"
-    "It releases a sweet aroma in flight.");
+    "A nocturnal Pokémon. Illumise releases\n"
+    "a sweet aroma to attract Volbeat.\n"
+    "It leads the lit-up swarm in drawing\n"
+    "designs on the canvas of the night sky.");
 
 const u8 gLileepPokedexText[] = _(
     "It disguises itself as seaweed by making\n"
