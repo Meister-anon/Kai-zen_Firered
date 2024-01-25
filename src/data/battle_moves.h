@@ -12131,7 +12131,7 @@ use wonder gaurd logic to determine its super effective
     [MOVE_OVER_MAX_POWER] =
     {
         .effect = EFFECT_LOSETYPE_HIT, //remember plan to set this up for entire battle 
-        .power = 150,
+        .power = 150,       //think will do by storing move used, and removing type based on that, potentially set a status?
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 5,

@@ -1932,6 +1932,13 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   when gmultihitcounter was 0, and I didn't have something clearing it for certain,
   I just assumed it cleared when move ended ie finish decrement, but the move could miss and not fully decrement to 0. etc.
   so I removed that condition, and added some extra counter clears, it seemed to fix it for the example I had, so for now am satisfied
+  -calling Done  -(back to dex research)
+
+  later note, port dive rock climb from ghoulslash repo in bookmarks
+  setup rock climb to be able to work as a map transition
+
+  also still need finish setup effect EFFECT_LOSETYPE_HIT
+  so it lasts entire battle
 
   adjusting tmhm learnsets for floating mon expanding fly access
   -DONE  
@@ -1972,12 +1979,37 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   gf just wrote bad code istead reusing the better existing code from rse
 
+  //looking into listmenutemplate thing its exactly that a template used all over the rom
+  for every used list, including the dex, but in emerald, its not used.
+
+  So they used custom stuff for that, I guess that means I should take that
+  instead of using the list menu stuff for firered dex?
+  The entire file doesn't need tobe replaced, just the navigation stuff
+  and potentially parts of the struct to be compatible w emerald functions
+
+  either replace use of listmenu, or change it so it works like emerlald,
+  and doesn't load entire list at once, instead load as scroll
+
   add wrap around to dex pages,  i.e press up at top to go to bottom,
   can pull functionality from start menu page as it already has that
   i.e press start,then press up on pokedex and it'll take you to bottom at Exit
 
+  //Important BIND still has freezing issue? happened when it locked into status move
+
+  //somehow I"m mising with moves that are 100 accuracy?!  needs to be fixed immediately
+  ..oh wait nvm was against a pidgey, that I confused, it most likely just had tangled feet ability
+  //well I know that works at least
+
   next - need see about making national stuff load faster
   and change searh filters to go to dex entry not cat page ...-DONE was as simple as changing a single value, found it by accident
+  
+  -RESOLVED found fix, still implementing,
+
+  also new idea ghoulslash has rockclimb implementation port that,
+  use it in caves to replace the stale ladder map transitions that make no sense.
+  with that can link different map sections in caves more realistically and stoke sense of adventure and scale in cave syystems.
+  can change map without fade in out, can do much more for cave systems, adding backdrop graphics for connections 
+  that would otherwise be intermediaries i.e narrow paths could have diff camera angle, maybe have waterfall in back or something
 
   but I do need to adjust the mon offsets in the entries page for it to look right,
   then change the search option so it takes you to the dex entry page, NOT the category page.

@@ -49,6 +49,12 @@ entries back to numerical*/
 };
 */
 
+//what it means to be anormal type, flexibility means you are able to be taught a wider variety of diff
+//type moves, because you don't lean to anything in particular.
+
+//this should also mean you can learn moves  outside your type normally
+//but I think the biggest variety should be in teachable things?
+
 static const u16 sBulbasaurTMHMLearnset[] = {
   ITEM_TM06_TOXIC,
                                         ITEM_TM09_BULLET_SEED,
