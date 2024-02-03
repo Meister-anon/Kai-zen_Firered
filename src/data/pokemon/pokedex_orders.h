@@ -3454,7 +3454,7 @@ const u16 gPokedexOrder_Type[] =
     SPECIES_SABLEYE,
     SPECIES_HOUNDOUR,
     SPECIES_HOUNDOOM,
-    SPECIES_SNEASEL
+    SPECIES_SNEASEL, //had issue looked likea another nvm issue wasn't because of comma, it was bad array math,
 };
 
 //when have error defined in text discarded in data
@@ -3634,7 +3634,6 @@ const u32 gDexAdjusting[] =
     SPECIES_BUIZEL,
     SPECIES_CHERUBI,
     SPECIES_SHELLOS,
-    SPECIES_AMBIPOM,
     SPECIES_CHINGLING,
     SPECIES_STUNKY,
     SPECIES_BONSLY,
