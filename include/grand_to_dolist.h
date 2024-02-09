@@ -1990,9 +1990,22 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   either replace use of listmenu, or change it so it works like emerlald,
   and doesn't load entire list at once, instead load as scroll
 
+  can't figur out gapless dex entries the non-numerical ones,
+  can't get it to load without issue its been on this one thing a month, its too long
+  for too little, especially with others progressing.
+  so instead for az-lightest etc. lists I"ll just make it like numerical lists
+  and use gaps, with that won't need last viewed struct value, and can just copy the setup for kanto
+  to all the lists, just changing the list namme
+
+  did that, but list still opens from 0, each time instead of storing place like other lists,
+  if I'm going to do it this way, need it to keep its place and open from where was last left.
+  
+
   add wrap around to dex pages,  i.e press up at top to go to bottom,
   can pull functionality from start menu page as it already has that
   i.e press start,then press up on pokedex and it'll take you to bottom at Exit
+
+  note, make activation message for poison barb, akin to cute charm
 
   //Important BIND still has freezing issue? happened when it locked into status move
 

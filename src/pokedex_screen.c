@@ -25,6 +25,9 @@
 
 #define DEX_MAX_SHOWN sListMenuTemplate_OrderedListMenu.maxShowed//9  //plan use for amount of mon to initially load, for speed sake, then expand on as scroll
 
+#define DEX_LOWER_FILL 30
+#define DEX_UPPER_FILL 30 //same value but need diff constant
+
 #define SCROLL_UP 1
 #define SCROLL_DOWN 0
 #define EXIT_DEX_ENTRY 2
@@ -73,6 +76,7 @@ struct PokedexScreenData
     struct ListMenuItem * listItems; //reverted for space saving, think otherwise its same affect, didn't affect load time, saves bout 10Kb of rom space
    // struct ListMenuItem listItems[NATIONAL_DEX_COUNT + 1]; //making this lets me skip alloc in load resources, costs good deal of space, but hopefully will svae me elsewher
     u16 orderedDexCount;
+    //u16 CurrentIndexValue; //added for categorica lists, to store array value that alligns w current index, takes i + 1 for this, so next trigger will be in allignment
     u8 windowIds[0x10];
     u16 dexSpecies;
     u16 * bgBufsMem;
@@ -149,6 +153,8 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 //new stuff
 static s32 DexScreen_ProcessInput(u8 listTaskId); //replace list menu input so can adjust separately
 static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex);//load list indexs on scroll after first open
+//added scroll increment to attempt help keep placement
+static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex); //moved new list creation logic here, still to be called from DexScreen_CountMonsInOrderedList
 
 #include "data/pokemon_graphics/footprint_table.h"
 
@@ -940,6 +946,7 @@ void CB2_PokedexScreen(void)
     }
 }
 
+//looks to be a good plae to put, last view index
 void DexScreen_LoadResources(void) //look into equiv emerald function, may be what I need
 {
     bool8 natDex;
@@ -1048,12 +1055,15 @@ void CB2_ClosePokedex(void)
     }
 }
 
+//could also put it here, so isnt triged excesively
+//looked further and its perfect, this called in creation and in case for closing dex list, so only need to add it here to both set and clear
 static void Task_PokedexScreen(u8 taskId) //appears be top menu
 {
     int i;
     switch (sPokedexScreenData->state)
     {
     case 0:
+        //sPokedexScreenData->CurrentIndexValue = 0; //think should work here
         sPokedexScreenData->unlockedCategories = 0;
         for (i = 0; i < 9; i++)
             sPokedexScreenData->unlockedCategories |= (DexScreen_IsCategoryUnlocked(i) << i);
@@ -1525,16 +1535,7 @@ static void DexScreen_CreateCharacteristicListMenu(void) //vsonic like numericla
 //think equivalent to CreatePokedexList in EE
 static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
 {
-    u32 entryPos;
-    u16 ndex_num;
-    u16 ret = NATIONAL_DEX_NONE;
-    u32 i,j, d;
-    bool8 caught;  //true false
-    bool8 seen;
-    u16 NumSeen = IsNationalPokedexEnabled() ? sPokedexScreenData->numSeenNational : sPokedexScreenData->numSeenKanto;
-    u16 NumCaught = IsNationalPokedexEnabled() ? sPokedexScreenData->numOwnedNational : sPokedexScreenData->numOwnedKanto;
-    //actually nvm on this, with how load works, only displays as move between "pages"on scroll so I still need to load dashes
-    //for a page that...wait no I'm not scrolling this is explicitly for when I DON'T have enough mon to need scrolling. 
+    
     int selectedIndex;
     u16 *itemsAbove_p, *cursorPos_p;
 
@@ -1560,331 +1561,13 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
     }
     
     selectedIndex = *cursorPos_p + *itemsAbove_p;
-    //entryPos = selectedIndex - 5;
-    entryPos = selectedIndex;
 
-    switch (orderIdx)//for some reason when open another list, and come back, it breaks this list...fucking hell just fucking work
-    {
-    default:
-    case DEX_ORDER_NUMERICAL_KANTO:
-        for (i = 0; i <= KANTO_DEX_COUNT; i++)
-        {
-            ndex_num = i + 1;
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+    return DexScreen_CreateList_ReturnCount(orderIdx,selectedIndex); //should hopefully work the same, just look better - works
 
-            
+    //can put everythin gbelow this in a funtion, use like process input, to assign ret, have it do funtion logic and do return value u16 ret
+    //need take argument orderIdx, and selectedIndex, put most arguments inside function, leave only ret selectedIndex & itemsabove and cursorPos in this function
 
-                if (entryPos <= DEX_MAX_SHOWN && i == entryPos)
-                {
-                    for (j = 0; j <= DEX_MAX_SHOWN; j++,i++)
-                    {
-                                if (seen)
-                                {
-                                    sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)]; //in lower range print first 10
-                                    
-                                }
-                                else
-                                {
-                                    sPokedexScreenData->listItems[j].label = gText_5Dashes;
-                                }
-                                sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
-                                ret++;
-
-                    }
-                }
-
-                else if (entryPos > DEX_MAX_SHOWN && i == entryPos) //loop 10, over i -5 label & index
-                {
-                    for (j = i - 5; j <= entryPos + 5; j++)
-                    {
-                                if (seen)
-                                {
-                                    sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)];//other print 10 from i minus 5                                    
-                                }
-                                else
-                                {
-                                    sPokedexScreenData->listItems[j].label = gText_5Dashes;
-                                }
-                                sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
-                                ret++;
-
-                            if (j > entryPos)
-                                i++;
-
-                    }
-
-                    for (d = 0; d <= DEX_MAX_SHOWN; d++) //intent to populate lowest range, to prevent scroll issue
-                    {
-                                if (seen)
-                                {
-                                    sPokedexScreenData->listItems[d].label = gSpeciesNames[NationalPokedexNumToSpecies(d + 1)]; //in lower range print first 10
-                                    
-                                }
-                                else
-                                {
-                                    sPokedexScreenData->listItems[d].label = gText_5Dashes;
-                                }
-                                sPokedexScreenData->listItems[d].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(d + 1);
-
-                    }
-                    
-                } 
-                else
-                {
-                    sPokedexScreenData->listItems[i].label = gText_5Dashes;
-                    sPokedexScreenData->listItems[i].index = 0;
-                
-                }
-                
-                ret = i;
-                    
-                    
-                
-            
-             //doesn't work dumb dyumb stupid head stupid  ungodly slow, slower than ever
-            /*//else
-            //{
-                sPokedexScreenData->listItems[i].label = gText_5Dashes;
-                sPokedexScreenData->listItems[i].index = 0;
-                ret++;
-           // }*/
-        }
-        break;
-    case DEX_ORDER_ATOZ: //look into making this load in sections?, think issue is would need to continuously retrigger this function?, not az but all national lists
-        for (i = 0; i < NELEMS(gPokedexOrder_Alphabetical); i++) //this was issue with limit, it used chimecho for some dumb reason, rather than species or something smh
-        {
-
-            ndex_num = gPokedexOrder_Alphabetical[i]; //don't know why, didn't just use nelms array to begin with rather than species, idk maybe expose errors if any
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-            //if (ndex_num <= max_n) //sListMenuTemplate_OrderedListMenu.maxShowed
-            if (NumSeen < DEX_MAX_SHOWN)
-            {
-                if (i < NumSeen) //this works for making an initial load, that theoretically can update w scroll function, without breaking original order
-                {
-                    
-                    if (seen)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                        ret++; //need ,//listItems already set to nat count, but not filled in until here, ret is each individual value
-
-                    }
-                }
-            }
-            else
-            {
-            
-                if (i < DEX_MAX_SHOWN) //this works for making an initial load, that theoretically can update w scroll function, without breaking original order
-                {
-                    
-                    if (seen)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                        ret++; //need ,//listItems already set to nat count, but not filled in until here, ret is each individual value
-
-                    }
-                }//since these are based on seen/caught do extra check for early game, change initial load to num seen/caught if lower than maxshown
-                else
-                {
-                    if (seen)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gText_5Dashes;
-                        sPokedexScreenData->listItems[ret].index = 0;
-                        ret++;
-                    }
-                }
-            }
-        }//only kanto and national dex list should fill empty space with dashes, rest are supposed to ONLY show number you've seen or caught based on their condition
-        break;
-    case DEX_ORDER_TYPE: //can't build automatically would need to loop entire species list MANY times, so would take forever
-     //now that I'm saving time I MAY be able to build with a function
-        for (i = 0; i < NELEMS(gPokedexOrder_Type); i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
-        {
-            ndex_num = gPokedexOrder_Type[i];
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-
-            if (NumCaught < DEX_MAX_SHOWN)
-            {
-
-                if (i < NumCaught)
-                {
-                    
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                        ret++;
-                    }
-                }
-            }
-            else
-            {
-                if (i < DEX_MAX_SHOWN)
-                {
-                    
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                        ret++;
-                    }
-                }
-                else
-                {
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gText_5Dashes;
-                        sPokedexScreenData->listItems[ret].index = 0;
-                        ret++;
-                    }
-                }
-            }
-        }
-        break; //order by type and weight, just wouldn't work with my changes/species expansion would require, going through and creating list by hand
-    case DEX_ORDER_LIGHTEST:
-        for (i = 0; i < NELEMS(gPokedexOrder_Weight); i++) //for (i = 0; i < NATIONAL_DEX_COUNT; i++) same reason as above //all below share same original value
-        {
-            ndex_num = gPokedexOrder_Weight[i]; //this is apparently missing one value compared to other lists?
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-
-            if (NumCaught < DEX_MAX_SHOWN)
-            {
-
-                if (i < NumCaught)
-                {
-                    
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                        ret++;
-                    }
-                }
-            }
-            else
-            {
-                if (i < DEX_MAX_SHOWN)
-                {
-                    
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                        ret++;
-                    }
-                }
-                else
-                {
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gText_5Dashes;
-                        sPokedexScreenData->listItems[ret].index = 0;
-                        ret++;
-                    }
-                }
-            }
-        }
-        break;
-    case DEX_ORDER_SMALLEST:
-        for (i = 0; i < NELEMS(gPokedexOrder_Height); i++)
-        {
-            ndex_num = gPokedexOrder_Height[i];
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-
-            if (NumCaught < DEX_MAX_SHOWN)
-            {
-
-                if (i < NumCaught)
-                {
-                    
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                        ret++;
-                    }
-                }
-            }
-            else
-            {
-                if (i < DEX_MAX_SHOWN)
-                {
-                    
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                        sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                        ret++;
-                    }
-                }
-                else
-                {
-                    if (caught)
-                    {
-                        sPokedexScreenData->listItems[ret].label = gText_5Dashes;
-                        sPokedexScreenData->listItems[ret].index = 0;
-                        ret++;
-                    }
-                }
-            }//think similar to how emerald works, full list is built, but not populated, just need to update and clear as I scroll, so, think make function similar
-            //but that doesn't return and then put in dexlist scroll that I made?
-        } //need dexlist count to be where I start, and think will need make +- 5 for when I re-enter the dex list, since I won't be at the spot.
-        //so initial load for starting from 0 point, then in another function, for when I reenter load plus minus from your position, think store value last species 
-        //but for scroll down set i, to DEX_MAX_SHOWN + 1, then increment add fill in the listItems
-        //make new function take orderidx & direction, up down and 0, for neutral/left/right
-        //put conditionals for dpad so dont need to put logic within function itself
-        //place final function in DexScreen_ProcessInput, think also add "count" argument, so can match scroll function
-        //can easily see how much its increaseing
-        //think logic will be for (i = DEX_MAX_SHOWN; i < DEX_MAX_SHOWN + count; i++) for increasing listItems 
-        //where i sits in for ret above, well honestly its better to not use count, so there isn't errors
-        //as increases of 1, are only for directions up and down, value 0 should use maxshown
-        break;//just need to find "selectedMon", the palce stores last mon/list place I viewed to return to when I reopen the dex list
-    case DEX_ORDER_NUMERICAL_NATIONAL:
-        for (i = 0; i < SPECIES_CALYREX; i++) //ok this changes load times, and num entries on list,
-        {
-            ndex_num = i + 1; //pok so replacing index num w a constant also greatly changed load time, but replaced w all one mon, so not a solution
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-
-            if (i < DEX_MAX_SHOWN)
-            {
-                 //but that does confirm that this function populates the list, not just "count" it
-                if (seen)
-                {
-                    sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)]; //changig here affects only the names shown
-                     //even if changing this number, which affects number loaded, load time still un changed, potential number of loops go through is easy?
-                }   //changging ^ only affected num mon in list, not how long it toook to load
-                else
-                {
-                    sPokedexScreenData->listItems[i].label = gText_5Dashes;
-                }
-                sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
-                ret++;
-            }
-            else
-            {
-                sPokedexScreenData->listItems[i].label = gText_5Dashes;
-                sPokedexScreenData->listItems[i].index = 0;
-                ret++;
-            }
-
-        } //hmm ok so removing above line, GREATLY changed load time, but mon order doesn't display right? need to look into this, but also most of page doesn't load so...
-        break; //changing  index affects, species number displayed and mon type displayed, not the nmae
-    }
-
-    /*for (i = 7; i < NATIONAL_DEX_COUNT; i++)
-    {
-        sPokedexScreenData->listItems[i].label = gText_5Dashes;
-        sPokedexScreenData->listItems[i].index = 0;
-    }*/
-
-    return ret;
+    
 }
 
 //vsonic IMPORTANT
@@ -2470,8 +2153,8 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important t
             return FALSE; //ok that's all handled in list menu file, done in ListMenu_ProcessInput function
 
 
-        if (selectedIndex >= 10)
-            DexScreen_LoadIndex(DEX_MAX_SHOWN, SCROLL_UP, selectedIndex); //works
+        //if (selectedIndex >= 10)
+            DexScreen_LoadIndex(250, SCROLL_UP, selectedIndex); //works
         //selectedIndex--;
         while (--selectedIndex >= 0) //Should be while (--selectedIndex >= 0) without the selectedIndex-- in the body or before the while at all, but this is needed to match.
         {
@@ -2494,7 +2177,8 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important t
         {
             return FALSE;
         }
-        DexScreen_LoadIndex(DEX_MAX_SHOWN, SCROLL_DOWN, selectedIndex);
+        DexScreen_LoadIndex(250, SCROLL_DOWN, selectedIndex);//discovered issue when scroll on entry need value large enough to cover blank entries or wont' scroll
+        //ok bounds hold, seems works without issue, huh even with the far larger value, it doesn't add to load time, nice :D
 
         //selectedIndex++;
         while (++selectedIndex < sPokedexScreenData->orderedDexCount) //Should be while (++selectedIndex < sPokedexScreenData->orderedDexCount) without the selectedIndex++ in the body or before the while at all, but this is needed to match.
@@ -2550,9 +2234,7 @@ static s32 DexScreen_ProcessInput(u8 listTaskId)//replace listmenu process input
     
     struct ListMenu *list = (struct ListMenu *)gTasks[listTaskId].data;
     struct ListMenuTemplate template;
-    s32 i;
-    bool8 caught;
-    bool8 seen;
+
     u32 selectedIndex = list->cursorPos + list->itemsAbove;
     //u16 ndex_num = selectedIndex + DEX_MAX_SHOWN;
 
@@ -2566,9 +2248,10 @@ static s32 DexScreen_ProcessInput(u8 listTaskId)//replace listmenu process input
     }
     else if (gMain.newAndRepeatedKeys & DPAD_UP)
     {
-        if (selectedIndex >= list->template.maxShowed)//fix works betternow
-            DexScreen_LoadIndex(list->template.maxShowed, SCROLL_UP, selectedIndex);
-        ListMenuChangeSelection(list, TRUE, 1, FALSE); //count here seems to be how much to move by
+        //if (selectedIndex >= list->template.maxShowed)//fix works betternow
+        //changed load function can do without this now
+            DexScreen_LoadIndex(list->template.maxShowed, SCROLL_UP, selectedIndex);//building w scroll, not building based on index pos when press b, from info page
+        ListMenuChangeSelection(list, TRUE, 1, FALSE); //count here seems to be how much to move by   
         return LIST_NOTHING_CHOSEN;
     }
     else if (gMain.newAndRepeatedKeys & DPAD_DOWN)
@@ -2601,8 +2284,8 @@ static s32 DexScreen_ProcessInput(u8 listTaskId)//replace listmenu process input
         if (leftButton) //think take page from this setup  else if (JOY_NEW(DPAD_UP) && DexScreen_TryScrollMonsVertical(1))
         {
             
-            if (selectedIndex >= 13)//this doesn't work
-            DexScreen_LoadIndex(13, SCROLL_UP, selectedIndex);
+            //if (selectedIndex >= 13)
+                DexScreen_LoadIndex(13, SCROLL_UP, selectedIndex);
             ListMenuChangeSelection(list, TRUE, list->template.maxShowed, FALSE); //think count ishow much to move by, since this is 9 other is 1
             return LIST_NOTHING_CHOSEN;
         }
@@ -2760,9 +2443,9 @@ s8 DexScreen_GetSetPokedexFlag(u16 nationalDexNo, u8 caseId, bool8 indexIsSpecie
         gSaveBlock2Ptr->pokedex.owned[index] |= mask;
         break;
     }
-    //return retVal;
-    return 1;   //dex test value  //other in event_data.c IsNationalPokedexEnabled function
-}
+    return retVal;
+    //return 1;   //dex test value  //other in event_data.c IsNationalPokedexEnabled function
+} //for some reason navigation only works with my dex test breaks, without them everything gets fucked so EVEN MORE FUCKING WORK
 
 static u16 DexScreen_GetDexCount(u8 caseId, bool8 whichDex)
 {
@@ -4091,13 +3774,23 @@ static void ClearMonListEntry(u8 x, u8 y)
     FillWindowPixelRect(0, PIXEL_FILL(0), x * 8, y * 8, 0x60, 16);
 }*/
 
-static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex)
+//building w scroll, not building based on index pos when press b, from info page
+//idk what the fuck is wrong but its broken AGAIN somehow, duplicate values on scrolll, not displaying entire list,
+//kanto dex is showing 150 values not 151, but if I close and reopen when at end of index it displays correctly so somehting happens
+//but ONLY when I effing scroll effing wonderful
+//...got it working instantly after gonna pass out now
+//issue was just it not properly lining up with other function that created list. smh
+//needed + 1 because the natdex stuff subtracts 1, from value
+static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex)//still has issue, repeats values rather than show next entry num,
 {
-    u32 i;
+    s32 i,j,d;
     bool8 caught;
     bool8 seen;
     struct ListMenu *list = (struct ListMenu *)gTasks[sPokedexScreenData->orderedListMenuTaskId].data; //hopefully works , it does
-    u16 ndex_num = selectedIndex;
+    s16 ndex_num = selectedIndex;
+    u16 Id_limit = IsNationalPokedexEnabled() ? NATIONAL_DEX_COUNT : KANTO_DEX_COUNT;  //for category dex, to limit displayed to kanto dex
+    //simple to do but idealy I'd just start with nat dex enabled, so think will leave for now
+
 
     switch (sPokedexScreenData->dexOrderId)
     {
@@ -4105,64 +3798,241 @@ static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex)
     case DEX_ORDER_NUMERICAL_KANTO:
         if (direction == SCROLL_DOWN)
         {
-            for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
+            for (i = 0; i <= count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
-                seen = DexScreen_GetSetPokedexFlag(ndex_num + i, FLAG_GET_SEEN, FALSE);
-                caught = DexScreen_GetSetPokedexFlag(ndex_num + i, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
-                if (seen) //instead just use + 1 or + i
+                seen = DexScreen_GetSetPokedexFlag(ndex_num + i + 1, FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(ndex_num + i + 1, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                
+                if (seen) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
                 {
-                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num + i + 1)];
-                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num + i + 1);
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num + i + 1)]; //in lower range print first 10
+                    
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gText_5Dashes; //ok the + 1 WAS right, issue was the other part was wrong first, facepalm
                 }
+                sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num + i + 1);
+
+                if (ndex_num + i == sPokedexScreenData->orderedDexCount) //to stop the function effect so I don't increment passed what I need to
+                    break; //needed to prevent graphic glitch from going too high
             }
         }
         else if (direction == SCROLL_UP)
         {
-            for (i = 0; i <= count; i++) //can have this be taken by count argument, so its same code for increasing once
+            
+
+            for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
-                seen = DexScreen_GetSetPokedexFlag(ndex_num - i, FLAG_GET_SEEN, FALSE);
-                caught = DexScreen_GetSetPokedexFlag(ndex_num - i, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
-                if (seen) //instead just use + 1 or + i
+                if (ndex_num - i < 0) //to stop the function effect so I don't increment passed what I need to
+                    break; //changed worked for preventing breaks, can now remove limiter on function, should hopefullyu fix az
+                    //with signed changed, changed from <= to just < think is more correct
+
+                seen = DexScreen_GetSetPokedexFlag(ndex_num - i + 1, FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(ndex_num - i + 1, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                
+                if (seen) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
                 {
-                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num - i + 1)];
-                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num - i + 1);
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num - i + 1)]; //in lower range print first 10
+                    
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gText_5Dashes;
                 }
+                sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num - i + 1);
             }
         }
         break;
     case DEX_ORDER_ATOZ: //look into making this load in sections?, think issue is would need to continuously retrigger this function?, not az but all national lists
        
+        //new give up attempt set like kanto dex w blanks
         if (direction == SCROLL_DOWN)
         {
-            for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
+            for (i = 0; i <= count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
                 seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[ndex_num + i], FLAG_GET_SEEN, FALSE);
                 caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[ndex_num + i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
-                if (seen) //instead just use + 1 or + i
+                
+                if (seen) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
                 {
-                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[ndex_num + i + 1])];
-                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[ndex_num + i + 1]);
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[ndex_num + i])]; //in lower range print first 10
+                    
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gText_5Dashes; //ok the + 1 WAS right, issue was the other part was wrong first, facepalm
                 }
+                sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[ndex_num + i]);
+                //found issue, though filled w dashes is still loading index of mon seen but not caught, which causes issues on scroll through entries when they pop up
+
+                if (ndex_num + i == sPokedexScreenData->orderedDexCount) //to stop the function effect so I don't increment passed what I need to
+                    break; //needed to prevent graphic glitch from going too high
             }
         }
         else if (direction == SCROLL_UP)
         {
+            
+
             for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
+                if (ndex_num - i < 0) //to stop the function effect so I don't increment passed what I need to
+                    break; //changed worked for preventing breaks, can now remove limiter on function, should hopefullyu fix az
+
                 seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[ndex_num - i], FLAG_GET_SEEN, FALSE);
                 caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[ndex_num - i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
-                if (seen) //instead just use + 1 or + i
+                
+                if (seen) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
                 {
-                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[ndex_num - i + 1])];
-                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[ndex_num - i + 1]);
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[ndex_num - i])]; //in lower range print first 10
+                    
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gText_5Dashes;
                 }
+                sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[ndex_num - i]);
             }
         }
+        /*//old setup
+        if (direction == SCROLL_DOWN) //alsmost works for some reason still breaks when press up at 0, or down at dex count
+        {
+            for (i = 0, j = sPokedexScreenData->CurrentIndexValue; i <= count && j <= NELEMS(gPokedexOrder_Alphabetical); j++) //can have this be taken by count argument, so its same code for increasing once
+            {
+
+                seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                if (seen) //instead just use + 1 or + i
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j])];
+                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j]);
+
+                    
+                    if (i == scroll_inrement) //replace 1 w scroll increent
+                        sPokedexScreenData->CurrentIndexValue = j;
+
+                    if (ndex_num + i == sPokedexScreenData->orderedDexCount) //to stop the function effect so I don't increment passed what I need to
+                    {
+                        sPokedexScreenData->CurrentIndexValue = j;
+                        break; //needed to prevent graphic glitch from going too high
+                    }
+                    
+                    i++;
+                }
+            }//idk why but this works correctly if I move left and right, but NOT if I scroll up and down even though they are meant to work the same i don't get it
+        }
+        else if (direction == SCROLL_UP) //alsmost works for some reason still breaks when press up at 0, or down at dex count
+        {
+            for (i = 1, j = sPokedexScreenData->CurrentIndexValue; i <= count && j >= 0; j--) //can have this be taken by count argument, so its same code for increasing once
+            {
+
+                //if (ndex_num - i < 0) //to stop the function effect so I don't increment passed what I need to
+                //    break;//had to change to explicitly less than but NOW works? seems works KILL ME NOW IT DOESN'T WOKR
+                    //for no good reason it causes a break when I try to select an index, but navigation looks right otherwise, only happens when scroll up
+                    //changing the type seems to fix this, but there are still other issues
+                    //ok found issue, its 2 part. sigh
+                    //ONE, it breaks when I move left/right because its not moving by 1 value its moving 9 spaces, so its tracking the wrong j value
+                    //SECOND, this may be wrong but I think the other issue is just I need to fix the createlist setup for when I come back from dex entry as its off
+
+                seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                if (seen) //instead just use + 1 or + i
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j])];
+                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j]);
+
+                    
+                    if (i == scroll_inrement)
+                        sPokedexScreenData->CurrentIndexValue = j;
+
+                    if (ndex_num - i == 0) //to stop the function effect so I don't increment passed what I need to
+                    {
+                        sPokedexScreenData->CurrentIndexValue = j; //but putting this here would keep j in sync
+                        break; //think putting here should be equivalent
+                    }
+                        
+                    i++;
+                    
+                    
+                }
+            }//idk why but this works correctly if I move left and right, but NOT if I scroll up and down even though they are meant to work the same i don't get it
+        }*///ok its doing something wrong, because of how it loads based on the index the function is called on, if its 0, and the function triggers once it works correct
+        //which is why flipping left right works, it only triggers one time, on index 0,
+        //for the numerical lists which don't skip spaces index directly translates to the i value/list value
+        //but index 2 does not translate to value 2 in the list here, so index can't be used reliably for this?
+        //attempting to just use variable alone,
+        //think issue revovles around count, since doesn't have blanks, incrementing way it does, based on index without considering the limit of the list
+        //the space just gets overwritten since I can only move so many spaces, which is why the list repeats.
+        //so think need to somehow releate count with sPokedexScreenData->orderedDexCount
+
+        //idea add field for lastmon same as emerald and use it to store the last value of the array assigned to an index
+        //in this case it would store j, then I would increment j as I scroll down,and decrement j as I scroll up...
+        //or would that now work because I have multiple lists? how does it normally store position between lists
+        //actually it wouldn't work because/ ok so it would be just for a llist and reset to 0 when I leave the list
+        //it should just be when I'm scrolling on it
+        //...but then  I couldn't loop through count as I'd already be on the last value..sigh
+
+        //-figured it out, would need to use a different method for the non numerical ones,
+        //use last viewed value like thought before, but then instead of using count
+        //that would subtract the index and count up, I would instead need
+        //split the count between two actions, for the building function I would neeed to
+        //take the index and decrement 5 times, take the last viewed value and also decrement that at the same time if seen
+        //then increment the index and increment 5 times, pass last viewed value to a different value and increment that
+        //but last viewed value would still not change that should only be changed in this function as I scroll.
         break;
     case DEX_ORDER_TYPE: //can't build automatically would need to loop entire species list MANY times, so would take forever
         //now that I'm saving time I MAY be able to build with a function
-        
         if (direction == SCROLL_DOWN)
+        {
+            for (i = 0; i <= count; i++) //can have this be taken by count argument, so its same code for increasing once
+            {
+                seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[ndex_num + i], FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[ndex_num + i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                
+                if (caught) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Type[ndex_num + i])]; //in lower range print first 10
+                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Type[ndex_num + i]);
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gText_5Dashes; //ok the + 1 WAS right, issue was the other part was wrong first, facepalm
+                    sPokedexScreenData->listItems[ndex_num + i].index = /*(caught << 17) + (seen << 16) +*/ NationalPokedexNumToSpecies(gPokedexOrder_Type[ndex_num + i]);
+                } //for caught only this works for fixing the load issue, when scrolling
+                //sPokedexScreenData->listItems[ndex_num + i].index = /*(caught << 17) + (seen << 16) +*/ NationalPokedexNumToSpecies(gPokedexOrder_Type[ndex_num + i]);
+
+                if (ndex_num + i == sPokedexScreenData->orderedDexCount) //to stop the function effect so I don't increment passed what I need to
+                    break; //needed to prevent graphic glitch from going too high
+            }
+        }
+        else if (direction == SCROLL_UP)
+        {
+            
+
+            for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
+            {
+                if (ndex_num - i < 0) //to stop the function effect so I don't increment passed what I need to
+                    break; //changed worked for preventing breaks, can now remove limiter on function, should hopefullyu fix az
+
+                seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[ndex_num - i], FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[ndex_num - i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                
+                if (caught) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Type[ndex_num - i])]; //in lower range print first 10
+                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Type[ndex_num - i]);
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gText_5Dashes; //ok the + 1 WAS right, issue was the other part was wrong first, facepalm
+                    sPokedexScreenData->listItems[ndex_num - i].index = /*(caught << 17) + (seen << 16) +*/ NationalPokedexNumToSpecies(gPokedexOrder_Type[ndex_num - i]);
+                } //for caught only this works for fixing the load issue, when scrolling
+            }
+        }
+        
+        
+        //old setup need make like above, but for caught
+        /*if (direction == SCROLL_DOWN)
         {
             for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
@@ -4187,11 +4057,58 @@ static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex)
                     sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + gPokedexOrder_Type[ndex_num - i];
                 }
             }
-        }//list didn't use natdex values it used species, so guess diodn't need + 1 becuase of that -seems fixed
+        }*///list didn't use natdex values it used species, so guess diodn't need + 1 becuase of that -seems fixed
         break; //order by type and weight, just wouldn't work with my changes/species expansion would require, going through and creating list by hand
     case DEX_ORDER_LIGHTEST:
-        
+
         if (direction == SCROLL_DOWN)
+        {
+            for (i = 0; i <= count; i++) //can have this be taken by count argument, so its same code for increasing once
+            {
+                seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[ndex_num + i], FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[ndex_num + i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                
+                if (caught) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num + i])]; //in lower range print first 10
+                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num + i]);
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gText_5Dashes; //ok the + 1 WAS right, issue was the other part was wrong first, facepalm
+                    sPokedexScreenData->listItems[ndex_num + i].index = /*(caught << 17) + (seen << 16) +*/ NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num + i]);
+                } //for caught only this works for fixing the load issue, when scrolling
+
+                if (ndex_num + i == sPokedexScreenData->orderedDexCount) //to stop the function effect so I don't increment passed what I need to
+                    break; //needed to prevent graphic glitch from going too high
+            }
+        }
+        else if (direction == SCROLL_UP)
+        {
+            
+
+            for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
+            {
+                if (ndex_num - i < 0) //to stop the function effect so I don't increment passed what I need to
+                    break; //changed worked for preventing breaks, can now remove limiter on function, should hopefullyu fix az
+
+                seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[ndex_num - i], FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[ndex_num - i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                
+                if (caught) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num - i])]; //in lower range print first 10
+                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num - i]);
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gText_5Dashes; //ok the + 1 WAS right, issue was the other part was wrong first, facepalm
+                    sPokedexScreenData->listItems[ndex_num - i].index = /*(caught << 17) + (seen << 16) +*/ NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num - i]);
+                } //for caught only this works for fixing the load issue, when scrolling
+            }
+        }
+        
+        /*if (direction == SCROLL_DOWN)
         {
             for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
@@ -4199,8 +4116,8 @@ static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex)
                 caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[ndex_num + i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
                 if (caught) //instead just use + 1 or + i
                 {
-                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num + i + 1])];
-                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num + i + 1]);
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num + i])];
+                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num + i]);
                 }
             }
         }
@@ -4212,15 +4129,63 @@ static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex)
                 caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[ndex_num - i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
                 if (caught) //instead just use + 1 or + i
                 {
-                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num - i + 1])];
-                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num - i + 1]);
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num - i])];
+                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[ndex_num - i]);
                 }
             }
-        }
+        }*/
         break;
     case DEX_ORDER_SMALLEST:
-        
+
         if (direction == SCROLL_DOWN)
+        {
+            for (i = 0; i <= count; i++) //can have this be taken by count argument, so its same code for increasing once
+            {
+                seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[ndex_num + i], FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[ndex_num + i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                
+                if (caught) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num + i])]; //in lower range print first 10
+                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num + i]);
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gText_5Dashes; //ok the + 1 WAS right, issue was the other part was wrong first, facepalm
+                    sPokedexScreenData->listItems[ndex_num + i].index = /*(caught << 17) + (seen << 16) +*/ NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num + i]);
+                } //for caught only this works for fixing the load issue, when scrolling
+
+                if (ndex_num + i == sPokedexScreenData->orderedDexCount) //to stop the function effect so I don't increment passed what I need to
+                    break; //needed to prevent graphic glitch from going too high
+            }
+        }
+        else if (direction == SCROLL_UP)
+        {
+            
+
+            for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
+            {
+                if (ndex_num - i < 0) //to stop the function effect so I don't increment passed what I need to
+                    break; //changed worked for preventing breaks, can now remove limiter on function, should hopefullyu fix az
+
+                seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[ndex_num - i], FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[ndex_num - i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+                
+                
+                if (caught) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num - i])]; //in lower range print first 10
+                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num - i]);
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gText_5Dashes; //ok the + 1 WAS right, issue was the other part was wrong first, facepalm
+                    sPokedexScreenData->listItems[ndex_num - i].index = /*(caught << 17) + (seen << 16) +*/ NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num - i]);
+                } //for caught only this works for fixing the load issue, when scrolling
+            }
+        }
+        
+        /*if (direction == SCROLL_DOWN)
         {
             for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
@@ -4228,8 +4193,8 @@ static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex)
                 caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[ndex_num + i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
                 if (caught) //instead just use + 1 or + i
                 {
-                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num + i + 1])];
-                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num + i + 1]);
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num + i])];
+                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num + i]);
                 }
             }
         }
@@ -4241,39 +4206,837 @@ static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex)
                 caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[ndex_num - i], FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
                 if (caught) //instead just use + 1 or + i
                 {
-                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num - i + 1])];
-                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num - i + 1]);
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num - i])];
+                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[ndex_num - i]);
                 }
             }
-        }
-        break;//just need to find "selectedMon", the palce stores last mon/list place I viewed to return to when I reopen the dex list
+        }*/
+        break;
     case DEX_ORDER_NUMERICAL_NATIONAL:
         if (direction == SCROLL_DOWN)
         {
-            for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
+            for (i = 0; i <= count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
-                seen = DexScreen_GetSetPokedexFlag(ndex_num + i, FLAG_GET_SEEN, FALSE);
-                caught = DexScreen_GetSetPokedexFlag(ndex_num + i, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
-                if (seen) //instead just use + 1 or + i
+                seen = DexScreen_GetSetPokedexFlag(ndex_num + i + 1, FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(ndex_num + i + 1, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+
+                if (seen) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
                 {
-                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num + i + 1)];
-                    sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num + i + 1);
+                    sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num + i + 1)]; //in lower range print first 10
+                    
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num + i].label = gText_5Dashes;
                 }
+                sPokedexScreenData->listItems[ndex_num + i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num + i + 1);
+
+                if (ndex_num + i == sPokedexScreenData->orderedDexCount) //to stop the function effect so I don't increment passed what I need to
+                    break; //needed to prevent graphic glitch from going too high
             }
         }
         else if (direction == SCROLL_UP)
         {
             for (i = 0; i < count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
-                seen = DexScreen_GetSetPokedexFlag(ndex_num - i, FLAG_GET_SEEN, FALSE);
-                caught = DexScreen_GetSetPokedexFlag(ndex_num - i, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
-                if (seen) //instead just use + 1 or + i
+
+                if (ndex_num - i < 0) //to stop the function effect so I don't increment passed what I need to
+                    break;
+
+                seen = DexScreen_GetSetPokedexFlag(ndex_num - i + 1, FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(ndex_num - i + 1, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
+
+                if (seen) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
                 {
-                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num - i + 1)];
-                    sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num - i + 1);
+                    sPokedexScreenData->listItems[ndex_num - i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num - i + 1)]; //in lower range print first 10
+                    
+                }   
+                else
+                {
+                    sPokedexScreenData->listItems[ndex_num - i].label = gText_5Dashes;
+                }
+                sPokedexScreenData->listItems[ndex_num - i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num - i + 1);
+            }
+        }
+        break;
+    }
+}
+
+//this works loadindex doesn't? this builds full list, and rebuilds based on spot when presss B from info page/showmon page
+static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //replacement to simplify new DexScreen_CountMonsInOrderedList logic
+{
+    u32 entryPos;
+    u16 ndex_num;
+    u16 ret = NATIONAL_DEX_NONE;
+    s32 i,j, d;
+    bool8 caught;  //true false
+    bool8 seen;
+    u16 NumSeen = IsNationalPokedexEnabled() ? sPokedexScreenData->numSeenNational : sPokedexScreenData->numSeenKanto;
+    u16 NumCaught = IsNationalPokedexEnabled() ? sPokedexScreenData->numOwnedNational : sPokedexScreenData->numOwnedKanto;
+    u16 Id_limit = IsNationalPokedexEnabled() ? NATIONAL_DEX_COUNT : KANTO_DEX_COUNT;  //for category dex, to limit displayed to kanto dex
+    //leaving unset for now`, for plans to setup nat dex from start
+
+    entryPos = selectedIndex;
+    j = 0; //remove later
+
+    //for non numericals, use num seen and num caught, if 0, loop max shown and just make full blank page
+    //if greater than 0, less than or equal to max shown, display that number no blanks
+    switch (orderIdx)//for some reason when open another list, and come back, it breaks this list...fucking hell just fucking work, think I had fixed this
+    {
+    default:
+    case DEX_ORDER_NUMERICAL_KANTO:
+        
+        for (i = 0; i <= KANTO_DEX_COUNT; i++)
+        {
+          
+
+            if (entryPos <= DEX_MAX_SHOWN && i == entryPos) //there's a split between here and the else if, causes some issue
+            {
+                for (j = 0; j <= DEX_MAX_SHOWN; j++,i++) //was matter of using else if, instea of continuous if, would cause it to skip a cycle, so changed all to if and fixed that bit
+                {
+                    seen = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_SEEN, FALSE);//still reads value 1 higher than it should be when scrolling
+                    caught = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_CAUGHT, FALSE);//happens when scrolling through info pages too, so something wrong with loadindex function
+
+                            if (seen)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)]; //in lower range print first 10
+                                
+                            }   
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
+                            ret++;
+
                 }
             }
-        } //hmm ok so removing above line, GREATLY changed load time, but mon order doesn't display right? need to look into this, but also most of page doesn't load so...
+
+            if (entryPos > DEX_MAX_SHOWN && i == entryPos && entryPos < sPokedexScreenData->orderedDexCount - 4) //loop 10, over i -5 label & index
+            {
+                /*if (i - DEX_LOWER_FILL < 0) //remember had change variable to s rather than unsigned, to properly compare negative value
+                    j = 0; //better way to do this would be with a macro but...
+                else
+                    j = i - DEX_LOWER_FILL;
+
+                if (entryPos + DEX_UPPER_FILL > sPokedexScreenData->orderedDexCount) //ok think has to be macro, can't reassign define, check stat index check
+                    d = sPokedexScreenData->orderedDexCount;
+                else
+                    d = entryPos + DEX_UPPER_FILL;*/
+                //removing for now as could increase load times, and realized it was an issue of scrolling not initial load
+                //and increasing scrolling range can be done easier, and is less intensive as wouldn't require loading both directions at once,
+                //and it already has built in bounds
+
+                for (j = i - DEX_MAX_SHOWN; j <= entryPos + DEX_MAX_SHOWN; j++) //changed to better fill, because issue w az etc. changess
+                {
+                    seen = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_SEEN, FALSE); //attempt expand above, can't scroll if empty space between entries is bigger than first load
+                    caught = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_CAUGHT, FALSE);
+
+                            if (seen)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+                
+            } 
+            if (i == entryPos && entryPos >= sPokedexScreenData->orderedDexCount - 4)//for highest portion of list
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= sPokedexScreenData->orderedDexCount; j++) //works
+                {
+                    seen = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_CAUGHT, FALSE);
+
+                            if (seen)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+
+            }
+            else
+            {
+                sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                sPokedexScreenData->listItems[i].index = 0;
+                //sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(i + 1); //fixed
+                //ok didn't need that line, was just an issue with my scroll function now fixed
+            }
+            
+            ret = KANTO_DEX_COUNT;
+                    
+        }
+        break;
+    case DEX_ORDER_ATOZ: //look into making this load in sections?, think issue is would need to continuously retrigger this function?, not az but all national lists
+
+        //realized don't need this at all, for the non-numeric loops since they are not in sync, and don't have gaps, I can just use numseen & numcaught for them 
+        //rather than needing to loop and use i for the list size, since I'm using i, inside its useful to keep
+        for (i = 0; i <= NELEMS(gPokedexOrder_Alphabetical); i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
+        { 
+          
+            //new setup to make like kanto dex fill w blanks
+            if (entryPos <= DEX_MAX_SHOWN && i == entryPos) //there's a split between here and the else if, causes some issue
+            {
+                for (j = 0; j <= DEX_MAX_SHOWN; j++,i++) //was matter of using else if, instea of continuous if, would cause it to skip a cycle, so changed all to if and fixed that bit
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_SEEN, FALSE);//still reads value 1 higher than it should be when scrolling
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_CAUGHT, FALSE);//happens when scrolling through info pages too, so something wrong with loadindex function
+
+                            if (seen)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j])]; //in lower range print first 10
+                                
+                            }   
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j]);
+                            ret++;
+
+                }
+            }
+
+            if (entryPos > DEX_MAX_SHOWN && i == entryPos && entryPos < sPokedexScreenData->orderedDexCount - 4) //loop 10, over i -5 label & index
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= entryPos + DEX_MAX_SHOWN; j++) //changed to better fill, appears to work without issue
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_CAUGHT, FALSE);
+
+                            if (seen)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j])];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j]);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+                
+            } 
+            if (i == entryPos && entryPos >= sPokedexScreenData->orderedDexCount - 4)//for highest portion of list
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= sPokedexScreenData->orderedDexCount; j++) //works
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_CAUGHT, FALSE);
+
+                            if (seen)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j])];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j]);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+
+            }
+            else
+            {
+                sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                sPokedexScreenData->listItems[i].index = 0; //need this to keep load speed for some reason, populate index as I scroll should be fine
+                //sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[i]); //fixed
+            
+            }
+            
+            ret = i;
+                    
+        }
+            /*{ //old setup - couldn't give up
+            if (NumSeen <= DEX_MAX_SHOWN)
+            {
+                if (NumSeen == 0  && i <= DEX_MAX_SHOWN)
+                {
+                    sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                    sPokedexScreenData->listItems[i].index = 0;
+                    ret++;
+                    
+                }
+
+                else if (NumSeen > 0)
+                {
+                    if (j < NumSeen) //works surprisingly
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_CAUGHT, FALSE);
+
+                        if (seen)
+                        {
+                            sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[i])];
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[i]);
+                            ret++;
+                            j++;
+                        }
+                    }
+                }
+
+            } //this portion works, else does not work / ok seems to be all set now, great
+            else
+            { //change the
+
+                if (entryPos <= DEX_MAX_SHOWN && i == 0)// it starts to scroll at max shown - 4, so shold prob adjust that
+                {
+
+                    for (d = 0; d <= NumSeen; d++) //ok so somehow i wasn't 0? and needed to stipulate i == 0, for it to work...
+                        {
+                            sPokedexScreenData->listItems[d].label = gText_5Dashes;
+                            sPokedexScreenData->listItems[d].index = 0;
+                            //to quick fill with empty values, then fill only what I need to see
+                        } 
+                        
+                    for (j = 0; j <= NumSeen; i++) //don't need set i to 0 as is a first contact point for function/loop
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_CAUGHT, FALSE);
+
+                        
+
+                        //extra buffer for displaying surounding mon
+                        //...ok now for some reason page doesn't even load if I use only dexmaxshown and notthat + 5 wtf
+                        if (seen && j <= DEX_MAX_SHOWN + 5) //would be an issue but above condition will arleady cut it off, if numseenis lessthan this condition
+                        {
+                            sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[i])];
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[i]);
+                            j++;
+                            //ret++;
+                        } //alright this works, I need an asynchronyous increment
+
+                        
+                                
+
+                    }
+                }
+                //for these, need do away with i == entryPos argument as its an asynch loop, replace w i == currIndex
+                if (entryPos > DEX_MAX_SHOWN && entryPos < sPokedexScreenData->orderedDexCount - 4) //loop 10, over i -5 label & index
+                {
+                    for (d = 0; d <= NumSeen; d++)
+                    {
+                        sPokedexScreenData->listItems[d].label = gText_5Dashes;
+                        sPokedexScreenData->listItems[d].index = 0;
+                        //to quick fill with empty values, then fill only what I need to see
+                    } //also can prob remove d fills since I only needed them because I couldnt scroll correctly now I can
+                    //changed to better fill, appears to work without issue
+                    /*for (j = entryPos - DEX_MAX_SHOWN; j <= entryPos + DEX_MAX_SHOWN; i++)
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_CAUGHT, FALSE);
+
+                        if (seen)
+                        {
+                            sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[i])];
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[i]);
+                            j++;
+                            //ret++;
+                        }
+
+                    }
+                    //change above to 2 loops, j = entry pos; j == entrypos - 5; i--)  if seen j--
+                    //2nd loop same as above just inverted signs, and i = sPokedexScreenData->CurrentIndexValue can keep below the same
+                    for (j = entryPos, d = sPokedexScreenData->CurrentIndexValue; j > entryPos - DEX_MAX_SHOWN; d--)
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[d], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[d], FLAG_GET_CAUGHT, FALSE);
+
+                        if (seen)
+                        {
+                            sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[d])];
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[d]);
+                            j--;
+                            //ret++;
+                        }
+
+                    }
+
+                    for (j = entryPos, d = sPokedexScreenData->CurrentIndexValue; j < entryPos + DEX_MAX_SHOWN; d++)
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[d], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[d], FLAG_GET_CAUGHT, FALSE);
+
+                        if (seen)
+                        {
+                            sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[d])];
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[d]);
+                            j++;
+                            //ret++;
+                        }
+
+                    }
+
+                    /*for (d = 0, j = 0; d <= DEX_MAX_SHOWN; j++) //intent to populate lowest range, to prevent scroll issue
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_CAUGHT, FALSE);
+
+                        if (seen)
+                        {
+                            sPokedexScreenData->listItems[d].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j])];
+                            sPokedexScreenData->listItems[d].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j]);
+                            d++;
+                        }
+
+                    }
+                    
+                } //for some reason loads slowly on lower half, prob double increment issue look into later
+                if (entryPos > DEX_MAX_SHOWN && entryPos >= sPokedexScreenData->orderedDexCount - 4)//for highest portion of list
+                {
+
+                    for (d = 0; d <= NumSeen; d++)
+                    {
+                        sPokedexScreenData->listItems[d].label = gText_5Dashes;
+                        sPokedexScreenData->listItems[d].index = 0;
+                        //to quick fill with empty values, then fill only what I need to see
+                    }
+
+                    for (j = entryPos, d = sPokedexScreenData->CurrentIndexValue; j > entryPos - DEX_MAX_SHOWN; d--)
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[d], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[d], FLAG_GET_CAUGHT, FALSE);
+
+                        if (seen)
+                        {
+                            sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[d])];
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[d]);
+                            j--;
+                            //ret++;
+                        }
+
+                    }
+
+                    for (j = entryPos, d = sPokedexScreenData->CurrentIndexValue; j <= sPokedexScreenData->orderedDexCount; d++)
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[d], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[d], FLAG_GET_CAUGHT, FALSE);
+
+                        if (seen)
+                        {
+                            sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[d])];
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[d]);
+                            j++;
+                            //ret++;
+                        }
+
+                    }
+
+                    /*for (d = 0, j = 0; d <= DEX_MAX_SHOWN; j++) //intent to populate lowest range, to prevent scroll issue
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[j], FLAG_GET_CAUGHT, FALSE);
+
+                        if (seen)
+                        {
+                            sPokedexScreenData->listItems[d].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j])];
+                            sPokedexScreenData->listItems[d].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Alphabetical[j]);
+                            d++;
+                        }
+
+                    }
+                }
+                /*else //for efficiency, fill unseen entries with empty dashes 
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_SEEN, FALSE);
+                    if (seen)
+                    {
+                        sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                        sPokedexScreenData->listItems[i].index = 0;
+                        //ret++;
+                    }
+                } //with putting insize case loop won't need this else either
+
+                ret = NumSeen; //just realized this is all I need
+
+                /*seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_SEEN, FALSE);
+                    if (seen)
+                        ret = i;
+                //this doesnt work because the i value doens't auto equal where it is on the index,
+                //since this doesn't use blank spaces, need manual increment ret, but think the kanto vs nat is still an issue
+
+
+            }
+        }*///only kanto and national dex list should fill empty space with dashes, rest are supposed to ONLY show number you've seen or caught based on their condition
+        break;
+    case DEX_ORDER_TYPE: //can't build automatically would need to loop entire species list MANY times, so would take forever
+     //now that I'm saving time I MAY be able to build with a function
+        for (i = 0; i <= NELEMS(gPokedexOrder_Type); i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
+        { 
+          
+            //new setup to make like kanto dex fill w blanks
+            if (entryPos <= DEX_MAX_SHOWN && i == entryPos) //there's a split between here and the else if, causes some issue
+            {
+                for (j = 0; j <= DEX_MAX_SHOWN; j++,i++) //was matter of using else if, instea of continuous if, would cause it to skip a cycle, so changed all to if and fixed that bit
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[j], FLAG_GET_SEEN, FALSE);//still reads value 1 higher than it should be when scrolling
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[j], FLAG_GET_CAUGHT, FALSE);//happens when scrolling through info pages too, so something wrong with loadindex function
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Type[j])]; //in lower range print first 10
+                                
+                            }   
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Type[j]);
+                            ret++;
+
+                }
+            }
+
+            if (entryPos > DEX_MAX_SHOWN && i == entryPos && entryPos < sPokedexScreenData->orderedDexCount - 4) //loop 10, over i -5 label & index
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= entryPos + DEX_MAX_SHOWN; j++) //changed to better fill, appears to work without issue
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[j], FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[j], FLAG_GET_CAUGHT, FALSE);
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Type[j])];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Type[j]);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+                
+            } 
+            if (i == entryPos && entryPos >= sPokedexScreenData->orderedDexCount - 4)//for highest portion of list
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= sPokedexScreenData->orderedDexCount; j++) //works
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[j], FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[j], FLAG_GET_CAUGHT, FALSE);
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Type[j])];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Type[j]);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+
+            }
+            else
+            {
+                sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                sPokedexScreenData->listItems[i].index = 0; //need this to keep load speed for some reason, populate index as I scroll should be fine
+                //sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Type[i]); //fixed
+            
+            }
+            
+            ret = i;
+                    
+        }
+        break; //order by type and weight, just wouldn't work with my changes/species expansion would require, going through and creating list by hand
+    case DEX_ORDER_LIGHTEST:
+        
+        for (i = 0; i <= NELEMS(gPokedexOrder_Weight); i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
+        { 
+          
+            //new setup to make like kanto dex fill w blanks
+            if (entryPos <= DEX_MAX_SHOWN && i == entryPos) //there's a split between here and the else if, causes some issue
+            {
+                for (j = 0; j <= DEX_MAX_SHOWN; j++,i++) //was matter of using else if, instea of continuous if, would cause it to skip a cycle, so changed all to if and fixed that bit
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[j], FLAG_GET_SEEN, FALSE);//still reads value 1 higher than it should be when scrolling
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[j], FLAG_GET_CAUGHT, FALSE);//happens when scrolling through info pages too, so something wrong with loadindex function
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[j])]; //in lower range print first 10
+                                
+                            }   
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[j]);
+                            ret++;
+
+                }
+            }
+
+            if (entryPos > DEX_MAX_SHOWN && i == entryPos && entryPos < sPokedexScreenData->orderedDexCount - 4) //loop 10, over i -5 label & index
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= entryPos + DEX_MAX_SHOWN; j++) //changed to better fill, appears to work without issue
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[j], FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[j], FLAG_GET_CAUGHT, FALSE);
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[j])];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[j]);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+                
+            } 
+            if (i == entryPos && entryPos >= sPokedexScreenData->orderedDexCount - 4)//for highest portion of list
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= sPokedexScreenData->orderedDexCount; j++) //works
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[j], FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[j], FLAG_GET_CAUGHT, FALSE);
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Weight[j])];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[j]);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+
+            }
+            else
+            {
+                sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                sPokedexScreenData->listItems[i].index = 0; //need this to keep load speed for some reason, populate index as I scroll should be fine
+                //sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Weight[i]); //fixed
+            
+            }
+            
+            ret = i;
+                    
+        }
+        break;
+    case DEX_ORDER_SMALLEST:
+        
+        for (i = 0; i <= NELEMS(gPokedexOrder_Height); i++)  //for (i = 0; i < NUM_SPECIES - 1; i++)  replaced because gens error, with undefined values
+        { 
+          
+            //new setup to make like kanto dex fill w blanks
+            if (entryPos <= DEX_MAX_SHOWN && i == entryPos) //there's a split between here and the else if, causes some issue
+            {
+                for (j = 0; j <= DEX_MAX_SHOWN; j++,i++) //was matter of using else if, instea of continuous if, would cause it to skip a cycle, so changed all to if and fixed that bit
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[j], FLAG_GET_SEEN, FALSE);//still reads value 1 higher than it should be when scrolling
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[j], FLAG_GET_CAUGHT, FALSE);//happens when scrolling through info pages too, so something wrong with loadindex function
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[j])]; //in lower range print first 10
+                                
+                            }   
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[j]);
+                            ret++;
+
+                }
+            }
+
+            if (entryPos > DEX_MAX_SHOWN && i == entryPos && entryPos < sPokedexScreenData->orderedDexCount - 4) //loop 10, over i -5 label & index
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= entryPos + DEX_MAX_SHOWN; j++) //changed to better fill, appears to work without issue
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[j], FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[j], FLAG_GET_CAUGHT, FALSE);
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[j])];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[j]);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+                
+            } 
+            if (i == entryPos && entryPos >= sPokedexScreenData->orderedDexCount - 4)//for highest portion of list
+            {
+                for (j = i - DEX_MAX_SHOWN; j <= sPokedexScreenData->orderedDexCount; j++) //works
+                {
+                    seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[j], FLAG_GET_SEEN, FALSE);
+                    caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[j], FLAG_GET_CAUGHT, FALSE);
+
+                            if (caught)
+                            {
+                                sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(gPokedexOrder_Height[j])];//other print 10 from i minus 5                                    
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[j]);
+                            ret++;
+
+                        if (j > entryPos)
+                            i++;
+
+                }
+
+            }
+            else
+            {
+                sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                sPokedexScreenData->listItems[i].index = 0; //need this to keep load speed for some reason, populate index as I scroll should be fine
+                //sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(gPokedexOrder_Height[i]); //fixed
+            
+            }
+            
+            ret = i;
+                    
+        }
+        break;
+    case DEX_ORDER_NUMERICAL_NATIONAL:
+        
+        for (i = 0; i <= SPECIES_CALYREX; i++) //ok this changes load times, and num entries on list,
+        {
+            
+            if (entryPos <= DEX_MAX_SHOWN && i == entryPos)
+                {
+                    for (j = 0; j <= DEX_MAX_SHOWN; j++,i++)
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_CAUGHT, FALSE);
+                                if (seen)
+                                {
+                                    sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)]; //in lower range print first 10
+                                    
+                                }
+                                else
+                                {
+                                    sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                                }
+                                sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
+                                ret++;
+
+                    }
+                }
+
+                if (entryPos > DEX_MAX_SHOWN && i == entryPos && entryPos < sPokedexScreenData->orderedDexCount - 4) //loop 10, over i -5 label & index
+                {
+                    for (j = i - 5; j <= entryPos + 5; j++)
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_CAUGHT, FALSE);
+                                if (seen)
+                                {
+                                    sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)];//other print 10 from i minus 5                                    
+                                }
+                                else
+                                {
+                                    sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                                }
+                                sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
+                                ret++;
+
+                            if (j > entryPos)
+                                i++;
+
+                    }
+                    
+                } 
+                if (i == entryPos && entryPos >= sPokedexScreenData->orderedDexCount - 4)//for highest portion of list
+                {
+                    for (j = i - DEX_MAX_SHOWN; j <= sPokedexScreenData->orderedDexCount; j++) //works
+                    {
+                        seen = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_SEEN, FALSE);
+                        caught = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_CAUGHT, FALSE);
+                                if (seen)
+                                {
+                                    sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)];//other print 10 from i minus 5                                    
+                                }
+                                else
+                                {
+                                    sPokedexScreenData->listItems[j].label = gText_5Dashes;
+                                }
+                                sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
+                                ret++;
+
+                            if (j > entryPos)
+                                i++;
+
+                    }
+                }
+                else
+                {
+                    sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                    sPokedexScreenData->listItems[i].index = 0;
+                    //sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(i + 1); //fixed
+                    //ok didn't need that line, was just an issue with my scroll function now fixed
+                
+                }
+                
+                ret = i;
+
+        }
         break; //changing  index affects, species number displayed and mon type displayed, not the nmae
     }
+
+
+    return ret; //this would be end of new function
+
 }

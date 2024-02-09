@@ -44,31 +44,36 @@ void ClearTempFieldEventData(void)
     memset(gSaveBlock1Ptr->vars, 0, 16 * 2);
     FlagClear(FLAG_SYS_WHITE_FLUTE_ACTIVE);
     FlagClear(FLAG_SYS_BLACK_FLUTE_ACTIVE);
-    FlagClear(FLAG_SYS_USE_STRENGTH);
+    FlagClear(FLAG_SYS_USE_STRENGTH); //add on to this for other hms I want to make continuous vsonic
     FlagClear(FLAG_SYS_SPECIAL_WILD_BATTLE);
     FlagClear(FLAG_SYS_INFORMED_OF_LOCAL_WIRELESS_PLAYER);
 }
 
-void sub_806E168(void)
+// Unused
+static void DisableNationalPokedex_RSE(void)
 {
     u16 *ptr = GetVarPointer(VAR_0x403C);
-    gSaveBlock2Ptr->pokedex.nationalMagic = 0;
+    //gSaveBlock2Ptr->pokedex.unusedRS = 0; //since not used can save saveblock space by removing
     *ptr = 0;
     FlagClear(FLAG_0x838);
 }
 
-void sub_806E190(void)
+// The magic numbers used here (0xDA and 0x0302) correspond to those
+// used in RSE for enabling the national Pokedex
+void EnableNationalPokedex_RSE(void)
 {
+    // Note: the var, struct member, and flag are never used
     u16 *ptr = GetVarPointer(VAR_0x403C);
-    gSaveBlock2Ptr->pokedex.nationalMagic = 0xDA;
+    //gSaveBlock2Ptr->pokedex.unusedRS = 0xDA;
     *ptr = 0x0302;
     FlagSet(FLAG_0x838);
 }
 
-bool32 sub_806E1C0(void)
+// Unused
+static bool32 IsNationalPokedexEnabled_RSE(void)
 {
-    if (gSaveBlock2Ptr->pokedex.nationalMagic != 0xDA)
-        return FALSE;
+    //if (gSaveBlock2Ptr->pokedex.unusedRS != 0xDA)
+    //    return FALSE;
     if (VarGet(VAR_0x403C) != 0x0302)
         return FALSE;
     if (!FlagGet(FLAG_0x838))
@@ -76,10 +81,11 @@ bool32 sub_806E1C0(void)
     return TRUE;
 }
 
-void sub_806E204(void)
+//seems never used? as flag not set by default
+void DisableNationalPokedex(void)
 {
     u16 *ptr = GetVarPointer(VAR_0x404E);
-    gSaveBlock2Ptr->pokedex.unknown2 = 0;
+    gSaveBlock2Ptr->pokedex.nationalMagic = 0;
     *ptr = 0;
     FlagClear(FLAG_SYS_NATIONAL_DEX);
 }
@@ -87,19 +93,19 @@ void sub_806E204(void)
 void EnableNationalPokedex(void)
 {
     u16 *ptr = GetVarPointer(VAR_0x404E);
-    gSaveBlock2Ptr->pokedex.unknown2 = 0xB9;
+    gSaveBlock2Ptr->pokedex.nationalMagic = 0xB9;
     *ptr = 0x6258;
     FlagSet(FLAG_SYS_NATIONAL_DEX);
 }
 
 bool32 IsNationalPokedexEnabled(void)
 {
-    /*if (gSaveBlock2Ptr->pokedex.unknown2 != 0xB9)
+    if (gSaveBlock2Ptr->pokedex.nationalMagic != 0xB9)
         return FALSE;
     if (VarGet(VAR_0x404E) != 0x6258)
         return FALSE;
     if (!FlagGet(FLAG_SYS_NATIONAL_DEX))
-        return FALSE;*/
+        return FALSE;
     return TRUE;
 }
 
