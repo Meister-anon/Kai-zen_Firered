@@ -487,9 +487,9 @@ static u8 ListMenuUpdateSelectedRowIndexAndScrollOffset(struct ListMenu *list, b
         else
             newRow = list->template.maxShowed - ((list->template.maxShowed / 2) + (list->template.maxShowed % 2)) - 1;
 
-        if (cursorPos == 0)
+        if (cursorPos == 0)//if position well, top of page, not necessarily top of list
         {
-            while (itemsAbove != 0)
+            while (itemsAbove != 0)//while can go scroll up, i.e there are indexes above this, so need right new code here to make flip
             {
                 itemsAbove--;
                 if (list->template.items[cursorPos + itemsAbove].index != LIST_HEADER)
@@ -498,7 +498,7 @@ static u8 ListMenuUpdateSelectedRowIndexAndScrollOffset(struct ListMenu *list, b
                     return 1;
                 }
             }
-            return 0;
+            return 0;//remove return 0, if no entries above and make flip to end of list, change nothing else in "going up"
         }
         else
         {
@@ -521,7 +521,7 @@ static u8 ListMenuUpdateSelectedRowIndexAndScrollOffset(struct ListMenu *list, b
         else
             newRow = ((list->template.maxShowed / 2) + (list->template.maxShowed % 2));
 
-        if (cursorPos == list->template.totalItems - list->template.maxShowed)
+        if (cursorPos == list->template.totalItems - list->template.maxShowed) //think this is where I need to make change but don't understand it
         {
             while (itemsAbove < list->template.maxShowed - 1)
             {
@@ -610,12 +610,12 @@ bool8 ListMenuChangeSelection(struct ListMenu *list, bool8 updateCursorAndCallCa
             selectionChange |= ret;
             if (ret != 2)
                 break;
-            cursorCount++;
+            cursorCount++; //potentially change this, based scroll up/down  //cursorCount =+ ordereddexcount (somehow)
         }
-        while (list->template.items[list->cursorPos + list->itemsAbove].index == LIST_HEADER);
+        while (list->template.items[list->cursorPos + list->itemsAbove].index == LIST_HEADER); //also potential to look into
     }
 
-    if (updateCursorAndCallCallback)
+    if (updateCursorAndCallCallback) //in dex always true, but selectionChange ased on ret
     {
         switch (selectionChange)
         {
