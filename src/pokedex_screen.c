@@ -4276,8 +4276,8 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
             seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_SEEN, FALSE);
             caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Alphabetical[i], FLAG_GET_CAUGHT, FALSE);
 
-            if (seen)
-                ret = i; //build list size here, to avoid using num seen/num caught for nat dex limit issue
+            if (seen && ret < NELEMS(gPokedexOrder_Alphabetical) && ret < NumSeen) //had to add extra change so its still limited to numseen/caught
+                ret++; //build list size here, to avoid using num seen/num caught for nat dex limit issue
 
             if (NumSeen <= DEX_MAX_SHOWN) //works for now at lower levels, but for some reason has issue at lower limit scroll, if press down when at end, it keeps going
             {
@@ -4444,8 +4444,8 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
             seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[i], FLAG_GET_SEEN, FALSE);
             caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Type[i], FLAG_GET_CAUGHT, FALSE);
 
-            if (caught)
-                ret = i; //build list size here, to avoid using num seen/num caught for nat dex limit issue
+            if (caught && ret < NELEMS(gPokedexOrder_Type) && ret < NumCaught)
+                ret++; //build list size here, to avoid using num seen/num caught for nat dex limit issue
 
             if (NumCaught <= DEX_MAX_SHOWN) //works for now at lower levels, but for some reason has issue at lower limit scroll, if press down when at end, it keeps going
             {
@@ -4610,8 +4610,8 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
             seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[i], FLAG_GET_SEEN, FALSE);
             caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Weight[i], FLAG_GET_CAUGHT, FALSE);
 
-            if (caught)
-                ret = i; //build list size here, to avoid using num seen/num caught for nat dex limit issue
+            if (caught && ret < NELEMS(gPokedexOrder_Weight) && ret < NumCaught)
+                ret++; //build list size here, to avoid using num seen/num caught for nat dex limit issue
 
             if (NumCaught <= DEX_MAX_SHOWN) //works for now at lower levels, but for some reason has issue at lower limit scroll, if press down when at end, it keeps going
             {
@@ -4776,8 +4776,8 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
             seen = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[i], FLAG_GET_SEEN, FALSE);
             caught = DexScreen_GetSetPokedexFlag(gPokedexOrder_Height[i], FLAG_GET_CAUGHT, FALSE);
 
-            if (caught)
-                ret = i; //build list size here, to avoid using num seen/num caught for nat dex limit issue
+            if (caught && ret < NELEMS(gPokedexOrder_Height) && ret < NumCaught) //issue its not currently matching numcaught, works
+                ret++; //build list size here, to avoid using num seen/num caught for nat dex limit issue
 
             if (NumCaught <= DEX_MAX_SHOWN) //works for now at lower levels, but for some reason has issue at lower limit scroll, if press down when at end, it keeps going
             {
