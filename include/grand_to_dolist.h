@@ -2008,7 +2008,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   basic premise is get the nat dex at the start, change progression blockers from check for nat dex
   to check for defeating the elite four w flag check instead, which is usually when you get it.
-  this way post game is unaffected. 
+  this way post game is unaffected.  -done
+
+  next step, update expanded species to fill in catgegory lists
+
+  --not worrying about dex wrap, I'll leave that for someone else
   
 
   add wrap around to dex pages,  i.e press up at top to go to bottom,
