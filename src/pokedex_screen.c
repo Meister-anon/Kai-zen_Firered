@@ -152,7 +152,7 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 
 //new stuff
 static s32 DexScreen_ProcessInput(u8 listTaskId); //replace list menu input so can adjust separately
-static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex, s8 scroll_increment);//load list indexs on scroll after first open
+static void DexScreen_LoadIndex(u16 count, u8 direction, int selectedIndex, s8 scroll_increment);//load list indexs on scroll after first open
 //added scroll increment to attempt help keep placement - works done
 static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex); //moved new list creation logic here, still to be called from DexScreen_CountMonsInOrderedList
 
@@ -2153,8 +2153,8 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important t
             return FALSE; //ok that's all handled in list menu file, done in ListMenu_ProcessInput function
 
 
-        //if (selectedIndex >= 10)
-            DexScreen_LoadIndex(250, SCROLL_UP, selectedIndex, 1); //works
+        //if (selectedIndex >= 10) //oh realized I can do more, since it scrolls fast now
+            DexScreen_LoadIndex(450, SCROLL_UP, selectedIndex, 1); //works
         //selectedIndex--;
         while (--selectedIndex >= 0) //Should be while (--selectedIndex >= 0) without the selectedIndex-- in the body or before the while at all, but this is needed to match.
         {
@@ -2177,7 +2177,7 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important t
         {
             return FALSE;
         }
-        DexScreen_LoadIndex(250, SCROLL_DOWN, selectedIndex, 1);//discovered issue when scroll on entry need value large enough to cover blank entries or wont' scroll
+        DexScreen_LoadIndex(450, SCROLL_DOWN, selectedIndex, 1);//discovered issue when scroll on entry need value large enough to cover blank entries or wont' scroll
         //ok bounds hold, seems works without issue, huh even with the far larger value, it doesn't add to load time, nice :D
 
         //selectedIndex++;
@@ -3820,7 +3820,7 @@ void DexScreen_PrintStringWithAlignment(const u8 * str, s32 mode)
 //...got it working instantly after gonna pass out now
 //issue was just it not properly lining up with other function that created list. smh
 //needed + 1 because the natdex stuff subtracts 1, from value
-static void DexScreen_LoadIndex(u8 count, u8 direction, int selectedIndex, s8 scroll_increment)//most complete, last thing to do is get search dexes to load in, on last seen entry like numerial ones do
+static void DexScreen_LoadIndex(u16 count, u8 direction, int selectedIndex, s8 scroll_increment)//most complete, last thing to do is get search dexes to load in, on last seen entry like numerial ones do
 {
     s32 i,j,d;
     bool8 caught;
