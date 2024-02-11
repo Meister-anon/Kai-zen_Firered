@@ -734,7 +734,7 @@
 #define FLAG_TUTOR_MIMIC                                 0x2CD
 #define FLAG_TUTOR_BODY_SLAM                             0x2CE
 #define FLAG_VISITED_OAKS_LAB                            0x2CF
-#define FLAG_FOUGHT_POWER_PLANT_ELECTRODE_1              0x2D0
+#define FLAG_FOUGHT_POWER_PLANT_ELECTRODE_1              0x2D0 //change these 2 from permanent to cleared w time, same as reset items w time
 #define FLAG_FOUGHT_POWER_PLANT_ELECTRODE_2              0x2D1
 #define FLAG_STOPPED_SEAFOAM_B3F_CURRENT                 0x2D2
 #define FLAG_STOPPED_SEAFOAM_B4F_CURRENT                 0x2D3
@@ -782,6 +782,8 @@
 #define FLAG_GOT_AMULET_COIN_FROM_OAKS_AIDE              0x2FD
 #define FLAG_NO_ROOM_FOR_JOYFUL_GAME_CORNER_MOON_STONE   0x2FE
 #define FLAG_OAKS_RATING_IS_VIA_PC                       0x2FF
+//end story flags?
+ 
 
 // Unused?
 #define FLAG_0x300               0x300
@@ -1365,7 +1367,7 @@
 #define FLAG_SYS_POKEMON_GET                                        (SYS_FLAGS + 0x28)
 #define FLAG_SYS_POKEDEX_GET                                        (SYS_FLAGS + 0x29)
 #define FLAG_0x82A                                                  (SYS_FLAGS + 0x2A)
-#define FLAG_0x82B                                                  (SYS_FLAGS + 0x2B)
+#define FLAG_BECAME_LEAGUE_CHAMPION                                 (SYS_FLAGS + 0x2B)  //replace special check for nat dex in progression/end game
 #define FLAG_SYS_GAME_CLEAR                                         (SYS_FLAGS + 0x2C)
 #define FLAG_SYS_SET_TRAINER_CARD_PROFILE                           (SYS_FLAGS + 0x2D)
 #define FLAG_0x82E                                                  (SYS_FLAGS + 0x2E)

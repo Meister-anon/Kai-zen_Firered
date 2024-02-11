@@ -8136,7 +8136,7 @@ u16 SpeciesToPokedexNum(u16 species) //used by sum screen to put ??? in place of
     return species;
 }
 
-void ClearBattleMonForms(void) //!important if I make mega evos permanent I may need to add an exclusion here
+void ClearBattleMonForms(void) //vsonic important if I make mega evos permanent I may need to add an exclusion here
 {
     int i;
     for (i = 0; i < 4; i++)

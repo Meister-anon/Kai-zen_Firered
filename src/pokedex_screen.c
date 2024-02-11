@@ -2250,7 +2250,7 @@ static s32 DexScreen_ProcessInput(u8 listTaskId)//replace listmenu process input
     {
         //if (selectedIndex >= list->template.maxShowed)//fix works betternow
         //changed load function can do without this now
-            DexScreen_LoadIndex(list->template.maxShowed, SCROLL_UP, selectedIndex, 1);//building w scroll, not building based on index pos when press b, from info page
+        DexScreen_LoadIndex(list->template.maxShowed, SCROLL_UP, selectedIndex, 1);//building w scroll, not building based on index pos when press b, from info page
         ListMenuChangeSelection(list, TRUE, 1, FALSE); //count here seems to be how much to move by   
         return LIST_NOTHING_CHOSEN;
     }
@@ -2564,6 +2564,15 @@ static bool8 DexScreen_CreateCategoryListGfx(bool8 justRegistered)
     if (!justRegistered)
         DexScreen_PrintControlInfo(gText_PickFlipPageCheckCancel);
     CopyWindowToVram(1, COPYWIN_GFX);
+
+    if (justRegistered) //to override pulling species from an existing cat page
+    {
+        DexScreen_DrawMonPicInCategoryPage(sPokedexScreenData->dexSpecies, 0, 1);   //WORKS!!!
+
+    }//slot needs to be 0
+        
+    if (!justRegistered)
+    {
     if (sPokedexScreenData->pageSpecies[0] != 0xFFFF)
         DexScreen_DrawMonPicInCategoryPage(sPokedexScreenData->pageSpecies[0], 0, sPokedexScreenData->numMonsOnPage);
     if (sPokedexScreenData->pageSpecies[1] != 0xFFFF)
@@ -2572,6 +2581,7 @@ static bool8 DexScreen_CreateCategoryListGfx(bool8 justRegistered)
         DexScreen_DrawMonPicInCategoryPage(sPokedexScreenData->pageSpecies[2], 2, sPokedexScreenData->numMonsOnPage);
     if (sPokedexScreenData->pageSpecies[3] != 0xFFFF)
         DexScreen_DrawMonPicInCategoryPage(sPokedexScreenData->pageSpecies[3], 3, sPokedexScreenData->numMonsOnPage);
+    }
     return FALSE;
 }
 
@@ -3413,9 +3423,9 @@ void DexScreen_CreateCategoryPageSpeciesList(u8 categoryNum, u8 pageNum)
     count = gDexCategories[categoryNum].page[pageNum].count;
     sPokedexScreenData->numMonsOnPage = 0;
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++) //max number mon on category page
         sPokedexScreenData->pageSpecies[i] = 0xffff;
-    for (i = 0; i < count; i++)
+    for (i = 0; i < count; i++) //dex page, also limited to 4 to fit
     {
         species = gDexCategories[categoryNum].page[pageNum].species[i];
         if (DexScreen_CanShowMonInDex(species) == TRUE && DexScreen_GetSetPokedexFlag(species, FLAG_GET_SEEN, TRUE))
@@ -3456,32 +3466,180 @@ static u8 DexScreen_GetPageLimitsForCategory(u8 category)
     }
 }
 
+enum DexCategories {
+    Grassland_Pokemon,
+    Forest_Pokemon,
+    WatersEdge_Pokemon,
+    Sea_Pokemon,
+    Cave_Pokemon,
+    Mountain_Pokemon,
+    RoughTerrain_Pokemon,
+    Urban_Pokemon,
+    Rare_Pokemon,    
+};
+
+//still searching but need find a way to replace 
+//mon for loading dex stuff on catch
+//without neeeding to create a category page for them
 static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
 {
-    int i, j, k, categoryCount, categoryPageCount, posInPage;
+    int i, j;
     u16 dexSpecies;
+    u16 foundSpecies = 0; //check to break out of main loop after find species
 
-    for (i = 0; i < NELEMS(gDexCategories); i++)
-    {
-        categoryCount = gDexCategories[i].count;
-        for (j = 0; j < categoryCount; j++)
+    for (i = 0; i < NELEMS(gDexCategories); i++) //change to an i value check make enum to match array
+    {   
+        
+        if (Grassland_Pokemon == i) //written this just cuz felt was more readable
         {
-            categoryPageCount = gDexCategories[i].page[j].count;
-            for (k = 0, posInPage = 0; k < categoryPageCount; k++)
+            for (j = 0; j < NELEMS(gDexCategory_GrasslandPkmnlist); j++)
             {
-                dexSpecies = gDexCategories[i].page[j].species[k];
-                if (species == dexSpecies)//don't understand this
+                if (species == gDexCategory_GrasslandPkmnlist[j])
                 {
-                    sPokedexScreenData->category = i;
-                    sPokedexScreenData->pageNum = j;
-                    sPokedexScreenData->categoryCursorPosInPage = posInPage;
-                    return FALSE;
+                    foundSpecies = gDexCategory_GrasslandPkmnlist[j];
+                    break; //break out of inner loop
                 }
-                if (DexScreen_CanShowMonInDex(dexSpecies) == TRUE && DexScreen_GetSetPokedexFlag(species, FLAG_GET_SEEN, TRUE))
-                    posInPage++; //kept diff, to catch any potential issue
+                    
             }
+            
         }
+
+
+        if (Forest_Pokemon == i)
+        {
+            for (j = 0; j < NELEMS(gDexCategory_ForestPkmnlist); j++)
+            {
+                if (species == gDexCategory_ForestPkmnlist[j])
+                {
+                    foundSpecies = gDexCategory_ForestPkmnlist[j];
+                    break; //break out of inner loop
+                }
+                    
+            }
+            
+        }
+
+            
+        if (WatersEdge_Pokemon == i)
+        {
+            for (j = 0; j < NELEMS(gDexCategory_WatersEdgePkmnlist); j++)
+            {
+                if (species == gDexCategory_WatersEdgePkmnlist[j])
+                {
+                    foundSpecies = gDexCategory_WatersEdgePkmnlist[j];
+                    break; //break out of inner loop
+                }
+                    
+            }
+            
+        }
+
+        if (Sea_Pokemon == i)
+        {
+            for (j = 0; j < NELEMS(gDexCategory_SeaPkmnlist); j++)
+            {
+                if (species == gDexCategory_SeaPkmnlist[j])
+                {
+                    foundSpecies = gDexCategory_SeaPkmnlist[j];
+                    break; //break out of inner loop
+                }
+                    
+            }
+            
+        }
+
+        if (Cave_Pokemon == i)
+        {
+            for (j = 0; j < NELEMS(gDexCategory_CavePkmnlist); j++)
+            {
+                if (species == gDexCategory_CavePkmnlist[j])
+                {
+                    foundSpecies = gDexCategory_CavePkmnlist[j];
+                    break; //break out of inner loop
+                }
+                    
+            }
+            
+        }
+
+        if (Mountain_Pokemon == i)
+        {
+            for (j = 0; j < NELEMS(gDexCategory_MountainPkmnlist); j++)
+            {
+                if (species == gDexCategory_MountainPkmnlist[j])
+                {
+                    foundSpecies = gDexCategory_MountainPkmnlist[j];
+                    break; //break out of inner loop
+                }
+                    
+            }
+            
+        }
+
+        if (RoughTerrain_Pokemon == i)
+        {
+            for (j = 0; j < NELEMS(gDexCategory_RoughTerrainPkmnlist); j++)
+            {
+                if (species == gDexCategory_RoughTerrainPkmnlist[j])
+                {
+                    foundSpecies = gDexCategory_RoughTerrainPkmnlist[j];
+                    break; //break out of inner loop
+                }
+                    
+            }
+            
+        }
+
+        if (Urban_Pokemon == i)
+        {
+            for (j = 0; j < NELEMS(gDexCategory_UrbanPkmnlist); j++)
+            {
+                if (species == gDexCategory_UrbanPkmnlist[j])
+                {
+                    foundSpecies = gDexCategory_UrbanPkmnlist[j];
+                    break; //break out of inner loop
+                }
+                    
+            }
+            
+        }
+
+        if (Rare_Pokemon == i)
+        {
+            for (j = 0; j < NELEMS(gDexCategory_RarePkmnlist); j++)
+            {
+                if (species == gDexCategory_RarePkmnlist[j])
+                {
+                    foundSpecies = gDexCategory_RarePkmnlist[j];
+                    break; //break out of inner loop
+                }
+                    
+            }
+            
+        }
+        
+        if (foundSpecies)   //realized only need one
+            break;  //break out of main loop
+        
     }
+
+        //this needed to pass to screendeta->dexspecies to
+        //populate dex as well as play correct cry on dex load - need check cry play w volume but from looks should work correctly
+        sPokedexScreenData->dexSpecies = dexSpecies = foundSpecies;
+
+        //got it all working, all need is store category, removed need for other values
+        //instead of reading dex category struct, it'll fill in the template page with its image species name and dex number, 
+        //same as if it actually had a cat page.
+        //this saves me a good deal of physical space, and also I just don't want to add a BUNCH of category pages that already move slowly
+        //that no one really looks through, it'd just be unnecesary bloat
+        if (species == dexSpecies)
+        {
+            sPokedexScreenData->category = i; //this sets category text, only part I needed from original function      
+            
+            return FALSE; 
+           
+        }
+        
     return TRUE;
 }
 
@@ -3502,18 +3660,21 @@ void DexScreen_InputHandler_StartToCry(void)
         PlayCry_NormalNoDucking(sPokedexScreenData->dexSpecies, 0, CRY_VOLUME_RS, CRY_PRIORITY_NORMAL);
 }
 
-u8 DexScreen_RegisterMonToPokedex(u16 species)
+u8 DexScreen_RegisterMonToPokedex(u16 species) //now has nat dex, need workaround register mon setup, for cat page, half working dex loads correct not cat page
 {
     DexScreen_GetSetPokedexFlag(species, FLAG_SET_SEEN, TRUE);
     DexScreen_GetSetPokedexFlag(species, FLAG_SET_CAUGHT, TRUE);
 
-    if (!IsNationalPokedexEnabled() && SpeciesToNationalPokedexNum(species) > KANTO_DEX_COUNT)
-        return CreateTask(Task_DexScreen_RegisterNonKantoMonBeforeNationalDex, 0); //couldn't remove this yet, breaks things cuz can't see all connections
+    //if (!IsNationalPokedexEnabled() && SpeciesToNationalPokedexNum(species) > KANTO_DEX_COUNT)
+    //    return CreateTask(Task_DexScreen_RegisterNonKantoMonBeforeNationalDex, 0);
 
     DexScreen_LoadResources();
-    gTasks[sPokedexScreenData->taskId].func = Task_DexScreen_RegisterMonToPokedex;
-    DexScreen_LookUpCategoryBySpecies(species);
-
+    
+    DexScreen_LookUpCategoryBySpecies(species);//with nat dex enabled at start am able to trigger full mon caught script, but issue is expansion mon
+                                        //dont have a species category page, and without that they can't show up properly, it instead defaults to rattata.
+                                        //but I don't want to bloat the category dex with a bunch of extra pages so hopefully I can just display the mon in the category
+                                        //and won't need an actual page for them.       vsonic IMPORTANT
+    gTasks[sPokedexScreenData->taskId].func = Task_DexScreen_RegisterMonToPokedex; //again putting here below lookup just in case order matered
     return sPokedexScreenData->taskId;
 }
 
@@ -3524,7 +3685,7 @@ static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId)
 
 //for when catching mon, vsonic edit later for double wilds
 //think add some kind of loop/check if battle type double wild and caught both mon
-static void Task_DexScreen_RegisterMonToPokedex(u8 taskId)
+static void Task_DexScreen_RegisterMonToPokedex(u8 taskId) //called from above dexScreen register function, which is called only from bs_commands so change need go there
 {
     switch (sPokedexScreenData->state)
     {
@@ -3576,7 +3737,7 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId)
         break;
     case 6:
         DexScreen_CreateCategoryPageSelectionCursor(sPokedexScreenData->categoryCursorPosInPage);
-        DexScreen_UpdateCategoryPageCursorObject(sPokedexScreenData->categoryPageCursorTaskId, sPokedexScreenData->categoryCursorPosInPage, sPokedexScreenData->numMonsOnPage);
+        DexScreen_UpdateCategoryPageCursorObject(sPokedexScreenData->categoryPageCursorTaskId, sPokedexScreenData->categoryCursorPosInPage, 1); //this seems to have fixed cursor
 
         if (gTasks[taskId].data[0])
             gTasks[taskId].data[0]--;
@@ -3586,12 +3747,11 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId)
             sPokedexScreenData->state = 7;
         }
         break;
-    case 7:
-        sPokedexScreenData->dexSpecies = sPokedexScreenData->pageSpecies[sPokedexScreenData->categoryCursorPosInPage];
-        sPokedexScreenData->state = 8;
+    case 7: 
+        sPokedexScreenData->state = 8; 
         break;
     case 8:
-        DexScreen_DrawMonDexPage(TRUE); //display dex for just caught mon,
+        DexScreen_DrawMonDexPage(TRUE); 
         sPokedexScreenData->state = 9;
         break;
     case 9:
@@ -3652,127 +3812,6 @@ void DexScreen_PrintStringWithAlignment(const u8 * str, s32 mode)
     DexScreen_AddTextPrinterParameterized(0, FONT_NORMAL, str, x, 2, 4);
 }
 
-//Emerald exclusive functions
-/*static u16 GetNextPosition(u8 direction, u16 position, u16 min, u16 max) //seems not needed
-{
-    switch (direction)
-    {
-    case 1: // Up/Left
-        if (position > min)
-            position--;
-        break;
-    case 0: // Down/Right
-        if (position < max)
-            position++;
-        break;
-    case 3: // Up/Left with loop (unused)
-        if (position > min)
-            position--;
-        else
-            position = max;
-        break;
-    case 2: // Down/Right with loop (unused)
-        if (position < max)
-            position++;
-        else
-            position = min;
-        break;
-    }
-    return position;
-}
-
-// u16 ignored is passed but never used -//remove ignored  /replace sPokedexScreenData with name used in this game struct at top
-static void CreateMonListEntry(u8 position, u16 b)//vsonic IMPORTANT belive relevant to load
-{                                                   //look at everything with ^ phrase. but this potential replace DexScreen_CountMonsInOrderedList in firered
-    s16 entryNum;
-    u16 i;
-    u16 vOffset;
-
-    switch (position)
-    {
-    case 0: // Initial
-    default:
-        entryNum = b - 5;       //b is selected mon, think place in the list while position is direction i.e up down
-        for (i = 0; i <= 10; i++) //believe is the 9 mon limit to display, so shows a full first page?
-        {
-            if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sPokedexScreenData->pokedexList[entryNum].dexNum == 0xFFFF)
-            {
-                ClearMonListEntry(17, i * 2);
-            }
-            else
-            {
-                ClearMonListEntry(17, i * 2);
-                if (sPokedexScreenData->pokedexList[entryNum].seen) //pokedexList seems substitute for use of list menu values/struct, also cuz emerald only has one dex list
-                {
-                    CreateMonDexNum(entryNum, 0x12, i * 2);
-                    CreateCaughtBall(sPokedexScreenData->pokedexList[entryNum].owned, 0x11, i * 2); //so I don't need to add pokedexList, just use the lists in firered
-                    CreateMonName(sPokedexScreenData->pokedexList[entryNum].dexNum, 0x16, i * 2);
-                }
-                else
-                {
-                    CreateMonDexNum(entryNum, 0x12, i * 2);
-                    CreateCaughtBall(FALSE, 0x11, i * 2);
-                    CreateMonName(0, 0x16, i * 2);
-                }
-            }
-            entryNum++;
-        }
-        break;
-    case 1: // Up
-        entryNum = b - 5;
-        if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sPokedexScreenData->pokedexList[entryNum].dexNum == 0xFFFF)
-        {
-            ClearMonListEntry(17, sPokedexScreenData->listVOffset * 2);
-        }
-        else
-        {
-            ClearMonListEntry(17, sPokedexScreenData->listVOffset * 2);
-            if (sPokedexScreenData->pokedexList[entryNum].seen)
-            {
-                CreateMonDexNum(entryNum, 18, sPokedexScreenData->listVOffset * 2);
-                CreateCaughtBall(sPokedexScreenData->pokedexList[entryNum].owned, 0x11, sPokedexScreenData->listVOffset * 2);
-                CreateMonName(sPokedexScreenData->pokedexList[entryNum].dexNum, 0x16, sPokedexScreenData->listVOffset * 2);
-            }
-            else
-            {
-                CreateMonDexNum(entryNum, 18, sPokedexScreenData->listVOffset * 2);
-                CreateCaughtBall(FALSE, 17, sPokedexScreenData->listVOffset * 2);
-                CreateMonName(0, 0x16, sPokedexScreenData->listVOffset * 2);
-            }
-        }
-        break;
-    case 2: // Down
-        entryNum = b + 5;
-        vOffset = sPokedexScreenData->listVOffset + 10;
-        if (vOffset >= LIST_SCROLL_STEP)
-            vOffset -= LIST_SCROLL_STEP;
-        if (entryNum < 0 || entryNum >= NATIONAL_DEX_COUNT || sPokedexScreenData->pokedexList[entryNum].dexNum == 0xFFFF)
-            ClearMonListEntry(17, vOffset * 2);
-        else
-        {
-            ClearMonListEntry(17, vOffset * 2);
-            if (sPokedexScreenData->pokedexList[entryNum].seen)
-            {
-                CreateMonDexNum(entryNum, 18, vOffset * 2);
-                CreateCaughtBall(sPokedexScreenData->pokedexList[entryNum].owned, 0x11, vOffset * 2);
-                CreateMonName(sPokedexScreenData->pokedexList[entryNum].dexNum, 0x16, vOffset * 2);
-            }
-            else
-            {
-                CreateMonDexNum(entryNum, 18, vOffset * 2);
-                CreateCaughtBall(FALSE, 0x11, vOffset * 2);
-                CreateMonName(0, 0x16, vOffset * 2);
-            }
-        }
-        break;
-    }
-    CopyWindowToVram(0, COPYWIN_GFX);
-}
-
-static void ClearMonListEntry(u8 x, u8 y)
-{
-    FillWindowPixelRect(0, PIXEL_FILL(0), x * 8, y * 8, 0x60, 16);
-}*/
 
 //building w scroll, not building based on index pos when press b, from info page
 //idk what the fuck is wrong but its broken AGAIN somehow, duplicate values on scrolll, not displaying entire list,

@@ -5,8 +5,8 @@
 
 PalletTown_MapScripts:: @ 816545A
 	map_script MAP_SCRIPT_ON_TRANSITION, PalletTown_OnTransition
-	map_script MAP_SCRIPT_ON_FRAME_TABLE, PalletTown_OnFrame
-	.byte 0
+	@map_script MAP_SCRIPT_ON_FRAME_TABLE, PalletTown_OnFrame	@VSONIC IMPORTANT pay attention to these two could be relevant to tranier rematch clearing on map
+	.byte 0		@believe diff of on transition and on frame, is transition wuold be entering from other map?  while frame is occur wherever you enter the map?
 
 PalletTown_OnTransition:: @ 8165465
 	setworldmapflag FLAG_WORLD_MAP_PALLET_TOWN

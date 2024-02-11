@@ -48,8 +48,8 @@ PokedexRating_EventScript_Rate:: @ 81A73E0
 	msgbox PokedexRating_Text_SeenXOwnedY
 	call_if_unset FLAG_OAKS_RATING_IS_VIA_PC, PokedexRating_EventScript_SetTextColor
 	call PokedexRating_EventScript_ShowRatingMsg
-	compare VAR_0x800A, FALSE
-	goto_if_eq PokedexRating_EventScript_EndRating  @ National Dex not enabled
+	@compare VAR_0x800A, FALSE
+	@goto_if_eq PokedexRating_EventScript_EndRating  @ National Dex not enabled
 	setvar VAR_0x8004, 1
 	specialvar VAR_RESULT, GetPokedexCount
 	copyvar VAR_0x8008, VAR_0x8005

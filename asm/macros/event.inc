@@ -1473,7 +1473,7 @@
 	goto_if FALSE, \dest
 	.endm
 
-	.macro goto_if_set flag:req, dest:req
+	.macro goto_if_set flag:req, dest:req		@call_if_set
 	checkflag \flag
 	goto_if TRUE, \dest
 	.endm

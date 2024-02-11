@@ -2617,7 +2617,7 @@ static u32 TestWhetherSelectedMonCanBeTraded(struct Pokemon * party, int partyCo
         species[i] = GetMonData(&party[i], MON_DATA_SPECIES);
     }
 
-    if (!IsNationalPokedexEnabled())
+    /*if (!IsNationalPokedexEnabled())
     {
         if (species2[cursorPos] > SPECIES_MEW)
         {
@@ -2627,7 +2627,7 @@ static u32 TestWhetherSelectedMonCanBeTraded(struct Pokemon * party, int partyCo
         {
             return 3;
         }
-    }
+    }*/
 
     player = &gLinkPlayers[GetMultiplayerId() ^ 1];
     if ((player->version & 0xFF) != VERSION_RUBY &&

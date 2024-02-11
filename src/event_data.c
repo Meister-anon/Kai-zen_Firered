@@ -100,12 +100,12 @@ void EnableNationalPokedex(void)
 
 bool32 IsNationalPokedexEnabled(void)
 {
-    if (gSaveBlock2Ptr->pokedex.nationalMagic != 0xB9)
+    /*if (gSaveBlock2Ptr->pokedex.nationalMagic != 0xB9)
         return FALSE;
     if (VarGet(VAR_0x404E) != 0x6258)
         return FALSE;
     if (!FlagGet(FLAG_SYS_NATIONAL_DEX))
-        return FALSE;
+        return FALSE;*/
     return TRUE;
 }
 

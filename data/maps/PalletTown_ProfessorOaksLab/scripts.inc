@@ -852,8 +852,8 @@ PalletTown_ProfessorOaksLab_Movement_OakWalkToDeskSouth:: @ 81698D0
 PalletTown_ProfessorOaksLab_EventScript_RatePokedexOrTryGiveBalls:: @ 81698D6
 	setvar VAR_0x8004, 0
 	specialvar VAR_RESULT, GetPokedexCount
-	copyvar VAR_0x8008, VAR_0x8005
-	copyvar VAR_0x8009, VAR_0x8006
+	copyvar VAR_0x8008, VAR_0x8005	@seen
+	copyvar VAR_0x8009, VAR_0x8006	@caught
 	getnumberstring 0, VAR_0x8008
 	getnumberstring 1, VAR_0x8009
 	compare VAR_0x8009, 1  @ Player only has starter
@@ -988,7 +988,7 @@ Movement_1699C5:
 PalletTown_ProfessorOaksLab_EventScript_TryStartNationalDexScene:: @ 81699CE
 	call PokedexRating_EventScript_RateInPerson
 	closemessage
-	compare VAR_0x8009, 60
+	compare VAR_0x8009, 60	@ if has more than 60 mon caught
 	goto_if_lt PalletTown_ProfessorOaksLab_EventScript_DontStartNationalDexScene
 	goto_if_unset FLAG_WORLD_MAP_ONE_ISLAND, PalletTown_ProfessorOaksLab_EventScript_DontStartNationalDexScene
 	delay 30

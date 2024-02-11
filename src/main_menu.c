@@ -640,7 +640,7 @@ static void PrintPlayTime(void)
     AddTextPrinterParameterized3(MAIN_MENU_WINDOW_CONTINUE, 2, 62, 34, sTextColor2, -1, strbuf);
 }
 
-static void PrintDexCount(void)
+static void PrintDexCount(void) //vsonic save screen num mon, I think
 {
     u8 strbuf[30];
     u8 *ptr;
@@ -648,7 +648,7 @@ static void PrintDexCount(void)
     if (FlagGet(FLAG_SYS_POKEDEX_GET) == TRUE)
     {
         if (IsNationalPokedexEnabled())
-            dexcount = GetNationalPokedexCount(FLAG_GET_CAUGHT);
+            dexcount = GetNationalPokedexCount(FLAG_GET_CAUGHT); //changing to give nat dex at stat so will make above always true, already replaced natdex checks in scripts
         else
             dexcount = GetKantoPokedexCount(FLAG_GET_CAUGHT);
         AddTextPrinterParameterized3(MAIN_MENU_WINDOW_CONTINUE, 2, 2, 50, sTextColor2, -1, gText_Pokedex);

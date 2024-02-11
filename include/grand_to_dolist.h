@@ -1999,11 +1999,21 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   did that, but list still opens from 0, each time instead of storing place like other lists,
   if I'm going to do it this way, need it to keep its place and open from where was last left.
+
+  -dex fixed, caught pokeball fixed, had adjust different from default but is passable
+
+  -plan give expanded dex at start, change original pokedex script to I've heard rumor of previously
+  unseen pokemon appearing all over the region, I've taken the liberty of upgrading my pokedex
+  in advance/anticipation of these events, (write something better later)
+
+  basic premise is get the nat dex at the start, change progression blockers from check for nat dex
+  to check for defeating the elite four w flag check instead, which is usually when you get it.
+  this way post game is unaffected. 
   
 
   add wrap around to dex pages,  i.e press up at top to go to bottom,
   can pull functionality from start menu page as it already has that
-  i.e press start,then press up on pokedex and it'll take you to bottom at Exit
+  i.e press start,then press up on pokedex and it'll take you to bottom at Exit -might just skip this, idk put on back burner for now?
 
   note, make activation message for poison barb, akin to cute charm
 

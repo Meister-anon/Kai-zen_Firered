@@ -22,20 +22,24 @@ extern const u8 PokedexRating_Text_Complete[];
 
 u16 GetPokedexCount(void)
 {
-    if (gSpecialVar_0x8004 == 0)
+    if (gSpecialVar_0x8004 == 0) //8004 is somehow apparently supposed to hold result of IsNationalPokedexEnabled func
     {
-        gSpecialVar_0x8005 = GetKantoPokedexCount(0);
-        gSpecialVar_0x8006 = GetKantoPokedexCount(1);
+        gSpecialVar_0x8005 = GetKantoPokedexCount(0); //0 = seen
+        gSpecialVar_0x8006 = GetKantoPokedexCount(1); //1 = caugh
     }
     else
     {
-        gSpecialVar_0x8005 = GetNationalPokedexCount(0);
-        gSpecialVar_0x8006 = GetNationalPokedexCount(1);
-    }
+        gSpecialVar_0x8005 = GetNationalPokedexCount(0); //what could do is change else to if, and make these use var 8007 and 8008
+        gSpecialVar_0x8006 = GetNationalPokedexCount(1); //ok think 8004 is VAR_RESULT, and this special populates var result w effect of function when called
+
+        //gSpecialVar_0x8007 = GetKantoPokedexCount(0); //0 = seen    //changed since would affect aides scripts, not presently used 
+        //gSpecialVar_0x8008 = GetKantoPokedexCount(1); //1 = caugh      //but want to use for dex rating,change to read both nat and local dex
+                                //since supposed to get some reward for completing each, looked further into seems script may already work how I want for rating?
+    }   //oh that's great it already works that way so I don't need to change anything, and the aides will pick up my nat dex count so everything is perfect
     return IsNationalPokedexEnabled();
 }
 
-static const u8 *GetProfOaksRatingMessageByCount(u16 count)
+static const u8 *GetProfOaksRatingMessageByCount(u16 count) //for this want to change to, say how many native mon you've caught and how many total mon you've caught
 {
     gSpecialVar_Result = FALSE;
 
