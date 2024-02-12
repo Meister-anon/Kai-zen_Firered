@@ -311,7 +311,7 @@ PalletTown_ProfessorOaksLab_Text_OakSightingsOfRareMons:: @ 818EE60
     .string "have never been seen in KANTO.\p"
     .string "I would love to go see things for\n"
     .string "myself, but I'm much too old.\p"
-    .string "Since I can't do it, {PLAYER}, I'd\n"
+    .string "Since I can't do it, I'd\n"
     .string "like you to go in my place.$"
 
 PalletTown_ProfessorOaksLab_Text_RivalJustLetMeHandleEverything:: @ 818EF59

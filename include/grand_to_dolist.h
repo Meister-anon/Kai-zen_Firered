@@ -2011,6 +2011,21 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   this way post game is unaffected.  -done
 
   next step, update expanded species to fill in catgegory lists
+  -in progress at gen 6
+
+  for updating oak speech for giving new uppgraded dex
+  take part of text from nat dex scene use text
+  PalletTown_ProfessorOaksLab_Text_OakSightingsOfRareMons
+
+  mixed in with original script,
+  think want to put this when oak picks up the dexs on the table
+  or he walks up to them but instead of pick up
+  turns the the player and rival, says rare mon text
+  then turns back and picks them up.
+
+  then i can do an edited version of the dex explanation
+  where he says and so I took the liberty to upgrade my inventions
+
 
   --not worrying about dex wrap, I'll leave that for someone else
   
