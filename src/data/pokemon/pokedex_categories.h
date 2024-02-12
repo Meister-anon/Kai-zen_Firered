@@ -1122,9 +1122,6 @@ const u16 gDexCategory_GrasslandPkmnlist[] =
     SPECIES_FLETCHLING,
     SPECIES_FLETCHINDER,
     SPECIES_TALONFLAME,
-    SPECIES_LITLEO,
-    SPECIES_PYROAR_M,
-    SPECIES_PYROAR_F,   //think would go to same dex?
     SPECIES_FLABEBE,
     SPECIES_FLORGES,
     SPECIES_SKIDDO,
@@ -1141,6 +1138,18 @@ const u16 gDexCategory_GrasslandPkmnlist[] =
     SPECIES_TSAREENA,
     SPECIES_COMFEY,
     SPECIES_TOGEDEMARU,
+    SPECIES_GOSSIFLEUR,
+    SPECIES_ELDEGOSS,
+    SPECIES_WOOLOO,
+    SPECIES_DUBWOOL,
+    SPECIES_YAMPER,
+    SPECIES_BOLTUND,
+    SPECIES_APPLIN,
+    SPECIES_FLAPPLE,
+    SPECIES_APPLETUN,
+    SPECIES_SIRFETCHD,
+    SPECIES_EISCUE,
+    SPECIES_INDEEDEE,
 };
 
 const u16 gDexCategory_ForestPkmnlist[] = {
@@ -1356,6 +1365,14 @@ const u16 gDexCategory_ForestPkmnlist[] = {
     SPECIES_ORANGURU,
     SPECIES_PASSIMIAN,
     SPECIES_KOMALA,
+    SPECIES_SKWOVET,
+    SPECIES_GREEDENT,
+    SPECIES_BLIPBUG,
+    SPECIES_DOTTLER,
+    SPECIES_ORBEETLE,
+    SPECIES_SIZZLIPEDE,
+    SPECIES_CENTISKORCH,
+    SPECIES_KLEAVOR,
 };
 
 const u16 gDexCategory_WatersEdgePkmnlist[] = {
@@ -1488,6 +1505,16 @@ const u16 gDexCategory_WatersEdgePkmnlist[] = {
     SPECIES_SANDYGAST,
     SPECIES_PALOSSAND,
     SPECIES_PYUKUMUKU,
+    SPECIES_SOBBLE,
+    SPECIES_DRIZZILE,
+    SPECIES_INTELEON,
+    SPECIES_CHEWTLE,
+    SPECIES_DREDNAW,
+    SPECIES_CRAMORANT,
+    SPECIES_CLOBBOPUS,
+    SPECIES_GRAPPLOCT,
+    SPECIES_PINCURCHIN,
+    SPECIES_DRACOVISH,
 };
 
 const u16 gDexCategory_SeaPkmnlist[] = {
@@ -1596,6 +1623,12 @@ const u16 gDexCategory_SeaPkmnlist[] = {
     SPECIES_WISHIWASHI,
     SPECIES_BRUXISH,
     SPECIES_DHELMISE,
+    SPECIES_ARROKUDA,
+    SPECIES_BARRASKEWDA,
+    SPECIES_CURSOLA,
+    SPECIES_ARCTOVISH,
+    SPECIES_BASCULEGION,
+    SPECIES_OVERQWIL,
 };
 
 //rock caves but also dark areas so suits ghost
@@ -1689,6 +1722,12 @@ const u16 gDexCategory_CavePkmnlist[] = {
     SPECIES_NOIBAT,
     SPECIES_NOIVERN,
     SPECIES_MIMIKYU,
+    SPECIES_ROLYCOLY,
+    SPECIES_CARKOL,
+    SPECIES_COALOSSAL,
+    SPECIES_RUNERIGUS,
+    SPECIES_FALINKS,
+    SPECIES_FRAEYJTA, //hidden away secret dimmenssion/ forest potential put in rare list
 };
 
 //gonna stand in for volcano crag and ice mountain 
@@ -1841,6 +1880,19 @@ const u16 gDexCategory_MountainPkmnlist[] = {
     SPECIES_JANGMO_O,
     SPECIES_HAKAMO_O,
     SPECIES_KOMMO_O,
+    SPECIES_HATENNA, //meant ot be loner, seeking solitude
+    SPECIES_HATTREM,
+    SPECIES_HATTERENE,
+    SPECIES_SNOM,
+    SPECIES_FROSMOTH,
+    SPECIES_STONJOURNER,
+    SPECIES_DURALUDON,
+    SPECIES_DREEPY,
+    SPECIES_DRAKLOAK,
+    SPECIES_DRAGAPULT,
+    SPECIES_WYRDEER,
+    SPECIES_SNEASLER,
+    SPECIES_CEFIREON,
 };
 
 //harsh environments, swamps deserts, savahna etc.
@@ -1959,6 +2011,26 @@ const u16 gDexCategory_RoughTerrainPkmnlist[] = {
     SPECIES_VIKAVOLT,
     SPECIES_MUDBRAY,
     SPECIES_MUDSDALE,
+    SPECIES_LITLEO,
+    SPECIES_PYROAR_M,
+    SPECIES_PYROAR_F,   //think would go to same dex?
+    SPECIES_GROOKEY,
+    SPECIES_THWACKEY,
+    SPECIES_RILLABOOM,
+    SPECIES_ROOKIDEE,
+    SPECIES_CORVISQUIRE,
+    SPECIES_CORVIKNIGHT,
+    SPECIES_SILICOBRA,
+    SPECIES_SANDACONDA,
+    SPECIES_IMPIDIMP,
+    SPECIES_MORGREM,
+    SPECIES_GRIMMSNARL,
+    SPECIES_PERRSERKER,
+    SPECIES_CUFANT,
+    SPECIES_COPPERAJAH,
+    SPECIES_DRACOZOLT,
+    SPECIES_ARCTOZOLT,
+    SPECIES_URSALUNA,
 };
 
 //cities or around people
@@ -2080,7 +2152,20 @@ const u16 gDexCategory_UrbanPkmnlist[] = {
     SPECIES_INCINEROAR,
     SPECIES_YUNGOOS,
     SPECIES_GUMSHOOS,
-
+    SPECIES_SCORBUNNY,
+    SPECIES_RABOOT,
+    SPECIES_CINDERACE,
+    SPECIES_NICKIT,
+    SPECIES_THIEVUL,
+    SPECIES_TOXEL,
+    SPECIES_TOXTRICITY,
+    SPECIES_SINISTEA,
+    SPECIES_POLTEAGEIST,
+    SPECIES_OBSTAGOON,
+    SPECIES_MR_RIME,
+    SPECIES_MILCERY,
+    SPECIES_ALCREMIE,
+    SPECIES_MORPEKO,
 };
 
 const u16 gDexCategory_RarePkmnlist[] = {
@@ -2190,6 +2275,7 @@ const u16 gDexCategory_RarePkmnlist[] = {
     SPECIES_GLASTRIER,
     SPECIES_SPECTRIER,
     SPECIES_CALYREX,
+    SPECIES_ENAMORUS,
 };
 
 

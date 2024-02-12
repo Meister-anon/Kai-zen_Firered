@@ -152,7 +152,7 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 
 //new stuff
 static s32 DexScreen_ProcessInput(u8 listTaskId); //replace list menu input so can adjust separately
-static void DexScreen_LoadIndex(u16 count, u8 direction, int selectedIndex, s8 scroll_increment);//load list indexs on scroll after first open
+static void DexScreen_LoadIndex(u32 count, u8 direction, int selectedIndex, s8 scroll_increment);//load list indexs on scroll after first open
 //added scroll increment to attempt help keep placement - works done
 static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex); //moved new list creation logic here, still to be called from DexScreen_CountMonsInOrderedList
 
@@ -2154,7 +2154,7 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important t
 
 
         //if (selectedIndex >= 10) //oh realized I can do more, since it scrolls fast now
-            DexScreen_LoadIndex(450, SCROLL_UP, selectedIndex, 1); //works
+            DexScreen_LoadIndex(255, SCROLL_UP, selectedIndex, 1); //works
         //selectedIndex--;
         while (--selectedIndex >= 0) //Should be while (--selectedIndex >= 0) without the selectedIndex-- in the body or before the while at all, but this is needed to match.
         {
@@ -2177,8 +2177,17 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important t
         {
             return FALSE;
         }
-        DexScreen_LoadIndex(450, SCROLL_DOWN, selectedIndex, 1);//discovered issue when scroll on entry need value large enough to cover blank entries or wont' scroll
+        // depending on where you are compared to the limit of the dex
+        //meaning if you're scrolling the full range without hittnig a limit
+        //it gets kind of slow, and since I want game to be fast unless
+        //I can somehow shorten the actual fade in fade out time, (which I THINK is possible)
+        //then i would need to lower the number to cut the processing load
+        //nvm I need to lower the range, the process goes before the fade 
+        //so the fade would be delayed regardless of shortening it,
+        DexScreen_LoadIndex(255, SCROLL_DOWN, selectedIndex, 1);//discovered issue when scroll on entry need value large enough to cover blank entries or wont' scroll
         //ok bounds hold, seems works without issue, huh even with the far larger value, it doesn't add to load time, nice :D
+        //ok this is good enough, nvm tested w full dex and its much slower
+        //when having to navigate filled values and can't just write blank entries
 
         //selectedIndex++;
         while (++selectedIndex < sPokedexScreenData->orderedDexCount) //Should be while (++selectedIndex < sPokedexScreenData->orderedDexCount) without the selectedIndex++ in the body or before the while at all, but this is needed to match.
@@ -2462,13 +2471,13 @@ static u16 DexScreen_GetDexCount(u8 caseId, bool8 whichDex) //vsonic IMPORTANT, 
         }
         break;
     case 1: // National
-        for (i = 0; i < NATIONAL_DEX_COUNT; i++) //so same as other places can't use NATIONAL_DEX_COUNT for this rn, to use nat count, need update search arrays, and add entry data
+        for (i = 0; i < NATIONAL_SPECIES_COUNT; i++) //so same as other places can't use NATIONAL_DEX_COUNT for this rn, to use nat count, need update search arrays, and add entry data
         {
             if (DexScreen_GetSetPokedexFlag(i + 1, caseId, FALSE))//changed back only reason this was issue was I was using numseen as size, which used this
                 count++;
 
         }
-        break;
+        break; //changed from NATIONAL_DEX_COUNT
     }
     return count;
 }
@@ -3132,7 +3141,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered) //should be able to uss
     || sPokedexScreenData->dexSpecies == SPECIES_UXIE)
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic3_Highest); //works
 
-    else if (sPokedexScreenData->dexSpecies != gDexAdjusting[i]) //this works now just need a list of all mon I Need the bigger window for a make it do a loop
+    else if (sPokedexScreenData->dexSpecies != gDexAdjusting[i]) //if mon not in list, uses biger window
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic2_Large);
         
     else
@@ -3820,7 +3829,7 @@ void DexScreen_PrintStringWithAlignment(const u8 * str, s32 mode)
 //...got it working instantly after gonna pass out now
 //issue was just it not properly lining up with other function that created list. smh
 //needed + 1 because the natdex stuff subtracts 1, from value
-static void DexScreen_LoadIndex(u16 count, u8 direction, int selectedIndex, s8 scroll_increment)//most complete, last thing to do is get search dexes to load in, on last seen entry like numerial ones do
+static void DexScreen_LoadIndex(u32 count, u8 direction, int selectedIndex, s8 scroll_increment)//most complete, last thing to do is get search dexes to load in, on last seen entry like numerial ones do
 {
     s32 i,j,d;
     bool8 caught;
@@ -4975,7 +4984,7 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
         break;
     case DEX_ORDER_NUMERICAL_NATIONAL:
         
-        for (i = 0; i <= SPECIES_CALYREX; i++) //ok this changes load times, and num entries on list,
+        for (i = 0; i <= NATIONAL_SPECIES_COUNT; i++) //ok this changes load times, and num entries on list,
         {
             
             if (entryPos <= DEX_MAX_SHOWN && i == entryPos)
@@ -5001,10 +5010,11 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
 
                 if (entryPos > DEX_MAX_SHOWN && i == entryPos && entryPos < sPokedexScreenData->orderedDexCount - 4) //loop 10, over i -5 label & index
                 {
-                    for (j = i - 5; j <= entryPos + 5; j++)
+                    for (j = i - DEX_MAX_SHOWN; j <= entryPos + DEX_MAX_SHOWN; j++) //changed to better fill, because issue w az etc. changess
                     {
-                        seen = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_SEEN, FALSE);
+                        seen = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_SEEN, FALSE); //attempt expand above, can't scroll if empty space between entries is bigger than first load
                         caught = DexScreen_GetSetPokedexFlag(j + 1, FLAG_GET_CAUGHT, FALSE);
+
                                 if (seen)
                                 {
                                     sPokedexScreenData->listItems[j].label = gSpeciesNames[NationalPokedexNumToSpecies(j + 1)];//other print 10 from i minus 5                                    

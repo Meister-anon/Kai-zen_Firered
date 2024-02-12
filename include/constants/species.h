@@ -2312,10 +2312,23 @@
 #define NATIONAL_DEX_OVERQWIL 904
 #define NATIONAL_DEX_ENAMORUS 905
 
+#define NATIONAL_SPECIES_COUNT NATIONAL_DEX_CALYREX
 #define NATIONAL_DEX_COUNT NATIONAL_DEX_ENAMORUS
 //#define POKEMON_SLOTS_NUMBER (NATIONAL_DEX_COUNT + 1) //outdated value already replaced in my hack
 //important remember I plan to have forms accessible from main species dex page just be able to tab over to see other form
 //should be able to include them without having to include them in national dex count 
+
+//think what I can do is separate natdex count into
+//nat species count  and nat dex count, species count would take current limit
+//and be used for dex limits, but  would expand list above that
+//to include forms, then when caught check if dex species is above
+//nat species count, if so check dex species against, formspeciestables ids
+//if find a match play that dex entry/data
+
+/*idea is still in workshop but think can work.
+The only issue I'm coming across now is how to not mark the base species as seen/caught
+just because I saw the form*/
+
 
 // Hoenn Dex(ORAS) Index Defines
 #define HOENN_DEX_NONE 0

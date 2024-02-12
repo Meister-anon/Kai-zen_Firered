@@ -2013,6 +2013,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   next step, update expanded species to fill in catgegory lists
   -in progress at gen 6
 
+  //tested gender forms, need to adjust make sure they pull same dex entry
+  //since diff species but meant to be treated as same species
+ //rn they default to 0, but display mon properly otherwise
+
+
   for updating oak speech for giving new uppgraded dex
   take part of text from nat dex scene use text
   PalletTown_ProfessorOaksLab_Text_OakSightingsOfRareMons
@@ -2035,6 +2040,41 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   i.e press start,then press up on pokedex and it'll take you to bottom at Exit -might just skip this, idk put on back burner for now?
 
   note, make activation message for poison barb, akin to cute charm
+  //seems tiger mom isn't triggering quite right,
+  displayed wrong ability name for effect
+
+  tiger mom is too long text message, need reset/adjust
+  
+  
+  //ok tiger mom works when you are using it,
+  but when on opponent side it triggers as intimidate instead
+  lowering attack, displaing intimidate message
+  but issue is it also uses user ability name as its ability
+
+
+  unfezeant Fs palette is FUCKED!!
+  god damnit, idk how it went bad
+  hopefully take new copy from emerald and it'll be fine
+  -its the back sprite only - fixed took from RHH
+
+  ...sigilyph back sprite is also fucked,
+  but that's because they made it look like shit
+  my god, gonna need to attempt remake in the image of sun/moon
+
+  double check all sprites now, think can use dex fill test
+  to fill all entries and check all front sprites
+  //possibly also switch function, so dex stuff
+  can read back sprites and check those too
+
+  -plan for dex view,to add forms to dex,
+  setup scroll arrow, on dex entry page left/right
+  to attempt set it so on entry page can scroll right
+  to swap to the form if seen/caught
+  //would need to overrwrite nat dex to species stuff
+  if dex species matches one of the forms
+  think to do that neeed loop gFormSpeciesIdTables array
+  against dexspecies
+
 
   //Important BIND still has freezing issue? happened when it locked into status move
 

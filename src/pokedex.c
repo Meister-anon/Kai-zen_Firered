@@ -25,12 +25,12 @@ s8 GetSetPokedexFlag(u16 nationalDexNo, u8 caseID)
     return DexScreen_GetSetPokedexFlag(nationalDexNo, caseID, 0);
 }
 
-u16 GetNationalPokedexCount(u8 caseID)
+u16 GetNationalPokedexCount(u8 caseID) //changd from NATIONAL_DEX_COUNT
 {
     u16 count = 0;
     u16 i;
 
-    for (i = 0; i < NATIONAL_DEX_COUNT; i++)
+    for (i = 0; i < NATIONAL_SPECIES_COUNT; i++)
     {
         switch (caseID)
         {

@@ -507,6 +507,8 @@ static const u16 sSpeciesToHoennPokedexNum[] =
 };
 
 // Assigns all species to the National Dex Index (Summary No. for National Dex)
+//think this is what I need for gender forms
+//VSONIC IMPORTANT, note this need be updated for all mons to track in dex
 static const u16 sSpeciesToNationalPokedexNum[] = 
 {
     SPECIES_TO_NATIONAL(BULBASAUR),
@@ -1799,6 +1801,9 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     // Calyrex
     [SPECIES_CALYREX_ICE_RIDER - 1] = NATIONAL_DEX_CALYREX,
     [SPECIES_CALYREX_SHADOW_RIDER - 1] = NATIONAL_DEX_CALYREX,
+    //Gender forms - meowstic already handled above
+    [SPECIES_UNFEZANT_F - 1] = NATIONAL_DEX_UNFEZANT_M,
+    [SPECIES_PYROAR_F - 1] = NATIONAL_DEX_PYROAR_M,
 };
 
 static const u16 sHoennToNationalOrder[] = // Assigns Hoenn Dex Pokémon (Using National Dex Index)
