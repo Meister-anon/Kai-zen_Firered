@@ -8,6 +8,8 @@
 
 #define GET_BASE_SPECIES_ID(speciesId) (GetFormSpeciesId(speciesId, 0))
 
+#define GET_FINAL_FORM_SPECIES_ID(speciesId) (GetFormSpeciesId(speciesId, GetFinalFormSpeciesId(speciesId)))
+
 struct PokemonSubstruct0
 {
     u16 species;
@@ -615,6 +617,7 @@ void OakSpeechNidoranFFreeResources(void);
 void *OakSpeechNidoranFGetBuffer(u8 bufferId);
 u16 GetFormSpeciesId(u16 speciesId, u8 formId);
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId);
+u8 GetFinalFormSpeciesId(u16 formSpeciesId); //added for dex changes to read forms
 u16 GetBaseStatTotal(u16 species);
 bool8 CanEvioliteActivate(u16 species);
 s16 atk_diff(void);

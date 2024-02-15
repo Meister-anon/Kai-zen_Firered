@@ -2190,8 +2190,15 @@ static void BufferMonInfo(void) // seems to be PSS_PAGE_INFO or data for it
     u16 gender;
     u16 heldItem;
     u32 otId;
+    u16 species,baseSpecies;
 
-    dexNum = SpeciesToPokedexNum(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES));
+    species = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPECIES);
+
+    if (species > NATIONAL_SPECIES_COUNT)
+        baseSpecies = GetFormSpeciesId(species, 0);
+
+    dexNum = SpeciesToPokedexNum(baseSpecies); //should ensure dex spescies match summ spsecies num
+
     if (dexNum == 0xffff)
         StringCopy(sMonSummaryScreen->summary.dexNumStrBuf, gUnknown_8416202);
     else
@@ -2210,8 +2217,8 @@ static void BufferMonInfo(void) // seems to be PSS_PAGE_INFO or data for it
         return;
     }
 
-    sMonSummaryScreen->monTypes[0] = gBaseStats[dexNum].type1;
-    sMonSummaryScreen->monTypes[1] = gBaseStats[dexNum].type2;
+    sMonSummaryScreen->monTypes[0] = gBaseStats[species].type1;
+    sMonSummaryScreen->monTypes[1] = gBaseStats[species].type2;
 
     GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_NICKNAME, tempStr);
     StringCopyN_Multibyte(sMonSummaryScreen->summary.nicknameStrBuf, tempStr, POKEMON_NAME_LENGTH);

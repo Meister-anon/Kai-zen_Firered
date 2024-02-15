@@ -120,6 +120,7 @@ static u8 DexScreen_CreateCategoryMenuScrollArrows(void);
 static int DexScreen_InputHandler_GetShoulderInput(void);
 static void Task_DexScreen_ShowMonPage(u8 taskId);
 static bool32 DexScreen_TryScrollMonsVertical(u8 direction);
+static bool32 DexScreen_TryDisplayForms(u8 direction); //new addition for displauing forms w left/right press
 static void DexScreen_RemoveWindow(u8 *windowId_p); //pret made static, which makes sense these aren't used elsewhere
 static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 colorIdx);
 static void DexScreen_PrintNum3RightAlign(u8 windowId, u8 fontId, u16 num, u8 x, u8 y, u8 colorIdx);
@@ -977,8 +978,9 @@ void DexScreen_LoadResources(void) //look into equiv emerald function, may be wh
     taskId = CreateTask(Task_PokedexScreen, 0);//actually think its equiv to pokedexListf
     sPokedexScreenData = Alloc(sizeof(struct PokedexScreenData)); //think  listItems equivalent to pokemonListCount  in EE, which is 0 at start and built w dex IMPORTANT
     *sPokedexScreenData = sDexScreenDataInitialState;
-    sPokedexScreenData->taskId = taskId; //without below value graphic gets broken
-    sPokedexScreenData->listItems = Alloc(NATIONAL_DEX_COUNT * sizeof(struct ListMenuItem)); //AsparagusEduardo from rhh mentnioed this could be problamatic
+    sPokedexScreenData->taskId = taskId; //without below value graphic gets broken - FOR SOME reason below buffer no longer works? the graphic breaks as I scroll, idk what changed it or what value is needed now
+    //...huh...using actual species count fixed it, 907 is species fraejta
+    sPokedexScreenData->listItems = Alloc(907 * sizeof(struct ListMenuItem)); //AsparagusEduardo from rhh mentnioed this could be problamatic
     sPokedexScreenData->numSeenNational = DexScreen_GetDexCount(FLAG_GET_SEEN, 1);  //need look into how ee (actualy basic emerald logic) does the dex it loads in pieces
     sPokedexScreenData->numOwnedNational = DexScreen_GetDexCount(FLAG_GET_CAUGHT, 1);//rather than all at once, which is what I had in mind
     sPokedexScreenData->numSeenKanto = DexScreen_GetDexCount(FLAG_GET_SEEN, 0);
@@ -2013,8 +2015,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)//think task show dex entry fro
     case 2:
         sPokedexScreenData->numMonsOnPage = 1;
         DexScreen_DrawMonDexPage(FALSE); //believe selecting a mon from the numerical list, navigate to ex entry page?
-        sPokedexScreenData->state = 3;
-        break;
+        sPokedexScreenData->state = 3;//think need add on above function to filter for if scroll and add scroll arrows
+        break; //rather than scroll arrows realize I can just add text to window at bottom
     case 3:
         CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(2);
@@ -2030,7 +2032,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)//think task show dex entry fro
         ShowBg(1);
         sPokedexScreenData->state = 5;
         break;
-    case 5:
+    case 5: //navigation from on the dex info page
         if (JOY_NEW(A_BUTTON))
         {
             RemoveDexPageWindows();
@@ -2056,7 +2058,19 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)//think task show dex entry fro
             BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
             sPokedexScreenData->state = 6;
         }
-        else
+        else if (JOY_NEW(DPAD_LEFT) && DexScreen_TryDisplayForms(1)) //use of this function means if able to scroll in that direction
+        {
+            RemoveDexPageWindows();
+            BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
+            sPokedexScreenData->state = 13;
+        }
+        else if (JOY_NEW(DPAD_RIGHT) && DexScreen_TryDisplayForms(0)) //vsonic attempt use add scrolling between category dex entires
+        {
+            RemoveDexPageWindows();
+            BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
+            sPokedexScreenData->state = 13;
+        } //fill in when fix //looks like all Ineed to do is change dexSPecis
+        else //so make new function to replace tryscrollvertical to check if can scroll left/right, compare base final form species then set new dexspecies
         {
             DexScreen_InputHandler_StartToCry();
         }
@@ -2116,7 +2130,58 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)//think task show dex entry fro
         FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 2, 30, 16);
         CopyBgTilemapBufferToVram(0);
         sPokedexScreenData->state = 1;
+        break;//put alt version of case 6, for form navigation below this, same just exclude dex->species setting
+    case 13:
+        HideBg(2); //will need set dexSpecies reassignment in new function, that loops form id table
+        HideBg(1); //if dexspecies is entry 0, before reassignment, don't make left arrow,  if next entry is 0xffff don't make right arrow
+        // foud this can use GET_BASE_SPECIES_ID(speciesId) can use to check if put left arrow
+        sPokedexScreenData->state = 2;
         break;
+    }
+}
+
+//left right
+static bool32 DexScreen_TryDisplayForms(u8 direction)
+{
+    s32 i; 
+    u16 seen;
+    u16 species = sPokedexScreenData->dexSpecies;
+    u8 FormId = GetFormIdFromFormSpeciesId(species); //id in relevant table of current species
+    u8 FinalFormId = GetFinalFormSpeciesId(species); //id of last form in table
+
+    if (direction) // Seek left
+    {
+        if (FormId == 0)
+            return FALSE;
+        for (i = FormId - 1; i >= 0; i--)
+        {
+            seen = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_SEEN, TRUE);
+            if (seen)
+            {
+                sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                return TRUE;
+            }
+                
+        }
+        return FALSE;
+    }
+    else    //seek right
+    {
+        if (FormId == FinalFormId || gFormSpeciesIdTables[species] == NULL)
+            return FALSE;
+
+        for (i = FormId + 1; i <= FinalFormId; i++)
+        {
+            seen = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_SEEN, TRUE);
+            if (seen)
+            {
+                sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                return TRUE;
+            }
+                
+        }
+        return FALSE;
+
     }
 }
 
@@ -2394,14 +2459,21 @@ static u32 DexScreen_GetDefaultPersonality(int species)
     }
 }
 
+//all need is use dexSPecies for argument
 static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOffset)
 {
     LoadMonPicInWindow(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, paletteOffset >> 4, windowId);
 }
 
+//use getbase form for this, make if species greater than, nat species count, assign species to base form id
+//vsonic then do same for ht wt etc.
 static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
 {
-    u16 dexNum = SpeciesToNationalPokedexNum(species);
+    u16 dexNum;
+
+        if (species > NATIONAL_SPECIES_COUNT)
+            species = GetFormSpeciesId(species, 0); //returns base form species, and num, w/o changing dexspecis
+    dexNum = SpeciesToNationalPokedexNum(species);
     DexScreen_AddTextPrinterParameterized(windowId, fontId, gText_PokedexNo, x, y, 0);
     DexScreen_PrintNum3LeadingZeroes(windowId, fontId, dexNum, x + 9, y, 0);
 }
@@ -2452,8 +2524,8 @@ s8 DexScreen_GetSetPokedexFlag(u16 nationalDexNo, u8 caseId, bool8 indexIsSpecie
         gSaveBlock2Ptr->pokedex.owned[index] |= mask;
         break;
     }
-    return retVal;
-    //return 1;   //dex test value  //other in event_data.c IsNationalPokedexEnabled function
+    //return retVal;
+    return 1;   //dex test value  //other in event_data.c IsNationalPokedexEnabled function
 } //for some reason navigation only works with my dex test breaks, without them everything gets fucked so EVEN MORE FUCKING WORK
 
 static u16 DexScreen_GetDexCount(u8 caseId, bool8 whichDex) //vsonic IMPORTANT, right now have more nat dex species values than I actually have array spots or dex entries
@@ -2872,11 +2944,14 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     u8 * categoryName;
     u8 index, categoryStr[12];
 
+    if (species > NATIONAL_SPECIES_COUNT)
+        species = GetFormSpeciesId(species, 0);
+
     species = SpeciesToNationalPokedexNum(species);
 
     categoryName = (u8 *)gPokedexEntries[species].categoryName;
     index = 0;
-    if (DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, FALSE))
+    if (DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE))
     {
 #if REVISION == 0
         while ((categoryName[index] != CHAR_SPACE) && (index < 11))
@@ -2912,7 +2987,12 @@ void DexScreen_PrintMonHeight(u8 windowId, u16 species, u8 x, u8 y)
     u8 buffer[32];
     u8 i;
 
+    
+    if (species > NATIONAL_SPECIES_COUNT)
+        species = GetFormSpeciesId(species, 0);
+
     species = SpeciesToNationalPokedexNum(species);
+
     height = gPokedexEntries[species].height;
     labelText = gText_HT;
 
@@ -2922,7 +3002,7 @@ void DexScreen_PrintMonHeight(u8 windowId, u16 species, u8 x, u8 y)
     buffer[i++] = 5;
     buffer[i++] = CHAR_SPACE;
 
-    if (DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, FALSE))
+    if (DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE)) //this needs to use source value nto species
     {
         inches = 10000 * height / 254; // actually tenths of inches here
         if (inches % 10 >= 5)
@@ -2972,7 +3052,12 @@ void DexScreen_PrintMonWeight(u8 windowId, u16 species, u8 x, u8 y)
     u8 i;
     u32 j;
 
+
+    if (species > NATIONAL_SPECIES_COUNT)
+        species = GetFormSpeciesId(species, 0);
+
     species = SpeciesToNationalPokedexNum(species);
+
     weight = gPokedexEntries[species].weight;
     labelText = gText_WT;
     lbsText = gText_Lbs;
@@ -2982,7 +3067,7 @@ void DexScreen_PrintMonWeight(u8 windowId, u16 species, u8 x, u8 y)
     buffer[i++] = EXT_CTRL_CODE_MIN_LETTER_SPACING;
     buffer[i++] = 5;
 
-    if (DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, FALSE))
+    if (DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE))
     {
         lbs = (weight * 100000) / 4536; // Convert to hundredths of lb
 
@@ -3058,6 +3143,9 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
     struct TextPrinterTemplate printerTemplate;
     u16 length;
     s32 xCenter;
+
+    if (species > NATIONAL_SPECIES_COUNT)
+            species = GetFormSpeciesId(species, 0); //returns base form species, and num, w/o changing dexspecis
 
     species = SpeciesToNationalPokedexNum(species);
 
@@ -3138,10 +3226,11 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered) //should be able to uss
     }
     if (sPokedexScreenData->dexSpecies == SPECIES_AZELF 
     || sPokedexScreenData->dexSpecies == SPECIES_MESPRIT 
-    || sPokedexScreenData->dexSpecies == SPECIES_UXIE)
+    || sPokedexScreenData->dexSpecies == SPECIES_UXIE
+    || sPokedexScreenData->dexSpecies == SPECIES_ORBEETLE) //SEE IF LOOKS BETTER
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic3_Highest); //works
 
-    else if (sPokedexScreenData->dexSpecies != gDexAdjusting[i]) //if mon not in list, uses biger window
+    else if (sPokedexScreenData->dexSpecies != gDexAdjusting[i]) //if mon not in list, uses higher window
         sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic2_Large);
         
     else
@@ -3156,7 +3245,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered) //should be able to uss
     PutWindowTilemap(sPokedexScreenData->windowIds[0]);
     CopyWindowToVram(sPokedexScreenData->windowIds[0], COPYWIN_GFX);
 
-    // Species stats
+    // Species stats -need change these print functions, dexno cat, height & weight
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[1], PIXEL_FILL(0));
     DexScreen_PrintMonDexNo(sPokedexScreenData->windowIds[1], FONT_SMALL, sPokedexScreenData->dexSpecies, 0, 1);
     DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[1], FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], 28, 1, 0);
@@ -3174,11 +3263,14 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered) //should be able to uss
     CopyWindowToVram(sPokedexScreenData->windowIds[2], COPYWIN_GFX);
 
     // Control info - cancel/next buttons
-    FillWindowPixelBuffer(1, PIXEL_FILL(15)); //was 255
+    FillWindowPixelBuffer(1, PIXEL_FILL(15)); //was 255  /is same thing calcs to 15 bitwise or 15 left shft 4
     if (justRegistered == FALSE)
     {
         DexScreen_AddTextPrinterParameterized(1, FONT_SMALL, gText_Cry, 8, 2, 4);
-        DexScreen_PrintControlInfo(gText_NextDataCancel);
+        if (gFormSpeciesIdTables[sPokedexScreenData->dexSpecies] != NULL) //if has a form should display form text
+            DexScreen_PrintControlInfo(gText_FormsNextDataCancel);
+        else
+            DexScreen_PrintControlInfo(gText_NextDataCancel);//wa bale to update and add a dpad forms graphic to this don't need scroll arrows
     }
     else
         // Just registered

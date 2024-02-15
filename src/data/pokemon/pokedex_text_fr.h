@@ -4913,8 +4913,8 @@ const u8 gCinderacePokedexText[] = _(
 
 const u8 gSobblePokedexText[] = _(
     "When scared, this Pokémon cries.\n"
-    "Its tears pack the chemical punch of 100\n"
-    "onions, and attackers won't be\n"
+    "Its tears pack the chemical punch of\n"
+    "100 onions, and attackers won't be\n"
     "able to resist weeping.");
 
 const u8 gDrizzilePokedexText[] = _(

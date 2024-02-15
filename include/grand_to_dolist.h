@@ -2075,6 +2075,52 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   think to do that neeed loop gFormSpeciesIdTables array
   against dexspecies
 
+  //need add on to dex, make entries for mega forms and other forms
+  but would need it to default to the base species dex number
+  look at how dex convert to nat dex works ok I THINK
+  I can keep it the same with converting to base species
+  to make it pull the normal number
+  but what I can do is, for the portion that pulls the dex entry,
+  I can add a check compare dex species if above nat species, make entry use dex species value as index
+  //long as entries are in order can make it pull that value
+
+  -overall changes I"d need to make are add onto natdex aarray, add all forms to list
+  wait they might already be in list?? - they're already added
+  - add entries for forms to dex entries list in pokede_entries
+  - make comparative function to rhh where I pull the dex entry from the array
+  will be based on if dex species is greater than nat species count
+  -then in scroll vertically function add logic for moving left and righht based on forms
+  -mostly done, made ground work, added nat dex forms, adjusted constants
+  made it able to read base species info for dex, other than entry
+  last thin neeeded is add new dex entries for forms from EE
+  then use functions (not macros) for getting base form and final form
+  and use those to add on where I need to, to be able to move
+  to that dex form, of course you have had to seen both the base and the other form
+  to be able to move, but usually that's normal
+
+  plan can just use species since idea is its something I've already seen or caught
+  if I've seen teh form, be able to move to it from base species page
+  via left right
+  -want do work same way move vertical works,
+  just fade in to the next species page w dex entry
+  -oh change from monvertical its not that function I need to put it in
+  its Task_DexScreen_ShowMonPage
+  -got whole thing working, but still facing some odd graphic issue no some values
+  -thiking could just be bit shift errors because its populating a random value, 
+  /since I don't have dex entries added, also need to port categories for mon if they exist in EE
+  -since some mon shift too greatly i.e legendary birds
+  -or just make diff categories for them, and treat like I did uxie etc. three elves
+  -and do specific changes just for them
+
+  -note need add logic for mon area page for trainer size comparison,
+  simpelest thing is just take base species values for size, but load mon pic
+  based on dexSpecies
+
+  IMPORTANT, idk what happened but grahpic glitch when scroll now?
+  //for some reason happens around value 200, attempt shift listitems buffers
+  back to use calyrex as that is technically the max value for the dex
+  hopefully its as simple as that
+
 
   //Important BIND still has freezing issue? happened when it locked into status move
 

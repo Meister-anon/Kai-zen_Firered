@@ -1150,6 +1150,7 @@ const u16 gDexCategory_GrasslandPkmnlist[] =
     SPECIES_SIRFETCHD,
     SPECIES_EISCUE,
     SPECIES_INDEEDEE,
+    SPECIES_VENUSAUR_MEGA,
 };
 
 const u16 gDexCategory_ForestPkmnlist[] = {
@@ -1893,6 +1894,8 @@ const u16 gDexCategory_MountainPkmnlist[] = {
     SPECIES_WYRDEER,
     SPECIES_SNEASLER,
     SPECIES_CEFIREON,
+    SPECIES_CHARIZARD_MEGA_X,
+    SPECIES_CHARIZARD_MEGA_Y,
 };
 
 //harsh environments, swamps deserts, savahna etc.
