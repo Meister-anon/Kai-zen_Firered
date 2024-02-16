@@ -5388,9 +5388,9 @@ const u8 gWyrdeerPokedexText[] = _(
 
 const u8 gKleavorPokedexText[] = _(
     "A violent creature that fells trees with\n"
-    "its crude axes and shields itself with hard\n"
-    "stone. Should one encounter this Pokémon\n"
-    "in the wild, one's only recourse is to flee.");
+    "its crude axes and shields itself with\n"
+    "hard stone. If one encounters this Pokémon\n"
+    "in the wild, the only recourse is to flee.");
 
 const u8 gUrsalunaPokedexText[] = _(
     "Swampy terrain gives Ursaluna its burly\n"

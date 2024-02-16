@@ -2507,7 +2507,7 @@ const struct PokedexEntry gPokedexEntries[] =
 
     [NATIONAL_DEX_GLIGAR] =
     {
-        .categoryName = _("Fly Scorpion"),
+        .categoryName = _("Fly-Scorpion"),
         .height = 11,
         .weight = 648,
         .description = gGligarPokedexText,
@@ -10808,7 +10808,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerScale = 256,
         .trainerOffset = 0,
     },
-    
+
     [NATIONAL_DEX_WYRDEER] =
     {
         .categoryName = _("Big Horn"),

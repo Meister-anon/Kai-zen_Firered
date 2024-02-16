@@ -2941,8 +2941,9 @@ void DexScreen_DexPageZoomEffectFrame(u8 bg, u8 scale)
 
 void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
 {
-    u8 * categoryName;
-    u8 index, categoryStr[12];
+    u8 * categoryName; //ok works now
+    u8 index;
+    u8 categoryStr[13];//changed from 12 - issue was this, wasn't defined right, needed  be separate
 
     if (species > NATIONAL_SPECIES_COUNT)
         species = GetFormSpeciesId(species, 0);
@@ -2953,11 +2954,11 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     index = 0;
     if (DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE))
     {
-#if REVISION == 0
-        while ((categoryName[index] != CHAR_SPACE) && (index < 11))
-#else
-        while ((categoryName[index] != EOS) && (index < 11))
-#endif
+//#if REVISION == 0
+ //       while ((categoryName[index] != CHAR_SPACE) && (index <= 13)) //potentially this is issue, need raise this
+//#else
+        while ((categoryName[index] != EOS) && (index <= 13)) //ok realized issue, above code is wrong, breaks line as soon as encounter space, replace with eos
+//#endif
         {
             categoryStr[index] = categoryName[index];
             index++;
@@ -2965,7 +2966,7 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     }
     else
     {
-        while (index < 11)
+        while (index < 11) //if this is length, this is just about filling blanks, so can leave as is
         {
             categoryStr[index] = CHAR_QUESTION_MARK;
             index++;
@@ -3300,7 +3301,14 @@ u8 DexScreen_DrawMonAreaPage(void)
     u16 kantoMapVoff;
 
     species = sPokedexScreenData->dexSpecies;
-    speciesId = SpeciesToNationalPokedexNum(species);
+    //seems can just fully replace speciesId use, as its only used in size comparison
+    if (species > NATIONAL_SPECIES_COUNT)
+        speciesId = SpeciesToNationalPokedexNum(GetFormSpeciesId(species, 0)); //returns base form species
+    else
+        speciesId = SpeciesToNationalPokedexNum(species);
+    //doesn't work with out below
+    //speciesId = SpeciesToNationalPokedexNum(species); //kept this , as before was using nat number so hopefully won't break anything
+    
     monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
     width = 28;
     height = 14;
@@ -3412,7 +3420,10 @@ u8 DexScreen_DrawMonAreaPage(void)
     ResetAllPicSprites();
     LoadPalette(sPalette_Silhouette, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
 
-    if (monIsCaught)
+    //will now fill baseform if above species count
+    //something wrong w base spepcies pikachu bigger than forms
+    //despite supposedly using same values
+    if (monIsCaught) 
     {
         sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, 40, 104, 0, 0xFFFF); //was 65535
         gSprites[sPokedexScreenData->windowIds[14]].oam.paletteNum = 2;
@@ -3421,6 +3432,7 @@ u8 DexScreen_DrawMonAreaPage(void)
         gSprites[sPokedexScreenData->windowIds[14]].oam.priority = 1;
         gSprites[sPokedexScreenData->windowIds[14]].pos2.y = gPokedexEntries[speciesId].pokemonOffset; //this is elevation of mon pic
         SetOamMatrix(2, gPokedexEntries[speciesId].pokemonScale, 0, 0, gPokedexEntries[speciesId].pokemonScale);
+        //trainer pic values
         sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId_Debug(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 104, 0, 0xFFFF); //same as above
         gSprites[sPokedexScreenData->windowIds[15]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[15]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
