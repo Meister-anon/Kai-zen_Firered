@@ -100,6 +100,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ARCEUS] = sArceusFormSpeciesIdTable,
 
     [SPECIES_SAMUROTT] = sSamurottFormSpeciesIdTable,
+    [SPECIES_UNFEZANT_M] = sUnfezantFormSpeciesIdTable,
     [SPECIES_AUDINO] = sAudinoFormSpeciesIdTable,
     [SPECIES_BASCULIN] = sBasculinFormSpeciesIdTable,
     [SPECIES_LILLIGANT] = sLilligantFormSpeciesIdTable,
@@ -122,6 +123,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_GRENINJA] = sGreninjaFormSpeciesIdTable,
     [SPECIES_VIVILLON] = sVivillonFormSpeciesIdTable,
+    [SPECIES_PYROAR_M] = sPyroarFormSpeciesIdTable,
     [SPECIES_FLABEBE] = sFlabebeFormSpeciesIdTable,
     [SPECIES_FLOETTE] = sFloetteFormSpeciesIdTable,
     [SPECIES_FLORGES] = sFlorgesFormSpeciesIdTable,
@@ -383,7 +385,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     // Basculin
     [SPECIES_BASCULIN_BLUE_STRIPED] = sBasculinFormSpeciesIdTable,
-    //[SPECIES_BASCULIN_WHITE_STRIPED] = sBasculinFormSpeciesIdTable,
+    [SPECIES_BASCULIN_WHITE_STRIPED] = sBasculinFormSpeciesIdTable,
     // Darmanitan
     [SPECIES_DARMANITAN_ZEN_MODE] = sDarmanitanFormSpeciesIdTable,
     [SPECIES_DARMANITAN_ZEN_MODE_GALARIAN] = sDarmanitanFormSpeciesIdTable,
@@ -435,6 +437,10 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_VIVILLON_JUNGLE] = sVivillonFormSpeciesIdTable,
     [SPECIES_VIVILLON_FANCY] = sVivillonFormSpeciesIdTable,
     [SPECIES_VIVILLON_POKE_BALL] = sVivillonFormSpeciesIdTable,
+    // Unfezant
+    [SPECIES_UNFEZANT_F] = sUnfezantFormSpeciesIdTable,
+    // Pyroar
+    [SPECIES_PYROAR_F] = sPyroarFormSpeciesIdTable,
     // Flabébé
     [SPECIES_FLABEBE_YELLOW_FLOWER] = sFlabebeFormSpeciesIdTable,
     [SPECIES_FLABEBE_ORANGE_FLOWER] = sFlabebeFormSpeciesIdTable,
@@ -575,6 +581,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     // Enamorus
     [SPECIES_ENAMORUS_THERIAN] = sEnamorusFormSpeciesIdTable,
     // Basculegion
-    //[SPECIES_BASCULEGION_FEMALE] = sBasculegionFormSpeciesIdTable,
+    [SPECIES_BASCULEGION_FEMALE] = sBasculegionFormSpeciesIdTable,
 
 };

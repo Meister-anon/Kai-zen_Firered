@@ -899,6 +899,13 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(GLASTRIER, gMonShinyPalette_Glastrier),
     SPECIES_SHINY_PAL(SPECTRIER, gMonShinyPalette_Spectrier),
     SPECIES_SHINY_PAL(CALYREX, gMonShinyPalette_Calyrex),
+    SPECIES_SHINY_PAL(WYRDEER, gMonShinyPalette_Wyrdeer),
+    SPECIES_SHINY_PAL(KLEAVOR, gMonShinyPalette_Kleavor),
+    SPECIES_SHINY_PAL(URSALUNA, gMonShinyPalette_Ursaluna),
+    SPECIES_SHINY_PAL(BASCULEGION, gMonShinyPalette_Basculegion),
+    SPECIES_SHINY_PAL(SNEASLER, gMonShinyPalette_Sneasler),
+    SPECIES_SHINY_PAL(OVERQWIL, gMonShinyPalette_Overqwil),
+    SPECIES_SHINY_PAL(ENAMORUS, gMonShinyPalette_Enamorus),
 
     SPECIES_SHINY_PAL(VENUSAUR_MEGA, gMonShinyPalette_VenusaurMega),
     SPECIES_SHINY_PAL(CHARIZARD_MEGA_X, gMonShinyPalette_CharizardMegaX),
@@ -1103,6 +1110,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(ARCEUS_FAIRY, gMonShinyPalette_ArceusFairy),
 
     SPECIES_SHINY_PAL(BASCULIN_BLUE_STRIPED, gMonShinyPalette_BasculinBlueStriped),
+    SPECIES_SHINY_PAL(BASCULIN_WHITE_STRIPED, gMonShinyPalette_BasculinHisuian),
 
     SPECIES_SHINY_PAL(DARMANITAN_ZEN_MODE, gMonShinyPalette_DarmanitanZenMode),
     SPECIES_SHINY_PAL(DARMANITAN_ZEN_MODE_GALARIAN, gMonShinyPalette_DarmanitanZenModeGalarian),
@@ -1293,6 +1301,9 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(CALYREX_ICE_RIDER, gMonShinyPalette_CalyrexIceRider),
     SPECIES_SHINY_PAL(CALYREX_SHADOW_RIDER, gMonShinyPalette_CalyrexShadowRider),
 
+    SPECIES_SHINY_PAL(BASCULEGION_FEMALE, gMonShinyPalette_BasculegionFemale),
+    SPECIES_SHINY_PAL(ENAMORUS_THERIAN, gMonShinyPalette_EnamorusTherian),
+    
     SPECIES_SHINY_PAL(EGG, gMonPalette_Egg),
 };
 

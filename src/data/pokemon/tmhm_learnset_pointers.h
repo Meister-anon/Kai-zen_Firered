@@ -1121,6 +1121,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     */
     // Basculin
     [SPECIES_BASCULIN_BLUE_STRIPED] = sBasculinTMHMLearnset,
+    [SPECIES_BASCULIN_WHITE_STRIPED] = sBasculinTMHMLearnset,
     // Darmanitan
     [SPECIES_DARMANITAN_ZEN_MODE] = sDarmanitanTMHMLearnset,
     [SPECIES_DARMANITAN_ZEN_MODE_GALARIAN] = sDarmanitanGalarianTMHMLearnset,

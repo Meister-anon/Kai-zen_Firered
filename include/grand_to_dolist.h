@@ -2119,7 +2119,52 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   IMPORTANT, idk what happened but grahpic glitch when scroll now?
   //for some reason happens around value 200, attempt shift listitems buffers
   back to use calyrex as that is technically the max value for the dex
-  hopefully its as simple as that
+  hopefully its as simple as that -wasn't calyrex but changing max value did fix it
+  -had to use 907 actual max species, not sure why that worked but glad
+
+  -new note, plan for encounters since normal forms are same species just different colors,
+  if there is a way to decide how that determines which form to display on encounter,
+  perhaps I can do something simlar for forms that are different species,
+  do something where it reads the species, checks form_Species_table_pointers
+  and could do a random num using getfinalidfromspecies to return num forms in table
+  and do a random based on that, or make a function to select odds
+  leave blank it will do random % num forms, to do even odds,
+  otherwise it'll take an input value and that'll be assigned to the 
+  species listed in the json,  and the form will use 100 - that value as its odds
+  ex.  pyroar_f is species listed  in function value is 70,
+  that leaves  pyroar_m to occur 30% of the time for the given odds of that line
+
+  -would prefer doing that as otherwise, I'd need to take up multiple lines
+  for gender forms as they are separate species idk having more control would be nice
+  but would be lost in binary, so perhaps just split it evenly?
+  -this would just be for gendered forms? but would also want to do for cosplay pikachu
+  not sure if I could? idea I would want is set normal pikachu
+  up till a point, then has a chance to encounter any of the cosplay forms
+  when pikachu is in table  ok that works, and species_pikachu_cosplay is already set
+  to that table, so all I'd have to do is setup forms like that,
+  set evenly and then late game set species to cosplay pikachu,
+  add some logic to exclude specifically base pikachu from the form thing
+  could make an array of species to exclude, can put base pikachu there along with all mega form only mon
+
+  -ok yeah that works for me, have form encounter exclusion table for base pika and megas
+  setup encounter function to check for mon that have forms and are not on array list
+  and check number of forms they have then if they appear in encounter have even odds to occur
+  probably exclude hisiun galarian forms as well, since they wouldn't want to be in same environment?
+
+  -further thought, just make a list for mon it should be not excluded mon,
+  since I'm thinking this would only be for gendered mon and the cosplay forms
+  and I guess mon that just have alt colors like alcremie vivilion etc.
+  well other than equal odds, would be better to weight it somehow?
+  -basculin too  note need setup white stripe baculin, that's the hisuian form that evolves to basculegion
+
+  one option is to separate pikachu and cosplay pikachu,
+  give cosplay pikachu its own form table, that is only the forms
+  not cosplay pikachu, then I can put cosplay_pikachu in the encounter table
+  later in game, and it'd pull just the forms
+
+  -would need a filter to ensure this doesn't occur for mega mon
+  //hmm well can do a check is mega since all mega have the mega flag
+  in their base stats data
 
 
   //Important BIND still has freezing issue? happened when it locked into status move

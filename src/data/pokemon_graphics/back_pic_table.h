@@ -899,6 +899,13 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(GLASTRIER, gMonBackPic_Glastrier),
     SPECIES_SPRITE(SPECTRIER, gMonBackPic_Spectrier),
     SPECIES_SPRITE(CALYREX, gMonBackPic_Calyrex),
+    SPECIES_SPRITE(WYRDEER, gMonBackPic_Wyrdeer),
+    SPECIES_SPRITE(KLEAVOR, gMonBackPic_Kleavor),
+    SPECIES_SPRITE(URSALUNA, gMonBackPic_Ursaluna),
+    SPECIES_SPRITE(BASCULEGION, gMonBackPic_Basculegion),
+    SPECIES_SPRITE(SNEASLER, gMonBackPic_Sneasler),
+    SPECIES_SPRITE(OVERQWIL, gMonBackPic_Overqwil),
+    SPECIES_SPRITE(ENAMORUS, gMonBackPic_Enamorus),
 
     SPECIES_SPRITE(VENUSAUR_MEGA, gMonBackPic_VenusaurMega),
     SPECIES_SPRITE(CHARIZARD_MEGA_X, gMonBackPic_CharizardMegaX),
@@ -1103,6 +1110,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(ARCEUS_FAIRY, gMonBackPic_Arceus),
 
     SPECIES_SPRITE(BASCULIN_BLUE_STRIPED, gMonBackPic_BasculinBlueStriped),
+    SPECIES_SPRITE(BASCULIN_WHITE_STRIPED, gMonBackPic_BasculinHisuian),
 
     SPECIES_SPRITE(DARMANITAN_ZEN_MODE, gMonBackPic_DarmanitanZenMode),
     SPECIES_SPRITE(DARMANITAN_ZEN_MODE_GALARIAN, gMonBackPic_DarmanitanZenModeGalarian),
@@ -1292,6 +1300,10 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
 
     SPECIES_SPRITE(CALYREX_ICE_RIDER, gMonBackPic_CalyrexIceRider),
     SPECIES_SPRITE(CALYREX_SHADOW_RIDER, gMonBackPic_CalyrexShadowRider),
+
+    SPECIES_SPRITE(ENAMORUS_THERIAN, gMonBackPic_EnamorusTherian),
+
+    SPECIES_SPRITE(BASCULEGION_FEMALE, gMonBackPic_BasculegionFemale),
 
     SPECIES_SPRITE(EGG, gMonFrontPic_Egg),
 };

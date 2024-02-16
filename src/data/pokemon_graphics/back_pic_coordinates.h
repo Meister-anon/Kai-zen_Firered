@@ -4499,6 +4499,41 @@ const struct MonCoords gMonBackPicCoords[] =
     {
         .size = 0x76,
         .y_offset = 10,
+    },//check added below as needed
+    [SPECIES_WYRDEER] =
+    {
+        .size = 0x78,
+        .y_offset = 5,
+    },
+    [SPECIES_KLEAVOR] =
+    {
+        .size = 0x78,
+        .y_offset = 5,
+    },
+    [SPECIES_URSALUNA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_BASCULEGION] =
+    {
+        .size = 0x72,
+        .y_offset = 5,
+    },
+    [SPECIES_SNEASLER] =
+    {
+        .size = 0x76,
+        .y_offset = 10,
+    },
+    [SPECIES_OVERQWIL] =
+    {
+        .size = 0x62, 
+        .y_offset = 10,
+    },
+    [SPECIES_ENAMORUS] =
+    {
+        .size = 0x68,
+        .y_offset = 7,
     },
     // Megas
     [SPECIES_VENUSAUR_MEGA] =
@@ -5377,6 +5412,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x86,
         .y_offset = 16,
     },
+    [SPECIES_BASCULIN_WHITE_STRIPED] =
+    {
+        .size = 0x86,
+        .y_offset = 16,
+    },
     // Darmanitan
     [SPECIES_DARMANITAN_ZEN_MODE] =
     {
@@ -6125,6 +6165,17 @@ const struct MonCoords gMonBackPicCoords[] =
     {
         .size = 0x87,
         .y_offset = 7,
+    },
+    [SPECIES_ENAMORUS_THERIAN] = 
+    {
+        .size = 0x68,
+        .y_offset = 7,
+    },
+    // Basculegion
+    [SPECIES_BASCULEGION_FEMALE] = 
+    {
+        .size = 0x72,
+        .y_offset = 5,
     },
     // Egg
     [SPECIES_EGG] =

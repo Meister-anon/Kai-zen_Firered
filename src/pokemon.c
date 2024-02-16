@@ -1410,6 +1410,14 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     SPECIES_TO_NATIONAL(SPECTRIER),
     SPECIES_TO_NATIONAL(CALYREX),
 
+    SPECIES_TO_NATIONAL(WYRDEER),// 899
+    SPECIES_TO_NATIONAL(KLEAVOR),// 900
+    SPECIES_TO_NATIONAL(URSALUNA),// 901
+    SPECIES_TO_NATIONAL(BASCULEGION),// 902
+    SPECIES_TO_NATIONAL(SNEASLER),// 903
+    SPECIES_TO_NATIONAL(OVERQWIL),// 904
+    SPECIES_TO_NATIONAL(ENAMORUS),// 905
+
     // Megas - for these to appear properly as not caught, would need to make each of these its own id (not gendered forms)
     //but then if species is above species form count, above calyrex, use baseform macro to load base species like it worked here
     //and use base species for dex info besides the entry, i.e ht wt category (x pokemon) and dex number
@@ -1527,6 +1535,7 @@ static const u16 sSpeciesToNationalPokedexNum[] =
 
     SPECIES_TO_NATIONAL(DECIDUEYE_HISUIAN), // - 1] = NATIONAL_DEX_DECIDUEYE,
 
+    SPECIES_TO_NATIONAL(BASCULIN_WHITE_STRIPED), //HISUIAN FORM
     // Cosplay Pikachu
     //SPECIES_TO_NATIONAL(PIKACHU_COSPLAY), // - 1] = NATIONAL_DEX_PIKACHU,
     SPECIES_TO_NATIONAL(PIKACHU_ROCK_STAR), // - 1] = NATIONAL_DEX_PIKACHU,
@@ -1535,6 +1544,7 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     SPECIES_TO_NATIONAL(PIKACHU_PH_D), // - 1] = NATIONAL_DEX_PIKACHU,
     SPECIES_TO_NATIONAL(PIKACHU_LIBRE), // - 1] = NATIONAL_DEX_PIKACHU,
     //End of Original Entry Forms
+
 
     // Cap Pikachu
     [SPECIES_PIKACHU_ORIGINAL_CAP - 1] = NATIONAL_DEX_PIKACHU,

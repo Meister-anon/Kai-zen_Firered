@@ -898,6 +898,13 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_GLASTRIER] = _("Glastrier"),
     [SPECIES_SPECTRIER] = _("Spectrier"),
     [SPECIES_CALYREX] = _("Calyrex"),
+    [SPECIES_WYRDEER] = _("Wyrdeer"),
+    [SPECIES_KLEAVOR] = _("Kleavor"),
+    [SPECIES_URSALUNA] = _("Ursaluna"),
+    [SPECIES_BASCULEGION] = _("Basculegion"),
+    [SPECIES_SNEASLER] = _("Sneasler"),
+    [SPECIES_OVERQWIL] = _("Overqwil"),
+    [SPECIES_ENAMORUS] = _("Enamorus"),
 
     // Megas
     [SPECIES_VENUSAUR_MEGA] = _("Venusaur"),
@@ -1111,6 +1118,7 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_ARCEUS_FAIRY] = _("Arceus"),
     // Basculin
     [SPECIES_BASCULIN_BLUE_STRIPED] = _("Basculin"),
+    [SPECIES_BASCULIN_WHITE_STRIPED] = _("Basculin"),
     // Darmanitan
     [SPECIES_DARMANITAN_ZEN_MODE] = _("Darmanitan"),
     [SPECIES_DARMANITAN_ZEN_MODE_GALARIAN] = _("Darmanitan"),
@@ -1126,6 +1134,8 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_TORNADUS_THERIAN] = _("Tornadus"),
     [SPECIES_THUNDURUS_THERIAN] = _("Thundurus"),
     [SPECIES_LANDORUS_THERIAN] = _("Landorus"),
+    //  Enamorus Therian
+    [SPECIES_ENAMORUS_THERIAN] = _("Enamorus"),
     // Kyurem
     [SPECIES_KYUREM_BLACK] = _("Kyurem"),
     [SPECIES_KYUREM_WHITE] = _("Kyurem"),
@@ -1300,7 +1310,9 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     // Calyrex
     [SPECIES_CALYREX_ICE_RIDER] = _("Calyrex"),
     [SPECIES_CALYREX_SHADOW_RIDER] = _("Calyrex"), 
-
+    // Basculegion female
+    [SPECIES_BASCULEGION_FEMALE] = _("Basculegion"),
     //New megas
     [SPECIES_TORTERRA_MEGA] = _("Torterra"), 
+    [SPECIES_MAROWAK_MEGA] = _("Marowak"),
 };

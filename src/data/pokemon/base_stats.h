@@ -23696,7 +23696,7 @@ const struct BaseStats gBaseStats[] =
             .catchRate = 25,
             .expYield = 186,
             //.evYield_HP = 2,
-            .genderRatio = PERCENT_FEMALE(50),
+            .genderRatio = MON_MALE,
             .eggCycles = 40,
              .friendship = 15,
             .growthRate = GROWTH_MEDIUM_FAST,
@@ -29243,6 +29243,32 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
+    [SPECIES_BASCULIN_WHITE_STRIPED] =
+    { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(70, 92, 65, 98, 80, 55),
+        .type1 = TYPE_WATER,
+        .type2 = TYPE_WATER,
+        .catchRate = 25,
+        .expYield = 161,
+        //.evYield_Speed = 2,
+        //.item2 = ITEM_DEEP_SEA_SCALE,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 40,
+         .friendship = 15,
+        .growthRate = GROWTH_MEDIUM_FAST,
+        .eggGroup1 = EGG_GROUP_WATER_2,
+        .eggGroup2 = EGG_GROUP_WATER_2,
+        //#ifdef BATTLE_ENGINE
+            .abilities = {ABILITY_RATTLED, ABILITY_ADAPTABILITY},
+            .abilityHidden = {ABILITY_MOLD_BREAKER, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_GREEN,
+        .noFlip = FALSE,
+        .flags = F_HISUIAN_FORM,
+    },//hisuian form, but other than being only one to evolve seems identical?
+    //Only White-Striped Basculin can have the Ability Rattled. They also learn Uproar at level 40 instead of Final Gambit
+    // like the other forms and can evolve into Basculegion.
+
     [SPECIES_DARMANITAN_ZEN_MODE] =
     { 
            //hp, atk, def, spd, spatk, spdef
@@ -29546,6 +29572,35 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_INTIMIDATE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
+    },
+
+    [SPECIES_ENAMORUS_THERIAN] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        74,
+        115,
+        110,
+        46,
+        135,
+        100
+        ),
+        .type1 = TYPE_FAIRY,
+        .type2 = TYPE_FLYING,
+        .catchRate = 3,
+        .expYield = 270,
+        //.evYield_SpAttack = 3,
+        .genderRatio = MON_FEMALE,
+        .eggCycles = 120,
+        .friendship = 25,
+        .growthRate = GROWTH_SLOW,
+        .eggGroup1 = EGG_GROUP_UNDISCOVERED,
+        .eggGroup2 = EGG_GROUP_UNDISCOVERED,
+        .abilities = {ABILITY_OVERCOAT, ABILITY_NONE},
+        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_PINK,
+        .noFlip = FALSE,
+        //.flags = SPECIES_FLAG_LEGENDARY, don't need
     },
 
     [SPECIES_KYUREM_WHITE] =
@@ -33631,6 +33686,35 @@ const struct BaseStats gBaseStats[] =
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
     },//note setup ability so it plays the cry of spectrier before the stat boost IMPORTANT - DONE
+
+    [SPECIES_BASCULEGION_FEMALE] =
+        { 
+           //hp, atk, def, spd, spatk, spdef
+         STATS(
+            120,
+            112,
+            65,
+            78,
+            80,
+            75
+            ),
+            .type1 = TYPE_WATER,
+            .type2 = TYPE_GHOST,
+            .catchRate = 25,
+            .expYield = 186,
+            //.evYield_HP = 2,
+            .genderRatio = MON_FEMALE,
+            .eggCycles = 40,
+             .friendship = 15,
+            .growthRate = GROWTH_MEDIUM_FAST,
+            .eggGroup1 = EGG_GROUP_WATER_2,
+            .eggGroup2 = EGG_GROUP_WATER_2,
+            .abilities = {ABILITY_RATTLED, ABILITY_ADAPTABILITY},
+            .abilityHidden = {ABILITY_MOLD_BREAKER, ABILITY_NONE},
+            .bodyColor = BODY_COLOR_GREEN,
+            .noFlip = FALSE,
+            .flags = SPECIES_FLAG_GENDER_DIFFERENCE,
+        },
 
     [SPECIES_TORTERRA_MEGA] =
     { 

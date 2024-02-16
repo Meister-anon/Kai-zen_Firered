@@ -676,6 +676,12 @@ static const u16 sSamurottFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 
+static const u16 sUnfezantFormSpeciesIdTable[] = {
+    SPECIES_UNFEZANT_M,
+    SPECIES_UNFEZANT_F,
+    FORM_SPECIES_END,
+};
+
 static const u16 sAudinoFormSpeciesIdTable[] = {
     SPECIES_AUDINO,
     SPECIES_AUDINO_MEGA,
@@ -685,7 +691,7 @@ static const u16 sAudinoFormSpeciesIdTable[] = {
 static const u16 sBasculinFormSpeciesIdTable[] = {
     SPECIES_BASCULIN,
     SPECIES_BASCULIN_BLUE_STRIPED,
-    //SPECIES_BASCULIN_WHITE_STRIPED, //PRETTY SURE DOESN'T EXIST?
+    SPECIES_BASCULIN_WHITE_STRIPED, //PRETTY SURE DOESN'T EXIST? - does exist its hisuian form that evolves to basculigeon
     FORM_SPECIES_END,
 };
 
@@ -829,6 +835,12 @@ static const u16 sVivillonFormSpeciesIdTable[] = {
     SPECIES_VIVILLON_JUNGLE,
     SPECIES_VIVILLON_FANCY,
     SPECIES_VIVILLON_POKE_BALL,
+    FORM_SPECIES_END,
+};
+
+static const u16 sPyroarFormSpeciesIdTable[] = {
+    SPECIES_PYROAR_M,
+    SPECIES_PYROAR_F,
     FORM_SPECIES_END,
 };
 
@@ -1141,7 +1153,7 @@ static const u16 sEnamorusFormSpeciesIdTable[] = {
 
 static const u16 sBasculegionFormSpeciesIdTable[] = {
     SPECIES_BASCULEGION,
-    //SPECIES_BASCULEGION_FEMALE,  dont have yet
+    SPECIES_BASCULEGION_FEMALE,  
     FORM_SPECIES_END,
 };
 

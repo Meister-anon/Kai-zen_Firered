@@ -1150,7 +1150,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
 //#if P_GEN_5_POKEMON == TRUE
         // Basculin
         [SPECIES_BASCULIN_BLUE_STRIPED] = sBasculinLevelUpLearnset,
-        //[SPECIES_BASCULIN_WHITE_STRIPED] = sBasculinLevelUpLearnset,
+        [SPECIES_BASCULIN_WHITE_STRIPED] = sBasculinHisuianLevelUpLearnset,
         // Darmanitan
         [SPECIES_DARMANITAN_ZEN_MODE] = sDarmanitanLevelUpLearnset,
         [SPECIES_DARMANITAN_ZEN_MODE_GALARIAN] = sDarmanitanGalarianLevelUpLearnset,
@@ -1203,7 +1203,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         [SPECIES_VIVILLON_JUNGLE] = sVivillonLevelUpLearnset,
         [SPECIES_VIVILLON_FANCY] = sVivillonLevelUpLearnset,
         [SPECIES_VIVILLON_POKE_BALL] = sVivillonLevelUpLearnset,
-        // Flabébé
+        // Flabï¿½bï¿½
         [SPECIES_FLABEBE_YELLOW_FLOWER] = sFlabebeLevelUpLearnset,
         [SPECIES_FLABEBE_ORANGE_FLOWER] = sFlabebeLevelUpLearnset,
         [SPECIES_FLABEBE_BLUE_FLOWER] = sFlabebeLevelUpLearnset,
@@ -1342,6 +1342,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         // Calyrex
         [SPECIES_CALYREX_ICE_RIDER] = sCalyrexIceRiderLevelUpLearnset,
         [SPECIES_CALYREX_SHADOW_RIDER] = sCalyrexShadowRiderLevelUpLearnset,
+        // Basculegion female
+        [SPECIES_BASCULEGION_FEMALE] = sBasculegionLevelUpLearnset,
         // Enamorus
         [SPECIES_ENAMORUS_THERIAN] = sEnamorusLevelUpLearnset,
 };
