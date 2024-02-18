@@ -1802,10 +1802,11 @@ u16 RivalEeveelutionForPlayerStarter(void) //rather than this can just do like, 
 //...ok it seems to return species none...
 u16 GetFinalEvo(u16 species) //well least it works now
 {
+    const struct Evolution *evolutions = GetSpeciesEvolutions(species);
 
-    u16 targetSpecies = gEvolutionTable[species][0].targetSpecies;
+    u16 targetSpecies = evolutions[0].targetSpecies;
 
-    for (; targetSpecies != SPECIES_NONE; targetSpecies = gEvolutionTable[species][0].targetSpecies)
+    for (; targetSpecies != SPECIES_NONE; targetSpecies = evolutions[0].targetSpecies)
     {
         species = targetSpecies;        
     }
@@ -1819,12 +1820,22 @@ u16 De_Evolve(u16 targetSpecies)
 {
     u32 j;
     u16 species;
+    u16 NUM_EVOS_CAP;
+    
 
     for (species = 0; species != FORMS_START; species++)
     {
-        for (j = 0; j != EVOS_PER_MON; j++)
+        const struct Evolution *evo = GetSpeciesEvolutions(species); //changed name to ensure doesn't conflict w below
+        NUM_EVOS_CAP = gBaseStats[SanitizeSpeciesId(species)].evolutions == NULL ? EVOS_PER_MON : EVOLUTIONS_END;
+        
+
+        //for (j = 0; evolutions[j].method != EVOLUTIONS_END; j++)
+        for (j = 0; evo[j].method != NUM_EVOS_CAP; j++)
         {
-           if (gEvolutionTable[species][j].targetSpecies == targetSpecies)
+            if (SanitizeSpeciesId(evo[j].targetSpecies) == SPECIES_NONE)
+                continue;
+
+           if (evo[j].targetSpecies == targetSpecies)
             {
                 //targetSpecies = species;
                 //species = 0;
@@ -2667,7 +2678,7 @@ bool8 UsedPokemonCenterWarp(void)
 bool8 BufferTMHMMoveName(void)
 {
     // 8004 = item ID
-    if (gSpecialVar_0x8004 >= ITEM_TM01 && gSpecialVar_0x8004 <= ITEM_HM08)
+    if (gSpecialVar_0x8004 >= ITEM_TM01 && gSpecialVar_0x8004 <= ITEM_HM09)
     {
         StringCopy(gStringVar1, gMoveNames[ItemIdToBattleMoveId(gSpecialVar_0x8004)]);
         return TRUE;

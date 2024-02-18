@@ -2136,10 +2136,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
                         {
+                            const struct Evolution *evolutions = GetSpeciesEvolutions(VarGet(VAR_RIVAL_STARTER));
+
                             if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
                                 targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
                             else
-                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
+                                targetSpecies = evolutions[l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
                             
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
@@ -2164,7 +2166,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
                         {
-                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            const struct Evolution *evolutions = GetSpeciesEvolutions(VarGet(VAR_RIVAL_STARTER));
+
+                            targetSpecies = evolutions[l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
@@ -2343,10 +2347,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
                         {
+                            const struct Evolution *evolutions = GetSpeciesEvolutions(VarGet(VAR_RIVAL_STARTER));
+
                             if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
                                 targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
                             else
-                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
+                                targetSpecies = evolutions[l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
                             
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
@@ -2371,7 +2377,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
                         {
-                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            const struct Evolution *evolutions = GetSpeciesEvolutions(VarGet(VAR_RIVAL_STARTER));
+
+                            targetSpecies = evolutions[l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
@@ -2553,10 +2561,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
                         {
+                            const struct Evolution *evolutions = GetSpeciesEvolutions(VarGet(VAR_RIVAL_STARTER));
+
                             if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
                                 targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
                             else
-                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
+                                targetSpecies = evolutions[l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
                             
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
@@ -2581,7 +2591,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
                         {
-                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            const struct Evolution *evolutions = GetSpeciesEvolutions(VarGet(VAR_RIVAL_STARTER));
+
+                            targetSpecies = evolutions[l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);
@@ -2753,10 +2765,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) != VarGet(VAR_RIVAL_EVO))
                         {
+                            const struct Evolution *evolutions = GetSpeciesEvolutions(VarGet(VAR_RIVAL_STARTER));
+
                             if (VarGet(VAR_RIVAL_STARTER) == SPECIES_EEVEE) //prevent multi trigger as rival starter is updated after function/evolution 
                                 targetSpecies = RivalEeveelutionForPlayerStarter(); //as eevee is a one stage evolution, only needs this addition default logic will ensure it persists
                             else
-                                targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
+                                targetSpecies = evolutions[l].targetSpecies; //replace target species value if eevee starter here with "RivalEeveelutionForPlayerStarter"
                             
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
@@ -2781,7 +2795,9 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
                     {
                         if (VarGet(VAR_RIVAL_STARTER) == VarGet(VAR_RIVAL_EVO))
                         {
-                            targetSpecies = gEvolutionTable[VarGet(VAR_RIVAL_STARTER)][l].targetSpecies;
+                            const struct Evolution *evolutions = GetSpeciesEvolutions(VarGet(VAR_RIVAL_STARTER));
+
+                            targetSpecies = evolutions[l].targetSpecies;
                             if (targetSpecies != SPECIES_NONE) {
                                 VarSet(VAR_RIVAL_STARTER, targetSpecies);
                                 VarSet(VAR_RIVAL_EVO, targetSpecies);

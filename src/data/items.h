@@ -7211,7 +7211,24 @@ const struct Item gItems[] =
     }, //+100
     {
       .name = _("TM153"),
-      .itemId = ITEM_TM153_HOLD_BACK,
+      .itemId = ITEM_TM153_METAL_CLAW,
+      .price =  3000,
+      .holdEffect = HOLD_EFFECT_NONE,
+      .holdEffectParam =  0,
+     .description = gMoveDescription_MetalClaw,
+//      "description":  "A maximum-power attack of great\\nferocity, but one that also sharply\\nreduces the user's SP. ATK stat.,
+      .importance = 0,
+      .exitsBagOnUse = 0,
+      .pocket = POCKET_TM_CASE,
+      .type = ITEM_USE_PARTY_MENU,
+      .fieldUseFunc = NULL,
+      .battleUseFunc = NULL,
+      .secondaryId =  0,
+      //"moveId" "Overheat"
+    }, //
+    {
+      .name = _("TM154"),
+      .itemId = ITEM_TM154_HOLD_BACK,
       .price =  3000,
       .holdEffect = HOLD_EFFECT_NONE,
       .holdEffectParam =  0,
@@ -7227,8 +7244,8 @@ const struct Item gItems[] =
       //"moveId" "Overheat"
     }, //+100
     {
-      .name = _("TM154"),
-      .itemId = ITEM_TM154_HEADBUTT,
+      .name = _("TM155"),
+      .itemId = ITEM_TM155_HEADBUTT,
       .price =  3000,
       .holdEffect = HOLD_EFFECT_NONE,
       .holdEffectParam =  0,
@@ -7244,8 +7261,8 @@ const struct Item gItems[] =
       //"moveId" "Overheat"
     }, //+100
     {
-      .name = _("TM155"),
-      .itemId = ITEM_TM155_HI_JUMP_KICK,
+      .name = _("TM156"),
+      .itemId = ITEM_TM156_HI_JUMP_KICK,
       .price =  3000,
       .holdEffect = HOLD_EFFECT_NONE,
       .holdEffectParam =  0,
@@ -7261,8 +7278,8 @@ const struct Item gItems[] =
       //"moveId" "Overheat"
     }, //+100
     {
-      .name = _("TM156"),
-      .itemId = ITEM_TM156_SNOWBALL,
+      .name = _("TM157"),
+      .itemId = ITEM_TM157_SNOWBALL,
       .price =  3000,
       .holdEffect = HOLD_EFFECT_NONE,
       .holdEffectParam =  0,
@@ -7278,8 +7295,8 @@ const struct Item gItems[] =
       //"moveId" "Overheat"
     }, //+100
     {
-      .name = _("TM157"),
-      .itemId = ITEM_TM157_CELEBRATE,
+      .name = _("TM158"),
+      .itemId = ITEM_TM158_CELEBRATE,
       .price =  3000,
       .holdEffect = HOLD_EFFECT_NONE,
       .holdEffectParam =  0,

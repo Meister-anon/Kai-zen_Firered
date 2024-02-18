@@ -538,19 +538,25 @@ static void CB2_TradeEvolutionSceneUpdate(void)
     RunTasks();
 }
 
+//NEED test make sure works
 static void CreateShedinja(u16 preEvoSpecies, struct Pokemon* mon)
 {
     u32 data = 0;
-    if (gEvolutionTable[preEvoSpecies][0].method == EVO_LEVEL_NINJASK && gPlayerPartyCount < 6)
+    const struct Evolution *evolutions = GetSpeciesEvolutions(preEvoSpecies);
+
+    if (evolutions == NULL)
+        return;
+        
+    if (evolutions[0].method == EVO_LEVEL_NINJASK && gPlayerPartyCount < PARTY_SIZE)
     {
         s32 i;
         struct Pokemon* shedinja = &gPlayerParty[gPlayerPartyCount];
-        const struct Evolution *evos;
-        const struct Evolution *evos2;
+        //const struct Evolution *evos;
+        //const struct Evolution *evos2;
 
         CopyMon(&gPlayerParty[gPlayerPartyCount], mon, sizeof(struct Pokemon));
-        SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_SPECIES, (&gEvolutionTable[preEvoSpecies][1].targetSpecies));
-        SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_NICKNAME, (gSpeciesNames[gEvolutionTable[preEvoSpecies][1].targetSpecies]));
+        SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_SPECIES, (&evolutions[1].targetSpecies));
+        SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_NICKNAME, (gSpeciesNames[evolutions[1].targetSpecies]));
         SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_HELD_ITEM, (&data));
         SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_MARKINGS, (&data));
         SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_ENCRYPT_SEPARATOR, (&data));
@@ -561,18 +567,18 @@ static void CreateShedinja(u16 preEvoSpecies, struct Pokemon* mon)
             SetMonData(&gPlayerParty[gPlayerPartyCount], i, (&data));
 
         SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_STATUS, (&data));
-        data = 0xFF;
-        SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_MAIL, (&data));
+        //data = 0xFF;
+        //SetMonData(&gPlayerParty[gPlayerPartyCount], MON_DATA_MAIL, (&data));
 
         CalculateMonStats(&gPlayerParty[gPlayerPartyCount]);
         CalculatePlayerPartyCount();
 
         // can't match it otherwise, ehh
-        evos2 = gEvolutionTable[0];
-        evos = evos2 + EVOS_PER_MON * preEvoSpecies;
+        //evos2 = gEvolutionTable[0];
+        //evos = evos2 + EVOS_PER_MON * preEvoSpecies;
 
-        GetSetPokedexFlag(SpeciesToNationalPokedexNum(evos[1].targetSpecies), FLAG_SET_SEEN);
-        GetSetPokedexFlag(SpeciesToNationalPokedexNum(evos[1].targetSpecies), FLAG_SET_CAUGHT);
+        GetSetPokedexFlag(SpeciesToNationalPokedexNum(evolutions[1].targetSpecies), FLAG_SET_SEEN);
+        GetSetPokedexFlag(SpeciesToNationalPokedexNum(evolutions[1].targetSpecies), FLAG_SET_CAUGHT);
 
         if (GetMonData(shedinja, MON_DATA_SPECIES) == SPECIES_SHEDINJA
             && GetMonData(shedinja, MON_DATA_LANGUAGE) == LANGUAGE_JAPANESE

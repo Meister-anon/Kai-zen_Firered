@@ -12367,11 +12367,14 @@ static void atk76_various(void) //will need to add all these emerald various com
     case VARIOUS_JUMP_IF_CANT_REVERT_TO_PRIMAL:
     {
         bool8 canDoPrimalReversion = FALSE;
+        u16 NUM_EVOS_CAP = (gBaseStats[SanitizeSpeciesId(gBattleMons[gActiveBattler].species)].evolutions == NULL) ? EVOS_PER_MON : EVOLUTIONS_END;
+        const struct Evolution *evolutions = GetSpeciesEvolutions(gBattleMons[gActiveBattler].species);
 
-        for (i = 0; i < EVOS_PER_MON; i++)
+        //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
+        for (i = 0; evolutions[i].method != NUM_EVOS_CAP; i++)
         {
-            if (gEvolutionTable[gBattleMons[gActiveBattler].species][i].method == EVO_PRIMAL_REVERSION
-            && gEvolutionTable[gBattleMons[gActiveBattler].species][i].param == gBattleMons[gActiveBattler].item)
+            if (evolutions[i].method == EVO_PRIMAL_REVERSION
+            && evolutions[i].param == gBattleMons[gActiveBattler].item)
                 canDoPrimalReversion = TRUE;
         }
         if (!canDoPrimalReversion)

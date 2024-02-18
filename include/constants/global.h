@@ -34,8 +34,8 @@
 #define BAG_ITEMS_COUNT     52
 #define BAG_KEYITEMS_COUNT  50
 #define BAG_POKEBALLS_COUNT 13  //double check how many poke ball types i have
-#define BAG_TMHM_COUNT      166 //brocks gym battle crashes, when giving tm & badge, maybe not having an accurate count was the problem. nope that isn't a problem, 
-#define BAG_BERRIES_COUNT   23 //that didn't solve it , but I think it did improve it.
+#define BAG_TMHM_COUNT      167 //List value from sTMHMMoves
+#define BAG_BERRIES_COUNT   23 
 #define OBJECT_EVENT_TEMPLATES_COUNT 64
 
 #define QUEST_LOG_SCENE_COUNT 2 //think this is flashbacks, cut from 4 to 2, to hopefully save space. plus everyone doesn't like the feature like I do.

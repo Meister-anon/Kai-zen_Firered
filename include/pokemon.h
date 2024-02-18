@@ -275,6 +275,9 @@ struct BaseStats  // had to adjust struct order to match paste value from base_s
  /* 0x1B */ u16 abilityHidden[2]; //need to make sure ability num can be 2, then set that as hidden ability
  /* 0x1D */ u8 bodyColor : 7; //what are bodyColor and noFLip fields are they necesary?
             u8 noFlip : 1;
+            const struct LevelUpMove *levelUpLearnset; //replace leveluplearnset pointers file, below replace tmhmlearnset pointers file
+            const u16 *tmhmLearnset; //these are just names, in struct will be .name
+            const struct Evolution *evolutions;
  /* 0x1E */ u8 flags;   //use for gender diff & form change, when creating mon plan check for flag and divert to what should be based on form species, //also used for making beast ball work, etc.
             u16 statTotal;  //with new macro from GriffinR am able to display mon bst
 };
@@ -383,6 +386,19 @@ enum
     BODY_COLOR_PINK
 };
 
+//these two taken from new emerald setup not sure how to use yet
+//understand it now, it uses EVOLUTIONS_END rather than evos_per_mon
+//as limiting factor, so it'll check every evo method for said species
+//rather than check a fixed number of times, unsure how it would handle conflicts
+//think thaat would just be up to the make to ensure doesn't happen
+//i.e don't use method level, w level night, would need to stipulate day so there's no overlap
+
+//why does this have to go so high? can't
+//I use 0xFF? cuz of how used in base stats
+//think it needs to be 2 byte fill
+#define EVOLUTIONS_END                    0xFFFF // Not an actual evolution, used to mark the end of an evolution array.
+#define EVO_NONE                          0xFFFE // Not an actual evolution, used to generate offspring that can't evolve into the specified species, like regional forms.
+//base methods
 #define EVO_FRIENDSHIP       				0x0001 // Pokémon levels up with friendship ≥ FRIENDSHIP_EVO_LIMITER
 #define EVO_FRIENDSHIP_DAY   				0x0002 // Pokémon levels up during the day with friendship ≥ FRIENDSHIP_EVO_LIMITER
 #define EVO_FRIENDSHIP_NIGHT 				0x0003 // Pokémon levels up at night with friendship ≥ FRIENDSHIP_EVO_LIMITER
@@ -460,7 +476,7 @@ extern u8 gEnemyPartyCount;
 extern struct Pokemon gEnemyParty[PARTY_SIZE];
 extern const struct BaseStats gBaseStats[];
 extern const u8 *const gItemEffectTable[];
-extern const struct Evolution gEvolutionTable[][EVOS_PER_MON];
+extern const struct Evolution gEvolutionTable[][EVOS_PER_MON]; //plan remove replace w EE version built into basestats
 extern const u8 gStatStageRatios[][2];
 extern struct SpriteTemplate gMultiuseSpriteTemplate;
 extern struct PokemonStorage* gPokemonStoragePtr;
@@ -622,6 +638,12 @@ u16 GetBaseStatTotal(u16 species);
 bool8 CanEvioliteActivate(u16 species);
 s16 atk_diff(void);
 s16 spatk_diff(void); //put here, used for hidden power change split
+
+const struct LevelUpMove *GetSpeciesLevelUpLearnset(u16 species);
+const u16 *GetSpeciesTeachableLearnset(u16 species);
+const struct Evolution *GetSpeciesEvolutions(u16 species);
+u16 SanitizeSpeciesId(u16 species);
+//new functions for file reorg based on EE
 
 void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst);
 

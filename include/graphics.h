@@ -7246,8 +7246,8 @@ extern const u32 gTMCase_TM_cleared_box[];
 extern const u32 gUnknown_8E84CB0[];
 extern const u32 gUnknown_8E84D20[];
 extern const u32 gTMCase_TMSpriteGfx[];
-extern const u32 gUnknown_8E84F20[];
-extern const u32 gUnknown_8E85068[];
+extern const u32 gTMCaseDiscTypes1_Pal[];
+extern const u32 gTMCaseDiscTypes2_Pal[];
 extern const u8 gUnknown_8E99118[];
 extern const u16 gTMCaseMainWindowPalette[];
 

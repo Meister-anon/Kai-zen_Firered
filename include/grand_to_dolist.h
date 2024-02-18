@@ -2122,6 +2122,41 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   hopefully its as simple as that -wasn't calyrex but changing max value did fix it
   -had to use 907 actual max species, not sure why that worked but glad
 
+  IMPORTANT -Plan my version of species info changes
+  what EE has is too much in one place, all the data isn't relevant to what you'd need at one time
+  so my plan is take all the graphic stuff put in one file
+  make new file graphic species info or something,
+  it'll have front/back pic graphics and coordinates
+  icon value and palette indecees as well as palette and shiny palette value
+
+  think would like to take evolution data to base stats as would be helpful for balance to have it there
+  //that looks simplest think will start with that - nope not simplest, very all or nothing
+  but found that all instances that loop evos_per_mon constant get replaced with
+  evolutions[k].method != EVOLUTIONS_END  (replace k w relevant variable)
+  requires use of another function that sets evolutions to the correct species
+  and one that sanitzes to reset it so it doesn't fill w wrong values it seems?
+  //but at the least I can add values to base stats struct but just nop it out so it does nothing
+  -ok easiest was doing learnset and tmhm learnset luckily was able to setup
+  to work like how I wanted where if its nulled out, would instead seek out the current setup
+  i.e tmhm learnset leveluplearnset and the evolution table
+  w how complex it is and w my changes not sure how I'll be able ot do evo replace
+  but for now attempting to testing levelup changes -WORKS
+  -w addition of level learnset tm learnset and evo to base stats
+  -needed to adjust order of includes in pokemon.c so those files are read BEFORE
+  base stats gets read
+
+  ok finished setting up evo logic to be read from base stats
+  to get it to default back to gevolution table correctly I had to use
+  the same constant for loops  as was used in the member for the table evos_per_mon
+  but that conflicted with the base stat setup which used a different constant
+  I got it to work w a ternary operator (conditional operator) which assigned either
+  constant to a variable in the functions  and assigning the loop value to that constant,
+  so its either evos_per_mon or evolutions_end based on condition
+  -which is if the base stats value is null or not
+
+  -check typecalc again, foud issue with it, counter and probably other fixed dmg moves
+  are triggering, type effectiveness when they shouldn't be
+
   -new note, plan for encounters since normal forms are same species just different colors,
   if there is a way to decide how that determines which form to display on encounter,
   perhaps I can do something simlar for forms that are different species,

@@ -491,6 +491,7 @@ extern const u8 gACROBATICSDescription[];
 extern const u8 gMoveDescription_Assurance[];
 extern const u8 gSOLAR_BLADEDescription[];
 extern const u8 gMoveDescription_IcyWind[];
+extern const u8 gMoveDescription_MetalClaw[];
 extern const u8 gMoveDescription_HoldBack[];
 extern const u8 gMoveDescription_Headbutt[];
 extern const u8 gMoveDescription_HiJumpKick[];

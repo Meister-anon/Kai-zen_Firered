@@ -11211,12 +11211,17 @@ static bool32 IsPartnerMonFromSameTrainer(u8 battlerId)
 u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId)
 {
     u32 i;
+    u16 NUM_EVOS_CAP = (gBaseStats[SanitizeSpeciesId(preEvoSpecies)].evolutions == NULL) ? EVOS_PER_MON : EVOLUTIONS_END;
+    const struct Evolution *evolutions = GetSpeciesEvolutions(preEvoSpecies);
 
-    for (i = 0; i < EVOS_PER_MON; i++)
+    //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
+    for (i = 0; evolutions[i].method != NUM_EVOS_CAP; i++)
     {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_PRIMAL_REVERSION
-            && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
-            return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+        if (evolutions == NULL)
+                continue;
+        if (evolutions[i].method == EVO_PRIMAL_REVERSION
+            && evolutions[i].param == heldItemId)
+            return evolutions[i].targetSpecies;
     }
     return SPECIES_NONE;
 }
@@ -11224,12 +11229,17 @@ u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId)
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId)
 {
     u32 i;
+    u16 NUM_EVOS_CAP = (gBaseStats[SanitizeSpeciesId(preEvoSpecies)].evolutions == NULL) ? EVOS_PER_MON : EVOLUTIONS_END;
+    const struct Evolution *evolutions = GetSpeciesEvolutions(preEvoSpecies);
 
-    for (i = 0; i < EVOS_PER_MON; i++)
+    //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
+    for (i = 0; evolutions[i].method != NUM_EVOS_CAP; i++)
     {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_MEGA_EVOLUTION
-            && gEvolutionTable[preEvoSpecies][i].param == heldItemId)
-            return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+        if (evolutions == NULL)
+                continue;
+        if (evolutions[i].method == EVO_MEGA_EVOLUTION
+            && evolutions[i].param == heldItemId)
+            return evolutions[i].targetSpecies;
     }
     return SPECIES_NONE;
 }
@@ -11237,14 +11247,19 @@ u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId)
 u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16 moveId3, u16 moveId4)
 {
     u32 i, par;
+    u16 NUM_EVOS_CAP = (gBaseStats[SanitizeSpeciesId(preEvoSpecies)].evolutions == NULL) ? EVOS_PER_MON : EVOLUTIONS_END;
+    const struct Evolution *evolutions = GetSpeciesEvolutions(preEvoSpecies);
 
-    for (i = 0; i < EVOS_PER_MON; i++)
+    //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
+    for (i = 0; evolutions[i].method != NUM_EVOS_CAP; i++)
     {
-        if (gEvolutionTable[preEvoSpecies][i].method == EVO_MOVE_MEGA_EVOLUTION)
+        if (evolutions == NULL)
+                continue;
+        if (evolutions[i].method == EVO_MOVE_MEGA_EVOLUTION)
         {
-            par = gEvolutionTable[preEvoSpecies][i].param;
+            par = evolutions[i].param;
             if (par == moveId1 || par == moveId2 || par == moveId3 || par == moveId4)
-                return gEvolutionTable[preEvoSpecies][i].targetSpecies;
+                return evolutions[i].targetSpecies;
         }
     }
     return SPECIES_NONE;

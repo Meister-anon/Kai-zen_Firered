@@ -68,7 +68,7 @@ enum {
 
 // Base position for TM/HM disc sprite
 #define DISC_BASE_X 41
-#define DISC_BASE_Y 46
+#define DISC_BASE_Y 35
 
 #define DISC_CASE_DISTANCE 20 // The total number of pixels a disc travels vertically in/out of the case
 #define DISC_Y_MOVE 10 // The number of pixels a disc travels vertically per movement step
@@ -76,6 +76,11 @@ enum {
 #define TAG_DISC 400
 
 #define DISC_HIDDEN 0xFF // When no TM/HM is selected, hide the disc sprite
+
+enum {
+    ANIM_TM,
+    ANIM_HM,
+};
 
 struct UnkStruct_203B10C
 {
@@ -178,12 +183,12 @@ static void HandleCreateYesNoMenu(u8 taskId, const struct YesNoFuncTable * ptrs)
 static u8 AddTMContextMenu(u8 * a0, u8 a1);
 static void RemoveTMContextMenu(u8 * a0);
 static u8 CreateTMSprite(u16 itemId);
-static void SetTMSpriteAnim(struct Sprite * sprite, u8 var);
-static void TintTMSpriteByType(u8 type);
-static void UpdateTMSpritePosition(struct Sprite * sprite, u8 var);
+static void SetTMSpriteAnim(struct Sprite * sprite, u8 tmIdx);
+static void TintTMSpriteByType(u8 type); //
+static void UpdateTMSpritePosition(struct Sprite * sprite, u8 tmIdx);
 static void InitSelectedTMSpriteData(u8 a0, u16 itemId);
 static void SpriteCB_MoveTMSpriteInCase(struct Sprite * sprite);
-static void LoadTMTypePalettes(void);
+static void LoadTMTypePalettes(void); //
 //added for new tm case
 static void DrawPartyMonIcons(void);
 static void TintPartyMonIcons(u16 tm, s32 itemIndex);
@@ -492,6 +497,8 @@ static const struct SpriteTemplate sTMSpriteTemplate = {
     SpriteCallbackDummy
 };
 
+//each type pallete is 16 bytes, 
+//so anything added would increase by 0x10
 static const u16 sTMSpritePaletteOffsetByType[] = { // fairy addition need do, need do sound as well
     [TYPE_NORMAL]   = 0x000,
     [TYPE_FIRE]     = 0x010,
@@ -509,7 +516,8 @@ static const u16 sTMSpritePaletteOffsetByType[] = { // fairy addition need do, n
     [TYPE_PSYCHIC]  = 0x0d0,
     [TYPE_STEEL]    = 0x0e0,
     [TYPE_DARK]     = 0x0f0,
-    [TYPE_DRAGON]   = 0x100
+    [TYPE_DRAGON]   = 0x100,
+    [TYPE_FAIRY]    = 0X110   //works
 };
 
 void InitTMCase(u8 type, void (* exitCallback)(void), bool8 allowSelectClose)
@@ -1706,8 +1714,8 @@ static void RemoveTMContextMenu(u8 * a0)
 
 static u8 CreateTMSprite(u16 itemId)
 {
-    u8 spriteId = CreateSprite(&sTMSpriteTemplate, 0x29, 0x23, 0); //think is coord for tm sprite sits in case 
-    u8 r5;
+    u8 spriteId = CreateSprite(&sTMSpriteTemplate, DISC_BASE_X, DISC_BASE_Y, 0); //think is coord for tm sprite sits in case 
+    u8 tmIdx;
     
     if (itemId == ITEM_NONE)
     {
@@ -1716,36 +1724,37 @@ static u8 CreateTMSprite(u16 itemId)
     }
     else
     {
-        r5 = itemId - 33; //think this uses 33 because tm uses - 32 to find id values,  this is using 33 prob need to adjust later w tm update/expansion vsonic
-        SetTMSpriteAnim(&gSprites[spriteId], r5); //or not, did expansion so not usign bit field but still worked as is?
+        tmIdx = itemId - ITEM_TM01;
+        //r5 = itemId - 33; //think this uses 33 because tm uses - 32 to find id values,  this is using 33 prob need to adjust later w tm update/expansion vsonic
+        SetTMSpriteAnim(&gSprites[spriteId], tmIdx); //or not, did expansion so not usign bit field but still worked as is?
         TintTMSpriteByType(gBattleMoves[ItemIdToBattleMoveId(itemId)].type);
-        UpdateTMSpritePosition(&gSprites[spriteId], r5);
+        UpdateTMSpritePosition(&gSprites[spriteId], tmIdx);
         return spriteId;
     }
 }
 
-static void SetTMSpriteAnim(struct Sprite * sprite, u8 idx)
+static void SetTMSpriteAnim(struct Sprite * sprite, u8 tmIdx)
 {
-    if (idx >= 50) //believe this is also for tm hm, and would need to change i.e 50 base tms
-        StartSpriteAnim(sprite, 1);
+    if (tmIdx >= NUM_TECHNICAL_MACHINES) //believe this is also for tm hm, and would need to change i.e 50 base tms
+        StartSpriteAnim(sprite, ANIM_HM);
     else
-        StartSpriteAnim(sprite, 0);
+        StartSpriteAnim(sprite, ANIM_TM);
 }
 
-static void TintTMSpriteByType(u8 type)
+static void TintTMSpriteByType(u8 type) //don't get this type here is worthless all that matters is offset?
 {
     u8 palIndex = IndexOfSpritePaletteTag(TM_CASE_TM_TAG) << 4;
-    LoadPalette(sTMSpritePaletteBuffer + sTMSpritePaletteOffsetByType[type], 0x100 | palIndex, 0x20);
-    if (sTMCaseStaticResources.tmCaseMenuType == 4)
+    LoadPalette(sTMSpritePaletteBuffer + sTMSpritePaletteOffsetByType[type], OBJ_PLTT_OFFSET  | palIndex, 0x20);
+    if (sTMCaseStaticResources.tmCaseMenuType == 4)     //The 0x100 that was here had nothing to do w offset replaced w constant to make clearer
     {
         BlendPalettes(1 << (0x10 + palIndex), 4, RGB_BLACK);
     }
 }
 
-static void UpdateTMSpritePosition(struct Sprite * sprite, u8 var) //vsonic
+static void UpdateTMSpritePosition(struct Sprite * sprite, u8 tmIdx) //vsonic
 {
     s32 x, y;
-    if (var == 0xFF) //var is tm id,  ff is close menu I believe
+    if (tmIdx == DISC_HIDDEN) //var is tm id,  ff is close menu I believe
     {
         x = 0x1B;
         y = 0x28;
@@ -1753,12 +1762,15 @@ static void UpdateTMSpritePosition(struct Sprite * sprite, u8 var) //vsonic
     }
     else
     {
-        if (var >= 50) //think this is tm idea as well, so may need to adjust with tm update/expansion
-            var -= 50;
+        if (tmIdx >= NUM_TECHNICAL_MACHINES) //think this is tm idea as well, so may need to adjust with tm update/expansion
+            tmIdx -= NUM_TECHNICAL_MACHINES;
         else
-            var += 8;
-        x = 0x29 - (((0xE00 * var) / 58) >> 8); //what is the 58 for?
-        y = 0x23 + (((0x800 * var) / 58) >> 8); //adjusted y value here, to match other function
+            tmIdx += NUM_HIDDEN_MACHINES;
+        //x = 0x29 - (((0xE00 * tmIdx) / (NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES)) >> 8); //what is the 58 for?
+        //y = 0x23 + (((0x800 * tmIdx) / (NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES)) >> 8); //adjusted y value here, to match other function
+
+        x = DISC_BASE_X - Q_24_8_TO_INT(Q_24_8(14 * tmIdx) / (NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES));
+        y = DISC_BASE_Y + Q_24_8_TO_INT(Q_24_8(8 * tmIdx) / (NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES));
     }
     sprite->pos1.x = x;
     sprite->pos1.y = y; //0x16 value was 2E
@@ -1802,17 +1814,46 @@ static void SpriteCB_MoveTMSpriteInCase(struct Sprite * sprite) //vsonic
     }
 }
 
-static void LoadTMTypePalettes(void)
+/*static void LoadTMTypePalettes(void)
 {
     struct SpritePalette spritePalette;
 
     sTMSpritePaletteBuffer = Alloc(0x110 * sizeof(u16));
-    LZDecompressWram(gUnknown_8E84F20, sTMSpritePaletteBuffer);
-    LZDecompressWram(gUnknown_8E85068, sTMSpritePaletteBuffer + 0x100);
+    LZDecompressWram(gTMCaseDiscTypes1_Pal, sTMSpritePaletteBuffer);
+    LZDecompressWram(gTMCaseDiscTypes2_Pal, sTMSpritePaletteBuffer + 0x110);
     spritePalette.data = sTMSpritePaletteBuffer + 0x110;
     spritePalette.tag = TM_CASE_TM_TAG;
     LoadSpritePalette(&spritePalette);
-}
+}*/
+
+// - 1 excludes TYPE_MYSTERY
+//had issue w load time, but seems first intuition was correct issue was use of hex w binary subtract, so change type constants from hex to binary values
+//ok important thing is number of colors, the number of palettes incompassing the 2 disc type pals below
+//type1_pal is a 8bps range w 256 colors 16 colors per palette 256 read as 0x100
+//old type2_pal was a 4bps range w 16 colors which would be 0x10
+//but w expansion of types needed add 3 palett for new types, w that changed
+//type2_pal is now changed to a 8bps range like type 1 adding another 0x100
+//so in total I need to allocate 0x200 and that worked
+//this change gives enough space for 32 diff pallets for types
+//so the value no longer needs to be changed its future proof (effectively)
+
+static void LoadTMTypePalettes(void) //would need item and type values
+{
+    struct SpritePalette spritePalette;
+    //u16 itemId = BagGetItemIdByPocketPosition(POCKET_TM_CASE, sTMCaseStaticResources.scrollOffset + sTMCaseStaticResources.selectedRow);
+    //u8 type = gBattleMoves[ItemIdToBattleMoveId(itemId)].type;
+
+    sTMSpritePaletteBuffer = Alloc(0x200 * sizeof(u16)); //alloc is end of offset, each is last start offset is 0x100, ends at 0x110 so 0x10 + last offset listed in type offset array
+    LZDecompressWram(gTMCaseDiscTypes1_Pal, sTMSpritePaletteBuffer); // Decompress the first 16
+    LZDecompressWram(gTMCaseDiscTypes2_Pal, sTMSpritePaletteBuffer + 0x100); // Decompress the rest (Only 17 total, this is just Dragon type)
+    spritePalette.data = sTMSpritePaletteBuffer + 0x200; //I have two more types fairy and sound so I need 2 more rows
+    spritePalette.tag = TM_CASE_TM_TAG; //the 0x100 is to find start position, of pal, based on type offset could make simpler by using type arg
+    LoadSpritePalette(&spritePalette);//think don't need change, would make worse not better
+} //ok I get it and the offset chart now, god this was confuisng,
+//so the entire palette is thing is differenet palettes stacked on top of each other
+//17 in total, the size is 16 bytes, which is why the offset increases in groups of 16,
+//each 16 is the start of the next palette
+//think beacause larger image need entire different set since its still fills up all 16
 
 //added functions for new tm case 
 #define sMonIconStill data[3]

@@ -3,6 +3,7 @@
 #include "constants/items.h"
 #include "constants/moves.h"
 #include "pokemon.h"
+//for this keep evos per mon on, for num methods, I THINK it'll be fine if runs w new EVOLUTIONS_END logic/setup
 const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
 {  // REMOVED specific map evolution cause don't know how to doit, replaced with general map evolution with mapsec
     //blocked mega evolution for now, so I can hopefully build within having to define mega items first
