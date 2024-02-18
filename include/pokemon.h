@@ -467,6 +467,35 @@ struct FormChange {
     u16 param3; //new adition from emerald logic
 }; //may change based on how I use forms
 
+//replaces front_pic_table back_pic_table front_pic_coordinates back_pic_coordinates pokemon_icon.c arrays palette_table  & shiny_palette_table
+struct SpeciesGraphicInfo 
+{
+
+    const u32 *frontPic;
+ /* 0x74 */ u16 frontPicSize; // The dimensions of this drawn pixel area.
+
+ /* 0x50 */ const u32 *backPic;
+ /* 0x76 */ u16 backPicSize; // The dimensions of this drawn pixel area.
+
+ /* 0x58 */ const u32 *palette;
+ /* 0x60 */ const u32 *shinyPalette;
+
+ /* 0x68 */ const u8 *iconSprite;
+
+            u8 frontCoordSize;
+ /* 0x75 */ u8 frontPicYOffset; // The number of pixels between the drawn pixel area and the bottom edge.
+
+            u8 backCoordSize;
+ /* 0x77 */ u8 backPicYOffset; // The number of pixels between the drawn pixel area and the bottom edge.
+
+ /* 0x78 */ u8 iconPalIndex:3;
+}; //all of these values have macros excluding iconPalIndex which should allow me to copy directly from existing arrays
+//think take all extra values/functions in file excluding table and put in single graphics file
+//at make a macro to display place of each files start, and at top of consilidated file put goto MACRONAME  for each section
+//for quick navigation
+
+
+
 #define EVOS_PER_MON 16 // set to 16 in case I need the shedinja byte change fix
 #define FORMS_PER_MON 5 //for breeding
 

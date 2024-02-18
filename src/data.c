@@ -270,7 +270,7 @@ const union AnimCmd *const gSpriteAnimTable_82349BC[] =
     gSpriteAnim_82349B4,
 };
 
-#define SPECIES_SPRITE(species, sprite) [SPECIES_##species] = {sprite, 0x800, SPECIES_##species}
+#define SPECIES_SPRITE(species, sprite) [SPECIES_##species] = {sprite, 0x800, SPECIES_##species} //used for front and back sprite
 #define SPECIES_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species}
 #define SPECIES_SHINY_PAL(species, pal) [SPECIES_##species] = {pal, SPECIES_##species + SPECIES_SHINY_TAG}
 
@@ -283,6 +283,7 @@ const union AnimCmd *const gSpriteAnimTable_82349BC[] =
 #include "data/pokemon_graphics/back_pic_table.h"
 #include "data/pokemon_graphics/palette_table.h"
 #include "data/pokemon_graphics/shiny_palette_table.h"
+#include "data/pokemon_graphics/species_graphic_info.h"//new file to consolidate all values    SpeciesGraphicInfo
 
 #include "data/trainer_graphics/front_pic_anims.h"
 #include "data/trainer_graphics/front_pic_tables.h"

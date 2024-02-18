@@ -2238,10 +2238,11 @@ static const u16 sDoduoTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
-                                        ITEM_TM47_STEEL_WING,
+                                        ITEM_TM153_METAL_CLAW,
                                        // ITEM_HM02_FLY,
     TMHM_LEARNSET_END
 }; //removing fly remember give to bunch of other mon to compensate like ghosts etc.
+//replaced steel wing w metal claw since doesn't have wings...
 
 static const u16 sDodrioTMHMLearnset[] = {
   ITEM_TM06_TOXIC,
@@ -2260,7 +2261,7 @@ static const u16 sDodrioTMHMLearnset[] = {
                                         ITEM_TM44_REST,
                                         ITEM_TM45_ATTRACT,
                                         ITEM_TM46_THIEF,
-                                        ITEM_TM47_STEEL_WING,
+                                        ITEM_TM153_METAL_CLAW,
     TMHM_LEARNSET_END
 };
 

@@ -2154,6 +2154,18 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   so its either evos_per_mon or evolutions_end based on condition
   -which is if the base stats value is null or not
 
+  -finished basis for graphic file condensing, made in file species_graphic_info
+  need fill array, have blank values until filled, just need to fill name buffer palIndex & pic Coordss
+  I have name buffer in each bracket process is copy name buffer fill values, for all species
+  2nd pass fill coordinates for front and back
+  3rd final pass, fill in icon index
+
+  after grahpic table is filled adjust functions to be able to read from that table rather than the other files
+  need adjust table read, and file includes
+
+  -for base stats need fill in learnset and evo data
+
+
   -check typecalc again, foud issue with it, counter and probably other fixed dmg moves
   are triggering, type effectiveness when they shouldn't be
 
