@@ -159,6 +159,11 @@ extern u8 gStringVar4[];
 #define CAT_(a, b) a ## b
 //logic for prete emeralds new cmd argms stuff its confusing to read so i dont like it
 //changed mind adding
+#define STR(a) STR_(a)
+#define STR_(a) #a
+
+// Converts a string to a compound literal, essentially making it a pointer to const u8
+#define COMPOUND_STRING(str) (const u8[]) _(str) //ported to use dex entry strings from EE
 
 // This produces an error at compile-time if expr is zero.
 // It looks like file.c:line: size of array `id' is negative
