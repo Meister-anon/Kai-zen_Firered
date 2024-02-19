@@ -171,7 +171,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_GUILLOTINE] =
     {
         .effect = EFFECT_OHKO,
-        .power = 1,
+        .power = 0,
         .type = TYPE_STEEL,
         .accuracy = 30, //change these back - was base 30, made 50 reset back to 40  / may make 35 test later
         .pp = 5,
@@ -491,7 +491,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_HORN_DRILL] =
     {
         .effect = EFFECT_OHKO,
-        .power = 1,
+        .power = 0,
         .type = TYPE_BUG,
         .accuracy = 30,
         .pp = 5,
@@ -766,7 +766,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SONIC_SCREECH] =
     {
         .effect = EFFECT_SONIC_SCREECH,
-        .power = 1,
+        .power = 0,
         .type = TYPE_SOUND,
         .accuracy = 95,
         .pp = 20,
@@ -1064,7 +1064,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .flags = FLAG_MAKES_CONTACT | FLAG_MIRROR_MOVE_AFFECTED,
         #endif
         .effect = EFFECT_COUNTER,
-        .power = 1,
+        .power = 0,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 20,
@@ -1077,7 +1077,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SEISMIC_TOSS] =
     {
         .effect = EFFECT_LEVEL_DAMAGE,
-        .power = 1,
+        .power = 0,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 20,
@@ -1283,7 +1283,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_DRAGON_RAGE] =
     {
         .effect = EFFECT_DRAGON_RAGE,
-        .power = 1,
+        .power = 0,
         .type = TYPE_DRAGON,
         .accuracy = 100,
         .pp = 10,
@@ -1404,7 +1404,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FISSURE] =
     {
         .effect = EFFECT_OHKO,
-        .power = 1,
+        .power = 0,
         .type = TYPE_GROUND,
         .accuracy = 30,
         .pp = 5,
@@ -1566,7 +1566,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_NIGHT_SHADE] =
     {
         .effect = EFFECT_LEVEL_DAMAGE,
-        .power = 1,
+        .power = 0,
         .type = TYPE_GHOST,
         .accuracy = 100,
         .pp = 15,
@@ -1810,7 +1810,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .priority = 0,
         #endif
         .effect = EFFECT_BIDE,
-        .power = 1,
+        .power = 0,
         .type = TYPE_NORMAL,
         .pp = 10,
         .secondaryEffectChance = 0,
@@ -3793,7 +3793,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
             .flags = FLAG_MIRROR_MOVE_AFFECTED,
         #endif
         .effect = EFFECT_MIRROR_COAT,
-        .power = 1,
+        .power = 0,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 20,
@@ -3935,7 +3935,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BEAT_UP] =
     {
 
-        .power = 1,
+        .power = 0,
         .effect = EFFECT_BEAT_UP,
         .type = TYPE_DARK,
         .accuracy = 100,
@@ -4442,7 +4442,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ENDEAVOR] =
     {
         .effect = EFFECT_ENDEAVOR,
-        .power = 1,
+        .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 5,
@@ -5152,7 +5152,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SHEER_COLD] =
     {
         .effect = EFFECT_OHKO,
-        .power = 1,
+        .power = 0,
         .type = TYPE_ICE,
         .accuracy = 30,
         .pp = 5,
@@ -8014,7 +8014,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FINAL_GAMBIT] =
     {
         .effect = EFFECT_FINAL_GAMBIT,
-        .power = 1,
+        .power = 0,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 5,

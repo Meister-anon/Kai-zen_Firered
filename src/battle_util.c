@@ -1139,7 +1139,8 @@ u8 TrySetCantSelectMoveBattleScript(void)
         gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingTormentedMove;
         ++limitations;
     }
-    if (gDisableStructs[gActiveBattler].tauntTimer && !gBattleMoves[move].power)
+    //specifically to block status moves so change
+    if (gDisableStructs[gActiveBattler].tauntTimer && gBattleMoves[move].split == SPLIT_STATUS)
     {
         gCurrentMove = move;
         gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveTaunt;
@@ -5089,7 +5090,8 @@ static u8 ForewarnChooseMove(u32 battler) //important add to list of switch in m
                         data[count].power = 100;
                     break;
                 default:
-                    if (gBattleMoves[data[count].moveId].power == 1)
+                    if (gBattleMoves[data[count].moveId].power == 1
+                    || (gBattleMoves[data[count].moveId].power == 0 && gBattleMoves[data[count].moveId].split != SPLIT_STATUS))
                         data[count].power = 80;
                     else
                         data[count].power = gBattleMoves[data[count].moveId].power; //default to actual move power, final thing need setup type check, to alter power
@@ -7922,7 +7924,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                                 }
                             default:
-                                if (gBattleMoves[gBattleMons[gBattlerTarget].moves[j]].power == 1)
+                                if (gBattleMoves[gBattleMons[gBattlerTarget].moves[j]].power == 1
+                                || (gBattleMoves[gBattleMons[gBattlerTarget].moves[j]].power == 0 && gBattleMoves[gBattleMons[gBattlerTarget].moves[j]].split != SPLIT_STATUS))
                                     MovePower = 80;
                                 else
                                     MovePower = gBattleMoves[gBattleMons[gBattlerTarget].moves[j]].power; //default to actual move power, final thing need setup type check, to alter power
@@ -11819,7 +11822,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
         || (defAbility == ABILITY_TELEPATHY && battlerDef == BATTLE_PARTNER(battlerAtk))
         || (defAbility == ABILITY_DISPIRIT_GUARD && modifier >= UQ_4_12(1.0))
         )
-        && gBattleMoves[move].power)
+        && gBattleMoves[move].split != SPLIT_STATUS)
     {
         modifier = UQ_4_12(0.0);
         if (recordAbilities)
@@ -11833,7 +11836,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     }
 
     if ((defAbility == ABILITY_LIQUID_SOUL && moveType == TYPE_WATER)
-        && gBattleMoves[move].power)
+        && gBattleMoves[move].split != SPLIT_STATUS)
     {
              modifier = UQ_4_12(0.0);
         if (recordAbilities)

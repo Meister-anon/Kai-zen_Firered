@@ -1394,7 +1394,7 @@ static void atk00_attackcanceler(void) //vsonic
         && gBattlerTarget != gBattlerAttacker) //need to ensure not self target
         {
             if ((Random() % 5 < 2) //40% 
-            && gBattleMoves[gCurrentMove].power) //only non status moves
+            && gBattleMoves[gCurrentMove].split != SPLIT_STATUS) //only non status moves
             {
                 gProtectStructs[gBattlerAttacker].ironwill++;
                 gDynamicBasePower = gBattleMoves[gCurrentMove].power;
@@ -1412,7 +1412,7 @@ static void atk00_attackcanceler(void) //vsonic
         && gBattlerTarget != gBattlerAttacker)
     {
         if (((Random() % 3) == 1) //40% 
-        && gBattleMoves[gCurrentMove].power) //only non status moves
+        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS) //only non status moves
         {
             gProtectStructs[gBattlerAttacker].ironwill++;
             gDynamicBasePower = gBattleMoves[gCurrentMove].power;
@@ -2598,7 +2598,8 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
     u16 effect = gBattleMoves[gCurrentMove].effect; //just realized should prob swap these for battlemons types since all types can shift, find where base stats becomes battlemons
     u16 multiplier;
 
-    if (gCurrentMove == MOVE_STRUGGLE || gCurrentMove == MOVE_BIDE) //should let hit ghost types could just remove typecalc bs from script instead...
+    ///had add counter and the like, as otherwise triggers supesr effective
+    if (gCurrentMove == MOVE_STRUGGLE || gCurrentMove == MOVE_BIDE || gCurrentMove == MOVE_COUNTER || gCurrentMove == MOVE_MIRROR_COAT || gCurrentMove == MOVE_METAL_BURST) //should let hit ghost types could just remove typecalc bs from script instead...
     {
         ++gBattlescriptCurrInstr;
         return;
@@ -2800,7 +2801,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
-        && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)    //hopefully works, should just make my move not hit ally partner
     {
         gLastUsedAbility = ABILITY_TELEPATHY;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -3003,7 +3004,7 @@ static void CheckWonderGuardAndLevitate(void)   //can leave as it is, logic i ne
         }
     } // the way this reads confuses me, I may just replace with cfru argument instead, nvm I just reversed whatever was in wonderguard function.
     else if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
-       )
+       && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)
     {
         gLastUsedAbility = ABILITY_TELEPATHY;
         gBattleCommunication[6] = 3; //vbelieve sets moveresult miss
@@ -3216,7 +3217,7 @@ u8 TypeCalc(u16 move, u8 attacker, u8 defender)
 
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
         && !(flags & MOVE_RESULT_MISSED)
-        && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)    //hopefully works, should just make my move not hit ally partner
     {
         flags |= MOVE_RESULT_MISSED;
 
@@ -3297,7 +3298,7 @@ u8 AI_TypeCalc(u16 move, u16 targetSpecies, u16 targetAbility)
     }
 
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
-        && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)    //hopefully works, should just make my move not hit ally partner
     {
         flags |= MOVE_RESULT_MISSED;
 
@@ -3909,7 +3910,7 @@ static void atk0F_resultmessage(void) //covers the battle message displayed afte
             switch (gMoveResultFlags & (u8)(~(MOVE_RESULT_MISSED)))
             {
             case MOVE_RESULT_SUPER_EFFECTIVE:
-            if (!(gBattleMoves[gCurrentMove].power)) //try skip message  if status move, works
+            if (!(gBattleMoves[gCurrentMove].power)) //try skip message  if status move, works - its f ppower 0, will use to exclude moves that should ignore type like counter
                break;
             else if (VarGet(VAR_LAST_MULTIHIT_RESULT) == STRINGID_SUPEREFFECTIVE)
                break;
@@ -8347,7 +8348,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_WONDER_GUARD
      && !(flags & MOVE_RESULT_NO_EFFECT)    
      && (!(flags & MOVE_RESULT_SUPER_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
-     && gBattleMoves[gCurrentMove].power)
+     && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)
     {
         gLastUsedAbility = ABILITY_WONDER_GUARD;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -8358,7 +8359,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_DISPIRIT_GUARD
         && !(flags & MOVE_RESULT_NO_EFFECT)       
         && (!(flags & MOVE_RESULT_NOT_VERY_EFFECTIVE) || ((flags & (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)) == (MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE)))
-        && gBattleMoves[gCurrentMove].power)
+        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)
     {
         gLastUsedAbility = ABILITY_DISPIRIT_GUARD;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -8367,7 +8368,7 @@ static void atk4A_typecalc2(void)   //aight this is only for counter, mirror coa
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
     }
     if (gBattleMons[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gBattlerAttacker)))].ability == ABILITY_TELEPATHY
-        && gBattleMoves[gCurrentMove].power)    //hopefully works, should just make my move not hit ally partner
+        && gBattleMoves[gCurrentMove].split != SPLIT_STATUS)    //hopefully works, should just make my move not hit ally partner
     {
         gLastUsedAbility = ABILITY_TELEPATHY;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
