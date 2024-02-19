@@ -10219,7 +10219,7 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       BACK_COORD(0x88,0),
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
-    }, //UNFEZANT_FEMALE,
+    }, //Unfezant_Female
   [SPECIES_PYROAR_FEMALE] = 
     {  
       FRONT_PIC(CircledQuestionMark),
@@ -10228,7 +10228,7 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       BACK_COORD(0x88,0),
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
-    }, //PyroarF,
+    }, //Pyroar_Female,
   [SPECIES_FLABEBE_YELLOW_FLOWER] = 
     {  
       FRONT_PIC(CircledQuestionMark),
@@ -11034,13 +11034,13 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
     }, //Eiscue_noice_face,
     [SPECIES_INDEEDEE_FEMALE] = 
     {  
-      FRONT_PIC(CircledQuestionMark),
+      FRONT_PIC(Indeedee_Female),
       FRONT_COORD(0x88,0),
-      BACK_PIC(CircledQuestionMark),
+      BACK_PIC(Indeedee_Female),
       BACK_COORD(0x88,0),
-      PALETTES(CircledQuestionMark),
-      ICON(QuestionMark,0),
-    }, //Indeedee_F,
+      PALETTES(Indeedee_Female),
+      ICON(Indeedee_Female,0),
+    }, //Indeedee_Female,
     [SPECIES_MORPEKO_HANGRY] = 
     {  
       FRONT_PIC(CircledQuestionMark),

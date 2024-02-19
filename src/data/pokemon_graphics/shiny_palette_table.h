@@ -1161,9 +1161,9 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(VIVILLON_FANCY, gMonShinyPalette_VivillonFancy),
     SPECIES_SHINY_PAL(VIVILLON_POKE_BALL, gMonShinyPalette_VivillonPokeBall),
 
-    SPECIES_SHINY_PAL(UNFEZANT_FEMALE, gMonShinyPalette_UNFEZANT_FEMALE),
+    SPECIES_SHINY_PAL(UNFEZANT_FEMALE, gMonShinyPalette_Unfezant_Female),
 
-    SPECIES_SHINY_PAL(PYROAR_FEMALE, gMonShinyPalette_PyroarF),
+    SPECIES_SHINY_PAL(PYROAR_FEMALE, gMonShinyPalette_Pyroar_Female),
 
     SPECIES_SHINY_PAL(FLABEBE_YELLOW_FLOWER, gMonShinyPalette_FlabebeYellowFlower),
     SPECIES_SHINY_PAL(FLABEBE_ORANGE_FLOWER, gMonShinyPalette_FlabebeOrangeFlower),
@@ -1282,7 +1282,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
 
     SPECIES_SHINY_PAL(EISCUE_NOICE_FACE, gMonShinyPalette_EiscueNoiceFace),
 
-    SPECIES_SHINY_PAL(INDEEDEE_FEMALE, gMonShinyPalette_IndeedeeFemale),
+    SPECIES_SHINY_PAL(INDEEDEE_FEMALE, gMonShinyPalette_Indeedee_Female),
 
     SPECIES_SHINY_PAL(MORPEKO_HANGRY, gMonShinyPalette_MorpekoHangry),
 

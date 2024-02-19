@@ -1161,9 +1161,9 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(VIVILLON_FANCY, gMonPalette_VivillonFancy),
     SPECIES_PAL(VIVILLON_POKE_BALL, gMonPalette_VivillonPokeBall),
 
-    SPECIES_PAL(UNFEZANT_FEMALE, gMonPalette_UNFEZANT_FEMALE),
+    SPECIES_PAL(UNFEZANT_FEMALE, gMonPalette_Unfezant_Female),
     
-    SPECIES_PAL(PYROAR_FEMALE, gMonPalette_PyroarF),
+    SPECIES_PAL(PYROAR_FEMALE, gMonPalette_Pyroar_Female),
 
     SPECIES_PAL(FLABEBE_YELLOW_FLOWER, gMonPalette_FlabebeYellowFlower),
     SPECIES_PAL(FLABEBE_ORANGE_FLOWER, gMonPalette_FlabebeOrangeFlower),
@@ -1282,7 +1282,7 @@ SPECIES_PAL(CRAMORANT_GULPING, gMonPalette_CramorantGulping),
 
     SPECIES_PAL(EISCUE_NOICE_FACE, gMonPalette_EiscueNoiceFace),
 
-    SPECIES_PAL(INDEEDEE_FEMALE, gMonPalette_IndeedeeFemale),
+    SPECIES_PAL(INDEEDEE_FEMALE, gMonPalette_Indeedee_Female),
 
     SPECIES_PAL(MORPEKO_HANGRY, gMonPalette_MorpekoHangry),
 
