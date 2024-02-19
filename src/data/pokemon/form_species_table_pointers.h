@@ -100,7 +100,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ARCEUS] = sArceusFormSpeciesIdTable,
 
     [SPECIES_SAMUROTT] = sSamurottFormSpeciesIdTable,
-    [SPECIES_UNFEZANT_M] = sUnfezantFormSpeciesIdTable,
+    [SPECIES_UNFEZANT] = sUnfezantFormSpeciesIdTable,
     [SPECIES_AUDINO] = sAudinoFormSpeciesIdTable,
     [SPECIES_BASCULIN] = sBasculinFormSpeciesIdTable,
     [SPECIES_LILLIGANT] = sLilligantFormSpeciesIdTable,
@@ -123,7 +123,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_GRENINJA] = sGreninjaFormSpeciesIdTable,
     [SPECIES_VIVILLON] = sVivillonFormSpeciesIdTable,
-    [SPECIES_PYROAR_M] = sPyroarFormSpeciesIdTable,
+    [SPECIES_PYROAR] = sPyroarFormSpeciesIdTable,
     [SPECIES_FLABEBE] = sFlabebeFormSpeciesIdTable,
     [SPECIES_FLOETTE] = sFloetteFormSpeciesIdTable,
     [SPECIES_FLORGES] = sFlorgesFormSpeciesIdTable,
@@ -142,7 +142,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_DECIDUEYE] = sDecidueyeFormSpeciesIdTable,
     [SPECIES_ORICORIO] = sOricorioFormSpeciesIdTable,
-    [SPECIES_ROCKRUFF] = sRockruffFormSpeciesIdTable,
+    //[SPECIES_ROCKRUFF] = sRockruffFormSpeciesIdTable,
     [SPECIES_LYCANROC] = sLycanrocFormSpeciesIdTable,
     [SPECIES_WISHIWASHI] = sWishiwashiFormSpeciesIdTable,
     [SPECIES_SILVALLY] = sSilvallyFormSpeciesIdTable,
@@ -415,7 +415,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_GENESECT_CHILL_DRIVE] = sGenesectFormSpeciesIdTable,
 
     // Greninja
-    [SPECIES_GRENINJA_BATTLE_BOND] = sGreninjaFormSpeciesIdTable,
     [SPECIES_GRENINJA_ASH] = sGreninjaFormSpeciesIdTable,
     // Vivillon
     [SPECIES_VIVILLON_POLAR] = sVivillonFormSpeciesIdTable,
@@ -438,9 +437,9 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_VIVILLON_FANCY] = sVivillonFormSpeciesIdTable,
     [SPECIES_VIVILLON_POKE_BALL] = sVivillonFormSpeciesIdTable,
     // Unfezant
-    [SPECIES_UNFEZANT_F] = sUnfezantFormSpeciesIdTable,
+    [SPECIES_UNFEZANT_FEMALE] = sUnfezantFormSpeciesIdTable,
     // Pyroar
-    [SPECIES_PYROAR_F] = sPyroarFormSpeciesIdTable,
+    [SPECIES_PYROAR_FEMALE] = sPyroarFormSpeciesIdTable,
     // Flabébé
     [SPECIES_FLABEBE_YELLOW_FLOWER] = sFlabebeFormSpeciesIdTable,
     [SPECIES_FLABEBE_ORANGE_FLOWER] = sFlabebeFormSpeciesIdTable,
@@ -493,8 +492,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ORICORIO_POM_POM] = sOricorioFormSpeciesIdTable,
     [SPECIES_ORICORIO_PAU] = sOricorioFormSpeciesIdTable,
     [SPECIES_ORICORIO_SENSU] = sOricorioFormSpeciesIdTable,
-    // Rockruff
-    [SPECIES_ROCKRUFF_OWN_TEMPO] = sRockruffFormSpeciesIdTable,
     // Lycanroc
     [SPECIES_LYCANROC_MIDNIGHT] = sLycanrocFormSpeciesIdTable,
     [SPECIES_LYCANROC_DUSK] = sLycanrocFormSpeciesIdTable,

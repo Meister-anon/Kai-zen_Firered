@@ -24,7 +24,7 @@ struct PokedexEntry
     /*0x00*/ u8 categoryName[13]; // changed to 15, set back to original value of 12.
     /*0x0C*/ u16 height; //in decimeters
     /*0x0E*/ u16 weight; //in hectograms
-    /*0x10*/ const u8 *description;
+    /*0x10*/ const u8 *description; //dex entry text
     /*0x14*/ //const u8 *unusedDescription; //literally removed these so think can get rid of? yup no problem removing this
     /*0x18*/ //u16 unused; //set cat names to 13, because match emerald //is this safe to remove as well? yeah seems fine
     /*0x1A*/ u16 pokemonScale;
@@ -32,6 +32,19 @@ struct PokedexEntry
     /*0x1E*/ u16 trainerScale;
     /*0x20*/ u16 trainerOffset;
 };  /*size = 0x24*/
+
+//smaller struct to just take necesary values for poke forms
+struct FormdexEntries
+{
+    const u8 *description; //dex entry text
+};//description field setup like in rhh so think can possibly just take directly as was
+
+//for the few species forms that are different enought to warrant diff category name
+//typically 3 legendary birs
+struct FormdexCategories
+{
+    u8 categoryName[13];
+};
 
 void ResetPokedex(void);
 void CopyMonCategoryText(u16 species, u8 *dst);

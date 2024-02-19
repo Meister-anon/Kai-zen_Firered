@@ -1031,7 +1031,7 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     SPECIES_TO_NATIONAL(MUSHARNA),
     SPECIES_TO_NATIONAL(PIDOVE),
     SPECIES_TO_NATIONAL(TRANQUILL),
-    SPECIES_TO_NATIONAL(UNFEZANT_M),
+    SPECIES_TO_NATIONAL(UNFEZANT),
     SPECIES_TO_NATIONAL(BLITZLE),
     SPECIES_TO_NATIONAL(ZEBSTRIKA),
     SPECIES_TO_NATIONAL(ROGGENROLA),
@@ -1178,7 +1178,7 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     SPECIES_TO_NATIONAL(SPEWPA),
     SPECIES_TO_NATIONAL(VIVILLON),
     SPECIES_TO_NATIONAL(LITLEO),
-    SPECIES_TO_NATIONAL(PYROAR_M),
+    SPECIES_TO_NATIONAL(PYROAR),
     SPECIES_TO_NATIONAL(FLABEBE),
     SPECIES_TO_NATIONAL(FLOETTE),
     SPECIES_TO_NATIONAL(FLORGES),
@@ -1663,7 +1663,6 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     [SPECIES_GENESECT_BURN_DRIVE - 1] = NATIONAL_DEX_GENESECT,
     [SPECIES_GENESECT_CHILL_DRIVE - 1] = NATIONAL_DEX_GENESECT,
     // Greninja
-    [SPECIES_GRENINJA_BATTLE_BOND - 1] = NATIONAL_DEX_GRENINJA,
     [SPECIES_GRENINJA_ASH - 1] = NATIONAL_DEX_GRENINJA,
     // Vivillon
     [SPECIES_VIVILLON_POLAR - 1] = NATIONAL_DEX_VIVILLON,
@@ -1736,8 +1735,6 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     [SPECIES_ORICORIO_POM_POM - 1] = NATIONAL_DEX_ORICORIO,
     [SPECIES_ORICORIO_PAU - 1] = NATIONAL_DEX_ORICORIO,
     [SPECIES_ORICORIO_SENSU - 1] = NATIONAL_DEX_ORICORIO,
-    // Rockruff
-    [SPECIES_ROCKRUFF_OWN_TEMPO - 1] = NATIONAL_DEX_ROCKRUFF,
     // Wishiwashi
     [SPECIES_WISHIWASHI_SCHOOL - 1] = NATIONAL_DEX_WISHIWASHI,
     // Silvally
@@ -1818,8 +1815,8 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     [SPECIES_CALYREX_ICE_RIDER - 1] = NATIONAL_DEX_CALYREX,
     [SPECIES_CALYREX_SHADOW_RIDER - 1] = NATIONAL_DEX_CALYREX,
     //Gender forms - meowstic already handled above
-    [SPECIES_UNFEZANT_F - 1] = NATIONAL_DEX_UNFEZANT_M,
-    [SPECIES_PYROAR_F - 1] = NATIONAL_DEX_PYROAR_M,
+    [SPECIES_UNFEZANT_FEMALE - 1] = NATIONAL_DEX_UNFEZANT,
+    [SPECIES_PYROAR_FEMALE - 1] = NATIONAL_DEX_PYROAR,
 };
 
 static const u16 sHoennToNationalOrder[] = // Assigns Hoenn Dex Pokémon (Using National Dex Index)
@@ -7110,6 +7107,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
     u16 heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
     u8 level;
+    u16 ability = GetMonAbility(mon);
     u16 friendship;
     u8 beauty = GetMonData(mon, MON_DATA_BEAUTY, 0);
     u16 upperPersonality = personality >> 16;
@@ -7208,6 +7206,10 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
             case EVO_LEVEL_DUSK:
                 RtcCalcLocalTime();
                 if (gLocalTime.hours >= 17 && gLocalTime.hours < 18 && evolutions[i].param <= level)
+                    targetSpecies = evolutions[i].targetSpecies;
+                break;
+            case EVO_LEVEL_ABILITY:
+                if (evolutions[i].param <= level && evolutions[i].param2 == ability)
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_ATK_GT_DEF:

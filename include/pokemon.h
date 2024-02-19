@@ -444,13 +444,28 @@ enum
 #define EVO_SCRIPT_TRIGGER_DMG              0x002b     // Pokémon has specified HP below max, then player interacts trigger
 #define EVO_DARK_SCROLL                     0x002c     // interacts with Scroll of Darkness
 #define EVO_WATER_SCROLL                    0x002d     // interacts with Scroll of Waters
+#define EVO_LEVEL_ABILITY                   0x002e // pokemon levels up w certain ability, mostly just to replace rockruff owntempo
 
 struct Evolution
 {
     u16 method;
     u16 param;
+    u16 param2;
     u16 targetSpecies;
-};
+};//thinking add 2nd param for more control
+//ex would allow me to make general evo level method without having to use a pre-defined ability
+//question is can I assign value to struct member when created i.e assign 0, so there's no garbage data
+//rather than having to do that in a function
+//well how it works now if a method doesn't use param its just set to 0
+//tried can't assign values to struct member when defining, so I'll have to fill table w zeroes myself
+//evo change worked, added 2nd param, zeroed out for existing values, will just need fill for new method changes
+//if param 2 not mentioned in function still works fine
+
+//planned change more complex late gen evo methods they suck and no one likes them, (think need keep for parafin though)
+//ex. EVO_CRITICAL_HITS  change to level_critical_hit just be at level and land a critical hit and it would evolve
+//think will keep level to 25, since these are modern mon and typically 3rd stage evo?, but can easily adjust
+//ALWAYS order name convention to match order of param, i.e level critical hit 1st param level, 2nd param critical hit
+
 
 struct Breed
 {

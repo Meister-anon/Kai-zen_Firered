@@ -520,7 +520,7 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_MUSHARNA] = _("Musharna"),
     [SPECIES_PIDOVE] = _("Pidove"),
     [SPECIES_TRANQUILL] = _("Tranquill"),
-    [SPECIES_UNFEZANT_M] = _("Unfezant"),
+    [SPECIES_UNFEZANT] = _("Unfezant"),
     [SPECIES_BLITZLE] = _("Blitzle"),
     [SPECIES_ZEBSTRIKA] = _("Zebstrika"),
     [SPECIES_ROGGENROLA] = _("Roggenrola"),
@@ -667,7 +667,7 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_SPEWPA] = _("Spewpa"),
     [SPECIES_VIVILLON] = _("Vivillon"),
     [SPECIES_LITLEO] = _("Litleo"),
-    [SPECIES_PYROAR_M] = _("Pyroar"),
+    [SPECIES_PYROAR] = _("Pyroar"),
     [SPECIES_FLABEBE] = _("Flabébé"),
     [SPECIES_FLOETTE] = _("Floette"),
     [SPECIES_FLORGES] = _("Florges"),
@@ -1149,7 +1149,6 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_GENESECT_BURN_DRIVE] = _("Genesect"),
     [SPECIES_GENESECT_CHILL_DRIVE] = _("Genesect"),
     // Greninja
-    [SPECIES_GRENINJA_BATTLE_BOND] = _("Greninja"),
     [SPECIES_GRENINJA_ASH] = _("Greninja"),
     // Vivillon
     [SPECIES_VIVILLON_POLAR] = _("Vivillon"),
@@ -1172,9 +1171,9 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_VIVILLON_FANCY] = _("Vivillon"),
     [SPECIES_VIVILLON_POKE_BALL] = _("Vivillon"),
     //Unfezant
-    [SPECIES_UNFEZANT_F] = _("Unfezant"),
+    [SPECIES_UNFEZANT_FEMALE] = _("Unfezant"),
     //Pyroar
-    [SPECIES_PYROAR_F] = _("Pyroar"),
+    [SPECIES_PYROAR_FEMALE] = _("Pyroar"),
     // Flabébé
     [SPECIES_FLABEBE_YELLOW_FLOWER] = _("Flabébé"),
     [SPECIES_FLABEBE_ORANGE_FLOWER] = _("Flabébé"),
@@ -1226,8 +1225,6 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_ORICORIO_POM_POM] = _("Oricorio"),
     [SPECIES_ORICORIO_PAU] = _("Oricorio"),
     [SPECIES_ORICORIO_SENSU] = _("Oricorio"),
-    // Rockruff
-    [SPECIES_ROCKRUFF_OWN_TEMPO] = _("Rockruff"),
     // Lycanroc
     [SPECIES_LYCANROC_MIDNIGHT] = _("Lycanroc"),
     [SPECIES_LYCANROC_DUSK] = _("Lycanroc"),

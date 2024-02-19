@@ -190,7 +190,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sBulbasaurLevelUpLearnset,
         .tmhmLearnset = sBulbasaurTMHMLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, 16, SPECIES_IVYSAUR}), //Should hopefully blank these for now without issue    
+        .evolutions = EVOLUTION({EVO_LEVEL, 16, 0,  SPECIES_IVYSAUR}), //Should hopefully blank these for now without issue    
 
     },
 
@@ -216,7 +216,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sIvysaurLevelUpLearnset,
         .tmhmLearnset = sIvysaurTMHMLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, 32, SPECIES_VENUSAUR}), //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 32, 0,  SPECIES_VENUSAUR}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_VENUSAUR] =
@@ -568,8 +568,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_EARLY_BIRD},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPidgeyLevelUpLearnset,
+        .tmhmLearnset = sPidgeyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -593,8 +593,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_AVIATOR},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPidgeottoLevelUpLearnset,
+        .tmhmLearnset = sPidgeottoTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -618,8 +618,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_BIG_PECKS, ABILITY_AVIATOR},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPidgeotLevelUpLearnset,
+        .tmhmLearnset = sPidgeotTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -642,8 +642,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_STRONG_JAW},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRattataLevelUpLearnset,
+        .tmhmLearnset = sRattataTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -666,8 +666,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_STRONG_JAW},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRaticateLevelUpLearnset,
+        .tmhmLearnset = sRaticateTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -693,8 +693,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSpearowLevelUpLearnset,
+        .tmhmLearnset = sSpearowTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -720,8 +720,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sFearowLevelUpLearnset,
+        .tmhmLearnset = sFearowTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -746,8 +746,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sEkansLevelUpLearnset,
+        .tmhmLearnset = sEkansTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -772,8 +772,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArbokLevelUpLearnset,
+        .tmhmLearnset = sArbokTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -797,8 +797,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_VOLT_ABSORB, ABILITY_OVERCHARGE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -821,7 +821,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_VOLT_ABSORB, ABILITY_OVERCHARGE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sRaichuLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -850,7 +850,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sSandshrewLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -879,7 +879,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sSandslashLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -905,7 +905,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_BIG_PECKS},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sNidoranFLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -931,7 +931,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_FRIEND_GUARD},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sNidorinaLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -956,7 +956,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_BATTLE_MATRON},//new idea ability Battle Matron, damage increase if paired w unevolved mon
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sNidoqueenLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -982,7 +982,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_GUTS},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sNidoranMLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1008,7 +1008,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_HUSTLE, ABILITY_GUTS},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sNidorinoLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1033,7 +1033,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_COMPETITIVE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sNidokingLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },  //because dark type intimidate exclusion, should I add workaround so competitive still activates?
@@ -1060,7 +1060,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_UNAWARE, ABILITY_FRIEND_GUARD},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sClefairyLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1086,7 +1086,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_UNAWARE, ABILITY_FRIEND_GUARD},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sClefableLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //need test this and consider if normal type is worth give my changes
@@ -1111,7 +1111,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SUN_DISK, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sVulpixLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1137,7 +1137,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SUN_DISK, ABILITY_SHADOW_TAG},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sNinetalesLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //give shadow ball , forgot I did this, this is horrifying
@@ -1163,7 +1163,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_FRIEND_GUARD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sJigglypuffLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1189,7 +1189,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_FRISK, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sWigglytuffLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1215,7 +1215,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sZubatLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1241,7 +1241,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGolbatLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1268,7 +1268,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_RUN_AWAY, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sOddishLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1295,7 +1295,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_AFTERMATH, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGloomLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //potentially lower sp atk for addition of stench/additional bulk given?
@@ -1322,7 +1322,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_EFFECT_SPORE, ABILITY_PRANKSTER},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sVileplumeLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1350,7 +1350,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_DAMP, ABILITY_IMMUNITY},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL, //sParasLevelUpLearnset
+        .levelUpLearnset = sParasLevelUpLearnset, //sParasLevelUpLearnset
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//can put evolution adn that builds but learnset doesn't don't get why
@@ -1381,7 +1381,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_DAMP, ABILITY_IMMUNITY},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sParasectLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1415,7 +1415,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_RUN_AWAY, ABILITY_ANTICIPATION},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sVenonatLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //since it has tinted lens I kinda want this to be normal type..but its literlaly venom nat so poison bug
@@ -1445,7 +1445,7 @@ const struct BaseStats gBaseStats[] =
         .safariZoneFleeRate = 75,
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sVenomothLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },  //tis thing is strong AF
@@ -1472,7 +1472,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sDiglettLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//making normal ground for more dmg, think this was before I changed joat, most moves are groud so w revert back
@@ -1499,7 +1499,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sDugtrioLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1525,7 +1525,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_UNNERVE, ABILITY_SUPER_LUCK},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMeowthLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1551,7 +1551,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_UNNERVE, ABILITY_SUPER_LUCK}, //harken back to  gen 1 crit days
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sPersianLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1576,7 +1576,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sPsyduckLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1600,7 +1600,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGolduckLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1625,7 +1625,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_DEFIANT, ABILITY_IRON_FIST},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMankeyLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1650,7 +1650,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_DEFIANT, ABILITY_IRON_FIST}, //muscle magic vs iron fist giving iron fist mucscle magic was supposed to be special/unique
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sPrimeapeLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1676,7 +1676,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGrowlitheLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1702,7 +1702,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sArcanineLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1727,7 +1727,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sPoliwagLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1752,7 +1752,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sPoliwhirlLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1777,7 +1777,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SWIFT_SWIM, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sPoliwrathLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1804,7 +1804,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sAbraLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//buffed hp as perma sleep,  buffing comatose w healing as mon can't rest think will attempt to set to have sleep status icon, no reason not to
@@ -1832,7 +1832,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sKadabraLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1859,7 +1859,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sAlakazamLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1885,7 +1885,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_MUSCLE_MAGIC, ABILITY_LIMBER},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMachopLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1911,7 +1911,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_MUSCLE_MAGIC, ABILITY_LIMBER},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMachokeLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1937,7 +1937,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_MUSCLE_MAGIC, ABILITY_MULTI_TASK},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMachampLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -1963,7 +1963,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sBellsproutLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//pokemon like this w big evo change have signinficant stat dif so previous evo may be better in some ways do 4 others i find like this
@@ -1991,7 +1991,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sWeepinbellLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2017,7 +2017,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sVictreebelLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2042,7 +2042,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_RAIN_DISH, ABILITY_POISON_POINT},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sTentacoolLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2067,7 +2067,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_RAIN_DISH, ABILITY_MULTI_TASK},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sTentacruelLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2092,7 +2092,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_DRY_SKIN},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGeodudeLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2117,7 +2117,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_MULTI_TASK},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGravelerLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2142,7 +2142,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SAND_VEIL, ABILITY_DRY_SKIN},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGolemLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2166,7 +2166,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_FLAME_BODY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sPonytaLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2190,7 +2190,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_FLAME_BODY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sRapidashLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2220,7 +2220,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sSlowpokeLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //buff tm learnset and mvoe pool needs it badly  learning payvback,gyro ball slow moves, and more water moves early would be good
@@ -2247,7 +2247,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sSlowbroLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2274,7 +2274,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMagnemiteLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2301,7 +2301,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMagnetonLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2328,7 +2328,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sFarfetchdLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2356,7 +2356,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sDoduoLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2383,7 +2383,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sDodrioLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2408,7 +2408,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ICE_BODY, ABILITY_SWIFT_SWIM},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sSeelLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2433,7 +2433,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ICE_BODY, ABILITY_SWIFT_SWIM},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sDewgongLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2462,7 +2462,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGrimerLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2492,7 +2492,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMukLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2519,7 +2519,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sShellderLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2546,7 +2546,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sCloysterLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//need add rock moves
@@ -2570,7 +2570,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SHADOW_TAG, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGastlyLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2594,7 +2594,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SHADOW_TAG, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sHaunterLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2620,7 +2620,7 @@ const struct BaseStats gBaseStats[] =
                  .abilityHidden = {ABILITY_SHADOW_TAG, ABILITY_PERISH_BODY},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGengarLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2646,7 +2646,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sOnixLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2671,7 +2671,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_INSOMNIA, ABILITY_GLUTTONY}, //ABILITY_GLUTTONY
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sDrowzeeLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, 
@@ -2696,7 +2696,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_INSOMNIA, ABILITY_MAGICIAN}, //ABILITY_MAGICIAN  for new new version of magician, swaps held item  if holding steals if not holding
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sHypnoLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2722,7 +2722,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sKrabbyLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2748,7 +2748,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sKinglerLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2774,7 +2774,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sVoltorbLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2800,7 +2800,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sElectrodeLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2830,7 +2830,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sExeggcuteLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2856,7 +2856,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sExeggutorLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2881,7 +2881,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_BATTLE_ARMOR, ABILITY_PHANTOM_TOUCH}, //scrappy fro sad reason, they want to touch ghosts in attempt to hug their dead mother again..
         .bodyColor = BODY_COLOR_BROWN, //actually could make its own ability scrappy but just contact moves, mostly for cubone call phantom touch?
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sCuboneLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue //from strong desire to commune w those lost, gained ability to make contact w ghosts
     },
@@ -2906,7 +2906,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_BATTLE_ARMOR, ABILITY_PHANTOM_TOUCH},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sMarowakLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //cant give muslce magic as that was meant to be main of mega marowak
@@ -2931,7 +2931,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_UNBURDEN, ABILITY_MUSCLE_MAGIC},
         .bodyColor = BODY_COLOR_BROWN, //give ability lethal legs strenghts kicking moves?
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sHitmonleeLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -2956,7 +2956,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_MUSCLE_MAGIC},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sHitmonchanLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //giving back normal type as flexibility as actual martial artists
@@ -2985,7 +2985,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_CLOUD_NINE, ABILITY_STALL},//relacing adaptability with stall
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sLickitungLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue//ability name ToxuTongue  based on toxungen which this technically is, or maybe ToxunTongue? to lean more into the name?
     },
@@ -3011,7 +3011,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_STENCH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sKoffingLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -3037,7 +3037,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_STENCH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sWeezingLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -3064,7 +3064,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sRhyhornLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -3090,7 +3090,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sRhydonLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //give head charge & headlong rush
@@ -3118,7 +3118,7 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PINK,//giving fairy type as well, mostly just  a few other weaknesses to counter its increased strength witih super changes
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sChanseyLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -3143,7 +3143,7 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sTangelaLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -3169,7 +3169,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_PARENTAL_BOND},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sKangaskhanLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -3195,7 +3195,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_DAMP, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sHorseaLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -3222,7 +3222,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_DAMP, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sSeadraLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
@@ -3248,7 +3248,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_STALL},//idk why I gaev this stall, its slow but not at all bulky
         .bodyColor = BODY_COLOR_RED, //welp nvm its kinda tankin pretty good??
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sGoldeenLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//thinking give unaware, keeping stall on pre evo for eviolite strats taht's about it
@@ -3274,7 +3274,7 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_UNAWARE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
+        .levelUpLearnset = sSeakingLevelUpLearnset,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//replaced abilities since they suck, and goldeen usually doesns't learn physical water moves, VSONIC
@@ -11818,7 +11818,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sRioluLevelUpLearnset,
         .tmhmLearnset = sRioluTMHMLearnset,
-        .evolutions = EVOLUTION({EVO_FRIENDSHIP_DAY, 0, SPECIES_LUCARIO}),//NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 0, 0,  SPECIES_LUCARIO}),//NULL, //Should hopefully blank these for now without issue
     },
 
     [SPECIES_LUCARIO] =
@@ -13919,7 +13919,7 @@ const struct BaseStats gBaseStats[] =
     },//seaprate final evo into gender forms
     //will need to reupdate species file again...
 
-    [SPECIES_UNFEZANT_M] =
+    [SPECIES_UNFEZANT] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
@@ -13949,6 +13949,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
     },
 
     [SPECIES_BLITZLE] =
@@ -18421,14 +18422,14 @@ const struct BaseStats gBaseStats[] =
         .eggGroup2 = EGG_GROUP_WATER_1,
         .abilities = {ABILITY_TORRENT, ABILITY_NONE},
         //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_PROTEAN, ABILITY_NONE},
+            .abilityHidden = {ABILITY_PROTEAN, ABILITY_BATTLE_BOND},
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
+    },// do same as I did special rock ruff, make evo method evolve w ability/form change w ability and set as hidden ability
 
     [SPECIES_BUNNELBY] =
     { 
@@ -18725,7 +18726,7 @@ const struct BaseStats gBaseStats[] =
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
-    [SPECIES_PYROAR_M] =
+    [SPECIES_PYROAR] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
@@ -18755,6 +18756,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
     },//add sunny day crunch extremespeed to learnet and have thunderbolt as tm move    vsonic
     
     [SPECIES_FLABEBE] =
@@ -19079,6 +19081,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
     },
 
     [SPECIES_HONEDGE] =
@@ -21218,12 +21221,18 @@ const struct BaseStats gBaseStats[] =
         //#ifdef BATTLE_ENGINE
             .abilityHidden = {ABILITY_STEADFAST, ABILITY_OWN_TEMPO}, //base game needs own tempo to evolve into dusk form, gave owntempo to work, so could just use ability patch
         // #endif
-        .bodyColor = BODY_COLOR_BROWN,
+        .bodyColor = BODY_COLOR_BROWN, //changed evo method, own tempo rockruff was classified as diff species w diff evo, so thats why it was limited
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
-    }, //give these normal secondary
+        .evolutions = EVOLUTION({EVO_LEVEL_DAY, 25, 0,  SPECIES_LYCANROC},
+                                {EVO_ITEM, ITEM_DAWN_STONE, 0,  SPECIES_LYCANROC},
+                                {EVO_LEVEL_NIGHT, 25, 0,  SPECIES_LYCANROC_MIDNIGHT},
+                                {EVO_ITEM, ITEM_MOON_STONE, 0,  SPECIES_LYCANROC_MIDNIGHT},
+                                {EVO_LEVEL_DUSK, 25, 0,  SPECIES_LYCANROC_DUSK},
+                                {EVO_ITEM, ITEM_DUSK_STONE, 0,  SPECIES_LYCANROC_DUSK},
+                                {EVO_LEVEL_ABILITY, 25, ABILITY_OWN_TEMPO,  SPECIES_LYCANROC_DUSK}),
+    }, //give these normal secondary - give alt evo method, dawn stone, moon stone, dusk stone
 
     [SPECIES_LYCANROC] =
     { 
@@ -25596,6 +25605,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
     },
 
     [SPECIES_MORPEKO] =
@@ -26311,294 +26321,294 @@ const struct BaseStats gBaseStats[] =
     },//need to add below mon to species_to_national dex in pokemon.c
 
     [SPECIES_WYRDEER] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            103,
-            105,
-            72,
-            65,
-            105,
-            75
-            ),
-            .type1 = TYPE_NORMAL,
-            .type2 = TYPE_PSYCHIC,
-            .catchRate = 45,
-            .expYield = 184,
-            //.evYield_Attack = 1,
-            .genderRatio = PERCENT_FEMALE(50),
-            .eggCycles = 20,
-             .friendship = 15,
-            .growthRate = GROWTH_SLOW,
-            .eggGroup1 = EGG_GROUP_FIELD,
-            .eggGroup2 = EGG_GROUP_FIELD,
-            .abilities = {ABILITY_INTIMIDATE, ABILITY_FRISK},
-            .abilityHidden = {ABILITY_SAP_SIPPER, ABILITY_NONE},
-            .bodyColor = BODY_COLOR_GRAY,
-            .noFlip = FALSE,
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        103,
+        105,
+        72,
+        65,
+        105,
+        75
+        ),
+        .type1 = TYPE_NORMAL,
+        .type2 = TYPE_PSYCHIC,
+        .catchRate = 45,
+        .expYield = 184,
+        //.evYield_Attack = 1,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 20,
+            .friendship = 15,
+        .growthRate = GROWTH_SLOW,
+        .eggGroup1 = EGG_GROUP_FIELD,
+        .eggGroup2 = EGG_GROUP_FIELD,
+        .abilities = {ABILITY_INTIMIDATE, ABILITY_FRISK},
+        .abilityHidden = {ABILITY_SAP_SIPPER, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_GRAY,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-        },
+    },
 
-        [SPECIES_KLEAVOR] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            70,
-            135,
-            95,
-            85,
-            45,
-            70
-            ),
-            .type1 = TYPE_BUG,
-            .type2 = TYPE_ROCK,
-            .catchRate = 25,
-            .expYield = 175,
-            //.evYield_Attack = 2,
-            .genderRatio = PERCENT_FEMALE(50),
-            .eggCycles = 25,
-             .friendship = 15,
-            .growthRate = GROWTH_MEDIUM_FAST,
-            .eggGroup1 = EGG_GROUP_BUG,
-            .eggGroup2 = EGG_GROUP_BUG,
-            .abilities = {ABILITY_SWARM, ABILITY_SHEER_FORCE},
-            .abilityHidden = {ABILITY_STEADFAST, ABILITY_NONE},
-            .bodyColor = BODY_COLOR_BROWN,
-            .noFlip = FALSE,
+    [SPECIES_KLEAVOR] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        70,
+        135,
+        95,
+        85,
+        45,
+        70
+        ),
+        .type1 = TYPE_BUG,
+        .type2 = TYPE_ROCK,
+        .catchRate = 25,
+        .expYield = 175,
+        //.evYield_Attack = 2,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 25,
+            .friendship = 15,
+        .growthRate = GROWTH_MEDIUM_FAST,
+        .eggGroup1 = EGG_GROUP_BUG,
+        .eggGroup2 = EGG_GROUP_BUG,
+        .abilities = {ABILITY_SWARM, ABILITY_SHEER_FORCE},
+        .abilityHidden = {ABILITY_STEADFAST, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_BROWN,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-        },
+    },
 
-        [SPECIES_URSALUNA] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            130,
-            140,
-            105,
-            50,
-            45,
-            80
-            ),
-            .type1 = TYPE_GROUND,
-            .type2 = TYPE_NORMAL,
-            .catchRate = 75,
-            .expYield = 194,
-            //.evYield_Attack = 3,
-            .genderRatio = PERCENT_FEMALE(50),
-            .eggCycles = 20,
-             .friendship = 15,
-            .growthRate = GROWTH_MEDIUM_FAST,
-            .eggGroup1 = EGG_GROUP_FIELD,
-            .eggGroup2 = EGG_GROUP_FIELD,
-            .abilities = {ABILITY_GUTS, ABILITY_BULLETPROOF},
-            .abilityHidden = {ABILITY_GORILLA_TACTICS, ABILITY_UNNERVE},
-            .bodyColor = BODY_COLOR_BROWN,
-            .noFlip = FALSE,
+    [SPECIES_URSALUNA] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        130,
+        140,
+        105,
+        50,
+        45,
+        80
+        ),
+        .type1 = TYPE_GROUND,
+        .type2 = TYPE_NORMAL,
+        .catchRate = 75,
+        .expYield = 194,
+        //.evYield_Attack = 3,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 20,
+            .friendship = 15,
+        .growthRate = GROWTH_MEDIUM_FAST,
+        .eggGroup1 = EGG_GROUP_FIELD,
+        .eggGroup2 = EGG_GROUP_FIELD,
+        .abilities = {ABILITY_GUTS, ABILITY_BULLETPROOF},
+        .abilityHidden = {ABILITY_GORILLA_TACTICS, ABILITY_UNNERVE},
+        .bodyColor = BODY_COLOR_BROWN,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-        },
+    },
 
-        [SPECIES_BASCULEGION] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            120,
-            112,
-            65,
-            78,
-            80,
-            75
-            ),
-            .type1 = TYPE_WATER,
-            .type2 = TYPE_GHOST,
-            .catchRate = 25,
-            .expYield = 186,
-            //.evYield_HP = 2,
-            .genderRatio = MON_MALE,
-            .eggCycles = 40,
-             .friendship = 15,
-            .growthRate = GROWTH_MEDIUM_FAST,
-            .eggGroup1 = EGG_GROUP_WATER_2,
-            .eggGroup2 = EGG_GROUP_WATER_2,
-            .abilities = {ABILITY_RATTLED, ABILITY_ADAPTABILITY},
-            .abilityHidden = {ABILITY_MOLD_BREAKER, ABILITY_NONE},
-            .bodyColor = BODY_COLOR_GREEN,
-            .noFlip = FALSE,
+    [SPECIES_BASCULEGION] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        120,
+        112,
+        65,
+        78,
+        80,
+        75
+        ),
+        .type1 = TYPE_WATER,
+        .type2 = TYPE_GHOST,
+        .catchRate = 25,
+        .expYield = 186,
+        //.evYield_HP = 2,
+        .genderRatio = MON_MALE,
+        .eggCycles = 40,
+            .friendship = 15,
+        .growthRate = GROWTH_MEDIUM_FAST,
+        .eggGroup1 = EGG_GROUP_WATER_2,
+        .eggGroup2 = EGG_GROUP_WATER_2,
+        .abilities = {ABILITY_RATTLED, ABILITY_ADAPTABILITY},
+        .abilityHidden = {ABILITY_MOLD_BREAKER, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_GREEN,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = SPECIES_FLAG_GENDER_DIFFERENCE,
-        },
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
+    },
 
-        [SPECIES_SNEASLER] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            80,
-            130,
-            60,
-            120,
-            40,
-            80
-            ),
-            .type1 = TYPE_FIGHTING,
-            .type2 = TYPE_POISON,
-            .catchRate = 135,
-            .expYield = 179,
-            //.evYield_Attack = 1,
-            //.evYield_Speed = 1,
-            .genderRatio = PERCENT_FEMALE(MON_FEMALE),
-            .eggCycles = 20,
-            .friendship = 10,
-            .growthRate = GROWTH_MEDIUM_SLOW,
-            .eggGroup1 = EGG_GROUP_FIELD,
-            .eggGroup2 = EGG_GROUP_FIELD,
-            .abilities = {ABILITY_FEMME_FATALE, ABILITY_FEMME_FATALE},
-            .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_NONE},
-            .bodyColor = BODY_COLOR_BLUE,
-            .noFlip = FALSE,
+    [SPECIES_SNEASLER] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        80,
+        130,
+        60,
+        120,
+        40,
+        80
+        ),
+        .type1 = TYPE_FIGHTING,
+        .type2 = TYPE_POISON,
+        .catchRate = 135,
+        .expYield = 179,
+        //.evYield_Attack = 1,
+        //.evYield_Speed = 1,
+        .genderRatio = PERCENT_FEMALE(MON_FEMALE),
+        .eggCycles = 20,
+        .friendship = 10,
+        .growthRate = GROWTH_MEDIUM_SLOW,
+        .eggGroup1 = EGG_GROUP_FIELD,
+        .eggGroup2 = EGG_GROUP_FIELD,
+        .abilities = {ABILITY_FEMME_FATALE, ABILITY_FEMME_FATALE},
+        .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_BLUE,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-        },//think will make female only evo, counterpart to salazzle
-        //give ABILITY_FEMME_FATALE when finish setup
+    },//think will make female only evo, counterpart to salazzle
+    //give ABILITY_FEMME_FATALE when finish setup
 
-        [SPECIES_OVERQWIL] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            85,
-            115,
-            95,
-            85,
-            65,
-            65
-            ),
-            .type1 = TYPE_DARK,
-            .type2 = TYPE_POISON,
-            .catchRate = 135,
-            .expYield = 180,
-            //.evYield_Attack = 1,
-            .genderRatio = PERCENT_FEMALE(50),
-            .eggCycles = 20,
-             .friendship = 15,
-            .growthRate = GROWTH_MEDIUM_FAST,
-            .eggGroup1 = EGG_GROUP_WATER_2,
-            .eggGroup2 = EGG_GROUP_WATER_2,
-            .abilities = {ABILITY_POISON_POINT, ABILITY_SWIFT_SWIM},
-            .abilityHidden = {ABILITY_INTIMIDATE, ABILITY_NONE},
-            .bodyColor = BODY_COLOR_BLACK,
-            .noFlip = FALSE,
+    [SPECIES_OVERQWIL] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        85,
+        115,
+        95,
+        85,
+        65,
+        65
+        ),
+        .type1 = TYPE_DARK,
+        .type2 = TYPE_POISON,
+        .catchRate = 135,
+        .expYield = 180,
+        //.evYield_Attack = 1,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 20,
+            .friendship = 15,
+        .growthRate = GROWTH_MEDIUM_FAST,
+        .eggGroup1 = EGG_GROUP_WATER_2,
+        .eggGroup2 = EGG_GROUP_WATER_2,
+        .abilities = {ABILITY_POISON_POINT, ABILITY_SWIFT_SWIM},
+        .abilityHidden = {ABILITY_INTIMIDATE, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_BLACK,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-        },
+    },
 
-        [SPECIES_ENAMORUS] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            74,
-            115,
-            70,
-            106,
-            135,
-            80
-            ),
-            .type1 = TYPE_FAIRY,
-            .type2 = TYPE_FLYING,
-            .catchRate = 3,
-            .expYield = 261,
-            //.evYield_SpAttack = 3,
-            .genderRatio = MON_FEMALE,
-            .eggCycles = 120,
-            .friendship = 25,
-            .growthRate = GROWTH_SLOW,
-            .eggGroup1 = EGG_GROUP_UNDISCOVERED,
-            .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-            .abilities = {ABILITY_HEALER, ABILITY_NONE},
-            .abilityHidden = {ABILITY_CONTRARY, ABILITY_NONE},
-            .bodyColor = BODY_COLOR_PINK,
-            .noFlip = FALSE,
+    [SPECIES_ENAMORUS] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        74,
+        115,
+        70,
+        106,
+        135,
+        80
+        ),
+        .type1 = TYPE_FAIRY,
+        .type2 = TYPE_FLYING,
+        .catchRate = 3,
+        .expYield = 261,
+        //.evYield_SpAttack = 3,
+        .genderRatio = MON_FEMALE,
+        .eggCycles = 120,
+        .friendship = 25,
+        .growthRate = GROWTH_SLOW,
+        .eggGroup1 = EGG_GROUP_UNDISCOVERED,
+        .eggGroup2 = EGG_GROUP_UNDISCOVERED,
+        .abilities = {ABILITY_HEALER, ABILITY_NONE},
+        .abilityHidden = {ABILITY_CONTRARY, ABILITY_NONE},
+        .bodyColor = BODY_COLOR_PINK,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            //.flags = SPECIES_FLAG_LEGENDARY, don't need
-        },
+        //.flags = SPECIES_FLAG_LEGENDARY, don't need
+    },
 
-        [SPECIES_CEFIREON] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            65,
-            65,
-            60,
-            130,
-            110,
-            95
-            ),
-            .type1 = TYPE_FLYING,
-            .type2 = TYPE_GHOST,
-            .catchRate = 45,
-            .expYield = 184,
-            //.evYield_SpDefense = 2,
-            .genderRatio = PERCENT_FEMALE(12.5),
-            .eggCycles = 35,
-             .friendship = 15,
-            .growthRate = GROWTH_MEDIUM_FAST,
-            .eggGroup1 = EGG_GROUP_FIELD,
-            .eggGroup2 = EGG_GROUP_FIELD,
-            .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_LIGHTNING_ROD},
-            //#ifdef BATTLE_ENGINE
-                .abilityHidden = {ABILITY_COMPOUND_EYES, ABILITY_WHITE_SMOKE},
-            // #endif
-            .bodyColor = BODY_COLOR_YELLOW,
-            .noFlip = FALSE,
+    [SPECIES_CEFIREON] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        65,
+        65,
+        60,
+        130,
+        110,
+        95
+        ),
+        .type1 = TYPE_FLYING,
+        .type2 = TYPE_GHOST,
+        .catchRate = 45,
+        .expYield = 184,
+        //.evYield_SpDefense = 2,
+        .genderRatio = PERCENT_FEMALE(12.5),
+        .eggCycles = 35,
+            .friendship = 15,
+        .growthRate = GROWTH_MEDIUM_FAST,
+        .eggGroup1 = EGG_GROUP_FIELD,
+        .eggGroup2 = EGG_GROUP_FIELD,
+        .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_LIGHTNING_ROD},
+        //#ifdef BATTLE_ENGINE
+            .abilityHidden = {ABILITY_COMPOUND_EYES, ABILITY_WHITE_SMOKE},
+        // #endif
+        .bodyColor = BODY_COLOR_YELLOW,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            
-        },
+        
+    },
 
-        [SPECIES_FRAEYJTA] =
-        { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-            170,  //hp betweeen snorlax and chansey
-            15,
-            25,
-            60,
-            50,
-            210
-            ),
-            .type1 = TYPE_FAIRY,
-            .type2 = TYPE_GHOST,
-            .catchRate = 13,
-            .expYield = 384,
-            //.evYield_SpDefense = 2,
-            .genderRatio = MON_FEMALE,
-            .eggCycles = 35,
-             .friendship = 15,
-            .growthRate = GROWTH_SLOW,
-            .eggGroup1 = EGG_GROUP_UNDISCOVERED,
-            .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-            .abilities = {ABILITY_OMNIPOTENT_AIDE, ABILITY_NONE}, //make ability that passes on any healing received to battle partner, potentially also makes healing effect priority?
-            //#ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_DISPIRIT_GUARD, ABILITY_NONE}, //not able to heal this mon, ok just make it so recovery moves don't work on it, otherwise would be horribly annoying
-            // #endif
-            .bodyColor = BODY_COLOR_GRAY,
-            .noFlip = FALSE,
+    [SPECIES_FRAEYJTA] =
+    { 
+        //hp, atk, def, spd, spatk, spdef
+        STATS(
+        170,  //hp betweeen snorlax and chansey
+        15,
+        25,
+        60,
+        50,
+        210
+        ),
+        .type1 = TYPE_FAIRY,
+        .type2 = TYPE_GHOST,
+        .catchRate = 13,
+        .expYield = 384,
+        //.evYield_SpDefense = 2,
+        .genderRatio = MON_FEMALE,
+        .eggCycles = 35,
+            .friendship = 15,
+        .growthRate = GROWTH_SLOW,
+        .eggGroup1 = EGG_GROUP_UNDISCOVERED,
+        .eggGroup2 = EGG_GROUP_UNDISCOVERED,
+        .abilities = {ABILITY_OMNIPOTENT_AIDE, ABILITY_NONE}, //make ability that passes on any healing received to battle partner, potentially also makes healing effect priority?
+        //#ifdef BATTLE_ENGINE
+        .abilityHidden = {ABILITY_DISPIRIT_GUARD, ABILITY_NONE}, //not able to heal this mon, ok just make it so recovery moves don't work on it, otherwise would be horribly annoying
+        // #endif
+        .bodyColor = BODY_COLOR_GRAY,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-        }, //give move powersplit,   //name is a mix of word for fairy,  freya norse goddess of protection/that watches over the dead, body based on priscilla from dark souls
-        //ok ability plan is heal moves don't work on self, if partner alive (and passes normal recurring ability conditions) increase priority by 3, same as triage
-        //heal them instead
+    }, //give move powersplit,   //name is a mix of word for fairy,  freya norse goddess of protection/that watches over the dead, body based on priscilla from dark souls
+    //ok ability plan is heal moves don't work on self, if partner alive (and passes normal recurring ability conditions) increase priority by 3, same as triage
+    //heal them instead
 
     [SPECIES_VENUSAUR_MEGA] =
     { 
@@ -26661,11 +26671,11 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
-       .noFlip = FALSE,
+        .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-       .flags = F_MEGA_FORM,
+        .flags = F_MEGA_FORM,
     },
 
     [SPECIES_CHARIZARD_MEGA_Y] =
@@ -29587,7 +29597,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_ARCANINE_HISUIAN] =
@@ -29619,7 +29629,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_VOLTORB_HISUIAN] =
@@ -29651,7 +29661,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_ELECTRODE_HISUIAN] =
@@ -29683,7 +29693,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_TYPHLOSION_HISUIAN] =
@@ -29715,7 +29725,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_QWILFISH_HISUIAN] =
@@ -29748,7 +29758,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_SNEASEL_HISUIAN] =
@@ -29781,7 +29791,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
 //////#if P_GEN_5_POKEMON == TRUE
@@ -29814,7 +29824,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_LILLIGANT_HISUIAN] =
@@ -29847,7 +29857,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_ZORUA_HISUIAN] =
@@ -29879,7 +29889,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_ZOROARK_HISUIAN] =
@@ -29911,7 +29921,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_BRAVIARY_HISUIAN] =
@@ -29943,7 +29953,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 //// #endif
 
@@ -29978,7 +29988,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_GOODRA_HISUIAN] =
@@ -30010,7 +30020,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
         [SPECIES_AVALUGG_HISUIAN] =
@@ -30042,7 +30052,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 //// #endif
 
@@ -30076,7 +30086,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = F_HISUIAN_FORM,
+        .flags = F_HISUIAN_FORM,
         },
 
     [SPECIES_PIKACHU_COSPLAY] =
@@ -33213,40 +33223,6 @@ const struct BaseStats gBaseStats[] =
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
-    [SPECIES_GRENINJA_BATTLE_BOND] =
-    { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-        72,
-        95,
-        67,
-        122,
-        103,
-        71
-        ),
-        .type1 = TYPE_WATER,
-        .type2 = TYPE_DARK,
-        .catchRate = 45,
-        .expYield = 239,
-        //.evYield_Speed = 3,
-        .genderRatio = MON_MALE,
-        .eggCycles = 20,
-         .friendship = 15,
-        .growthRate = GROWTH_MEDIUM_SLOW,
-        .eggGroup1 = EGG_GROUP_UNDISCOVERED,
-        .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-        //#ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_BATTLE_BOND, ABILITY_NONE},
-       // #ifdef BATTLE_ENGINE
-            .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
-        // #endif
-        .bodyColor = BODY_COLOR_BLUE,
-        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
-
     [SPECIES_GRENINJA_ASH] =
     { 
            //hp, atk, def, spd, spatk, spdef
@@ -33946,7 +33922,7 @@ const struct BaseStats gBaseStats[] =
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
-    [SPECIES_UNFEZANT_F] =
+    [SPECIES_UNFEZANT_FEMALE] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
@@ -33976,9 +33952,10 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
     },
 
-    [SPECIES_PYROAR_F] =
+    [SPECIES_PYROAR_FEMALE] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
@@ -34008,6 +33985,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
     },
 
     [SPECIES_FLABEBE_YELLOW_FLOWER] =
@@ -34762,6 +34740,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
     },
 
     [SPECIES_AEGISLASH_BLADE] =
@@ -35300,37 +35279,6 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
-        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
-
-    [SPECIES_ROCKRUFF_OWN_TEMPO] =
-    { 
-           //hp, atk, def, spd, spatk, spdef
-         STATS(
-        45,
-        65,
-        40,
-        60,
-        30,
-        40
-        ),
-        .type1 = TYPE_NORMAL,
-        .type2 = TYPE_ROCK,
-        .catchRate = 190,
-        .expYield = 56,
-        //.evYield_Attack = 1,
-        .genderRatio = PERCENT_FEMALE(50),
-        .eggCycles = 15,
-         .friendship = 15,
-        .growthRate = GROWTH_MEDIUM_FAST,
-        .eggGroup1 = EGG_GROUP_FIELD,
-        .eggGroup2 = EGG_GROUP_FIELD,
-        .abilities = {ABILITY_OWN_TEMPO, ABILITY_NONE},
-        .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
-        .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
@@ -37141,6 +37089,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
+        .flags = F_SPECIES_GENDER_DIFFERENCE,
     },
 
     [SPECIES_MORPEKO_HANGRY] =
@@ -37438,10 +37387,10 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_MOLD_BREAKER, ABILITY_NONE},
             .bodyColor = BODY_COLOR_GREEN,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
-            .flags = SPECIES_FLAG_GENDER_DIFFERENCE,
+            .levelUpLearnset = NULL,
+            .tmhmLearnset = NULL,
+            .evolutions = NULL, //Should hopefully blank these for now without issue
+            .flags = F_SPECIES_GENDER_DIFFERENCE,
         },
 
     [SPECIES_TORTERRA_MEGA] =

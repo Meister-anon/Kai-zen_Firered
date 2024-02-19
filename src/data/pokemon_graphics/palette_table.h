@@ -521,7 +521,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(MUSHARNA, gMonPalette_Musharna),
     SPECIES_PAL(PIDOVE, gMonPalette_Pidove),
     SPECIES_PAL(TRANQUILL, gMonPalette_Tranquill),
-    SPECIES_PAL(UNFEZANT_M, gMonPalette_Unfezant),
+    SPECIES_PAL(UNFEZANT, gMonPalette_Unfezant),
     SPECIES_PAL(BLITZLE, gMonPalette_Blitzle),
     SPECIES_PAL(ZEBSTRIKA, gMonPalette_Zebstrika),
     SPECIES_PAL(ROGGENROLA, gMonPalette_Roggenrola),
@@ -668,7 +668,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(SPEWPA, gMonPalette_Spewpa),
     SPECIES_PAL(VIVILLON, gMonPalette_Vivillon),
     SPECIES_PAL(LITLEO, gMonPalette_Litleo),
-    SPECIES_PAL(PYROAR_M, gMonPalette_Pyroar),
+    SPECIES_PAL(PYROAR, gMonPalette_Pyroar),
     SPECIES_PAL(FLABEBE, gMonPalette_Flabebe),
     SPECIES_PAL(FLOETTE, gMonPalette_Floette),
     SPECIES_PAL(FLORGES, gMonPalette_Florges),
@@ -1139,7 +1139,6 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(GENESECT_BURN_DRIVE, gMonPalette_GenesectBurnDrive),
     SPECIES_PAL(GENESECT_CHILL_DRIVE, gMonPalette_GenesectChillDrive),
 
-    SPECIES_PAL(GRENINJA_BATTLE_BOND, gMonPalette_Greninja),
     SPECIES_PAL(GRENINJA_ASH, gMonPalette_GreninjaAsh),
 
     SPECIES_PAL(VIVILLON_POLAR, gMonPalette_VivillonPolar),
@@ -1162,9 +1161,9 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(VIVILLON_FANCY, gMonPalette_VivillonFancy),
     SPECIES_PAL(VIVILLON_POKE_BALL, gMonPalette_VivillonPokeBall),
 
-    SPECIES_PAL(UNFEZANT_F, gMonPalette_Unfezant_F),
+    SPECIES_PAL(UNFEZANT_FEMALE, gMonPalette_UNFEZANT_FEMALE),
     
-    SPECIES_PAL(PYROAR_F, gMonPalette_PyroarF),
+    SPECIES_PAL(PYROAR_FEMALE, gMonPalette_PyroarF),
 
     SPECIES_PAL(FLABEBE_YELLOW_FLOWER, gMonPalette_FlabebeYellowFlower),
     SPECIES_PAL(FLABEBE_ORANGE_FLOWER, gMonPalette_FlabebeOrangeFlower),
@@ -1217,7 +1216,6 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(ORICORIO_PAU, gMonPalette_OricorioPau),
     SPECIES_PAL(ORICORIO_SENSU, gMonPalette_OricorioSensu),
 
-    SPECIES_PAL(ROCKRUFF_OWN_TEMPO, gMonPalette_Rockruff),
 
     SPECIES_PAL(LYCANROC_MIDNIGHT, gMonPalette_LycanrocMidnight),
     SPECIES_PAL(LYCANROC_DUSK, gMonPalette_LycanrocDusk),

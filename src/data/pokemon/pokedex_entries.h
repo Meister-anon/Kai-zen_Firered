@@ -6273,7 +6273,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_UNFEZANT_M] =
+    [NATIONAL_DEX_UNFEZANT] =
     {
         .categoryName = _("Proud"),
         .height = 12,
@@ -8037,7 +8037,7 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_PYROAR_M] =
+    [NATIONAL_DEX_PYROAR] =
     {
         .categoryName = _("Royal"),
         .height = 15,
@@ -10892,4 +10892,474 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerScale = 296,
         .trainerOffset = 1,
     },
+}; //end of species form dex below
+
+//if species has mega flag they are same categoryName as base species so can use that to skip processing
+//.flags = F_MEGA_FORM,  or SPECIES_FLAG_PRIMAL_REVERSION  or F_PIKACHU_FORM  use && !=  && !=
+//for those forms catname will be "garbage data" just a meaningless unused value
+//going to call max description limit 140, as thats what enamorus uses and that fits
+const struct FormdexEntries gFormdexEntries[] =
+{
+    [NATIONAL_DEX_VENUSAUR_MEGA] =
+    {
+        .description = COMPOUND_STRING(
+            "In order to support its flower, which\n"
+            "has grown larger due to Mega Evolution,\n"
+            "its back and legs have become stronger."),
+    }, //use array to filter for which species I need
+    //since using gFormdexEntries[species] want match species
+    //I need to do like catdex where I check gFormdexEntries[i] == species
+    //but its in natdex so I need do natdex conversion first
+
+    [NATIONAL_DEX_CHARIZARD_MEGA_X] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_CHARIZARD_MEGA_Y] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_BLASTOISE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_BEEDRILL_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PIDGEOT_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_ALAKAZAM_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SLOWBRO_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GENGAR_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_KANGASKHAN_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PINSIR_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GYARADOS_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_AERODACTYL_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_MEWTWO_MEGA_X] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_MEWTWO_MEGA_Y] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_AMPHAROS_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    [NATIONAL_DEX_STEELIX_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SCIZOR_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    [NATIONAL_DEX_HERACROSS_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_HOUNDOOM_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_TYRANITAR_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SCEPTILE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    [NATIONAL_DEX_BLAZIKEN_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SWAMPERT_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    [NATIONAL_DEX_GARDEVOIR_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SABLEYE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_MAWILE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_AGGRON_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_MEDICHAM_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_MANECTRIC_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SHARPEDO_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    [NATIONAL_DEX_CAMERUPT_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_ALTARIA_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_BANETTE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_ABSOL_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GLALIE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SALAMENCE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_METAGROSS_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_LATIAS_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    [NATIONAL_DEX_LATIOS_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_LOPUNNY_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    [NATIONAL_DEX_GARCHOMP_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_LUCARIO_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    [NATIONAL_DEX_ABOMASNOW_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GALLADE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_AUDINO_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_DIANCIE_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_RAYQUAZA_MEGA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_KYOGRE_PRIMAL] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GROUDON_PRIMAL] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PIKACHU_ROCK_STAR] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PIKACHU_BELLE] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PIKACHU_PH_D] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PIKACHU_LIBRE] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    //curr end of mega forms//enhanced forms, add custom megas torterra and marowwak here later
+    //after her categoryName matters ok screw teh list, most cat names are the same
+    //so instead build array based on exclusions, but if that's the case makes more sense to 
+    //have the new struct JUST be descriptions,  and make a cat struct just for teh exceptions sigh
+    //which are most likely JUST the 3 birds smh
+
+    [NATIONAL_DEX_RATTATA_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_RATICATE_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_RAICHU_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SANDSHREW_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_SANDSLASH_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_VULPIX_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_NINETALES_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_DIGLETT_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_DUGTRIO_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_MEOWTH_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PERSIAN_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GEODUDE_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GRAVELER_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GOLEM_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_GRIMER_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_MUK_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_EXEGGUTOR_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_MAROWAK_ALOLAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_LYCANROC_MIDNIGHT] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This Pokémon uses its rocky mane\n"
+            "to slash any who approach. It will\n"
+            "even disobey its Trainer if it dislikes\n"
+            "the orders it was given."),
+    },
+
+    [NATIONAL_DEX_LYCANROC_DUSK] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "These Pokémon have both calm and\n"
+            "ferocious qualities. It's said that\n"
+            "this form of Lycanroc is the most\n"
+            "troublesome to raise."),
+    },
+    //alola end - galar start
+
+    [NATIONAL_DEX_MEOWTH_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+    
+
 };

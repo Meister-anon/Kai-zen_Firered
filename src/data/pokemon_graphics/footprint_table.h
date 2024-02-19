@@ -522,8 +522,8 @@
     [SPECIES_MUSHARNA] = gMonFootprint_None, //gMonFootprint_Musharna,
     [SPECIES_PIDOVE] = gMonFootprint_None, //gMonFootprint_Pidove,
     [SPECIES_TRANQUILL] = gMonFootprint_None, //gMonFootprint_Tranquill,
-    [SPECIES_UNFEZANT_F] = gMonFootprint_None, //gMonFootprint_Unfezant,
-    [SPECIES_UNFEZANT_M] = gMonFootprint_None, //gMonFootprint_Unfezant,
+    [SPECIES_UNFEZANT_FEMALE] = gMonFootprint_None, //gMonFootprint_Unfezant,
+    [SPECIES_UNFEZANT] = gMonFootprint_None, //gMonFootprint_Unfezant,
     [SPECIES_BLITZLE] = gMonFootprint_None, //gMonFootprint_Blitzle,
     [SPECIES_ZEBSTRIKA] = gMonFootprint_None, //gMonFootprint_Zebstrika,
     [SPECIES_ROGGENROLA] = gMonFootprint_None, //gMonFootprint_Roggenrola,
@@ -671,8 +671,8 @@
     [SPECIES_SPEWPA] = gMonFootprint_None, //gMonFootprint_None,
     [SPECIES_VIVILLON] = gMonFootprint_None, //gMonFootprint_None,
     [SPECIES_LITLEO] = gMonFootprint_None, //gMonFootprint_Litleo,
-    [SPECIES_PYROAR_M] = gMonFootprint_None, //gMonFootprint_Pyroar,
-    [SPECIES_PYROAR_F] = gMonFootprint_None, //gMonFootprint_Pyroar,  //remove this line if an issue
+    [SPECIES_PYROAR] = gMonFootprint_None, //gMonFootprint_Pyroar,
+    [SPECIES_PYROAR_FEMALE] = gMonFootprint_None, //gMonFootprint_Pyroar,  //remove this line if an issue
     [SPECIES_FLABEBE] = gMonFootprint_None, //gMonFootprint_None,
     [SPECIES_FLOETTE] = gMonFootprint_None, //gMonFootprint_None,
     [SPECIES_FLORGES] = gMonFootprint_None, //gMonFootprint_None,

@@ -526,8 +526,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         [SPECIES_MUSHARNA] = sMusharnaLevelUpLearnset,
         [SPECIES_PIDOVE] = sPidoveLevelUpLearnset,
         [SPECIES_TRANQUILL] = sTranquillLevelUpLearnset,
-        [SPECIES_UNFEZANT_M] = sUnfezantLevelUpLearnset,
-        [SPECIES_UNFEZANT_F] = sUnfezantLevelUpLearnset,
+        [SPECIES_UNFEZANT] = sUnfezantLevelUpLearnset,
+        [SPECIES_UNFEZANT_FEMALE] = sUnfezantLevelUpLearnset,
         [SPECIES_BLITZLE] = sBlitzleLevelUpLearnset,
         [SPECIES_ZEBSTRIKA] = sZebstrikaLevelUpLearnset,
         [SPECIES_ROGGENROLA] = sRoggenrolaLevelUpLearnset,
@@ -676,8 +676,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         [SPECIES_SPEWPA] = sSpewpaLevelUpLearnset,
         [SPECIES_VIVILLON] = sVivillonLevelUpLearnset,
         [SPECIES_LITLEO] = sLitleoLevelUpLearnset,
-        [SPECIES_PYROAR_M] = sPyroarLevelUpLearnset,
-        [SPECIES_PYROAR_F] = sPyroarLevelUpLearnset,
+        [SPECIES_PYROAR] = sPyroarLevelUpLearnset,
+        [SPECIES_PYROAR_FEMALE] = sPyroarLevelUpLearnset,
         [SPECIES_FLABEBE] = sFlabebeLevelUpLearnset,
         [SPECIES_FLOETTE] = sFloetteLevelUpLearnset,
         [SPECIES_FLORGES] = sFlorgesLevelUpLearnset,
@@ -1181,7 +1181,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
 //#endif
 //#if P_GEN_6_POKEMON == TRUE
         // Greninja
-        [SPECIES_GRENINJA_BATTLE_BOND] = sGreninjaLevelUpLearnset,
         [SPECIES_GRENINJA_ASH] = sGreninjaLevelUpLearnset,
         // Vivillon
         [SPECIES_VIVILLON_POLAR] = sVivillonLevelUpLearnset,
@@ -1256,8 +1255,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
         [SPECIES_ORICORIO_POM_POM] = sOricorioLevelUpLearnset,
         [SPECIES_ORICORIO_PAU] = sOricorioLevelUpLearnset,
         [SPECIES_ORICORIO_SENSU] = sOricorioLevelUpLearnset,
-        // Rockruff
-        [SPECIES_ROCKRUFF_OWN_TEMPO] = sRockruffLevelUpLearnset,
         // Lycanroc
         [SPECIES_LYCANROC_MIDNIGHT] = sLycanrocMidnightLevelUpLearnset,
         [SPECIES_LYCANROC_DUSK] = sLycanrocDuskLevelUpLearnset,

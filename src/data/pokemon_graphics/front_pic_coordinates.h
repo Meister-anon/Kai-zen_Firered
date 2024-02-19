@@ -2644,12 +2644,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 7,
     },
-    [SPECIES_UNFEZANT_F] =
+    [SPECIES_UNFEZANT_FEMALE] =
     {
         .size = 0x45,
         .y_offset = 0,
     },
-    [SPECIES_UNFEZANT_M] =
+    [SPECIES_UNFEZANT] =
     {
         .size = 0x45,
         .y_offset = 0,
@@ -3385,12 +3385,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 10,
     },
-    [SPECIES_PYROAR_M] =
+    [SPECIES_PYROAR] =
     {
         .size = 0x45,
         .y_offset = 0,
     },
-    [SPECIES_PYROAR_F] =
+    [SPECIES_PYROAR_FEMALE] =
     {
         .size = 0x45,
         .y_offset = 0,
@@ -5566,11 +5566,6 @@ const struct MonCoords gMonFrontPicCoords[] =
         .y_offset = 0,
     },
     // Greninja
-    [SPECIES_GRENINJA_BATTLE_BOND] =
-    {
-        .size = 0x45,
-        .y_offset = 7,
-    },
     [SPECIES_GRENINJA_ASH] =
     {
         .size = 0x45,
@@ -5878,12 +5873,6 @@ const struct MonCoords gMonFrontPicCoords[] =
     {
         .size = 0x45,
         .y_offset = 2,
-    },
-    // Rockruff
-    [SPECIES_ROCKRUFF_OWN_TEMPO] =
-    {
-        .size = 0x45,
-        .y_offset = 11,
     },
     // Lycanroc
     [SPECIES_LYCANROC_MIDNIGHT] =

@@ -153,7 +153,7 @@ const struct FormChange *const gFormChangeTablePointers[NUM_SPECIES] =
     [SPECIES_GENESECT_BURN_DRIVE] = sGenesectFormChangeTable,
     [SPECIES_GENESECT_CHILL_DRIVE] = sGenesectFormChangeTable,
 
-    [SPECIES_GRENINJA_BATTLE_BOND] = sGreninjaBattleBondFormChangeTable,
+    [SPECIES_GRENINJA] = sGreninjaBattleBondFormChangeTable,
     [SPECIES_GRENINJA_ASH] = sGreninjaBattleBondFormChangeTable,
     [SPECIES_AEGISLASH] = sAegislashFormChangeTable,
     [SPECIES_AEGISLASH_BLADE] = sAegislashFormChangeTable,

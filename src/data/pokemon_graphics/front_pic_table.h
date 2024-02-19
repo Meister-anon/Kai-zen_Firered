@@ -521,7 +521,7 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(MUSHARNA, gMonFrontPic_Musharna),
     SPECIES_SPRITE(PIDOVE, gMonFrontPic_Pidove),
     SPECIES_SPRITE(TRANQUILL, gMonFrontPic_Tranquill),
-    SPECIES_SPRITE(UNFEZANT_M, gMonFrontPic_Unfezant),
+    SPECIES_SPRITE(UNFEZANT, gMonFrontPic_Unfezant),
     SPECIES_SPRITE(BLITZLE, gMonFrontPic_Blitzle),
     SPECIES_SPRITE(ZEBSTRIKA, gMonFrontPic_Zebstrika),
     SPECIES_SPRITE(ROGGENROLA, gMonFrontPic_Roggenrola),
@@ -668,7 +668,7 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(SPEWPA, gMonFrontPic_Spewpa),
     SPECIES_SPRITE(VIVILLON, gMonFrontPic_Vivillon),
     SPECIES_SPRITE(LITLEO, gMonFrontPic_Litleo),
-    SPECIES_SPRITE(PYROAR_M, gMonFrontPic_Pyroar),
+    SPECIES_SPRITE(PYROAR, gMonFrontPic_Pyroar),
     SPECIES_SPRITE(FLABEBE, gMonFrontPic_Flabebe),
     SPECIES_SPRITE(FLOETTE, gMonFrontPic_Floette),
     SPECIES_SPRITE(FLORGES, gMonFrontPic_Florges),
@@ -1139,7 +1139,6 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(GENESECT_BURN_DRIVE, gMonFrontPic_Genesect),
     SPECIES_SPRITE(GENESECT_CHILL_DRIVE, gMonFrontPic_Genesect),
 
-    SPECIES_SPRITE(GRENINJA_BATTLE_BOND, gMonFrontPic_Greninja),
     SPECIES_SPRITE(GRENINJA_ASH, gMonFrontPic_GreninjaAsh),
 
     SPECIES_SPRITE(VIVILLON_POLAR, gMonFrontPic_VivillonPolar),
@@ -1162,9 +1161,9 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(VIVILLON_FANCY, gMonFrontPic_VivillonFancy),
     SPECIES_SPRITE(VIVILLON_POKE_BALL, gMonFrontPic_VivillonPokeBall),
 
-    SPECIES_SPRITE(UNFEZANT_F, gMonFrontPic_Unfezant_F),
+    SPECIES_SPRITE(UNFEZANT_FEMALE, gMonFrontPic_UNFEZANT_FEMALE),
 
-    SPECIES_SPRITE(PYROAR_F, gMonFrontPic_PyroarF),
+    SPECIES_SPRITE(PYROAR_FEMALE, gMonFrontPic_PyroarF),
 
     SPECIES_SPRITE(FLABEBE_YELLOW_FLOWER, gMonFrontPic_Flabebe),
     SPECIES_SPRITE(FLABEBE_ORANGE_FLOWER, gMonFrontPic_Flabebe),
@@ -1217,7 +1216,6 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(ORICORIO_PAU, gMonFrontPic_OricorioPau),
     SPECIES_SPRITE(ORICORIO_SENSU, gMonFrontPic_OricorioSensu),
 
-    SPECIES_SPRITE(ROCKRUFF_OWN_TEMPO, gMonFrontPic_Rockruff),
 
     SPECIES_SPRITE(LYCANROC_MIDNIGHT, gMonFrontPic_LycanrocMidnight),
     SPECIES_SPRITE(LYCANROC_DUSK, gMonFrontPic_LycanrocDusk),

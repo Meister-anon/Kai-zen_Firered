@@ -4973,7 +4973,7 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
     }, //Tranquill,
-[SPECIES_UNFEZANT_M] = 
+[SPECIES_UNFEZANT] = 
     {  
       FRONT_PIC(CircledQuestionMark),
       FRONT_COORD(0x88,0),
@@ -6296,7 +6296,7 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
     }, //Litleo,
-[SPECIES_PYROAR_M] = 
+[SPECIES_PYROAR] = 
     {  
       FRONT_PIC(CircledQuestionMark),
       FRONT_COORD(0x88,0),
@@ -10031,15 +10031,6 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
     }, //Genesect,
-  [SPECIES_GRENINJA_BATTLE_BOND] = 
-    {  
-      FRONT_PIC(CircledQuestionMark),
-      FRONT_COORD(0x88,0),
-      BACK_PIC(CircledQuestionMark),
-      BACK_COORD(0x88,0),
-      PALETTES(CircledQuestionMark),
-      ICON(QuestionMark,0),
-    }, //Greninja,
   [SPECIES_GRENINJA_ASH] = 
     {  
       FRONT_PIC(CircledQuestionMark),
@@ -10220,7 +10211,7 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
     }, //VivillonPokeBall,
-  [SPECIES_UNFEZANT_F] = 
+  [SPECIES_UNFEZANT_FEMALE] = 
     {  
       FRONT_PIC(CircledQuestionMark),
       FRONT_COORD(0x88,0),
@@ -10228,8 +10219,8 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       BACK_COORD(0x88,0),
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
-    }, //Unfezant_F,
-  [SPECIES_PYROAR_F] = 
+    }, //UNFEZANT_FEMALE,
+  [SPECIES_PYROAR_FEMALE] = 
     {  
       FRONT_PIC(CircledQuestionMark),
       FRONT_COORD(0x88,0),
@@ -10589,15 +10580,6 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
     }, //OricorioSensu,
-  [SPECIES_ROCKRUFF_OWN_TEMPO] = 
-    {  
-      FRONT_PIC(CircledQuestionMark),
-      FRONT_COORD(0x88,0),
-      BACK_PIC(CircledQuestionMark),
-      BACK_COORD(0x88,0),
-      PALETTES(CircledQuestionMark),
-      ICON(QuestionMark,0),
-    }, //Rockruff,
   [SPECIES_LYCANROC_MIDNIGHT] = 
     {  
       FRONT_PIC(CircledQuestionMark),

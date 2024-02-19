@@ -1150,7 +1150,6 @@ const u16 gDexCategory_GrasslandPkmnlist[] =
     SPECIES_SIRFETCHD,
     SPECIES_EISCUE,
     SPECIES_INDEEDEE,
-    SPECIES_VENUSAUR_MEGA,
 };
 
 const u16 gDexCategory_ForestPkmnlist[] = {
@@ -1894,8 +1893,6 @@ const u16 gDexCategory_MountainPkmnlist[] = {
     SPECIES_WYRDEER,
     SPECIES_SNEASLER,
     SPECIES_CEFIREON,
-    SPECIES_CHARIZARD_MEGA_X,
-    SPECIES_CHARIZARD_MEGA_Y,
 };
 
 //harsh environments, swamps deserts, savahna etc.
@@ -2015,8 +2012,8 @@ const u16 gDexCategory_RoughTerrainPkmnlist[] = {
     SPECIES_MUDBRAY,
     SPECIES_MUDSDALE,
     SPECIES_LITLEO,
-    SPECIES_PYROAR_M,
-    SPECIES_PYROAR_F,   //think would go to same dex?
+    SPECIES_PYROAR,
+    SPECIES_PYROAR_FEMALE,   //think would go to same dex?
     SPECIES_GROOKEY,
     SPECIES_THWACKEY,
     SPECIES_RILLABOOM,
@@ -2127,8 +2124,8 @@ const u16 gDexCategory_UrbanPkmnlist[] = {
     SPECIES_MUSHARNA,
     SPECIES_PIDOVE,
     SPECIES_TRANQUILL,
-    SPECIES_UNFEZANT_M,
-    SPECIES_UNFEZANT_F,
+    SPECIES_UNFEZANT,
+    SPECIES_UNFEZANT_FEMALE,
     SPECIES_SCRAGGY,   
     SPECIES_SCRAFTY, 
     SPECIES_TRUBBISH,

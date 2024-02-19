@@ -2114,7 +2114,23 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   -note need add logic for mon area page for trainer size comparison,
   simpelest thing is just take base species values for size, but load mon pic
-  based on dexSpecies
+  based on dexSpecies -done
+
+  plan create evo mothod based on ability will be reach level w ability
+  and setup form change based on ability
+  these ideas are for rock ruff own tempo and battle bond greninja
+  w that I'll be able to remove them as species, and from form_species table
+  that way it'll clean up their dex pages as well, as its otherwise identical to base form
+  -done
+
+  notes on evo change- IMPORTANT
+  //evo change worked, added 2nd param, zeroed out for existing values, will just need fill for new method changes
+  //if param 2 not mentioned in function still works fine
+
+  //planned change more complex late gen evo methods they suck and no one likes them, (think need keep for parafin though)
+  //ex. EVO_CRITICAL_HITS  change to level_critical_hit just be at level and land a critical hit and it would evolve
+  //think will keep level to 25, since these are modern mon and typically 3rd stage evo?, but can easily adjust
+  //ALWAYS order name convention to match order of param, i.e level critical hit 1st param level, 2nd param critical hit
 
   IMPORTANT, idk what happened but grahpic glitch when scroll now?
   //for some reason happens around value 200, attempt shift listitems buffers
@@ -2178,8 +2194,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   leave blank it will do random % num forms, to do even odds,
   otherwise it'll take an input value and that'll be assigned to the 
   species listed in the json,  and the form will use 100 - that value as its odds
-  ex.  pyroar_f is species listed  in function value is 70,
-  that leaves  pyroar_m to occur 30% of the time for the given odds of that line
+  ex.  PYROAR_FEMALE is species listed  in function value is 70,
+  that leaves  PYROAR to occur 30% of the time for the given odds of that line
 
   -would prefer doing that as otherwise, I'd need to take up multiple lines
   for gender forms as they are separate species idk having more control would be nice

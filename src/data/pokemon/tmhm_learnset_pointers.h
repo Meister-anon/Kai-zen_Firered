@@ -522,8 +522,8 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_MUSHARNA] = sMusharnaTMHMLearnset,
     [SPECIES_PIDOVE] = sPidoveTMHMLearnset,
     [SPECIES_TRANQUILL] = sTranquillTMHMLearnset,
-    [SPECIES_UNFEZANT_M] = sUnfezantTMHMLearnset,
-    [SPECIES_UNFEZANT_F] = sUnfezantTMHMLearnset,
+    [SPECIES_UNFEZANT] = sUnfezantTMHMLearnset,
+    [SPECIES_UNFEZANT_FEMALE] = sUnfezantTMHMLearnset,
     [SPECIES_BLITZLE] = sBlitzleTMHMLearnset,
     [SPECIES_ZEBSTRIKA] = sZebstrikaTMHMLearnset,
     [SPECIES_ROGGENROLA] = sRoggenrolaTMHMLearnset,
@@ -670,8 +670,8 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_SPEWPA] = sSpewpaTMHMLearnset,
     [SPECIES_VIVILLON] = sVivillonTMHMLearnset,
     [SPECIES_LITLEO] = sLitleoTMHMLearnset,
-    [SPECIES_PYROAR_M] = sPyroarTMHMLearnset,
-    [SPECIES_PYROAR_F] = sPyroarTMHMLearnset,
+    [SPECIES_PYROAR] = sPyroarTMHMLearnset,
+    [SPECIES_PYROAR_FEMALE] = sPyroarTMHMLearnset,
     [SPECIES_FLABEBE] = sFlabebeTMHMLearnset,
     [SPECIES_FLOETTE] = sFloetteTMHMLearnset,
     [SPECIES_FLORGES] = sFlorgesTMHMLearnset,
@@ -1150,7 +1150,6 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_GENESECT_BURN_DRIVE] = sGenesectTMHMLearnset,
     [SPECIES_GENESECT_CHILL_DRIVE] = sGenesectTMHMLearnset,
     // Greninja
-    [SPECIES_GRENINJA_BATTLE_BOND] = sGreninjaTMHMLearnset,
     [SPECIES_GRENINJA_ASH] = sGreninjaTMHMLearnset,
     // Vivillon
     [SPECIES_VIVILLON_POLAR] = sVivillonTMHMLearnset,
@@ -1223,8 +1222,6 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_ORICORIO_POM_POM] = sOricorioTMHMLearnset,
     [SPECIES_ORICORIO_PAU] = sOricorioTMHMLearnset,
     [SPECIES_ORICORIO_SENSU] = sOricorioTMHMLearnset,
-    // Rockruff
-    [SPECIES_ROCKRUFF_OWN_TEMPO] = sRockruffTMHMLearnset,
     // Lycanroc
     [SPECIES_LYCANROC_MIDNIGHT] = sLycanrocMidnightTMHMLearnset,
     [SPECIES_LYCANROC_DUSK] = sLycanrocDuskTMHMLearnset,

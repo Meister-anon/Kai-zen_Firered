@@ -521,7 +521,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(MUSHARNA, gMonBackPic_Musharna),
     SPECIES_SPRITE(PIDOVE, gMonBackPic_Pidove),
     SPECIES_SPRITE(TRANQUILL, gMonBackPic_Tranquill),
-    SPECIES_SPRITE(UNFEZANT_M, gMonBackPic_Unfezant),
+    SPECIES_SPRITE(UNFEZANT, gMonBackPic_Unfezant),
     SPECIES_SPRITE(BLITZLE, gMonBackPic_Blitzle),
     SPECIES_SPRITE(ZEBSTRIKA, gMonBackPic_Zebstrika),
     SPECIES_SPRITE(ROGGENROLA, gMonBackPic_Roggenrola),
@@ -668,7 +668,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(SPEWPA, gMonBackPic_Spewpa),
     SPECIES_SPRITE(VIVILLON, gMonBackPic_Vivillon),
     SPECIES_SPRITE(LITLEO, gMonBackPic_Litleo),
-    SPECIES_SPRITE(PYROAR_M, gMonBackPic_Pyroar),
+    SPECIES_SPRITE(PYROAR, gMonBackPic_Pyroar),
     SPECIES_SPRITE(FLABEBE, gMonBackPic_Flabebe),
     SPECIES_SPRITE(FLOETTE, gMonBackPic_Floette),
     SPECIES_SPRITE(FLORGES, gMonBackPic_Florges),
@@ -1139,7 +1139,6 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(GENESECT_BURN_DRIVE, gMonBackPic_Genesect),
     SPECIES_SPRITE(GENESECT_CHILL_DRIVE, gMonBackPic_Genesect),
 
-    SPECIES_SPRITE(GRENINJA_BATTLE_BOND, gMonBackPic_Greninja),
     SPECIES_SPRITE(GRENINJA_ASH, gMonBackPic_GreninjaAsh),
 
     SPECIES_SPRITE(VIVILLON_POLAR, gMonBackPic_VivillonPolar),
@@ -1162,9 +1161,9 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(VIVILLON_FANCY, gMonBackPic_VivillonFancy),
     SPECIES_SPRITE(VIVILLON_POKE_BALL, gMonBackPic_VivillonPokeBall),
 
-    SPECIES_SPRITE(UNFEZANT_F, gMonBackPic_Unfezant_F),
+    SPECIES_SPRITE(UNFEZANT_FEMALE, gMonBackPic_UNFEZANT_FEMALE),
 
-    SPECIES_SPRITE(PYROAR_F, gMonBackPic_PyroarF),
+    SPECIES_SPRITE(PYROAR_FEMALE, gMonBackPic_PyroarF),
 
     SPECIES_SPRITE(FLABEBE_YELLOW_FLOWER, gMonBackPic_Flabebe),
     SPECIES_SPRITE(FLABEBE_ORANGE_FLOWER, gMonBackPic_Flabebe),
@@ -1217,7 +1216,6 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(ORICORIO_PAU, gMonBackPic_OricorioPau),
     SPECIES_SPRITE(ORICORIO_SENSU, gMonBackPic_OricorioSensu),
 
-    SPECIES_SPRITE(ROCKRUFF_OWN_TEMPO, gMonBackPic_Rockruff),
 
     SPECIES_SPRITE(LYCANROC_MIDNIGHT, gMonBackPic_LycanrocMidnight),
     SPECIES_SPRITE(LYCANROC_DUSK, gMonBackPic_LycanrocDusk),

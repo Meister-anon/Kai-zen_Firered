@@ -12312,7 +12312,8 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         return;
     case VARIOUS_TRY_ACTIVATE_BATTLE_BOND:
-        if (gBattleMons[gBattlerAttacker].species == SPECIES_GRENINJA_BATTLE_BOND
+        if (gBattleMons[gBattlerAttacker].species == SPECIES_GRENINJA
+            && GetBattlerAbility(gBattlerAttacker) == ABILITY_BATTLE_BOND
             && HasAttackerFaintedTarget()
             && CalculateEnemyPartyCount() > 1)
         {

@@ -677,8 +677,8 @@ static const u16 sSamurottFormSpeciesIdTable[] = {
 };
 
 static const u16 sUnfezantFormSpeciesIdTable[] = {
-    SPECIES_UNFEZANT_M,
-    SPECIES_UNFEZANT_F,
+    SPECIES_UNFEZANT,
+    SPECIES_UNFEZANT_FEMALE,
     FORM_SPECIES_END,
 };
 
@@ -809,8 +809,7 @@ static const u16 sGenesectFormSpeciesIdTable[] = {
 
 static const u16 sGreninjaFormSpeciesIdTable[] = {
     SPECIES_GRENINJA,
-    SPECIES_GRENINJA_BATTLE_BOND, //doesn't work well w dex graphic but can't change
-    SPECIES_GRENINJA_ASH,
+    SPECIES_GRENINJA_ASH, //nvm COULD remove battle bond gren just needed adjust form change values to allow use norm gren w batle_bond
     FORM_SPECIES_END,
 };
 
@@ -839,8 +838,8 @@ static const u16 sVivillonFormSpeciesIdTable[] = {
 };
 
 static const u16 sPyroarFormSpeciesIdTable[] = {
-    SPECIES_PYROAR_M,
-    SPECIES_PYROAR_F,
+    SPECIES_PYROAR,
+    SPECIES_PYROAR_FEMALE,
     FORM_SPECIES_END,
 };
 
@@ -970,12 +969,6 @@ static const u16 sOricorioFormSpeciesIdTable[] = {
     SPECIES_ORICORIO_POM_POM,
     SPECIES_ORICORIO_PAU,
     SPECIES_ORICORIO_SENSU,
-    FORM_SPECIES_END,
-};
-
-static const u16 sRockruffFormSpeciesIdTable[] = {
-    SPECIES_ROCKRUFF,
-    SPECIES_ROCKRUFF_OWN_TEMPO,
     FORM_SPECIES_END,
 };
 
