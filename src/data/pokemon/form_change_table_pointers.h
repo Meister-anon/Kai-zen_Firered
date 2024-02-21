@@ -167,7 +167,7 @@ const struct FormChange *const gFormChangeTablePointers[NUM_SPECIES] =
     [SPECIES_HOOPA] = sHoopaFormChangeTable,
     [SPECIES_HOOPA_UNBOUND] = sHoopaFormChangeTable,
 
-    [SPECIES_ORICORIO] = sOricorioFormChangeTable,
+    [SPECIES_ORICORIO_BAILE] = sOricorioFormChangeTable,
     [SPECIES_ORICORIO_POM_POM] = sOricorioFormChangeTable,
     [SPECIES_ORICORIO_PAU] = sOricorioFormChangeTable,
     [SPECIES_ORICORIO_SENSU] = sOricorioFormChangeTable,

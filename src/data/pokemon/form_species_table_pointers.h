@@ -141,7 +141,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_HOOPA] = sHoopaFormSpeciesIdTable,
 
     [SPECIES_DECIDUEYE] = sDecidueyeFormSpeciesIdTable,
-    [SPECIES_ORICORIO] = sOricorioFormSpeciesIdTable,
+    [SPECIES_ORICORIO_BAILE] = sOricorioFormSpeciesIdTable,
     //[SPECIES_ROCKRUFF] = sRockruffFormSpeciesIdTable,
     [SPECIES_LYCANROC] = sLycanrocFormSpeciesIdTable,
     [SPECIES_WISHIWASHI] = sWishiwashiFormSpeciesIdTable,

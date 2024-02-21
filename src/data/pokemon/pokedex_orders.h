@@ -564,7 +564,7 @@ const u16 gPokedexOrder_Alphabetical[] =
     NATIONAL_DEX_ONIX,
     NATIONAL_DEX_ORANGURU,
     NATIONAL_DEX_ORBEETLE,
-    NATIONAL_DEX_ORICORIO,
+    NATIONAL_DEX_ORICORIO_BAILE,
     NATIONAL_DEX_OSHAWOTT,
     NATIONAL_DEX_OVERQWIL,
 
@@ -1041,7 +1041,7 @@ const u16 gPokedexOrder_Weight[] =
     NATIONAL_DEX_CHERUBI,
     NATIONAL_DEX_TOGEDEMARU,
     NATIONAL_DEX_BURMY,
-    NATIONAL_DEX_ORICORIO,
+    NATIONAL_DEX_ORICORIO_BAILE,
     NATIONAL_DEX_HATENNA,
     NATIONAL_DEX_RATTATA,
     NATIONAL_DEX_ESPURR,
@@ -2306,7 +2306,7 @@ const u16 gPokedexOrder_Height[] =
     NATIONAL_DEX_BRIONNE,
     NATIONAL_DEX_TRUMBEAK,
     NATIONAL_DEX_CRABRAWLER,
-    NATIONAL_DEX_ORICORIO,
+    NATIONAL_DEX_ORICORIO_BAILE,
     NATIONAL_DEX_SALANDIT,
     //NATIONAL_DEX_TOGEDEMARU, // Totem-sized
     NATIONAL_DEX_JANGMO_O,
@@ -3476,6 +3476,329 @@ const u16 gPokedexOrder_Type[] =
     SPECIES_HOUNDOUR,
     SPECIES_HOUNDOOM,
     SPECIES_SNEASEL, //had issue looked likea another nvm issue wasn't because of comma, it was bad array math,
+};
+
+const u32 gdexCatFormSpecies[] =
+{
+    NATIONAL_DEX_PONYTA_GALARIAN,
+    NATIONAL_DEX_RAPIDASH_GALARIAN,
+    NATIONAL_DEX_SLOWKING_GALARIAN,
+    NATIONAL_DEX_MR_MIME_GALARIAN,
+    NATIONAL_DEX_ARTICUNO_GALARIAN,
+    NATIONAL_DEX_ZAPDOS_GALARIAN,
+    NATIONAL_DEX_MOLTRES_GALARIAN,
+    NATIONAL_DEX_DARMANITAN_GALARIAN,
+    NATIONAL_DEX_GROWLITHE_HISUIAN,
+    NATIONAL_DEX_VOLTORB_HISUIAN,
+    NATIONAL_DEX_ELECTRODE_HISUIAN,
+    NATIONAL_DEX_TYPHLOSION_HISUIAN,
+    NATIONAL_DEX_LILLIGANT_HISUIAN,
+    NATIONAL_DEX_ZORUA_HISUIAN,
+    NATIONAL_DEX_ZOROARK_HISUIAN,
+    NATIONAL_DEX_BRAVIARY_HISUIAN,
+    NATIONAL_DEX_SLIGGOO_HISUIAN,
+    NATIONAL_DEX_GOODRA_HISUIAN,
+};
+
+//for storing species of temporary forms that can change in battle
+//so can use for dexentry if species is on list, use base form
+//also note SpeciesToNationalPokedexNum will already shift many mon to
+//base form, oh that's prob the reason cat isn't working?
+//way works if species is on list it'll use the base form
+//being seen not species being seen for display in dex
+const u32 gdexEntryFormSpecies[] =
+{
+    /*[*/SPECIES_VENUSAUR_MEGA, //] = sVenusaurFormChangeTable,
+    /*[*/SPECIES_CHARIZARD_MEGA_X, //] = sCharizardFormChangeTable,
+    /*[*/SPECIES_CHARIZARD_MEGA_Y, //] = sCharizardFormChangeTable,
+    /*[*/SPECIES_BLASTOISE_MEGA, //] = sBlastoiseFormChangeTable,
+    /*[*/SPECIES_BEEDRILL_MEGA, //] = sBeedrillFormChangeTable,
+    /*[*/SPECIES_PIDGEOT_MEGA, //] = sPidgeotFormChangeTable,
+    /*[*/SPECIES_ALAKAZAM_MEGA, //] = sAlakazamFormChangeTable,
+    /*[*/SPECIES_SLOWBRO_MEGA, //] = sSlowbroFormChangeTable,
+    /*[*/SPECIES_GENGAR_MEGA, //] = sGengarFormChangeTable,
+    /*[*/SPECIES_KANGASKHAN_MEGA, //] = sKangaskhanFormChangeTable,
+    /*[*/SPECIES_PINSIR_MEGA, //] = sPinsirFormChangeTable,
+    /*[*/SPECIES_GYARADOS_MEGA, //] = sGyaradosFormChangeTable,
+    /*[*/SPECIES_AERODACTYL_MEGA, //] = sAerodactylFormChangeTable,
+    /*[*/SPECIES_MEWTWO_MEGA_X, //] = sMewtwoFormChangeTable,
+    /*[*/SPECIES_MEWTWO_MEGA_Y, //] = sMewtwoFormChangeTable,
+    /*[*/SPECIES_AMPHAROS_MEGA, //] = sAmpharosFormChangeTable,
+    /*[*/SPECIES_STEELIX_MEGA, //] = sSteelixFormChangeTable,
+    /*[*/SPECIES_SCIZOR_MEGA, //] = sScizorFormChangeTable,
+    /*[*/SPECIES_HERACROSS_MEGA, //] = sHeracrossFormChangeTable,
+    /*[*/SPECIES_HOUNDOOM_MEGA, //] = sHoundoomFormChangeTable,
+    /*[*/SPECIES_TYRANITAR_MEGA, //] = sTyranitarFormChangeTable,
+    /*[*/SPECIES_SCEPTILE_MEGA, //] = sSceptileFormChangeTable,
+    /*[*/SPECIES_BLAZIKEN_MEGA, //] = sBlazikenFormChangeTable,
+    /*[*/SPECIES_SWAMPERT_MEGA, //] = sSwampertFormChangeTable,
+    /*[*/SPECIES_SABLEYE_MEGA, //] = sSableyeFormChangeTable,
+    /*[*/SPECIES_SHARPEDO_MEGA, //] = sSharpedoFormChangeTable,
+    /*[*/SPECIES_MANECTRIC_MEGA, //] = sManectricFormChangeTable,
+    /*[*/SPECIES_CAMERUPT_MEGA, //] = sCameruptFormChangeTable,
+    /*[*/SPECIES_GLALIE_MEGA, //] = sGlalieFormChangeTable,
+    /*[*/SPECIES_MAWILE_MEGA, //] = sMawileFormChangeTable,
+    /*[*/SPECIES_MEDICHAM_MEGA, //] = sMedichamFormChangeTable,
+    /*[*/SPECIES_ALTARIA_MEGA, //] = sAltariaFormChangeTable,
+    /*[*/SPECIES_ABSOL_MEGA, //] = sAbsolFormChangeTable,
+    /*[*/SPECIES_CASTFORM_SUNNY, //] = sCastformFormChangeTable,
+    /*[*/SPECIES_CASTFORM_RAINY, //] = sCastformFormChangeTable,
+    /*[*/SPECIES_CASTFORM_SNOWY, //] = sCastformFormChangeTable,
+    /*[*/SPECIES_BANETTE_MEGA, //] = sBanetteFormChangeTable,
+    /*[*/SPECIES_AGGRON_MEGA, //] = sAggronFormChangeTable,
+    /*[*/SPECIES_GARDEVOIR_MEGA, //] = sGardevoirFormChangeTable,
+    /*[*/SPECIES_SALAMENCE_MEGA, //] = sSalamenceFormChangeTable,
+    /*[*/SPECIES_METAGROSS_MEGA, //] = sMetagrossFormChangeTable,
+    /*[*/SPECIES_LATIAS_MEGA, //] = sLatiasFormChangeTable,
+    /*[*/SPECIES_LATIOS_MEGA, //] = sLatiosFormChangeTable,
+    /*[*/SPECIES_KYOGRE_PRIMAL, //] = sKyogreFormChangeTable,
+    /*[*/SPECIES_GROUDON_PRIMAL, //] = sGroudonFormChangeTable,
+    /*[*/SPECIES_RAYQUAZA_MEGA, //] = sRayquazaFormChangeTable,
+
+    /*[*/SPECIES_BURMY_SANDY_CLOAK, //] = sBurmyFormChangeTable,
+    /*[*/SPECIES_BURMY_TRASH_CLOAK, //] = sBurmyFormChangeTable,
+    SPECIES_WORMADAM_SANDY_CLOAK,
+    SPECIES_WORMADAM_TRASH_CLOAK,
+    /*[*/SPECIES_CHERRIM_SUNSHINE, //] = sCherrimFormChangeTable,
+    /*[*/SPECIES_LOPUNNY_MEGA, //] = sLopunnyFormChangeTable,
+    /*[*/SPECIES_GARCHOMP_MEGA, //] = sGarchompFormChangeTable,
+    /*[*/SPECIES_LUCARIO_MEGA, //] = sLucarioFormChangeTable,
+    /*[*/SPECIES_ABOMASNOW_MEGA, //] = sAbomasnowFormChangeTable,
+    /*[*/SPECIES_GALLADE_MEGA, //] = sGalladeFormChangeTable,
+    ///*[*/SPECIES_DIALGA, //] = sDialgaFormChangeTable,
+    ///*[*/SPECIES_DIALGA_ORIGIN, //] = sDialgaFormChangeTable,
+    ///*[*/SPECIES_PALKIA, //] = sPalkiaFormChangeTable,
+    ///*[*/SPECIES_PALKIA_ORIGIN, //] = sPalkiaFormChangeTable,
+    /*[*/SPECIES_GIRATINA_ORIGIN, //] = sGiratinaFormChangeTable,
+    /*[*/SPECIES_SHAYMIN_SKY, //] = sShayminFormChangeTable,
+    /*[*/SPECIES_ARCEUS_FIGHTING, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_FLYING, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_POISON, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_ROCK, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_GROUND, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_BUG, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_GHOST, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_STEEL, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_FIRE, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_WATER, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_GRASS, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_ELECTRIC, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_PSYCHIC, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_ICE, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_DRAGON, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_DARK, //] = sArceusFormChangeTable,
+    /*[*/SPECIES_ARCEUS_FAIRY, //] = sArceusFormChangeTable,
+
+    /*[*/SPECIES_AUDINO_MEGA, //] = sAudinoFormChangeTable,
+
+    //darmanitan is only exception where I need it to use base form 
+    //as it has alt species but ALSO an alt form which wouldn't be linked to dex otherwise
+    /*[*/SPECIES_DARMANITAN_ZEN_MODE, //] = sDarmanitanFormChangeTable,
+    /*[*/SPECIES_DARMANITAN_GALARIAN, //] = sDarmanitanGalarianFormChangeTable,
+    /*[*/SPECIES_DARMANITAN_ZEN_MODE_GALARIAN, //] = sDarmanitanGalarianFormChangeTable,
+
+    /*[*/SPECIES_TORNADUS_THERIAN, //] = sTornadusFormChangeTable,
+    /*[*/SPECIES_THUNDURUS_THERIAN, //] = sThundurusFormChangeTable,
+    /*[*/SPECIES_LANDORUS_THERIAN, //] = sLandorusFormChangeTable,
+    /*[*/SPECIES_KELDEO_RESOLUTE, //] = sKeldeoFormChangeTable,
+    /*[*/SPECIES_MELOETTA_PIROUETTE, //] = sMeloettaFormChangeTable,
+    /*[*/SPECIES_GENESECT_DOUSE_DRIVE, //] = sGenesectFormChangeTable,
+    /*[*/SPECIES_GENESECT_SHOCK_DRIVE, //] = sGenesectFormChangeTable,
+    /*[*/SPECIES_GENESECT_BURN_DRIVE, //] = sGenesectFormChangeTable,
+    /*[*/SPECIES_GENESECT_CHILL_DRIVE, //] = sGenesectFormChangeTable,
+
+    /*[*/SPECIES_GRENINJA_ASH, //] = sGreninjaBattleBondFormChangeTable,
+    /*[*/SPECIES_AEGISLASH_BLADE, //] = sAegislashFormChangeTable,
+    /*[*/SPECIES_XERNEAS_ACTIVE, //] = sXerneasFormChangeTable,
+    /*[*/SPECIES_ZYGARDE_10_POWER_CONSTRUCT, //] = sZygardePowerConstructFormChangeTable,
+    /*[*/SPECIES_ZYGARDE_50_POWER_CONSTRUCT, //] = sZygardePowerConstructFormChangeTable,
+    /*[*/SPECIES_ZYGARDE_COMPLETE, //] = sZygardePowerConstructFormChangeTable,
+    /*[*/SPECIES_DIANCIE_MEGA, //] = sDiancieFormChangeTable,
+    /*[*/SPECIES_HOOPA_UNBOUND, //] = sHoopaFormChangeTable,
+
+    //think leave these separte so if not in game won't show
+    //but would otherwise show up individually as you see them
+    /*[SPECIES_ORICORIO_BAILE, //] = sOricorioFormChangeTable,
+    /*[SPECIES_ORICORIO_POM_POM, //] = sOricorioFormChangeTable,
+    /*[SPECIES_ORICORIO_PAU, //] = sOricorioFormChangeTable,
+    /*[SPECIES_ORICORIO_SENSU, //] = sOricorioFormChangeTable,
+
+    /*[*/SPECIES_WISHIWASHI_SCHOOL, //] = sWishiwashiFormChangeTable,
+    /*[*/SPECIES_SILVALLY_BUG, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_DARK, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_DRAGON, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_ELECTRIC, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_FAIRY, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_FIGHTING, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_FIRE, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_FLYING, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_GHOST, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_GRASS, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_GROUND, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_ICE, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_POISON, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_PSYCHIC, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_ROCK, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_STEEL, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_SILVALLY_WATER, //] = sSilvallyFormChangeTable,
+    /*[*/SPECIES_MIMIKYU_BUSTED, //] = sMimikyuFormChangeTable,
+    /*[*/SPECIES_MINIOR_CORE_RED, //] = sMiniorRedFormChangeTable,
+    /*[*/SPECIES_MINIOR_METEOR_BLUE, //] = sMiniorBlueFormChangeTable,
+    /*[*/SPECIES_MINIOR_CORE_BLUE, //] = sMiniorBlueFormChangeTable,
+    /*[*/SPECIES_MINIOR_METEOR_GREEN, //] = sMiniorGreenFormChangeTable,
+    /*[*/SPECIES_MINIOR_CORE_GREEN, //] = sMiniorGreenFormChangeTable,
+    /*[*/SPECIES_MINIOR_METEOR_INDIGO, //] = sMiniorIndigoFormChangeTable,
+    /*[*/SPECIES_MINIOR_CORE_INDIGO, //] = sMiniorIndigoFormChangeTable,
+    /*[*/SPECIES_MINIOR_METEOR_ORANGE, //] = sMiniorOrangeFormChangeTable,
+    /*[*/SPECIES_MINIOR_CORE_ORANGE, //] = sMiniorOrangeFormChangeTable,
+    /*[*/SPECIES_MINIOR_METEOR_VIOLET, //] = sMiniorVioletFormChangeTable,
+    /*[*/SPECIES_MINIOR_CORE_VIOLET, //] = sMiniorVioletFormChangeTable,
+    /*[*/SPECIES_MINIOR_METEOR_YELLOW, //] = sMiniorYellowFormChangeTable,
+    /*[*/SPECIES_MINIOR_CORE_YELLOW, //] = sMiniorYellowFormChangeTable,
+
+    SPECIES_PICHU_SPIKY_EARED,
+    SPECIES_URSHIFU_RAPID_STRIKE_STYLE,
+    SPECIES_BASCULIN_BLUE_STRIPED,
+    SPECIES_DEERLING_SUMMER,
+    SPECIES_DEERLING_AUTUMN,
+    SPECIES_DEERLING_WINTER,
+    SPECIES_SAWSBUCK_SUMMER,
+    SPECIES_SAWSBUCK_AUTUMN,
+    SPECIES_SAWSBUCK_WINTER,
+    SPECIES_NECROZMA_DUSK_MANE,
+    SPECIES_NECROZMA_DAWN_WINGS,
+    SPECIES_NECROZMA_ULTRA,
+    SPECIES_MAGEARNA_ORIGINAL_COLOR,
+    SPECIES_TOXTRICITY_LOW_KEY,
+    SPECIES_ZARUDE_DADA,
+    SPECIES_CALYREX_ICE_RIDER,
+    SPECIES_CALYREX_SHADOW_RIDER,
+    SPECIES_BASCULEGION_FEMALE, //- mixed on this
+    SPECIES_TORTERRA_MEGA,
+    SPECIES_MAROWAK_MEGA,
+    SPECIES_KYUREM_WHITE,
+    SPECIES_KYUREM_BLACK,
+    SPECIES_ROTOM_HEAT,
+    SPECIES_ROTOM_WASH,
+    SPECIES_ROTOM_FROST,
+    SPECIES_ROTOM_FAN,
+    SPECIES_ROTOM_MOW,
+
+    //I ...think, would be better for below to leave off
+    //so it fills in as I see them? think would need make entirly new list for
+    //and put just in try display forms...would need remove below variants
+    //as well as basculegion femlae above
+    //but idk would be cool, but its also fine as is, where you
+    //can just auto see all the possible options after getting the base
+    // Vivillon
+    /*#define*/ SPECIES_VIVILLON_POLAR,               //FORMS_START + 206
+    /*#define*/ SPECIES_VIVILLON_TUNDRA,             //FORMS_START + 207
+    /*#define*/ SPECIES_VIVILLON_CONTINENTAL,         //FORMS_START + 208
+    /*#define*/ SPECIES_VIVILLON_GARDEN,              //FORMS_START + 209
+    /*#define*/ SPECIES_VIVILLON_ELEGANT,             //FORMS_START + 210
+    /*#define*/ SPECIES_VIVILLON_MEADOW,              //FORMS_START + 211
+    /*#define*/ SPECIES_VIVILLON_MODERN,              //FORMS_START + 212
+    /*#define*/ SPECIES_VIVILLON_MARINE,              //FORMS_START + 213
+    /*#define*/ SPECIES_VIVILLON_ARCHIPELAGO,         //FORMS_START + 214
+    /*#define*/ SPECIES_VIVILLON_HIGH_PLAINS,         //FORMS_START + 215
+    /*#define*/ SPECIES_VIVILLON_SANDSTORM,           //FORMS_START + 216
+    /*#define*/ SPECIES_VIVILLON_RIVER,               //FORMS_START + 217
+    /*#define*/ SPECIES_VIVILLON_MONSOON,             //FORMS_START + 218
+    /*#define*/ SPECIES_VIVILLON_SAVANNA,             //FORMS_START + 219
+    /*#define*/ SPECIES_VIVILLON_SUN,                 //FORMS_START + 220
+    /*#define*/ SPECIES_VIVILLON_OCEAN,               //FORMS_START + 221
+    /*#define*/ SPECIES_VIVILLON_JUNGLE,              //FORMS_START + 222
+    /*#define*/ SPECIES_VIVILLON_FANCY,               //FORMS_START + 223
+    /*#define*/ SPECIES_VIVILLON_POKE_BALL,           //FORMS_START + 224
+
+    // Flab�b�
+    /*#define*/ SPECIES_FLABEBE_YELLOW_FLOWER,        //FORMS_START + 227
+    /*#define*/ SPECIES_FLABEBE_ORANGE_FLOWER,        //FORMS_START + 228
+    /*#define*/ SPECIES_FLABEBE_BLUE_FLOWER,          //FORMS_START + 229
+    /*#define*/ SPECIES_FLABEBE_WHITE_FLOWER,         //FORMS_START + 230
+
+    // Floette
+    /*#define*/ SPECIES_FLOETTE_YELLOW_FLOWER,        //FORMS_START + 231
+    /*#define*/ SPECIES_FLOETTE_ORANGE_FLOWER,        //FORMS_START + 232
+    /*#define*/ SPECIES_FLOETTE_BLUE_FLOWER,          //FORMS_START + 233
+    /*#define*/ SPECIES_FLOETTE_WHITE_FLOWER,         //FORMS_START + 234
+    /*#define*/ SPECIES_FLOETTE_ETERNAL_FLOWER,       //FORMS_START + 235
+
+    // Florges
+    /*#define*/ SPECIES_FLORGES_YELLOW_FLOWER,        //FORMS_START + 236
+    /*#define*/ SPECIES_FLORGES_ORANGE_FLOWER,        //FORMS_START + 237
+    /*#define*/ SPECIES_FLORGES_BLUE_FLOWER,          //FORMS_START + 238
+    /*#define*/ SPECIES_FLORGES_WHITE_FLOWER,         //FORMS_START + 239
+
+    // Furfrou
+    /*#define*/ SPECIES_FURFROU_HEART_TRIM,           //FORMS_START + 240
+    /*#define*/ SPECIES_FURFROU_STAR_TRIM,            //FORMS_START + 241
+    /*#define*/ SPECIES_FURFROU_DIAMOND_TRIM,         //FORMS_START + 242
+    /*#define*/ SPECIES_FURFROU_DEBUTANTE_TRIM,       //FORMS_START + 243
+    /*#define*/ SPECIES_FURFROU_MATRON_TRIM,          //FORMS_START + 244
+    /*#define*/ SPECIES_FURFROU_DANDY_TRIM,           //FORMS_START + 245
+    /*#define*/ SPECIES_FURFROU_LA_REINE_TRIM,        //FORMS_START + 246
+    /*#define*/ SPECIES_FURFROU_KABUKI_TRIM,          //FORMS_START + 247
+    /*#define*/ SPECIES_FURFROU_PHARAOH_TRIM,         //FORMS_START + 248
+
+    // Gourgeist
+    /*#define*/ SPECIES_GOURGEIST_SMALL,              //FORMS_START + 254
+    /*#define*/ SPECIES_GOURGEIST_LARGE,              //FORMS_START + 255
+    /*#define*/ SPECIES_GOURGEIST_SUPER,              //FORMS_START + 256
+
+    // Alcremie
+    /*#define*/ SPECIES_ALCREMIE_RUBY_CREAM,          //FORMS_START + 309
+    /*#define*/ SPECIES_ALCREMIE_MATCHA_CREAM,        //FORMS_START + 310
+    /*#define*/ SPECIES_ALCREMIE_MINT_CREAM,          //FORMS_START + 311
+    /*#define*/ SPECIES_ALCREMIE_LEMON_CREAM,         //FORMS_START + 312
+    /*#define*/ SPECIES_ALCREMIE_SALTED_CREAM,        //FORMS_START + 313
+    /*#define*/ SPECIES_ALCREMIE_RUBY_SWIRL,          //FORMS_START + 314
+    /*#define*/ SPECIES_ALCREMIE_CARAMEL_SWIRL,       //FORMS_START + 315
+    /*#define*/ SPECIES_ALCREMIE_RAINBOW_SWIRL,       //FORMS_START + 316
+
+    // Unown
+    /*#define*/ SPECIES_UNOWN_B,                      //FORMS_START + 119
+    /*#define*/ SPECIES_UNOWN_C,                      //FORMS_START + 120
+    /*#define*/ SPECIES_UNOWN_D,                      //FORMS_START + 121
+    /*#define*/ SPECIES_UNOWN_E,                      //FORMS_START + 122
+    /*#define*/ SPECIES_UNOWN_F,                      //FORMS_START + 123
+    /*#define*/ SPECIES_UNOWN_G,                      //FORMS_START + 124
+    /*#define*/ SPECIES_UNOWN_H,                      //FORMS_START + 125
+    /*#define*/ SPECIES_UNOWN_I,                      //FORMS_START + 126
+    /*#define*/ SPECIES_UNOWN_J,                      //FORMS_START + 127
+    /*#define*/ SPECIES_UNOWN_K,                      //FORMS_START + 128
+    /*#define*/ SPECIES_UNOWN_L,                      //FORMS_START + 129
+    /*#define*/ SPECIES_UNOWN_M,                      //FORMS_START + 130
+    /*#define*/ SPECIES_UNOWN_N,                      //FORMS_START + 131
+    /*#define*/ SPECIES_UNOWN_O,                      //FORMS_START + 132
+    /*#define*/ SPECIES_UNOWN_P,                      //FORMS_START + 133
+    /*#define*/ SPECIES_UNOWN_Q,                      //FORMS_START + 134
+    /*#define*/ SPECIES_UNOWN_R,                      //FORMS_START + 135
+    /*#define*/ SPECIES_UNOWN_S,                      //FORMS_START + 136
+    /*#define*/ SPECIES_UNOWN_T,                      //FORMS_START + 137
+    /*#define*/ SPECIES_UNOWN_U,                      //FORMS_START + 138
+    /*#define*/ SPECIES_UNOWN_V,                      //FORMS_START + 139
+    /*#define*/ SPECIES_UNOWN_W,                      //FORMS_START + 140
+    /*#define*/ SPECIES_UNOWN_X,                      //FORMS_START + 141
+    /*#define*/ SPECIES_UNOWN_Y,                      //FORMS_START + 142
+    /*#define*/ SPECIES_UNOWN_Z,                      //FORMS_START + 143
+    /*#define*/ SPECIES_UNOWN_EMARK,                  //FORMS_START + 144
+    /*#define*/ SPECIES_UNOWN_QMARK,                  //FORMS_START + 145
+
+    SPECIES_DEOXYS_ATTACK,
+    SPECIES_DEOXYS_DEFENSE,
+    SPECIES_DEOXYS_SPEED,
+
+    SPECIES_SHELLOS_EAST_SEA,
+    SPECIES_GASTRODON_EAST_SEA,
+
+    /*[*/SPECIES_CRAMORANT_GULPING, //] = sCramorantFormChangeTable,
+    /*[*/SPECIES_CRAMORANT_GORGING, //] = sCramorantFormChangeTable,
+    /*[*/SPECIES_EISCUE_NOICE_FACE, //] = sEiscueFormChangeTable,
+    /*[*/SPECIES_MORPEKO_HANGRY, //] = sMorpekoFormChangeTable,
+    /*[*/SPECIES_ZACIAN_CROWNED_SWORD, //] = sZacianFormChangeTable,
+    /*[*/SPECIES_ZAMAZENTA_CROWNED_SHIELD, //] = sZamazentaFormChangeTable,
+    /*[*/SPECIES_ENAMORUS_THERIAN, //] = sEnamorusFormChangeTable,
 };
 
 //when have error defined in text discarded in data

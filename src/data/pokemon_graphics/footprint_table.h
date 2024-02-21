@@ -747,7 +747,7 @@
     [SPECIES_VIKAVOLT] = gMonFootprint_None, //gMonFootprint_Vikavolt,
     [SPECIES_CRABRAWLER] = gMonFootprint_None, //gMonFootprint_Crabrawler,
     [SPECIES_CRABOMINABLE] = gMonFootprint_None, //gMonFootprint_Crabominable,
-    [SPECIES_ORICORIO] = gMonFootprint_None, //gMonFootprint_Oricorio,
+    [SPECIES_ORICORIO_BAILE] = gMonFootprint_None, //gMonFootprint_Oricorio_Baile,
     [SPECIES_CUTIEFLY] = gMonFootprint_None, //gMonFootprint_Cutiefly,
     [SPECIES_RIBOMBEE] = gMonFootprint_None, //gMonFootprint_Ribombee,
     [SPECIES_ROCKRUFF] = gMonFootprint_None, //gMonFootprint_Rockruff,

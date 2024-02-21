@@ -3755,7 +3755,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 0,
     },
-    [SPECIES_ORICORIO] =
+    [SPECIES_ORICORIO_BAILE] =
     {
         .size = 0x45,
         .y_offset = 2,

@@ -8913,12 +8913,16 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
-    [NATIONAL_DEX_ORICORIO] =
+    [NATIONAL_DEX_ORICORIO_BAILE] =
     {
         .categoryName = _("Dancing"),
         .height = 6,
         .weight = 34,
-        .description = gOricorioPokedexText,
+        .description = COMPOUND_STRING(
+            "It wins the hearts of its enemies\n"
+            "with its passionate dancing and then\n"
+            "uses the opening it creates to\n"
+            "burn them up with blazing flames."),
         .pokemonScale = 356,
         .pokemonOffset = 17,
         .trainerScale = 256,
@@ -10914,312 +10918,475 @@ const struct FormdexEntries gFormdexEntries[] =
     [NATIONAL_DEX_CHARIZARD_MEGA_X] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The overwhelming power that fills its\n"
+            "entire body causes it to turn black\n"
+            "and creates intense blue flames."),
     },
 
     [NATIONAL_DEX_CHARIZARD_MEGA_Y] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Its bond with its Trainer is the source\n"
+            "of its power. It boasts speed and\n"
+            "maneuverability greater than that of a\n"
+            "jet fighter."),
     },
 
     [NATIONAL_DEX_BLASTOISE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The cannon on its back is as powerful\n"
+            "as a tank gun. Its tough legs and back\n"
+            "enable it to withstand the recoil from\n"
+            "firing the cannon."),
     },
 
     [NATIONAL_DEX_BEEDRILL_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Its legs have become poison stingers.\n"
+            "It stabs its prey repeatedly with the\n"
+            "stingers on its limbs, dealing the final\n"
+            "blow with the stinger on its rear."),
     },
 
     [NATIONAL_DEX_PIDGEOT_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "With its muscular strength now greatly\n"
+            "increased, it can fly continuously\n"
+            "for two weeks without resting."),
     },
 
     [NATIONAL_DEX_ALAKAZAM_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Having traded away its muscles, Alakazam's\n"
+            "true power has been unleashed. With its\n"
+            "psychic powers, it can foresee all things."),
     },
 
     [NATIONAL_DEX_SLOWBRO_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "When bathed in the energy of Mega\n"
+            "Evolution, Shellder converts into\n"
+            "impregnable armor. There is virtually no\n"
+            "change in Slowpoke."),
     },
 
     [NATIONAL_DEX_GENGAR_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Gengar's relationships are warped. It\n"
+            "tries to take the lives of anyone and\n"
+            "everyone. It will even try to curse the\n"
+            "Trainer who is its master!"),
     },
 
     [NATIONAL_DEX_KANGASKHAN_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "When the mother sees the back of her\n"
+            "Mega-Evolved child, it makes her think\n"
+            "of the day when her child will inevitably\n"
+            "leave her."),
     },
 
     [NATIONAL_DEX_PINSIR_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The influence of Mega Evolution leaves it\n"
+            "in a state of constant excitement.\n"
+            "It pierces enemies with its two large\n"
+            "horns before shredding them."),
     },
 
     [NATIONAL_DEX_GYARADOS_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Although it obeys its instinctive drive to\n"
+            "destroy everything within its reach, it\n"
+            "will respond to orders from a Trainer it\n"
+            "truly trusts."),
     },
 
     [NATIONAL_DEX_AERODACTYL_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The power of Mega Evolution has\n"
+            "completely restored its genes. The rocks\n"
+            "on its body are harder than diamond."),
     },
 
     [NATIONAL_DEX_MEWTWO_MEGA_X] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Psychic power has augmented its muscles.\n"
+            "It has a grip strength of one ton and can\n"
+            "sprint a hundred meters in two seconds\n"
+            "flat!"),
     },
 
     [NATIONAL_DEX_MEWTWO_MEGA_Y] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Despite its diminished size, its mental\n"
+            "power has grown phenomenally. With a mere\n"
+            "thought, it can smash a skyscraper to\n"
+            "smithereens."),
     },
 
     [NATIONAL_DEX_AMPHAROS_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Massive amounts of energy intensely\n"
+            "stimulated Ampharos's cells, apparently\n"
+            "awakening its long-sleeping dragon's\n"
+            "blood."),
     },
     [NATIONAL_DEX_STEELIX_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The cells within its body, crystallized by\n"
+            "the energy produced from Mega Evolution,\n"
+            "are stronger than any mineral and able\n"
+            "to withstand any temperature."),
     },
 
     [NATIONAL_DEX_SCIZOR_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The excess energy that bathes this\n"
+            "Pokémon keeps it in constant danger of\n"
+            "overflow. It can't sustain a battle over\n"
+            "long periods of time."),
     },
     [NATIONAL_DEX_HERACROSS_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "A tremendous influx of energy builds it up,\n"
+            "but when Mega Evolution ends, Heracross\n"
+            "is bothered by terrible soreness in its\n"
+            "muscles."),
     },
 
     [NATIONAL_DEX_HOUNDOOM_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Its red claws and the tips of its tail are\n"
+            "melting from high internal temperatures\n"
+            "that are painful to Houndoom itself.\n"),
     },
 
     [NATIONAL_DEX_TYRANITAR_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Due to the colossal power poured into it,\n"
+            "this Pokémon's back split right open. Its\n"
+            "destructive instincts are the only thing\n"
+            "keeping it moving."),
     },
 
     [NATIONAL_DEX_SCEPTILE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Thanks to the power in its quick legs,\n"
+            "Mega Sceptile can be on its opponent in a\n"
+            "flash. It can cut off a portion of its tail\n"
+            "to fire it like a missile at an opponent."),
     },
     [NATIONAL_DEX_BLAZIKEN_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "As it unleashes a flurry of savage kicks,\n"
+            "its legs can begin to burn from the\n"
+            "friction of the surrounding atmosphere.\n"
+            "They're always a source of pride to it."),
     },
 
     [NATIONAL_DEX_SWAMPERT_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "When it Mega Evolves, the strength that it\n"
+            "needs to act in the water is increased.\n"
+            "It can use its tenacious power\n"
+            "both on land and in the water."),
     },
     [NATIONAL_DEX_GARDEVOIR_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "By opening its heart, Mega Gardevoir\n"
+            "becomes able to use tremendous psychic\n"
+            "power. The red plate in its chest is said to\n"
+            "be a physical manifestation of its heart."),
     },
 
     [NATIONAL_DEX_SABLEYE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Bathed in the energy of Mega Evolution,\n"
+            "the gemstone on its chest expands, rips\n"
+            "through its skin, and falls out."),
     },
 
     [NATIONAL_DEX_MAWILE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Its two sets of jaws thrash about\n"
+            "violently as if they each had a will of\n"
+            "their own. One gnash from them can turn a\n"
+            "boulder to dust."),
     },
 
     [NATIONAL_DEX_AGGRON_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "When Aggron Mega Evolves into\n"
+            "Mega Aggron, the destructive ability of\n"
+            "its fearsome horns can turn a steel-clad\n"
+            "tank into so much scrap metal."),
     },
 
     [NATIONAL_DEX_MEDICHAM_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It uses its amped-up willpower to create\n"
+            "additional arms for itself. The more it has\n"
+            "trained its spirit, the more realistic and\n"
+            "dexterous these self-created arms become."),
     },
 
     [NATIONAL_DEX_MANECTRIC_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Too much electricity has built up in its\n"
+            "body, irritating Manectric. Its explosive\n"
+            "speed is equal to that of a lightning bolt."),
     },
 
     [NATIONAL_DEX_SHARPEDO_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The yellow patterns it bears are old scars.\n"
+            "The energy from Mega Evolution runs\n"
+            "through them, causing it sharp pain and\n"
+            "suffering."),
     },
     [NATIONAL_DEX_CAMERUPT_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The humps on its back have transformed\n"
+            "into one large and very active volcano. It\n"
+            "has a deep hatred of water or any moisture\n"
+            "and has an explosive personality."),
     },
 
     [NATIONAL_DEX_ALTARIA_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It sings with a voice that is even more\n"
+            "beautiful than before it Mega Evolved.\n"
+            "Its feathers became larger for protection\n"
+            "and glimmer with an iridescent sheen."),
     },
 
     [NATIONAL_DEX_BANETTE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Extraordinary energy amplifies its\n"
+            "cursing power to such an extent that it\n"
+            "can't help but curse its own Trainer."),
     },
 
     [NATIONAL_DEX_ABSOL_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "As the energy of Mega Evolution fills it,\n"
+            "its fur bristles. What you see on its back\n"
+            "are not true wings, and this Pokémon isn't\n"
+            "able to fly."),
     },
 
     [NATIONAL_DEX_GLALIE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The power of Mega Evolution was so strong\n"
+            "that it smashed Glalie's jaw. Its inability\n"
+            "to eat very well leaves Glalie irritated."),
     },
 
     [NATIONAL_DEX_SALAMENCE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Mega Evolution fuels its brutality, and it\n"
+            "may even turn on the Trainer who raised it.\n"
+            "It's been dubbed the blood-soaked.\n"
+            "crescent."),
     },
 
     [NATIONAL_DEX_METAGROSS_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "When it knows it can't win, it digs the\n"
+            "claws on its legs into its opponent and\n"
+            "starts the countdown to a big explosion."),
     },
 
     [NATIONAL_DEX_LATIAS_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Its body is smaller than Mega Latios's\n"
+            "body. It is more agile and can make very\n"
+            "sharp turns. When it Mega Evolves, its\n"
+            "defensive strength grows substantially."),
     },
     [NATIONAL_DEX_LATIOS_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It's larger than Mega Latias, and can\n"
+            "achieve higher speeds in flight.\n"
+            "This Pokémon can use its speed in battle\n"
+            "to unleash a flurry of attacks."),
     },
 
     [NATIONAL_DEX_LOPUNNY_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Mega Evolution awakens its combative\n"
+            "instincts. It has shed any fur that got in\n"
+            "the way of its attacks.\n"
+            "crescent."),
     },
     [NATIONAL_DEX_GARCHOMP_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Excess energy melted its arms and wings\n"
+            "into giant scythes, sending it mad with\n"
+            "rage. It swings its scythes wildly and\n"
+            "slices the ground to pieces."),
     },
 
     [NATIONAL_DEX_LUCARIO_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It readies itself to face its enemies by\n"
+            "focusing its mental energies. Its fighting\n"
+            "style can be summed up in a single word:\n"
+            "heartless."),
     },
     [NATIONAL_DEX_ABOMASNOW_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The sprouts on Abomasnow's back grow into\n"
+            "great shafts of ice when it Mega Evolves.\n"
+            "Dislikes associating with others and\n"
+            "chooses to live quietly deep in mountains."),
     },
 
     [NATIONAL_DEX_GALLADE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Mega Gallade has a knightly appearance.\n"
+            "It can use its psychic power to reshape\n"
+            "both arms into blades simultaneously and\n"
+            "fight using a dual-wielding style."),
     },
 
     [NATIONAL_DEX_AUDINO_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Mega Audino emits a soothing pulse from\n"
+            "its body that reduces hostility in others.\n"
+            "Anything that comes into contact with its\n"
+            "second feelers will fall into a deep sleep."),
     },
 
     [NATIONAL_DEX_DIANCIE_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The impurities upon its body's surface\n"
+            "have fallen away, sparkling so brilliantly\n"
+            "that cannot be observed directly.\n"
+            "It is known as “the Royal Pink Princess”."),
     },
 
     [NATIONAL_DEX_RAYQUAZA_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Particles stream from the filaments that\n"
+            "extend from its jaw. They can control the\n"
+            "density and humidity of the air, allowing\n"
+            "Rayquaza to manipulate the weather."),
     },
 
     [NATIONAL_DEX_KYOGRE_PRIMAL] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "When Kyogre roared, water poured forth\n"
+            "and the seas spread outward.\n"
+            "Dark clouds enshrouded the world,\n"
+            "and the deluge fell upon all…"),
     },
 
     [NATIONAL_DEX_GROUDON_PRIMAL] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "When Groudon howled, the earth swelled and\n"
+            "the land grew wide. The sun blazed atop\n"
+            "and all the world around the creature\n"
+            "was enveloped in incandescent heat."),
     },
 
-    [NATIONAL_DEX_PIKACHU_ROCK_STAR] =
-    {
-        //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
-    },
-
-    [NATIONAL_DEX_PIKACHU_BELLE] =
-    {
-        //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
-    },
-
-    [NATIONAL_DEX_PIKACHU_PH_D] =
-    {
-        //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
-    },
-
-    [NATIONAL_DEX_PIKACHU_LIBRE] =
-    {
-        //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
-    },
     //curr end of mega forms//enhanced forms, add custom megas torterra and marowwak here later
     //after her categoryName matters ok screw teh list, most cat names are the same
     //so instead build array based on exclusions, but if that's the case makes more sense to 
@@ -11229,109 +11396,182 @@ const struct FormdexEntries gFormdexEntries[] =
     [NATIONAL_DEX_RATTATA_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "With its incisors, it gnaws through doors\n"
+            "and infiltrates people's homes.\n"
+            "Then, with a twitch of its whiskers,\n"
+            "it steals whatever food it finds."),
     },
 
     [NATIONAL_DEX_RATICATE_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It forms a group of Rattata, which it \n"
+            "assumes command of. Each group\n"
+            "has its own territory, and disputes\n"
+            "over food happen often."),
     },
 
     [NATIONAL_DEX_RAICHU_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It uses psychokinesis to control\n"
+            "electricity. It focuses psychic energy\n"
+            "into its tail and rides it like it's surfing.\n"
+            "Another name for this Pokémon is 'hodad'."),
     },
 
     [NATIONAL_DEX_SANDSHREW_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
-    },
+        .description = COMPOUND_STRING(
+            "Life on mountains covered with deep snow\n"
+            "has granted this Pokémon a body of ice\n"
+            "that's as hard as steel.\n"
+            "Predators go after its soft belly."),
+    }, //for some reason these two don't display correctly???
+    //species weren't on species to nat list, that's why
 
     [NATIONAL_DEX_SANDSLASH_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It uses large, hooked claws to cut\n"
+            "a path through deep snow as it runs.\n"
+            "On snowy mountains, this Sandslash\n"
+            "is faster than any other Pokémon."),
     },
 
     [NATIONAL_DEX_VULPIX_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "They live together in a skulk, helping\n"
+            "one another. In hot weather, this Pokémon\n"
+            "makes ice shards with its six tails and\n"
+            "sprays them around to cool itself off."),
     },
 
     [NATIONAL_DEX_NINETALES_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "While it will guide travelers who get lost\n"
+            "on a snowy mountain down to the\n"
+            "mountain's base, it won't forgive anyone\n"
+            "who harms nature."),
     },
 
     [NATIONAL_DEX_DIGLETT_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The metal-rich geology of its habitat\n"
+            "caused it to develop steel whiskers on its\n"
+            "head that change shape depending on its\n"
+            "mood and when communicating with others."),
     },
 
     [NATIONAL_DEX_DUGTRIO_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Their beautiful, metallic whiskers create\n"
+            "a sort of protective helmet on\n"
+            "heir heads, and they also function\n"
+            "as highly precise sensors."),
     },
 
     [NATIONAL_DEX_MEOWTH_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It's accustomed to luxury because it used\n"
+            "to live with Alolan royalty. Highly smart\n"
+            "and proud, it's famously difficult to\n"
+            "handle, but that also makes it popular."),
     },
 
     [NATIONAL_DEX_PERSIAN_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It looks down on everyone other than\n"
+            "itself. In contrast to its lovely face, it\n"
+            "is so brutal that it tortures its weakened\n"
+            "prey rather than finishing them off."),
     },
 
     [NATIONAL_DEX_GEODUDE_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Its body is a magnetic stone. Iron sand\n"
+            "attach to parts of its body with stronger\n"
+            "magnetism. If you carelessly step on one,\n"
+            "it will headbutt and shock you in anger."),
     },
 
     [NATIONAL_DEX_GRAVELER_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "When two Graveler smash each other over\n"
+            "dravite, their favorite food, they cause\n"
+            "flashes of light and booming noises.\n"
+            "People call them “fireworks of the earth.”"),
     },
 
     [NATIONAL_DEX_GOLEM_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "It fires rocks charged with electricity.\n"
+            "Even if the rock isn't fired that\n"
+            "accurately, just grazing an opponent\n"
+            "will cause numbness and fainting."),
     },
 
     [NATIONAL_DEX_GRIMER_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "There are a hundred or so of them living\n"
+            "in Alola's waste-disposal site. They're all\n"
+            "hard workers who eat a lot of trash. Grimer\n"
+            "seems to relish any and all kinds of trash."),
     },
 
     [NATIONAL_DEX_MUK_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "While it's unexpectedly quiet and friendly,\n"
+            "if it's not fed any trash for a while,,\n"
+            "it will smash its Trainer's furnishings,\n"
+            "and eat up the fragments."),
     },
 
     [NATIONAL_DEX_EXEGGUTOR_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "Alola is the best environment for\n"
+            "this Pokémon. Local people take pride\n"
+            "in its appearance, saying this is how\n"
+            "Exeggutor ought to look."),
     },
 
     [NATIONAL_DEX_MAROWAK_ALOLAN] =
     {
         //.categoryName = _("Love-Hate"),
-        .description = gEnamorusPokedexText,
+        .description = COMPOUND_STRING(
+            "The cursed flames that light up the bone\n"
+            "carried by this Pokémon are said\n"
+            "to cause both mental and physical\n"
+            "pain that will never fade."),
     },
 
     [NATIONAL_DEX_LYCANROC_MIDNIGHT] =
@@ -11358,8 +11598,625 @@ const struct FormdexEntries gFormdexEntries[] =
     [NATIONAL_DEX_MEOWTH_GALARIAN] =
     {
         //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Living with a savage, seafaring people has\n"
+            "hardened its body so much that parts of it\n"
+            "turned to iron. Darker coins are harder\n"
+            "and garner more respect among Meowth."),
+    },
+
+    [NATIONAL_DEX_PONYTA_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Its small horn hides a healing power.\n"
+            "This Pokémon will look into your eyes and\n"
+            "read the contents of your heart. If it\n"
+            "finds evil there, it promptly hides away."),
+    },
+
+    [NATIONAL_DEX_RAPIDASH_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Little can stand up to its psycho cut.\n"
+            "Unleashed from this Pokémon's horn,\n"
+            "the move will punch a hole right\n"
+            "through a thick metal sheet."),
+    },
+
+    [NATIONAL_DEX_SLOWPOKE_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Although it is normally zoned out, its\n"
+            "expression abruptly sharpens on occasion.\n"
+            "The cause seems to lie in Slowpoke's diet,\n"
+            "which also give their tails a spicy flavor."),
+    },
+
+    [NATIONAL_DEX_SLOWBRO_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "A Shellder bite set off a chemical reaction\n"
+            "with the spices inside Slowbro's body,\n"
+            "causing Slowbro to become a\n"
+            "Poison-type Pokémon."),
+    },
+
+    [NATIONAL_DEX_FARFETCHD_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "The stalks of leeks are thicker and longer\n"
+            "in the Galar region. Brave Farfetch'd\n"
+            "warriors that adapted to these stalks\n"
+            "took on a unique form."),
+    },
+
+    [NATIONAL_DEX_WEEZING_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Long ago, when droves of factories fouled\n"
+            "the air with pollution, it changed into this\n"
+            "form for some reason. It consumes air\n"
+            "pollutant particles, expelling clean air."),
+    },
+
+    [NATIONAL_DEX_MR_MIME_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Its talent is tap-dancing. It can radiate\n"
+            "chilliness from the bottoms of its feet to\n"
+            "to create a floor of ice, which this\n"
+            "Pokémon can kick up to use as a barrier."),
+    },
+
+    [NATIONAL_DEX_ARTICUNO_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "It fires beams that immobilize opponents\n"
+            "as if they had been frozen solid.\n"
+            "Its feather-like blades of psychic energy\n"
+            "rip through thick iron sheets like paper."),
+    },
+
+    [NATIONAL_DEX_ZAPDOS_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "When its feathers rub together, they\n"
+            "produce a crackling sound like the\n"
+            "zapping of electricity. Apparently, it runs\n"
+            "through the mountains at over 180 mph."),
+    },
+
+    [NATIONAL_DEX_MOLTRES_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This Pokémon's sinister, flame-like aura\n"
+            "will consume the spirit of any creature\n"
+            "it hits. Victims become burned-out\n"
+            "shadows of themselves."),
+    },
+
+    [NATIONAL_DEX_SLOWKING_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "A combination of toxins and the shock of\n"
+            "evolving has increased Shellder's\n"
+            "intelligence to the point that Shellder\n"
+            "now controls Slowking."),
+    },
+
+    [NATIONAL_DEX_CORSOLA_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Sudden climate change wiped out this\n"
+            "ancient kind of Corsola. With its branches,\n"
+            "it absorbs others' life-force. It curses\n"
+            "those unaware that kick it by accident."),
+    },
+
+    [NATIONAL_DEX_ZIGZAGOON_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Its restlessness has it constantly moving\n"
+            "in zigzags. It will purposely run into other\n"
+            "Pokémon to start fights. It's thought to\n"
+            "be the oldest form of Zigzagoon."),
+    },
+
+    [NATIONAL_DEX_LINOONE_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This very aggressive Pokémon will\n"
+            "recklessly challenge opponents stronger\n"
+            "than itself. It uses its long tongue to\n"
+            "taunt them to then tackle forcefully."),
+    },
+
+    [NATIONAL_DEX_DARUMAKA_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "The colder they get, the more\n"
+            "energetic they are. They freeze their\n"
+            "breath to make snowballs, using them\n"
+            "as ammo for playful snowball fights."),
+    },
+
+    [NATIONAL_DEX_DARMANITAN_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Though it has a gentle disposition,\n"
+            "it's also very strong. But, when\n"
+            "angered, it spews fire everywhere as\n"
+            "it rampages indiscriminately."),
+    },
+
+    [NATIONAL_DEX_DARMANITAN_ZEN_MODE_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Though it has a gentle disposition,\n"
+            "it's also very strong. But, when\n"
+            "angered, it spews fire everywhere as\n"
+            "it rampages indiscriminately."),
+    },
+
+    [NATIONAL_DEX_YAMASK_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "A clay slab with cursed engravings\n"
+            "took possession of a Yamask. The\n"
+            "slab is said to be absorbing the\n"
+            "Yamask's dark power."),
+    },
+
+    [NATIONAL_DEX_STUNFISK_GALARIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Its conspicuous lips lure prey in\n"
+            "as it lies in wait in the mud. When\n"
+            "prey gets close, Stunfisk clamps its\n"
+            "jagged steel fins down on them."),
+    },//galar end - hisuian start
+
+    [NATIONAL_DEX_GROWLITHE_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "They patrol their territory in pairs.\n"
+            "It's believed the igneous rock components\n"
+            "in the fur of this species are the result\n"
+            "of volcanic activity in its habitat."),
+    },
+
+    [NATIONAL_DEX_ARCANINE_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Snaps at its foes with fangs cloaked in\n"
+            "blazing flame. Despite its bulk, it deftly\n"
+            "feints every which way, leading opponents\n"
+            "on a deceptively merry chase."),
+    },
+
+    [NATIONAL_DEX_VOLTORB_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "It esembles an ancient Poké Ball design.\n"
+            "When excited, it discharges the electric\n"
+            "current it has stored in its belly, then\n"
+            "lets out a great, uproarious laugh."),
+    },
+
+    [NATIONAL_DEX_ELECTRODE_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "The tissue on the surface of its body is\n"
+            "similar in composition to an Apricorn.\n"
+            "When irritated, it lets loose an electric\n"
+            "current equal to 20 lightning bolts."),
+    },
+
+    [NATIONAL_DEX_TYPHLOSION_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Said to purify lost, forsaken souls with\n"
+            "its flames and guide them to the afterlife.\n"
+            "It's believed its form was influenced by\n"
+            "the energy of Mt. Coronet in ancient times."),
+    },
+
+    [NATIONAL_DEX_QWILFISH_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "A form of Qwilfish from the distant past.\n"
+            "Fishers detest this troublesome Pokémon\n"
+            "because it sprays poison from its spines,\n"
+            "getting it everywhere."),
+    },
+
+    [NATIONAL_DEX_SNEASEL_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Its sturdy, curved claws are ideal for\n"
+            "traversing precipitous cliffs. From the\n"
+            "tips of these claws drips a venom that\n"
+            "infiltrates the nerves of any prey caught."),
+    },
+
+    [NATIONAL_DEX_SAMUROTT_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Hard of heart and deft of blade,\n"
+            "this rare form of Samurott is a\n"
+            "product of the Pokémon's evolution in the\n"
+            "region of Hisui."),
+    },
+
+    [NATIONAL_DEX_LILLIGANT_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Its well-developed legs are the result of\n"
+            "a life spent on mountains covered in deep\n"
+            "snow. The scent it exudes from its flower\n"
+            "crown heartens those in proximity."),
+    },
+
+    [NATIONAL_DEX_ZORUA_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Derives power from resentment,\n"
+            "which rises as energy atop its head and\n"
+            "takes on the forms of foes. In this\n"
+            "way, Zorua vents lingering malice."),
+    },
+
+    [NATIONAL_DEX_ZOROARK_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Heedless of its own safety,\n"
+            "Zoroark attacks its nemeses with a bitter\n"
+            "energy so intense, it lacerates\n"
+            "Zoroark's own body."),
+    },
+
+    [NATIONAL_DEX_BRAVIARY_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Screaming a bloodcurdling battle\n"
+            "cry, this huge and ferocious bird\n"
+            "Pokémon goes out on the hunt."),
+    },
+
+    [NATIONAL_DEX_SLIGGOO_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "A creature given to melancholy.\n"
+            "Its metallic shell developed as a\n"
+            "result of the mucus on its skin reacting\n"
+            "with the iron in Hisui's water."),
+    },
+
+    [NATIONAL_DEX_GOODRA_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "It loathes solitude and is\n"
+            "extremely clingy-it will fume and run riot if\n"
+            "those dearest to it ever leave its\n"
+            "side."),
+    },
+
+    [NATIONAL_DEX_AVALUGG_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "The armor of ice covering its lower\n"
+            "jaw puts steel to shame and can\n"
+            "shatter rocks with ease."),
+    },
+
+    [NATIONAL_DEX_DECIDUEYE_HISUIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "The air stored inside the rachises\n"
+            "of Decidueye's feathers insulates\n"
+            "the Pokémon against Hisui's extreme\n"
+            "cold."),
+    },
+
+    [NATIONAL_DEX_BASCULIN_WHITE_STRIPED] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "While this ancient form of Basculin shares\n"
+            "a vast array of qualities with other forms,\n"
+            "it differs in several respects, including\n"
+            "demeanor, being much gentler than others."),
+    }, //hisuian end  - misc alt forms start
+    
+    //start pika cosplay, will need write new entries for it
+    [NATIONAL_DEX_PIKACHU_ROCK_STAR] =
+    {
+        //.categoryName = _("Love-Hate"),
         .description = gEnamorusPokedexText,
     },
+
+    [NATIONAL_DEX_PIKACHU_BELLE] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PIKACHU_POP_STAR] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PIKACHU_PH_D] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_PIKACHU_LIBRE] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = gEnamorusPokedexText,
+    },
+
+    [NATIONAL_DEX_ORICORIO_POM_POM] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This form of Oricorio has sipped\n"
+            "yellow nectar. It uses nimble steps to\n"
+            "approach opponents, then knocks\n"
+            "them out with electric punches."),
+    },
+
+    [NATIONAL_DEX_ORICORIO_PAU] =
+    {
+        //.categoryName = _("Love-Hate"),
+        COMPOUND_STRING(
+            "This form of Oricorio has sipped\n"
+            "pink nectar. It elevates its mind with\n"
+            "the gentle steps of its dance, then\n"
+            "unleashes its psychic energy."),
+    },
+
+    [NATIONAL_DEX_ORICORIO_SENSU] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "It charms its opponents with its\n"
+            "refined dancing. When they let their\n"
+            "guard down, it places a curse on\n"
+            "them that will bring on their demise."),
+    },
+
+    [NATIONAL_DEX_NECROZMA_DUSK_MANE] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This is its form while it is\n"
+            "devouring the light of Solgaleo. It pounces\n"
+            "on foes and then slashes them with\n"
+            "the claws on its four limbs and back."),
+    },
+
+    [NATIONAL_DEX_NECROZMA_DAWN_WINGS] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This is its form while it's\n"
+            "devouring the light of Lunala. It grasps\n"
+            "foes in its giant claws and rips them\n"
+            "apart with brute force."),
+    },
+
+    [NATIONAL_DEX_NECROZMA_ULTRA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "The light pouring out from all over\n"
+            "its body affects living things and\n"
+            "nature, impacting them in various\n"
+            "ways."),
+    },
     
+    [NATIONAL_DEX_MAGEARNA_ORIGINAL_COLOR] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This is its form from almost 500\n"
+            "years ago. Its body is nothing more\n"
+            "than a container-its artificial heart\n"
+            "is the actual life-form."),
+    },
+
+    [NATIONAL_DEX_KYUREM_WHITE] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "It has foreseen a world of truth will arrive\n"
+            "for people and Pokémon. It strives to protect\n"
+            "that future. Kyurem can now use the power\n"
+            "of both fire and ice."),
+    },
+
+    [NATIONAL_DEX_KYUREM_BLACK] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "It's said this Pokémon battles in order\n"
+            "to create an ideal world for people\n"
+            "and Pokémon. Kyurem can now use the power\n"
+            "of both electricity and ice."),
+    },
+
+    [NATIONAL_DEX_TORNADUS_THERIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "An example of what is known as a\n"
+            "“form change”. Tornadus has been\n"
+            "sighted crossing the ocean while in this\n"
+            "form."),
+    },
+
+    [NATIONAL_DEX_THUNDURUS_THERIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "It pulverizes foes into\n"
+            "nothingness with showers of devastatingly\n"
+            "powerful lightning bolts launched from\n"
+            "the string of orbs on its tail."),
+    },
+
+    [NATIONAL_DEX_LANDORUS_THERIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "Landorus soars through the sky in\n"
+            "this form, bestowing plentiful\n"
+            "harvests upon the land and earning the\n"
+            "people's reverence."),
+    },
+
+    [NATIONAL_DEX_ENAMORUS_THERIAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "From the clouds, it descends upon\n"
+            "those who treat any form of life\n"
+            "with disrespect and metes out\n"
+            "wrathful, ruthless punishment."),
+    },
+
+};
+
+//form categorie to replace appears done
+const struct FormdexCategories gFormdexCategoryName[] =
+{
+    [NATIONAL_DEX_PONYTA_GALARIAN] =
+    {
+        .categoryName = _("Unique Horn"),
+    },
+    
+    [NATIONAL_DEX_RAPIDASH_GALARIAN] =
+    {
+        .categoryName = _("Unique Horn"),
+    },
+
+    [NATIONAL_DEX_SLOWKING_GALARIAN] =
+    {
+        .categoryName = _("Hexpert"),
+    },
+
+    [NATIONAL_DEX_MR_MIME_GALARIAN] =
+    {
+        .categoryName = _("Dancing"),
+    },
+
+    [NATIONAL_DEX_ARTICUNO_GALARIAN] =
+    {
+        .categoryName = _("Cruel"),
+    },
+
+    [NATIONAL_DEX_ZAPDOS_GALARIAN] =
+    {
+        .categoryName = _("Strong Legs"),
+    },
+
+    [NATIONAL_DEX_MOLTRES_GALARIAN] =
+    {
+        .categoryName = _("Malevolent"),
+    },
+
+    [NATIONAL_DEX_DARMANITAN_GALARIAN] =
+    {
+        .categoryName = _("Zen Charm"),
+    },
+
+    [NATIONAL_DEX_GROWLITHE_HISUIAN] =
+    {
+        .categoryName = _("Scout"),
+    },
+
+    [NATIONAL_DEX_VOLTORB_HISUIAN] =
+    {
+        .categoryName = _("Sphere"),
+    },
+
+    [NATIONAL_DEX_ELECTRODE_HISUIAN] =
+    {
+        .categoryName = _("Sphere"),
+    },
+
+    [NATIONAL_DEX_TYPHLOSION_HISUIAN] =
+    {
+        .categoryName = _("Ghost Flame"),
+    },
+
+    [NATIONAL_DEX_LILLIGANT_HISUIAN] =
+    {
+        .categoryName = _("Spinning"),
+    },
+
+    [NATIONAL_DEX_ZORUA_HISUIAN] =
+    {
+        .categoryName = _("Spiteful Fox"),
+    },
+
+    [NATIONAL_DEX_ZOROARK_HISUIAN] =
+    {
+        .categoryName = _("Baneful Fox"),
+    },
+
+    [NATIONAL_DEX_BRAVIARY_HISUIAN] =
+    {
+        .categoryName = _("Battle Cry"),
+    },
+
+    [NATIONAL_DEX_SLIGGOO_HISUIAN] =
+    {
+        .categoryName = _("Snail"),
+    },
+
+    [NATIONAL_DEX_GOODRA_HISUIAN] =
+    {
+        .categoryName = _("Shell Bunker"),
+    },
 
 };

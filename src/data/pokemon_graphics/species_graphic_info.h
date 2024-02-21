@@ -6953,15 +6953,15 @@ const struct SpeciesGraphicInfo gSpeciesGraphics[] =
       PALETTES(CircledQuestionMark),
       ICON(QuestionMark,0),
     }, //Crabominable,
-[SPECIES_ORICORIO] = 
+[SPECIES_ORICORIO_BAILE] = 
     {  
-      FRONT_PIC(CircledQuestionMark),
+      FRONT_PIC(Oricorio_Baile),
       FRONT_COORD(0x88,0),
-      BACK_PIC(CircledQuestionMark),
+      BACK_PIC(Oricorio_Baile),
       BACK_COORD(0x88,0),
-      PALETTES(CircledQuestionMark),
+      PALETTES(Oricorio_Baile),
       ICON(QuestionMark,0),
-    }, //Oricorio,
+    }, //Oricorio_Baile,
 [SPECIES_CUTIEFLY] = 
     {  
       FRONT_PIC(CircledQuestionMark),

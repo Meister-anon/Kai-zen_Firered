@@ -2184,6 +2184,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   -check typecalc again, foud issue with it, counter and probably other fixed dmg moves
   are triggering, type effectiveness when they shouldn't be
+  -fixed changed moves that should bypass typecalc to power 0 moves
+  they still do proper damage
 
   -new note, plan for encounters since normal forms are same species just different colors,
   if there is a way to decide how that determines which form to display on encounter,
@@ -2231,6 +2233,25 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
 
   //Important BIND still has freezing issue? happened when it locked into status move
+
+  fixing dex entries, add on for forms, not all forms have entries so right now
+  it instead defaults to base species dex entry, when done update functions to read new entries and category names
+
+  -need to add new dexentries for pikaforms
+
+  NOTES - for handling cosplay pika
+  Cosplay Pikachu can switch between costumes at any time by going to any Contest Hall in the Hoenn region and talking to the Pokémon Breeder in the green room. This Pokémon Breeder can also remove the costume.
+
+  Upon removing a costume, Cosplay Pikachu will forget the special move associated
+  with the previous costume. Upon putting on a new costume, 
+  Cosplay Pikachu will learn the special move associated with the
+  new costume. When changing costume, if Cosplay Pikachu knows four moves
+  but not the special move of its previous costume, 
+  the player will be prompted to replace a move with the new 
+  exclusive move (Cosplay Pikachu cannot put on the new costume unless
+  it does). If Cosplay Pikachu's only known move is the special move
+  and the costume is removed, then it will learn Thunder Shock. 
+  Cosplay Pikachu can remain in a costume even if it forgets the associated special move.
 
   //somehow I"m mising with moves that are 100 accuracy?!  needs to be fixed immediately
   ..oh wait nvm was against a pidgey, that I confused, it most likely just had tangled feet ability

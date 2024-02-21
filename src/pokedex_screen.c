@@ -2143,11 +2143,23 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)//think task show dex entry fro
 //left right
 static bool32 DexScreen_TryDisplayForms(u8 direction)
 {
-    s32 i; 
+    s32 i;
+    u32 a = 0; //to get base form use in seen only 
     u16 seen;
     u16 species = sPokedexScreenData->dexSpecies;
     u8 FormId = GetFormIdFromFormSpeciesId(species); //id in relevant table of current species
     u8 FinalFormId = GetFinalFormSpeciesId(species); //id of last form in table
+    u16 FormFilter;
+
+
+    //for choosing when to display forms
+    //based on what type of form it is, a temp or permanent one
+    //if permanenet I can use actual form species
+    //otherwise I should prefer to use see the base form to display other form
+    //unless seen works for the player USING the species in battle as well,
+    //not just seeing it on the otherside vsonic IMPORTANT
+
+    FormFilter = DexScreen_FormFilter(species);
 
     if (direction) // Seek left
     {
@@ -2155,7 +2167,9 @@ static bool32 DexScreen_TryDisplayForms(u8 direction)
             return FALSE;
         for (i = FormId - 1; i >= 0; i--)
         {
-            seen = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_SEEN, TRUE);
+            FormFilter = DexScreen_FormFilter(GetFormSpeciesId(species, i)); //assign based on which form displaying
+            //seen = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_SEEN, TRUE);
+            seen = DexScreen_GetSetPokedexFlag(FormFilter, FLAG_GET_SEEN, TRUE);
             if (seen)
             {
                 sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
@@ -2172,7 +2186,9 @@ static bool32 DexScreen_TryDisplayForms(u8 direction)
 
         for (i = FormId + 1; i <= FinalFormId; i++)
         {
-            seen = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_SEEN, TRUE);
+            FormFilter = DexScreen_FormFilter(GetFormSpeciesId(species, i)); //assign based on which form displaying
+            //seen = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_SEEN, TRUE);
+            seen = DexScreen_GetSetPokedexFlag(FormFilter, FLAG_GET_SEEN, TRUE);
             if (seen)
             {
                 sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
@@ -2943,22 +2959,94 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
 {
     u8 * categoryName; //ok works now
     u8 index;
+    u32 i;
     u8 categoryStr[13];//changed from 12 - issue was this, wasn't defined right, needed  be separate
+    u16 speciesArgument;
+    u16 speciesFilter;
+    bool8 UniqueCategory = FALSE;
+    //bool8 UseBaseForm = FALSE;
+    u16 NatSpecies = SpeciesToNationalPokedexNum(species);
+    //can use ternary operator or just a conditional assignment
+    //yeah prob better to do conditional assignment
+    //to pass off whether it'll check if you've caught the 
+    //base species or the form species will replace 
+    //use of sPokedexScreenData->dexSpecies
 
-    if (species > NATIONAL_SPECIES_COUNT)
-        species = GetFormSpeciesId(species, 0);
+    //if I can return the species argument from
+    //gFormChangeTablePointers that would be a good split
+    //for if the specie is a temp form or permanent form.
+    //as that is used for species that change forms in battle
 
-    species = SpeciesToNationalPokedexNum(species);
-
-    categoryName = (u8 *)gPokedexEntries[species].categoryName;
-    index = 0;
-    if (DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE))
+    for (i = 0; i < NELEMS(gdexCatFormSpecies); i++) //only the cat names I need change
     {
-//#if REVISION == 0
- //       while ((categoryName[index] != CHAR_SPACE) && (index <= 13)) //potentially this is issue, need raise this
-//#else
+        if (NatSpecies > NATIONAL_SPECIES_COUNT)
+        {
+            if (NatSpecies == gdexCatFormSpecies[i])
+            {
+                UniqueCategory = TRUE;
+                break;
+            }
+            
+        }
+        
+    }
+
+    if (UniqueCategory == TRUE)
+    {
+        categoryName = (u8 *)gFormdexCategoryName[NatSpecies].categoryName;
+    }
+    else
+    {
+        speciesArgument = GetFormSpeciesId(species, 0);
+        speciesArgument = SpeciesToNationalPokedexNum(speciesArgument);
+        categoryName = (u8 *)gPokedexEntries[speciesArgument].categoryName;
+    }
+               
+    
+    
+    
+    /*for (i = 0; i < NELEMS(gdexEntryFormSpecies); i++) //only the cat names I need change
+    {
+        if (species > NATIONAL_SPECIES_COUNT)
+        {
+            if (species == gdexEntryFormSpecies[i])
+            {
+                UseBaseForm = TRUE;
+                break;
+            }
+            
+        }
+        
+    }
+
+    //if specis is on list use the base form to decide if should display 
+    //put this in display form as well
+    //still need go over array values to clean up
+
+    //try sepaaret from use of i, in case some issue, well that fixed it suprisingly
+    if (UseBaseForm == TRUE)
+        speciesFilter = GetFormSpeciesId(species, 0);
+    else
+        speciesFilter = sPokedexScreenData->dexSpecies;*/
+
+    speciesFilter = DexScreen_FormFilter(species);
+        
+
+    index = 0;
+
+    //think need change DexScreen_FormFilter back to bool
+    // then can have two diff versions of below condition
+    
+
+    //think may need change this, since not all forms are permanent, keep in mind and find answer later
+    //vsonic 
+    if (DexScreen_GetSetPokedexFlag(speciesFilter, FLAG_GET_CAUGHT, TRUE))
+    {
+        //#if REVISION == 0
+        //       while ((categoryName[index] != CHAR_SPACE) && (index <= 13)) //potentially this is issue, need raise this
+        //#else
         while ((categoryName[index] != EOS) && (index <= 13)) //ok realized issue, above code is wrong, breaks line as soon as encounter space, replace with eos
-//#endif
+        //#endif
         {
             categoryStr[index] = categoryName[index];
             index++;
@@ -3144,15 +3232,86 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
     struct TextPrinterTemplate printerTemplate;
     u16 length;
     s32 xCenter;
+    u32 i;
+    u16 speciesArgument;
+    //bool8 UseBaseForm = FALSE;
+    //can use ternary operator or just a conditional assignment
+    //yeah prob better to do conditional assignment
+    //to pass off whether it'll check if you've caught the 
+    //base species or the form species will replace 
+    //use of sPokedexScreenData->dexSpecies
 
-    if (species > NATIONAL_SPECIES_COUNT)
-            species = GetFormSpeciesId(species, 0); //returns base form species, and num, w/o changing dexspecis
+    //if I can return the species argument from
+    //gFormChangeTablePointers that would be a good split
+    //for if the specie is a temp form or permanent form.
+    //as that is used for species that change forms in battle
+
+    //can't pull species since its a pointer table,
+    //instead need copy species constants in array,
+    //and compare against that
+    
+    //if (species > NATIONAL_SPECIES_COUNT)
+    //    species = GetFormSpeciesId(species, 0);
+
+    
+
+    
+    /*for (i = 0; i < NELEMS(gdexEntryFormSpecies); i++) //only the cat names I need change
+    {
+        if (species > NATIONAL_SPECIES_COUNT)
+        {
+            if (species == gdexEntryFormSpecies[i])
+            {
+                break;
+            }
+            
+        }
+        
+    }*/
+
+    /*if (species == gdexEntryFormSpecies[i])
+        speciesArgument = GetFormSpeciesId(species, 0);
+    else   
+        speciesArgument = sPokedexScreenData->dexSpecies;*/
+
+    //if specis is on list use the base form to decide if should display 
+    //put this in display form as well
+    //still need go over array values to clean up
+    /*for (i = 0; i < NELEMS(gdexEntryFormSpecies); i++) //only the cat names I need change
+    {
+        if (species > NATIONAL_SPECIES_COUNT)
+        {
+            if (species == gdexEntryFormSpecies[i])
+            {
+                UseBaseForm = TRUE;
+                break;
+            }
+            
+        }
+        
+    }
+    
+
+    //try sepaaret from use of i, in case some issue, well that fixed it suprisingly
+    if (UseBaseForm == TRUE)
+        speciesArgument = GetFormSpeciesId(species, 0);
+    else
+        speciesArgument = sPokedexScreenData->dexSpecies;*/
+
+    speciesArgument = DexScreen_FormFilter(species);
+
 
     species = SpeciesToNationalPokedexNum(species);
 
-    if (DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, FALSE))
+
+    
+    if (DexScreen_GetSetPokedexFlag(speciesArgument, FLAG_GET_CAUGHT, FALSE))
     {
-        printerTemplate.currentChar = gPokedexEntries[species].description;
+        if (species > NATIONAL_SPECIES_COUNT)
+            printerTemplate.currentChar = gFormdexEntries[species].description;
+        else
+            printerTemplate.currentChar = gPokedexEntries[species].description;
+
         printerTemplate.windowId = windowId;
         printerTemplate.fontId = FONT_NORMAL;
         printerTemplate.letterSpacing = 1;
@@ -3162,7 +3321,11 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
         printerTemplate.bgColor = 0;
         printerTemplate.shadowColor = 2;
 
-        length = GetStringWidth(FONT_NORMAL, gPokedexEntries[species].description, 0);
+        if (species > NATIONAL_SPECIES_COUNT)
+            length = GetStringWidth(FONT_NORMAL, gFormdexEntries[species].description, 0);
+        else
+            length = GetStringWidth(FONT_NORMAL, gPokedexEntries[species].description, 0);
+
         xCenter = x + (240 - length) / 2;
 
         if (xCenter > 0)
@@ -3179,6 +3342,35 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
     }
 }
 
+//turned into function -
+//if specis is on list use the base form to decide if should display 
+    //put this in display form as well
+    //still need go over array values to clean up
+u16 DexScreen_FormFilter(u16 species)
+{
+    u32 i;
+    bool8 UseBaseForm = FALSE;
+
+    for (i = 0; i < NELEMS(gdexEntryFormSpecies); i++)
+    {
+        if (species > NATIONAL_SPECIES_COUNT)
+        {
+            if (species == gdexEntryFormSpecies[i]) //remember put spiky pikachu castform unown etc. on list
+            {
+                UseBaseForm = TRUE;
+                break;
+            }
+            
+        }
+        
+    }
+
+    if (UseBaseForm)
+        return  GetFormSpeciesId(species, 0);
+    else
+        return  species;  //potentially change to just species
+
+}
 void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 {
     u16 i, j, unused, tileIdx;

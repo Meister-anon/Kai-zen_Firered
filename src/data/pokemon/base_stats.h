@@ -21089,7 +21089,7 @@ const struct BaseStats gBaseStats[] =
     //...just gonna make new ability for it that is combination of regrigerate and regenerator aka "Wetiko"
     //which is algonuin for wendigo i.e original word
 
-    [SPECIES_ORICORIO] =
+    [SPECIES_ORICORIO_BAILE] =
     { 
            //hp, atk, def, spd, spatk, spdef
          STATS(
@@ -26997,8 +26997,8 @@ const struct BaseStats gBaseStats[] =
         130
         ),
         .type1 = TYPE_WATER,
-        .type2 = TYPE_DARK,
-        .catchRate = 45,
+        .type2 = TYPE_DARK, //this is its base type but w dark changes unsure if should keep as is, 
+        .catchRate = 45,  //base gyarados may be better now w its type change?s
         .expYield = 224,
         //.evYield_Attack = 2,
         .genderRatio = PERCENT_FEMALE(50),
@@ -30106,7 +30106,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 112,
         //.evYield_Speed = 2,
         //.item2 = ITEM_LIGHT_BALL,
-        .genderRatio = PERCENT_FEMALE(50),
+        .genderRatio = MON_FEMALE,
         .eggCycles = 10,
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -30139,7 +30139,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 112,
         //.evYield_Speed = 2,
         //.item2 = ITEM_LIGHT_BALL,
-        .genderRatio = PERCENT_FEMALE(50),
+        .genderRatio = MON_FEMALE,
         .eggCycles = 10,
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -30172,7 +30172,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 112,
         //.evYield_Speed = 2,
         //.item2 = ITEM_LIGHT_BALL,
-        .genderRatio = PERCENT_FEMALE(50),
+        .genderRatio = MON_FEMALE,
         .eggCycles = 10,
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -30204,7 +30204,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 112,
         //.evYield_Speed = 2,
         //.item2 = ITEM_LIGHT_BALL,
-        .genderRatio = PERCENT_FEMALE(50),
+        .genderRatio = MON_FEMALE,
         .eggCycles = 10,
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -30236,7 +30236,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 112,
         //.evYield_Speed = 2,
         //.item2 = ITEM_LIGHT_BALL,
-        .genderRatio = PERCENT_FEMALE(50),
+        .genderRatio = MON_FEMALE,
         .eggCycles = 10,
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
@@ -30268,7 +30268,7 @@ const struct BaseStats gBaseStats[] =
         .expYield = 112,
         //.evYield_Speed = 2,
         //.item2 = ITEM_LIGHT_BALL,
-        .genderRatio = PERCENT_FEMALE(50),
+        .genderRatio = MON_FEMALE,
         .eggCycles = 10,
          .friendship = 15,
         .growthRate = GROWTH_MEDIUM_FAST,
