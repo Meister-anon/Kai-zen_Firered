@@ -2315,8 +2315,8 @@ const u8 gLatiasPokedexText[] = _(
     "if they sense enemies.");
 
 const u8 gLatiosPokedexText[] = _(
-    "Even in hiding, it can detect the\n"
-    "location of others and sense their emotions\n"
+    "Even in hiding, it can detect the location\n"
+    "of others and sense their emotions\n"
     "since it has telepathy. Its intelligence\n"
     "allows it to understand human languages.");
 
@@ -2911,8 +2911,8 @@ const u8 gMespritPokedexText[] = _(
 
 const u8 gAzelfPokedexText[] = _(
     "This Pokémon is said to have endowed\n"
-    "humans with the determination needed to do\n"
-    "things. It is thought that Uxie, Mesprit\n"
+    "humans with the determination needed to\n"
+    "thrive. It is thought that Uxie, Mesprit\n"
     "and Azelf all came from the same egg.");
 
 const u8 gDialgaPokedexText[] = _(

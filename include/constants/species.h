@@ -2455,18 +2455,29 @@
 #define NATIONAL_DEX_MAGEARNA_ORIGINAL_COLOR      NATIONAL_SPECIES_COUNT + 119
 
 // Kyurem
-// Kyurem
 #define NATIONAL_DEX_KYUREM_BLACK                 NATIONAL_SPECIES_COUNT + 120
 #define NATIONAL_DEX_KYUREM_WHITE                 NATIONAL_SPECIES_COUNT + 121
 
+//urshifu
+#define NATIONAL_DEX_URSHIFU_RAPID_STRIKE_STYLE   NATIONAL_SPECIES_COUNT + 122
+
+//Rotom
+#define NATIONAL_DEX_ROTOM_HEAT                   NATIONAL_SPECIES_COUNT + 123
+#define NATIONAL_DEX_ROTOM_WASH                   NATIONAL_SPECIES_COUNT + 124
+#define NATIONAL_DEX_ROTOM_FROST                  NATIONAL_SPECIES_COUNT + 125
+#define NATIONAL_DEX_ROTOM_FAN                    NATIONAL_SPECIES_COUNT + 126
+#define NATIONAL_DEX_ROTOM_MOW                    NATIONAL_SPECIES_COUNT + 127
+
 // Therian Forms
-#define NATIONAL_DEX_TORNADUS_THERIAN             NATIONAL_SPECIES_COUNT + 122
-#define NATIONAL_DEX_THUNDURUS_THERIAN            NATIONAL_SPECIES_COUNT + 123
-#define NATIONAL_DEX_LANDORUS_THERIAN             NATIONAL_SPECIES_COUNT + 124
-#define NATIONAL_DEX_ENAMORUS_THERIAN             NATIONAL_SPECIES_COUNT + 125
+#define NATIONAL_DEX_TORNADUS_THERIAN             NATIONAL_SPECIES_COUNT + 128
+#define NATIONAL_DEX_THUNDURUS_THERIAN            NATIONAL_SPECIES_COUNT + 129
+#define NATIONAL_DEX_LANDORUS_THERIAN             NATIONAL_SPECIES_COUNT + 130
+#define NATIONAL_DEX_ENAMORUS_THERIAN             NATIONAL_SPECIES_COUNT + 131
 
 //need add more species to list, like rotom forms
 //to display a unique dex entry species has to have nat dex page
+//(If I'm gonna be able to catch a mon, I need it to have a nat dex page to work
+//then also have a value in dex category, which I have fixed now)
 
 //#define NATIONAL_SPECIES_COUNT NATIONAL_DEX_CALYREX
 

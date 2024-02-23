@@ -17163,11 +17163,11 @@ static void atkF1_trysetcaughtmondexflags(void)
     u16 species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(&gEnemyParty[0], MON_DATA_PERSONALITY, NULL);
 
-    if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
+    if (GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT)) //if mon caught skip, 
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
-    else
+    else    //otherwise trigger set caught
     {
         HandleSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_SET_CAUGHT, personality);
         gBattlescriptCurrInstr += 5;
@@ -17701,12 +17701,13 @@ void BS_setstealthrock(void) { //check where rest of spikes handled
     }
 }
 
+//added back sound exclusion for more nuance
 bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) //sound bypass is dumb, guess now it works how I want
 {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE))
         return FALSE;
-    //else if (gBattleMoves[move].flags & FLAG_SOUND)
-      //  return FALSE;
+    else if (gBattleMoves[move].type == TYPE_SOUND)
+        return FALSE;
     else if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE)
         return FALSE;
     else if (GetBattlerAbility(battlerAtk) == ABILITY_INFILTRATOR)

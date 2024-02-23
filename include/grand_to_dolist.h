@@ -2231,6 +2231,8 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   //hmm well can do a check is mega since all mega have the mega flag
   in their base stats data
 
+  Fixed nat dex navigation issue
+
 
   //Important BIND still has freezing issue? happened when it locked into status move
 
@@ -2238,6 +2240,17 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   it instead defaults to base species dex entry, when done update functions to read new entries and category names
 
   -need to add new dexentries for pikaforms
+  rotom forms as well.
+  and values below SPECIES_MORPEKO_HANGRY in species.h
+  still working on form dex, need add national dex values
+  for forms that will be getting unique entries
+
+  =testing, broke oak lab scripts with changes for post game nat dex eliminations
+  review oak lab scripts see what I can do here - least I think its the nat dex script changes
+
+  -talked it through thought it through believe will leave forms as they are
+  -dont change to base form for dex, or revert mon on catch
+  -would be more accesible for randomizers etc. would just need to be particular about mon access
 
   NOTES - for handling cosplay pika
   Cosplay Pikachu can switch between costumes at any time by going to any Contest Hall in the Hoenn region and talking to the Pokémon Breeder in the green room. This Pokémon Breeder can also remove the costume.

@@ -2539,8 +2539,8 @@ s8 DexScreen_GetSetPokedexFlag(u16 nationalDexNo, u8 caseId, bool8 indexIsSpecie
         gSaveBlock2Ptr->pokedex.owned[index] |= mask;
         break;
     }
-    //return retVal;
-    return 1;   //dex test value  //other in event_data.c IsNationalPokedexEnabled function
+    return retVal;
+    //return 1;   //dex test value  //other in event_data.c IsNationalPokedexEnabled function
 } //for some reason navigation only works with my dex test breaks, without them everything gets fucked so EVEN MORE FUCKING WORK
 
 static u16 DexScreen_GetDexCount(u8 caseId, bool8 whichDex) //vsonic IMPORTANT, right now have more nat dex species values than I actually have array spots or dex entries

@@ -11549,13 +11549,15 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_CRAMORANT_GULPING,             SPECIES_CRAMORANT,            TRUE},
         {SPECIES_MORPEKO_HANGRY,                SPECIES_MORPEKO,              TRUE},
         {SPECIES_DARMANITAN_ZEN_MODE_GALARIAN,  SPECIES_DARMANITAN_GALARIAN,  TRUE},
-    };
+        };
 
     currSpecies = GetMonData(&party[monId], MON_DATA_SPECIES, NULL);
     for (i = 0; i < ARRAY_COUNT(species); i++)
     {
+        //curr species is form species
         if (currSpecies == species[i][0] && (!isSwitchingOut || species[i][2] == TRUE))
         {
+            //change species to base form
             SetMonData(&party[monId], MON_DATA_SPECIES, &species[i][1]);
             CalculateMonStats(&party[monId]);
             break;

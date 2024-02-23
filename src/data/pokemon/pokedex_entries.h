@@ -11083,7 +11083,7 @@ const struct FormdexEntries gFormdexEntries[] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "A tremendous influx of energy builds it up,\n"
+            "A tremendous influx of energy bolsters it,\n"
             "but when Mega Evolution ends, Heracross\n"
             "is bothered by terrible soreness in its\n"
             "muscles."),
@@ -11131,8 +11131,8 @@ const struct FormdexEntries gFormdexEntries[] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "When it Mega Evolves, the strength that it\n"
-            "needs to act in the water is increased.\n"
+            "When it Mega Evolves, the strength that\n"
+            "it needs to act in the water is increased.\n"
             "It can use its tenacious power\n"
             "both on land and in the water."),
     },
@@ -11142,8 +11142,8 @@ const struct FormdexEntries gFormdexEntries[] =
         .description = COMPOUND_STRING(
             "By opening its heart, Mega Gardevoir\n"
             "becomes able to use tremendous psychic\n"
-            "power. The red plate in its chest is said to\n"
-            "be a physical manifestation of its heart."),
+            "power. The red plate in its chest is said\n"
+            "to be a physical manifestation of its heart."),
     },
 
     [NATIONAL_DEX_SABLEYE_MEGA] =
@@ -11190,27 +11190,28 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "Too much electricity has built up in its\n"
-            "body, irritating Manectric. Its explosive\n"
-            "speed is equal to that of a lightning bolt."),
+            "body, irritating Manectric.\n"
+            "Its explosive speed is equal to that\n"
+            "of a lightning bolt."),
     },
 
     [NATIONAL_DEX_SHARPEDO_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "The yellow patterns it bears are old scars.\n"
-            "The energy from Mega Evolution runs\n"
-            "through them, causing it sharp pain and\n"
-            "suffering."),
+            "The yellow patterns it bears are\n"
+            "old scars. The energy from Mega\n"
+            "Evolution runs through them, \n"
+            "causing it sharp pain and suffering."),
     },
     [NATIONAL_DEX_CAMERUPT_MEGA] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "The humps on its back have transformed\n"
-            "into one large and very active volcano. It\n"
-            "has a deep hatred of water or any moisture\n"
-            "and has an explosive personality."),
+            "into one large and very active volcano.\n"
+            "It has a deep hatred of water or any\n"
+            "moisture and has an explosive personality."),
     },
 
     [NATIONAL_DEX_ALTARIA_MEGA] =
@@ -11255,9 +11256,9 @@ const struct FormdexEntries gFormdexEntries[] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "Mega Evolution fuels its brutality, and it\n"
-            "may even turn on the Trainer who raised it.\n"
-            "It's been dubbed the blood-soaked.\n"
+            "Mega Evolution fuels its brutality, and\n"
+            "it may even turn on its Trainer.\n"
+            "It's been dubbed the blood-soaked\n"
             "crescent."),
     },
 
@@ -11294,9 +11295,8 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "Mega Evolution awakens its combative\n"
-            "instincts. It has shed any fur that got in\n"
-            "the way of its attacks.\n"
-            "crescent."),
+            "instincts. It has shed any fur that\n"
+            "got in the way of its attacks."),
     },
     [NATIONAL_DEX_GARCHOMP_MEGA] =
     {
@@ -11381,8 +11381,8 @@ const struct FormdexEntries gFormdexEntries[] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "When Groudon howled, the earth swelled and\n"
-            "the land grew wide. The sun blazed atop\n"
+            "When Groudon howled, the earth swelled\n"
+            "and the land grew wide. The sun blazed\n"
             "and all the world around the creature\n"
             "was enveloped in incandescent heat."),
     },
@@ -11730,9 +11730,9 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "Its restlessness has it constantly moving\n"
-            "in zigzags. It will purposely run into other\n"
-            "Pokémon to start fights. It's thought to\n"
-            "be the oldest form of Zigzagoon."),
+            "in zigzags. It will purposely run into\n"
+            "other Pokémon to start fights. It's thought\n"
+            "to be the oldest form of Zigzagoon."),
     },
 
     [NATIONAL_DEX_LINOONE_GALARIAN] =
@@ -11928,8 +11928,8 @@ const struct FormdexEntries gFormdexEntries[] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "It loathes solitude and is\n"
-            "extremely clingy-it will fume and run riot if\n"
+            "It loathes solitude and is extremely\n"
+            "clingy it will fume and run riot if\n"
             "those dearest to it ever leave its\n"
             "side."),
     },
@@ -12028,8 +12028,8 @@ const struct FormdexEntries gFormdexEntries[] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "This is its form while it is\n"
-            "devouring the light of Solgaleo. It pounces\n"
+            "This is its form while it is devouring\n"
+            "the light of Solgaleo. It pounces\n"
             "on foes and then slashes them with\n"
             "the claws on its four limbs and back."),
     },
@@ -12064,14 +12064,64 @@ const struct FormdexEntries gFormdexEntries[] =
             "is the actual life-form."),
     },
 
+    [NATIONAL_DEX_ROTOM_HEAT] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "If the convection microwave oven is not\n"
+            "working properly, then the Rotom inhabiting\n"
+            "it will become lethargic. It will gleefully\n"
+            "burn your favorite outfit in mischief."),
+    },
+
+    [NATIONAL_DEX_ROTOM_WASH] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "It enjoys coming up with water-based\n"
+            "pranks. The model of washing machine that\n"
+            "Rotom can inspirit has been discontinued,\n"
+            "so they are now traded at high prices."),
+    },
+
+    [NATIONAL_DEX_ROTOM_FROST] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "In this form, Rotom likes to play freezing\n"
+            "cold pranks. You may find it's turned the\n"
+            "bath you just filled to solid ice!\n"
+            "It battles by spewing cold air."),
+    },
+
+    [NATIONAL_DEX_ROTOM_FAN] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "The first appliance developed that Rotom\n"
+            "coud inspirit was the electric fan. It uses\n"
+            "its power over wind in its pranks, happily\n"
+            "blowing away important documents it finds."),
+    },
+
+    [NATIONAL_DEX_ROTOM_MOW] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "The lawn mower is an appliance that led to\n"
+            "the development of the Rotom Dex. It will\n"
+            "mow down grass and flowers, then swagger\n"
+            "around with pride at its accomplishments."),
+    },
+
     [NATIONAL_DEX_KYUREM_WHITE] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "It has foreseen a world of truth will arrive\n"
-            "for people and Pokémon. It strives to protect\n"
-            "that future. Kyurem can now use the power\n"
-            "of both fire and ice."),
+            "It has foreseen a world of truth will\n"
+            "arrive for people and Pokémon. It strives\n"
+            "to protect that future. Kyurem can\n"
+            "now use the power of both fire and ice."),
     },
 
     [NATIONAL_DEX_KYUREM_BLACK] =
@@ -12080,8 +12130,18 @@ const struct FormdexEntries gFormdexEntries[] =
         .description = COMPOUND_STRING(
             "It's said this Pokémon battles in order\n"
             "to create an ideal world for people\n"
-            "and Pokémon. Kyurem can now use the power\n"
-            "of both electricity and ice."),
+            "and Pokémon. Kyurem can now use\n"
+            "the power of both electricity and ice."),
+    },
+
+    [NATIONAL_DEX_URSHIFU_RAPID_STRIKE_STYLE] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This form of Urshifu is a strong\n"
+            "believer in defeating foes by raining\n"
+            "many blows down on them. Its\n"
+            "strikes are nonstop, flowing like a river."),
     },
 
     [NATIONAL_DEX_TORNADUS_THERIAN] =

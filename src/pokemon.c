@@ -1607,17 +1607,13 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     [SPECIES_SHELLOS_EAST_SEA - 1] = NATIONAL_DEX_SHELLOS,
     // Gastrodon
     [SPECIES_GASTRODON_EAST_SEA - 1] = NATIONAL_DEX_GASTRODON,
-    // Rotom - need add these
-    /*SPECIES_TO_NATIONAL(ROTOM_HEAT),
+    // Rotom 
+    SPECIES_TO_NATIONAL(ROTOM_HEAT),
     SPECIES_TO_NATIONAL(ROTOM_WASH),
     SPECIES_TO_NATIONAL(ROTOM_FROST),
     SPECIES_TO_NATIONAL(ROTOM_FAN),
-    SPECIES_TO_NATIONAL(ROTOM_MOW),*/
-    [SPECIES_ROTOM_HEAT - 1] = NATIONAL_DEX_ROTOM,
-    [SPECIES_ROTOM_WASH - 1] = NATIONAL_DEX_ROTOM,
-    [SPECIES_ROTOM_FROST - 1] = NATIONAL_DEX_ROTOM,
-    [SPECIES_ROTOM_FAN - 1] = NATIONAL_DEX_ROTOM,
-    [SPECIES_ROTOM_MOW - 1] = NATIONAL_DEX_ROTOM,
+    SPECIES_TO_NATIONAL(ROTOM_MOW),
+
     // Giratina
     [SPECIES_GIRATINA_ORIGIN - 1] = NATIONAL_DEX_GIRATINA,
     // Shaymin
@@ -1816,7 +1812,7 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     // Eternatus
     [SPECIES_ETERNATUS_ETERNAMAX - 1] = NATIONAL_DEX_ETERNATUS,
     // Urshifu
-    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE - 1] = NATIONAL_DEX_URSHIFU,
+    SPECIES_TO_NATIONAL(URSHIFU_RAPID_STRIKE_STYLE),
     // Zarude
     [SPECIES_ZARUDE_DADA - 1] = NATIONAL_DEX_ZARUDE,
     // Calyrex
@@ -8629,6 +8625,18 @@ void CreateEventLegalEnemyMon(void)
     }
 }
 
+//this is used for catching seeing mon,
+//use this for forms plan change filter for seen not caught
+//thre are some forms I can say if I saw it I should treat it as also seing the base form (I think)
+//and I think other mon I MIGHT, want to set it as if I caught the base form I caught the alt form, like megas?
+//like rotom forms for example, seeing that shuold count as seeing rotom
+//not fully sure on what I need, or how to handle this,
+//If i catch mon in its form state I can't make it revert *
+//normally wouldn't catch mega form but someone may want to,
+//but say i catch rotom form it stays in form, and I can't change it without item
+//there are ways to do a catch revert, but idk if that's what I want
+//I know I want gender forms, which would be handled differently,
+//I want rotom forms pika forms, and then there's the regional forms
 void HandleSetPokedexFlag(u16 nationalNum, u8 caseId, u32 personality)
 {
     u8 getFlagCaseId = (caseId == FLAG_SET_SEEN) ? FLAG_GET_SEEN : FLAG_GET_CAUGHT;

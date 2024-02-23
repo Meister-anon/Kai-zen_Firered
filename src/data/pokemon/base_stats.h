@@ -11667,7 +11667,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
+    }, //to differentiate give more sound moves
 
     [SPECIES_SPIRITOMB] =
     { 
@@ -20821,7 +20821,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
+    },//to differentiate, based on dex give bullet seed and some sound moves
 
     [SPECIES_TOUCANNON] =
     { 
@@ -20854,7 +20854,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
+    }, //to differentiate based on dex give bullet seed, rock smash think flamethrower as well & sound move
 
     [SPECIES_YUNGOOS] =
     { 
