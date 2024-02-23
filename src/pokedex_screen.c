@@ -152,8 +152,8 @@ static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId);
 static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 
 //new stuff
-static s32 DexScreen_ProcessInput(u8 listTaskId); //replace list menu input so can adjust separately
-static void DexScreen_LoadIndex(u32 count, u8 direction, int selectedIndex, s8 scroll_increment);//load list indexs on scroll after first open
+static s32 DexScreen_ProcessInput(u8 listTaskId); //replace list menu input so can adjust separately for in dex list
+static void DexScreen_LoadIndex(u32 count, u8 direction, int selectedIndex, s8 scroll_increment);//load list indexs on scroll
 //added scroll increment to attempt help keep placement - works done
 static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex); //moved new list creation logic here, still to be called from DexScreen_CountMonsInOrderedList
 
@@ -1065,7 +1065,7 @@ static void Task_PokedexScreen(u8 taskId) //appears be top menu
     switch (sPokedexScreenData->state)
     {
     case 0:
-        sPokedexScreenData->CurrentIndexValue = 0; //works, also added on clear
+        sPokedexScreenData->CurrentIndexValue = 0; //works, also added on clear - feels like this isn't doing anythingbu Ihvae the value used so keeping..
         sPokedexScreenData->unlockedCategories = 0;
         for (i = 0; i < 9; i++)
             sPokedexScreenData->unlockedCategories |= (DexScreen_IsCategoryUnlocked(i) << i);
@@ -1154,7 +1154,7 @@ static void Task_PokedexScreen(u8 taskId) //appears be top menu
                 sPokedexScreenData->dexOrderId = sPokedexScreenData->modeSelectInput - DEX_CATEGORY_COUNT; //selects mode i.e which list generate based on selection
                 sPokedexScreenData->characteristicOrderMenuItemsAbove = sPokedexScreenData->characteristicOrderMenuCursorPos = 0;
                 BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
-                sPokedexScreenData->state = 9; //...welp it was as simple as changing this  to 9 and now goes to dex list page not cat page
+                sPokedexScreenData->state = 9; //...welp it was as simple as changing this  to 9 and now goes to dex list page not cat page at 7
                 break;
             }
             break;
@@ -1565,7 +1565,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx) //this function returns
     selectedIndex = *cursorPos_p + *itemsAbove_p;
 
     return DexScreen_CreateList_ReturnCount(orderIdx,selectedIndex); //should hopefully work the same, just look better - works
-
+    
     //can put everythin gbelow this in a funtion, use like process input, to assign ret, have it do funtion logic and do return value u16 ret
     //need take argument orderIdx, and selectedIndex, put most arguments inside function, leave only ret selectedIndex & itemsabove and cursorPos in this function
 
@@ -1573,7 +1573,6 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx) //this function returns
 }
 
 //vsonic IMPORTANT
-//need put those cursor changes here as well for them to track, nvm, since got working no need for new cursors
 static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate * template, u8 order) //belive this is actual dex list build, i.e what builds it at once
 {
     switch (order)
@@ -3965,6 +3964,13 @@ void DexScreen_InputHandler_StartToCry(void)
         PlayCry_NormalNoDucking(sPokedexScreenData->dexSpecies, 0, CRY_VOLUME_RS, CRY_PRIORITY_NORMAL);
 }
 
+//for forms that are counted as same mon, would want form check here as well,
+//so they would display as caught or seen - may have already done that? idk
+//checked seems in battle only sets seen from enemy side, so player changing into form for first time
+//wouldn't set seenm, hmm but it does do so for evolution scene,
+//so if I do something similar for form change, it'd work for my needs
+//would just need a check to make sure its not already set i.e use get_seen/getcaught  if not 
+//then set..VSONIC IMPORTANT
 u8 DexScreen_RegisterMonToPokedex(u16 species) //now has nat dex, need workaround register mon setup, for cat page, half working dex loads correct not cat page
 {
     DexScreen_GetSetPokedexFlag(species, FLAG_SET_SEEN, TRUE);
@@ -4504,7 +4510,6 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
     //leaving unset for now`, for plans to setup nat dex from start
 
     entryPos = selectedIndex;
-    j = 0; //remove later
 
     //for non numericals, use num seen and num caught, if 0, loop max shown and just make full blank page
     //if greater than 0, less than or equal to max shown, display that number no blanks
@@ -5299,7 +5304,7 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
                                     sPokedexScreenData->listItems[j].label = gText_5Dashes;
                                 }
                                 sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
-                                ret++;
+                                //ret++;
 
                     }
                 }
@@ -5320,7 +5325,7 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
                                     sPokedexScreenData->listItems[j].label = gText_5Dashes;
                                 }
                                 sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
-                                ret++;
+                                //ret++;
 
                             if (j > entryPos)
                                 i++;
@@ -5343,23 +5348,24 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
                                     sPokedexScreenData->listItems[j].label = gText_5Dashes;
                                 }
                                 sPokedexScreenData->listItems[j].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(j + 1);
-                                ret++;
+                                //ret++;
 
                             if (j > entryPos)
                                 i++;
 
                     }
                 }
-                else
+                /*else
                 {
-                    sPokedexScreenData->listItems[i].label = gText_5Dashes;
-                    sPokedexScreenData->listItems[i].index = 0;
+                   // sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                    //sPokedexScreenData->listItems[i].index = 0;
                     //sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(i + 1); //fixed
                     //ok didn't need that line, was just an issue with my scroll function now fixed
                 
-                }
+                }*///Ican't fucking believe it but somehow THIS ELSE was the problem...
                 
-                ret = i;
+                ret = NATIONAL_SPECIES_COUNT;
+                
 
         }
         break; //changing  index affects, species number displayed and mon type displayed, not the nmae
