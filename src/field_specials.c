@@ -1804,15 +1804,32 @@ u16 GetFinalEvo(u16 species) //well least it works now
 {
     const struct Evolution *evolutions = GetSpeciesEvolutions(species);
 
-    u16 targetSpecies = evolutions[0].targetSpecies;
+    //const struct Evolution *targetSpecies = (const struct Evolution *)evolutions[0].targetSpecies;
+    //if (SanitizeSpeciesId(evolutions[i].targetSpecies))
+    u16 targetSpecies = (evolutions[0].targetSpecies);
 
     for (; targetSpecies != SPECIES_NONE; targetSpecies = evolutions[0].targetSpecies)
+    {
+        species = targetSpecies;        
+        evolutions = GetSpeciesEvolutions(species); //this was issue needed recallc this assignment here w new species value to work
+    }
+
+    return species; //think should loop first evo method encountered for a species, and go until it can't find an evolution, then stop and return species
+}
+
+/*
+u16 GetFinalEvo(u16 species) //well least it works now
+{
+
+    u16 targetSpecies = gEvolutionTable[species][0].targetSpecies;
+
+    for (; targetSpecies != SPECIES_NONE; targetSpecies = gEvolutionTable[species][0].targetSpecies)
     {
         species = targetSpecies;        
     }
 
     return species; //think should loop first evo method encountered for a species, and go until it can't find an evolution, then stop and return species
-}
+}*/
 
 //make into field command,
 //if this function does not return/equal species_none make setmonspecies with this functions value as species
@@ -1848,6 +1865,7 @@ u16 De_Evolve(u16 targetSpecies)
         return SPECIES_NONE;
 }
 
+//keep eye on this think curr emerald expansion has better versions I can use to fill this uot
 u16 Init_movelearn_options(u16 targetSpecies)
 {
     u16 preEvos;
