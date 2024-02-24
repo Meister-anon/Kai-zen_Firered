@@ -167,6 +167,8 @@ static const struct SpriteTemplate sSpriteTemplate_ItemIcon = {
     SpriteCallbackDummy
 };
 
+//no idea what this is used for seems to be not used?
+//least far as the tm stuff
 static const void *const sItemIconGfxPtrs[][2] = {
     [ITEM_NONE] = {gFile_graphics_items_icons_question_mark_sheet, gFile_graphics_items_icon_palettes_question_mark_palette},
     // Pokeballs

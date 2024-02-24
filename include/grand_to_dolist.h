@@ -2248,6 +2248,10 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   =testing, broke oak lab scripts with changes for post game nat dex eliminations
   review oak lab scripts see what I can do here - least I think its the nat dex script changes
 
+  wasn't nat dex script changes, issue was fieldspecials,  it was improper setup/use of my evolution struct changes
+  in the starter filter functions  specifically GetFinalEvo need rewrite it better
+  -seems fixed
+
   -talked it through thought it through believe will leave forms as they are
   -dont change to base form for dex, or revert mon on catch
   -would be more accesible for randomizers etc. would just need to be particular about mon access

@@ -624,9 +624,10 @@ static u16 GetAnimTypeByItemId(u16 itemId)
     return 0;
 }
 
+//vsonic
 static u8 GetClosenessFromFriendship(u16 friendship)
 {
-    if (friendship <= 100)
+    if (friendship <= 65)
         return 0;
     else if (friendship <= 150)
         return 1;
