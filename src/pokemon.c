@@ -1803,8 +1803,8 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     [SPECIES_EISCUE_NOICE_FACE - 1] = NATIONAL_DEX_EISCUE,
     // Indeedee
     [SPECIES_INDEEDEE_FEMALE - 1] = NATIONAL_DEX_INDEEDEE,
-    // Morpeko
-    [SPECIES_MORPEKO_HANGRY - 1] = NATIONAL_DEX_MORPEKO,
+    // Morepeko
+    SPECIES_TO_NATIONAL(MORPEKO_HANGRY),
     // Zacian
     [SPECIES_ZACIAN_CROWNED_SWORD - 1] = NATIONAL_DEX_ZACIAN,
     // Zamazenta
@@ -1814,7 +1814,7 @@ static const u16 sSpeciesToNationalPokedexNum[] =
     // Urshifu
     SPECIES_TO_NATIONAL(URSHIFU_RAPID_STRIKE_STYLE),
     // Zarude
-    [SPECIES_ZARUDE_DADA - 1] = NATIONAL_DEX_ZARUDE,
+    SPECIES_TO_NATIONAL(ZARUDE_DADA), //ZARUDE_DADA
     // Calyrex
     [SPECIES_CALYREX_ICE_RIDER - 1] = NATIONAL_DEX_CALYREX,
     [SPECIES_CALYREX_SHADOW_RIDER - 1] = NATIONAL_DEX_CALYREX,
@@ -7140,8 +7140,8 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
 
         //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++) replace w this later, had to use evos_per_mon to work w evo table
-        for (i = 0; evolutions[i].method != NUM_EVOS_CAP; i++) //may need change, think this is looping based on previous num evolutions this is 5 options
-            //which was old evos per mon I may need change to 16   yup that is the case
+        for (i = 0; /*evolutions[i].method*/ i != NUM_EVOS_CAP; i++) //may need change, think this is looping based on previous num evolutions this is 5 options
+            //which was old evos per mon I may need change to 16   yup that is the case, think I actually need make this loop on i, not method
         {
             if (SanitizeSpeciesId(evolutions[i].targetSpecies) == SPECIES_NONE)
                 continue;
@@ -7407,7 +7407,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         break;
     case EVO_MODE_TRADE:
         //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
-        for (i = 0; evolutions[i].method != NUM_EVOS_CAP; i++)
+        for (i = 0; i != NUM_EVOS_CAP; i++)
         {
             switch (evolutions[i].method)
             {
@@ -7432,7 +7432,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
     case EVO_MODE_ITEM_USE:
     case EVO_MODE_ITEM_CHECK:
         //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
-        for (i = 0; evolutions[i].method != NUM_EVOS_CAP; i++)
+        for (i = 0; i != NUM_EVOS_CAP; i++)
         {
             if (evolutions[i].method == EVO_ITEM
              && evolutions[i].param == evolutionItem)
