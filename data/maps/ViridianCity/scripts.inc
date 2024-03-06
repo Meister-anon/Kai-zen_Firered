@@ -238,7 +238,10 @@ ViridianCity_EventScript_TutorialTriggerRight:: @ 8165B2E
 	end
 
 ViridianCity_EventScript_DoTutorialBattle:: @ 8165B4C
-	msgbox ViridianCity_Text_ShowYouHowToCatchMons
+	msgbox ViridianCity_Text_ShowYouHowToCatchMons, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq ViridianCity_EventScript_SkipTutorialBattle
+	msgbox ViridianCity_Text_BetterShowYou
 	closemessage
 	goto_if_questlog EventScript_ReleaseEnd
 	special QuestLog_CutRecording
@@ -248,6 +251,15 @@ ViridianCity_EventScript_DoTutorialBattle:: @ 8165B4C
 	faceplayer
 	msgbox ViridianCity_Text_ThatWasEducationalTakeThis
 	setvar VAR_MAP_SCENE_VIRIDIAN_CITY_OLD_MAN, 2
+	giveitem ITEM_TEACHY_TV
+	msgbox ViridianCity_Text_WatchThatToLearnBasics
+	return
+
+ViridianCity_EventScript_SkipTutorialBattle::
+	goto_if_questlog EventScript_ReleaseEnd
+	special QuestLog_CutRecording
+	setvar VAR_MAP_SCENE_VIRIDIAN_CITY_OLD_MAN, 2
+	msgbox ViridianCity_Text_TakeTeachTV
 	giveitem ITEM_TEACHY_TV
 	msgbox ViridianCity_Text_WatchThatToLearnBasics
 	return

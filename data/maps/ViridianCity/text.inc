@@ -54,7 +54,10 @@ ViridianCity_Text_ShowYouHowToCatchMons:: @ 817DD4E
     .string "the POKéDEX automatically updates\l"
     .string "its data.\p"
     .string "…You don't know how to catch\n"
-    .string "a POKéMON?\p"
+    .string "a POKéMON do you?$"
+    
+@put after yes no, if select no
+ViridianCity_Text_BetterShowYou:: @ 817DD4E 
     .string "I suppose I had better show you\n"
     .string "then!$"
 
@@ -62,6 +65,10 @@ ViridianCity_Text_ThatWasEducationalTakeThis:: @ 817DE9B
     .string "There! Now tell me, that was\n"
     .string "educational, was it not?\p"
     .string "And here, take this, too.$"
+
+ViridianCity_Text_TakeTeachTV::
+    .string "Oh! Well here, take this\n"
+    .string "just in case.$"
 
 ViridianCity_Text_WatchThatToLearnBasics:: @ 817DEEB
     .string "If there's something you don't\n"

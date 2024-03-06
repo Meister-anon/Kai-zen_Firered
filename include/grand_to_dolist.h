@@ -2273,12 +2273,14 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -sigh found other issue, moves that  set poisoning status seem to not work well,/correclty
   -when used to reapply poison, the text displays but the toxic damage isn't right. rn using poison gas move to poison
 
-  more work on starter filter, found issue with resist mon and immune mon.
+  more work needed on starter filter, found issue with resist mon and immune mon.
   player got azurill, rival got grookey,  
   -rival grass resists my water, but my fairy is immune to their grass, giving me the advantage, so can't have that.
   meanig I need to further revise the filter function
+  -its ok for them to be immune to me, but I can't be immune to them
 
-  -DON'T FORGET, need put back yes/no box for teach tv script
+  -DON'T FORGET, need put back yes/no box for teach tv script, so can avoid it, still have him give teach tv idk
+  -done, not perfect but you can A press to skip through it and skip battle
 
   NOTES - for handling cosplay pika - can encouter forms, but then w item/npc can change costume to switch forms
   Cosplay Pikachu can switch between costumes at any time by going to any Contest Hall in the Hoenn region and talking to the Pokémon Breeder in the green room. 
