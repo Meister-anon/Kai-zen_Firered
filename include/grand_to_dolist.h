@@ -2252,12 +2252,37 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   in the starter filter functions  specifically GetFinalEvo need rewrite it better
   -seems fixed
 
+  -still going through form dex make sure everything fits -
+
   -talked it through thought it through believe will leave forms as they are
   -dont change to base form for dex, or revert mon on catch
   -would be more accesible for randomizers etc. would just need to be particular about mon access
 
-  NOTES - for handling cosplay pika
-  Cosplay Pikachu can switch between costumes at any time by going to any Contest Hall in the Hoenn region and talking to the Pokémon Breeder in the green room. This Pokémon Breeder can also remove the costume.
+  -discovered issue with evo, again sigh, for some reason all mon being treated as eevee, when in veridian forest
+  everyone that levels up evolves into leafeon.  -ok discovered its not everyone... 
+  -hypothesizing its every mon below eevee species, some type of fall through?
+  -fixed it, was an overflow, isue was I was using evolution method doesn't equal cap incrment i, rather than using i doesn't equal cap increment i.
+  with that it would increment i infinitely going passed the limit into other species ranges etc.
+
+  ok NOT fixed,  riolu somehow evolved into mankey
+  -ok but that only happens when I build from base stats, not evo table?
+
+  fixed, it was issue with base stats evo setup, my condition wasn't right for filterin the evo constant something with how i moved.
+  it was the for loop condition
+
+  -sigh found other issue, moves that  set poisoning status seem to not work well,/correclty
+  -when used to reapply poison, the text displays but the toxic damage isn't right. rn using poison gas move to poison
+
+  more work on starter filter, found issue with resist mon and immune mon.
+  player got azurill, rival got grookey,  
+  -rival grass resists my water, but my fairy is immune to their grass, giving me the advantage, so can't have that.
+  meanig I need to further revise the filter function
+
+  -DON'T FORGET, need put back yes/no box for teach tv script
+
+  NOTES - for handling cosplay pika - can encouter forms, but then w item/npc can change costume to switch forms
+  Cosplay Pikachu can switch between costumes at any time by going to any Contest Hall in the Hoenn region and talking to the Pokémon Breeder in the green room. 
+  This Pokémon Breeder can also remove the costume.
 
   Upon removing a costume, Cosplay Pikachu will forget the special move associated
   with the previous costume. Upon putting on a new costume, 
@@ -3585,6 +3610,7 @@ that way you don't need to keep flying aruond to different places looking for th
  //function name "should reroll/reset rival starter"
 
  put in another function, if that is true, reset and do random again think do for looop with if should reset is true
+ -did this appears to work
 
  
  fixed intro trainer select text
@@ -3890,9 +3916,9 @@ goto ITEM_ICON_SETTING //item_menu_icons.c
 * woul be in set move effect, rathr than setting status in that case it would just remove the opposing status
 * plan to put in CanBeStatused functions already done for CanBePoisoned)
 * 
-* including my custom fairy status spirit lock  (which should be mix of para & burn)
-* theres 7 effects but with exclusivity only  5 would be  active at once
-* slp para burn psn/toxic & sprt   
+* including my custom fairy status spirit lock  (which should be mix of para & burn) - change to special drop, or make paralysis like lower odds, 
+* theres 7 effects but with exclusivity only  5 would be  active at once  - potentially change name to spellbound? - attempt use existing EE move sprites for status anim
+* slp para burn psn/toxic & sprt                        --thinking some kind of swirl effct that rises up?
 * thats still a bit much so i plan to link sleep & spirit lock
 * like freeze &  burn are linked.  as sp lk is meant to be a mental impairment
 * attempting to put to sleep makes sense as a curative

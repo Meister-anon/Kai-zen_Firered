@@ -7139,9 +7139,10 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         level = GetMonData(mon, MON_DATA_LEVEL, 0);
         friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, 0);
 
-        //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++) replace w this later, had to use evos_per_mon to work w evo table
-        for (i = 0; /*evolutions[i].method*/ i != NUM_EVOS_CAP; i++) //may need change, think this is looping based on previous num evolutions this is 5 options
+        //for (i = 0; i < EVOS_PER_MON; i++) replace w this later, had to use evos_per_mon to work w evo table
+        for (i = 0; i != NUM_EVOS_CAP && evolutions[i].method != EVOLUTIONS_END; i++) //may need change, think this is looping based on previous num evolutions this is 5 options
             //which was old evos per mon I may need change to 16   yup that is the case, think I actually need make this loop on i, not method
+            //half write, needed both conditions,  as evolutions was specifically checking the method, not the i value
         {
             if (SanitizeSpeciesId(evolutions[i].targetSpecies) == SPECIES_NONE)
                 continue;
@@ -7407,7 +7408,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         break;
     case EVO_MODE_TRADE:
         //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
-        for (i = 0; i != NUM_EVOS_CAP; i++)
+        for (i = 0; i != NUM_EVOS_CAP && evolutions[i].method != EVOLUTIONS_END; i++)
         {
             switch (evolutions[i].method)
             {
@@ -7432,7 +7433,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
     case EVO_MODE_ITEM_USE:
     case EVO_MODE_ITEM_CHECK:
         //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
-        for (i = 0; i != NUM_EVOS_CAP; i++)
+        for (i = 0; i != NUM_EVOS_CAP && evolutions[i].method != EVOLUTIONS_END; i++)
         {
             if (evolutions[i].method == EVO_ITEM
              && evolutions[i].param == evolutionItem)

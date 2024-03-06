@@ -5150,7 +5150,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
+    }, //what fire moves am I giving this lol (speaking for blaze) oh I gave it ember ok
 
     [SPECIES_SUNFLORA] =
     { 
@@ -5175,7 +5175,7 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    },//made fire match grand colloseum changes
+    },//made fire match grand colloseum changes - give the grass move that burns nettle whip
 
     [SPECIES_YANMA] =
     { 
@@ -11818,7 +11818,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sRioluLevelUpLearnset,
         .tmhmLearnset = sRioluTMHMLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, 0, 0,  SPECIES_LUCARIO}),//NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_FRIENDSHIP_DAY, 0, 0, SPECIES_LUCARIO}),//NULL, //Should hopefully blank these for now without issue
     },
 
     [SPECIES_LUCARIO] =
