@@ -11046,9 +11046,9 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "Despite its diminished size, its mental\n"
-            "power has grown phenomenally. With a mere\n"
-            "thought, it can smash a skyscraper to\n"
-            "smithereens."),
+            "power has grown phenomenally.\n"
+            "With a mere thought, it can smash\n"
+            "a skyscraper to smithereens."),
     },
 
     [NATIONAL_DEX_AMPHAROS_MEGA] =
@@ -11141,9 +11141,9 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "By opening its heart, Mega Gardevoir\n"
-            "becomes able to use tremendous psychic\n"
-            "power. The red plate in its chest is said\n"
-            "to be a physical manifestation of its heart."),
+            "is able to use tremendous psychic power.\n"
+            "The red plate in its chest is said to be\n"
+            "a physical manifestation of its heart."),
     },
 
     [NATIONAL_DEX_SABLEYE_MEGA] =
@@ -11180,8 +11180,8 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "It uses its amped-up willpower to create\n"
-            "additional arms for itself. The more it has\n"
-            "trained its spirit, the more realistic and\n"
+            "additional arms for itself. The more it\n"
+            "trains its spirit, the more realistic and\n"
             "dexterous these self-created arms become."),
     },
 
@@ -11315,7 +11315,7 @@ const struct FormdexEntries gFormdexEntries[] =
             "It readies itself to face its enemies by\n"
             "focusing its mental energies. Its fighting\n"
             "style can be summed up in a single word:\n"
-            "heartless."),
+            "Merciless."),
     },
     [NATIONAL_DEX_ABOMASNOW_MEGA] =
     {
@@ -11344,7 +11344,7 @@ const struct FormdexEntries gFormdexEntries[] =
             "Mega Audino emits a soothing pulse from\n"
             "its body that reduces hostility in others.\n"
             "Anything that comes into contact with its\n"
-            "second feelers will fall into a deep sleep."),
+            "second feelers will fall into deep sleep."),
     },
 
     [NATIONAL_DEX_DIANCIE_MEGA] =
@@ -11538,9 +11538,9 @@ const struct FormdexEntries gFormdexEntries[] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "There are a hundred or so of them living\n"
+            "There are a hundred or so Grimer living\n"
             "in Alola's waste-disposal site. They're all\n"
-            "hard workers who eat a lot of trash. Grimer\n"
+            "hard workers who eat a lot of trash. They\n"
             "seems to relish any and all kinds of trash."),
     },
 
@@ -11549,7 +11549,7 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "While it's unexpectedly quiet and friendly,\n"
-            "if it's not fed any trash for a while,,\n"
+            "if it's not fed any trash for a while,\n"
             "it will smash its Trainer's furnishings,\n"
             "and eat up the fragments."),
     },
@@ -11600,8 +11600,8 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "Living with a savage, seafaring people has\n"
-            "hardened its body so much that parts of it\n"
-            "turned to iron. Darker coins are harder\n"
+            "hardened its body so much that parts of\n"
+            "it turned to iron. Darker coins are harder\n"
             "and garner more respect among Meowth."),
     },
 
@@ -11632,17 +11632,17 @@ const struct FormdexEntries gFormdexEntries[] =
             "Although it is normally zoned out, its\n"
             "expression abruptly sharpens on occasion.\n"
             "The cause seems to lie in Slowpoke's diet,\n"
-            "which also give their tails a spicy flavor."),
+            "which give their tails a spicy flavor."),
     },
 
     [NATIONAL_DEX_SLOWBRO_GALARIAN] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "A Shellder bite set off a chemical reaction\n"
-            "with the spices inside Slowbro's body,\n"
-            "causing Slowbro to become a\n"
-            "Poison-type Pokémon."),
+            "A Shellder bite set off a chemical\n"
+            "reaction with the spices inside\n"
+            "Slowbro's body, causing Slowbro\n"
+            "to become a Poison-type Pokémon."),
     },
 
     [NATIONAL_DEX_FARFETCHD_GALARIAN] =
@@ -11660,8 +11660,8 @@ const struct FormdexEntries gFormdexEntries[] =
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
             "Long ago, when droves of factories fouled\n"
-            "the air with pollution, it changed into this\n"
-            "form for some reason. It consumes air\n"
+            "the air with pollution, it changed into\n"
+            "this form for some reason. It consumes air\n"
             "pollutant particles, expelling clean air."),
     },
 
@@ -12098,8 +12098,8 @@ const struct FormdexEntries gFormdexEntries[] =
     {
         //.categoryName = _("Love-Hate"),
         .description = COMPOUND_STRING(
-            "The first appliance developed that Rotom\n"
-            "coud inspirit was the electric fan. It uses\n"
+            "The first appliance developed Rotom could\n"
+            "inspirit was the electric fan. It uses\n"
             "its power over wind in its pranks, happily\n"
             "blowing away important documents it finds."),
     },
@@ -12112,6 +12112,15 @@ const struct FormdexEntries gFormdexEntries[] =
             "the development of the Rotom Dex. It will\n"
             "mow down grass and flowers, then swagger\n"
             "around with pride at its accomplishments."),
+    },
+
+    [NATIONAL_DEX_MORPEKO_HANGRY] =
+    {
+        .description = COMPOUND_STRING(
+            "Intense hunger drives it to extremes\n"
+            "of violence, and the electricity\n"
+            "in its cheek sacs has converted into\n"
+            "a Dark-type energy."),
     },
 
     [NATIONAL_DEX_KYUREM_WHITE] =
@@ -12142,6 +12151,16 @@ const struct FormdexEntries gFormdexEntries[] =
             "believer in defeating foes by raining\n"
             "many blows down on them. Its\n"
             "strikes are nonstop, flowing like a river."),
+    },
+
+    [NATIONAL_DEX_ZARUDE_DADA] =
+    {
+        //.categoryName = _("Love-Hate"),
+        .description = COMPOUND_STRING(
+            "This Zarude's special strength\n"
+            "stems from its love and care for an\n"
+            "orphaned human child that the Pokémon\n"
+            "has raised."),
     },
 
     [NATIONAL_DEX_TORNADUS_THERIAN] =
