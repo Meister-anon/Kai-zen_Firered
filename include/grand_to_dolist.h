@@ -2252,6 +2252,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   in the starter filter functions  specifically GetFinalEvo need rewrite it better
   -seems fixed
 
+  -for some reason, dex num, not showing up correctly for summary screen
+  its showing blank 000 - fixed issue was bad condition logic
+
   -still going through form dex make sure everything fits -
 
   -talked it through thought it through believe will leave forms as they are
@@ -2267,17 +2270,36 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   ok NOT fixed,  riolu somehow evolved into mankey
   -ok but that only happens when I build from base stats, not evo table?
 
+  -think want to put encounters in underpass between ceruleun and vermillion. 
+  would keep at lower encounter rate but think can use some night time mon there
+  
+
+  -issue w dex navigation scroll down through dex info pages for some reason goes passed last entry?
+  only on nat dex, and after retruning to info page fixes itself?
+
+  -potentially rever the battlescript line change, where you can't check your party in swictch mode.
+  i made it so if you select yes would like to switch mon, you can't cancel it and change your mind.
+  but I like that, its already a blind switch, but that time is used more to take stock of your team.
+
+  on the other hand, it forces you to think more and keep track of everyone's health yourself.
+
+  -fixed cerulean city man, gym badge text based on my changes
+
   fixed, it was issue with base stats evo setup, my condition wasn't right for filterin the evo constant something with how i moved.
   it was the for loop condition
 
   -sigh found other issue, moves that  set poisoning status seem to not work well,/correclty
   -when used to reapply poison, the text displays but the toxic damage isn't right. rn using poison gas move to poison
 
+  -ok other issue w poison, I use antidote to clear poison and that works, but for some reason,
+  pokeball is still blocked out as if still poisoned/statused??
+
   more work needed on starter filter, found issue with resist mon and immune mon.
   player got azurill, rival got grookey,  
   -rival grass resists my water, but my fairy is immune to their grass, giving me the advantage, so can't have that.
   meanig I need to further revise the filter function
   -its ok for them to be immune to me, but I can't be immune to them
+  --believe fixed, added check for atk multiplier value 0
 
   -DON'T FORGET, need put back yes/no box for teach tv script, so can avoid it, still have him give teach tv idk
   -done, not perfect but you can A press to skip through it and skip battle
@@ -3012,9 +3034,11 @@ that way you don't need to keep flying aruond to different places looking for th
   -note rebalance seismic toss, its too strong, upholding was right, got lvl 100 onix and its max hp is still under 200 
   ... oh then a different one had hp over 260... idk anymore man, guess its fine, onix has one of lowest hp in game anyway
 
-  pokedex issue, for some reason, have repeating entries for some mon, when looking on different dex screens
-  //check enemy damagecalc, think somehow multitask isn't working right on enemy side, damage isn't being cut?
+
   //remember to make values to store rival starter data in, i.e personality nature etc. or just personality if everything is based on that
+  same as roamer. think may make for entire rival party, potentially put in battle main?
+  can make store entire value of party only reset personality if mon isn't the same species or an evolution
+  //since slots move a bit, think I will have to loop 6 times, looking for each mon
 
   -nother break double kick is causing game freeze, seems to be just against opponents of certain type combo
   i.e super effective and resist type, so I'd assume it was something todo with my new type calc, but it doenst effect all moves of that type,
@@ -3036,7 +3060,7 @@ that way you don't need to keep flying aruond to different places looking for th
   code will fill in field and set leve to average of party level - DONE doesn't impact mon caught, or lvl 5 mon
 
   */
- goto DEX_REGISTER_DATA //plan remove nat dex checks so can show all mon
+ goto DEX_REGISTER_DATA //plan remove nat dex checks so can show all mon - done, giving nat dex at start, removed nat dex from checks for game progression
  goto SUMM_MAIN_WINDOW //main summary screen box, where mon sprite is shown
  goto CUSTOM_SETUP_GIVEMON //change for givemon script command, so don't have to worry about setting level just use whatever and it'll match
  //player average level so mon given can actually be used, excludes lvl 5 mon, as tey are meant to be at that level.

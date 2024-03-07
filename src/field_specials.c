@@ -1815,7 +1815,7 @@ u16 GetFinalEvo(u16 species) //well least it works now
     }
 
     return species; //think should loop first evo method encountered for a species, and go until it can't find an evolution, then stop and return species
-}
+}//keep an eye out for any more issues
 
 /*
 u16 GetFinalEvo(u16 species) //well least it works now
@@ -1969,7 +1969,7 @@ u8 ShouldResetRivalStarter(void)
             passedChecks = TRUE;
         else
         {
-            //check for if rival starter super against player starter
+            //set rival offense values, 
             MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type1)));
               if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
                 MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type2)));
@@ -1981,7 +1981,7 @@ u8 ShouldResetRivalStarter(void)
                     MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type2)));
             }
 
-            //check for if rival starter resists player starter
+            //set rival defense to player type
             MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type1)));
               if (type1 != type2)
                 MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type2)));
@@ -2019,6 +2019,11 @@ u8 ShouldResetRivalStarter(void)
             || DefenseMultiplierType2 > UQ_4_12(1.0))
             && AtkMultiplierType1 <= UQ_4_12(1.0)
             && AtkMultiplierType2 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
+
+            //final final FINAL catch to ensure player is not immune to rival type dmg - can't believe I missed this
+            if (AtkMultiplierType1 == UQ_4_12(0.0)
+            || AtkMultiplierType2 == UQ_4_12(0.0))
                 passedChecks = FALSE;
             
         }
@@ -2037,7 +2042,7 @@ u8 ShouldResetRivalStarter(void)
             passedChecks = TRUE;
         else
         {
-            //check for if rival starter super against player starter
+            //set rival offense values, 
             MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type1)));
               if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
                 MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type2)));
@@ -2049,7 +2054,7 @@ u8 ShouldResetRivalStarter(void)
                     MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type2)));
             }
 
-            //check for if rival starter resists player starter
+            //set rival defense to player type
             MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type1)));
               if (type1 != type2)
                 MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type2)));
@@ -2086,6 +2091,11 @@ u8 ShouldResetRivalStarter(void)
             || DefenseMultiplierType2 > UQ_4_12(1.0))
             && AtkMultiplierType1 <= UQ_4_12(1.0)
             && AtkMultiplierType2 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
+
+            //final final FINAL catch to ensure player is not immune to rival type dmg - can't believe I missed this
+            if (AtkMultiplierType1 == UQ_4_12(0.0)
+            || AtkMultiplierType2 == UQ_4_12(0.0))
                 passedChecks = FALSE;
 
             //specific exception case
@@ -2108,7 +2118,7 @@ u8 ShouldResetRivalStarter(void)
             passedChecks = TRUE;
         else
         {
-            //check for if rival starter super against player starter
+            //set rival offense values, 
             MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type1)));
               if (gBaseStats[playermon].type1 != gBaseStats[playermon].type2)
                 MulModifier(&AtkMultiplierType1, (GetTypeModifier(type1, gBaseStats[playermon].type2)));
@@ -2120,7 +2130,7 @@ u8 ShouldResetRivalStarter(void)
                     MulModifier(&AtkMultiplierType2, (GetTypeModifier(type2, gBaseStats[playermon].type2)));
             }
 
-            //check for if rival starter resists player starter
+            //set rival defense to player type
             MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type1)));
               if (type1 != type2)
                 MulModifier(&DefenseMultiplierType1, (GetTypeModifier(gBaseStats[playermon].type1, type2)));
@@ -2158,6 +2168,11 @@ u8 ShouldResetRivalStarter(void)
             || DefenseMultiplierType2 > UQ_4_12(1.0))
             && AtkMultiplierType1 <= UQ_4_12(1.0)
             && AtkMultiplierType2 <= UQ_4_12(1.0))
+                passedChecks = FALSE;
+
+            //final final FINAL catch to ensure player is not immune to rival type dmg - can't believe I missed this
+            if (AtkMultiplierType1 == UQ_4_12(0.0)
+            || AtkMultiplierType2 == UQ_4_12(0.0))
                 passedChecks = FALSE;
             
         }
