@@ -16,8 +16,71 @@
 //taken from emerald planned setup overwrite need for evolution.h file
 #define EVOLUTION(...) (const struct Evolution[]) { __VA_ARGS__, { EVOLUTIONS_END }, }
 
+#define RELATIVE_EVO(ceiling, lvlgain) (ceiling | (lvlgain << 8))
+//new macro set from The Sylph is In on rhh server
+//lets you store 2 values within the u16 level member so don't need to change struct, can't keep my current setup without needing 2nd lvl value param very nice
+
+//which along with the conditional that filters the top bits and lower 8 bits 
+//allows for filtering the level
+
+/*case EVO_RELATIVE_TO_MET:
+                if ((evolutions[i].param & 0xFF) <= level || ((evolutions[i].param & 0xFF00) >> 8 <= level - GetMonData(mon, MON_DATA_MET_LEVEL, 0)))
+                {
+                    targetSpecies = evolutions[i].targetSpecies;
+                }
+                break;
+            */
+
+ //ceiling is max, which typically will be existing level, difference would be how many levels you need to raise it,
+ //my version will be slightly different effect may be same but just want slight tweak for readability
+
+ //my version 
+ //if ((evolutions[i].param & 0xFF) <= level || ((GetMonData(mon, MON_DATA_MET_LEVEL, 0) + ((evolutions[i].param & 0xFF00) >> 8)) <= level)
+
+ //within evo case for levels need make values for several fields to make more readable.
+ //think define all as u32
+ //EvoCeiling = (evolutions[i].param & 0xFF);
+ //LevelsGained/EffortToRaise = ((evolutions[i].param & 0xFF00) >> 8);
+ //LevelMet = (GetMonData(mon, MON_DATA_MET_LEVEL, 0));//Level FLoor
+
+ //extra bit that's needed is the check for if its a 2+ stage evo, 
+ //if mon is able to evolve, but does not have a pre evo, then use levelMet as level floor
+ //if mon is able to evolve but HAS a pre evo, than use the level ceiling of the pre evo as the level floor
+
+ //simpler, set bool  hasPreEvo
+ //if species has pre evo, hasPreEvo is set to true
+
+ //if true, LevelFloor = EvoCeiling for pre evo
+ //else
+ //LevelFloor = LevelMet
+
+
+
+ //revised
+ //if (EvoCeiling <= level || (LevelFloor + EffortToRaise) <= level)
+
+ //RELATIVE_EVO(ceiling, LOW_EFFORT)
+
+
 //add new struct values evo, learnset tmlearnset under noFLip
-//search replace .noFlip = FALSE,
+//search replace .noFlip = FALSE,  
+//-done
+
+/*
+for setup of new evo levels for level based evolution  make sure to adjust growth rates for mon want to evolve faster
+
+enum
+{
+    GROWTH_MEDIUM_FAST,
+    GROWTH_ERRATIC,
+    GROWTH_FLUCTUATING,
+    GROWTH_MEDIUM_SLOW,
+    GROWTH_FAST,
+    GROWTH_SLOW
+};  - these are growth rates
+
+things like bulbasaur chikorita etc. that usually evolve at lower level
+*/
 
         
 //leaving 6 undone than just search .noFlip = TRUE, to fill those
@@ -190,7 +253,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sBulbasaurLevelUpLearnset,
         .tmhmLearnset = sBulbasaurTMHMLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, 16, 0,  SPECIES_IVYSAUR}), //Should hopefully blank these for now without issue    
+        .evolutions = EVOLUTION({EVO_LEVEL, RELATIVE_EVO(16, LOW_EFFORT), 0,  SPECIES_IVYSAUR}), //Should hopefully blank these for now without issue    
 
     },
 
@@ -216,7 +279,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sIvysaurLevelUpLearnset,
         .tmhmLearnset = sIvysaurTMHMLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, 32, 0,  SPECIES_VENUSAUR}), //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, RELATIVE_EVO(32, MEDIUM_EFFORT), 0,  SPECIES_VENUSAUR}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_VENUSAUR] =
@@ -267,7 +330,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sCharmanderLevelUpLearnset,
         .tmhmLearnset = sCharmanderTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 16, 0, SPECIES_CHARMELEON}),
     },
 
     [SPECIES_CHARMELEON] =
@@ -294,7 +357,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sCharmeleonLevelUpLearnset,
         .tmhmLearnset = sCharmeleonTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 36, 0, SPECIES_CHARIZARD}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_CHARIZARD] =
@@ -344,7 +407,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sSquirtleLevelUpLearnset,
         .tmhmLearnset = sSquirtleTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 16, 0, SPECIES_WARTORTLE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_WARTORTLE] =
@@ -369,7 +432,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sWartortleLevelUpLearnset,
         .tmhmLearnset = sWartortleTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 36, 0, SPECIES_BLASTOISE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_BLASTOISE] =
@@ -417,7 +480,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sCaterpieLevelUpLearnset,
         .tmhmLearnset = sCaterpieTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 7, 0, SPECIES_METAPOD}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_METAPOD] =
@@ -441,7 +504,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sMetapodLevelUpLearnset,
         .tmhmLearnset = sMetapodTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 10, 0, SPECIES_BUTTERFREE}), //Should hopefully blank these for now without issue
     },//Lunos explained hidden ability is saved even if mid evo doesn't have  a hidden ability final evo will go back to hidden ability slot
   //ok augment hp for late game effectiveness hopefully balanced by you encountering them at such low level bc the hp formula isn't fully effective
 
@@ -494,7 +557,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sWeedleLevelUpLearnset,
         .tmhmLearnset = sWeedleTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 7, 0, SPECIES_KAKUNA}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_KAKUNA] =
@@ -517,7 +580,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sKakunaLevelUpLearnset,
         .tmhmLearnset = sKakunaTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 10, 0, SPECIES_BEEDRILL}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_BEEDRILL] =
@@ -570,7 +633,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sPidgeyLevelUpLearnset,
         .tmhmLearnset = sPidgeyTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 18, 0, SPECIES_PIDGEOTTO}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_PIDGEOTTO] =
@@ -595,7 +658,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sPidgeottoLevelUpLearnset,
         .tmhmLearnset = sPidgeottoTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 36, 0, SPECIES_PIDGEOT}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_PIDGEOT] =
@@ -644,7 +707,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sRattataLevelUpLearnset,
         .tmhmLearnset = sRattataTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 20, 0, SPECIES_RATICATE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_RATICATE] =
@@ -695,7 +758,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sSpearowLevelUpLearnset,
         .tmhmLearnset = sSpearowTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 20, 0, SPECIES_FEAROW}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_FEAROW] =
@@ -748,7 +811,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sEkansLevelUpLearnset,
         .tmhmLearnset = sEkansTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 22, 0, SPECIES_ARBOK}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_ARBOK] =
@@ -799,7 +862,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sPikachuLevelUpLearnset,
         .tmhmLearnset = sPikachuTMHMLearnset,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_THUNDER_STONE, 0, SPECIES_RAICHU},
+                                {EVO_NONE, 0, 0, SPECIES_RAICHU_ALOLAN}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_RAICHU] =
@@ -852,7 +916,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sSandshrewLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 22, 0, SPECIES_SANDSLASH}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_SANDSLASH] =
@@ -907,7 +971,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sNidoranFLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 16, 0, SPECIES_NIDORINA}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_NIDORINA] =
@@ -933,7 +997,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sNidorinaLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_MOON_STONE, 0, SPECIES_NIDOQUEEN}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_NIDOQUEEN] =
@@ -984,7 +1048,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sNidoranMLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 16, 0, SPECIES_NIDORINO}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_NIDORINO] =
@@ -1010,7 +1074,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sNidorinoLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_MOON_STONE, 0, SPECIES_NIDOKING}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_NIDOKING] =
@@ -1062,7 +1126,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sClefairyLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_MOON_STONE, 0, SPECIES_CLEFABLE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_CLEFABLE] =
@@ -1113,7 +1177,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sVulpixLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_FIRE_STONE, 0, SPECIES_NINETALES}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_NINETALES] =
@@ -1165,7 +1229,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sJigglypuffLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_MOON_STONE, 0, SPECIES_WIGGLYTUFF}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_WIGGLYTUFF] =
@@ -1217,7 +1281,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sZubatLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 22, 0, SPECIES_GOLBAT}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_GOLBAT] =
@@ -1243,7 +1307,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sGolbatLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_CROBAT}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_ODDISH] =
@@ -1270,7 +1334,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sOddishLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 21, 0, SPECIES_GLOOM}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_GLOOM] =
@@ -1297,7 +1361,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sGloomLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_LEAF_STONE, 0, SPECIES_VILEPLUME},
+                                {EVO_ITEM, ITEM_SUN_STONE, 0, SPECIES_BELLOSSOM}), //Should hopefully blank these for now without issue
     }, //potentially lower sp atk for addition of stench/additional bulk given?
 
     [SPECIES_VILEPLUME] =
@@ -1352,7 +1417,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sParasLevelUpLearnset, //sParasLevelUpLearnset
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 24, 0, SPECIES_PARASECT}), //Should hopefully blank these for now without issue
     },//can put evolution adn that builds but learnset doesn't don't get why
 
     //moveset special case, mostly bug, then physical ghost moves, grass moves only special
@@ -1383,7 +1448,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sParasectLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 31, 0, SPECIES_VENOMOTH}), //Should hopefully blank these for now without issue
     },
     /*Most mushrooms prefer shade or dark places,
     which is why you'll often find them on forest floors. 
@@ -1474,7 +1539,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sDiglettLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 26, 0, SPECIES_DUGTRIO}), //Should hopefully blank these for now without issue
     },//making normal ground for more dmg, think this was before I changed joat, most moves are groud so w revert back
 
     [SPECIES_DUGTRIO] =
@@ -1527,7 +1592,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sMeowthLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 28, 0, SPECIES_PERSIAN}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_PERSIAN] =
@@ -1578,7 +1643,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sPsyduckLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 33, 0, SPECIES_GOLDUCK}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_GOLDUCK] =
@@ -1627,7 +1692,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sMankeyLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 28, 0, SPECIES_PRIMEAPE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_PRIMEAPE] =
@@ -1652,7 +1717,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sPrimeapeLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        //.evolutions = EVOLUTION({EVO_MOVE, MOVE_RAGE_FIST, 0, SPECIES_ANNIHILAPE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_GROWLITHE] =
@@ -1678,7 +1743,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sGrowlitheLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_FIRE_STONE, 0, SPECIES_ARCANINE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_ARCANINE] =
@@ -1729,7 +1794,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sPoliwagLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 25, 0, SPECIES_POLIWHIRL}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_POLIWHIRL] =
@@ -1754,7 +1819,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sPoliwhirlLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_WATER_STONE, 0, SPECIES_POLIWRATH},
+                                {EVO_ITEM, ITEM_KINGS_ROCK, 0, SPECIES_POLITOED}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_POLIWRATH] =
@@ -1806,7 +1872,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sAbraLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 16, 0, SPECIES_KADABRA}), //Should hopefully blank these for now without issue
     },//buffed hp as perma sleep,  buffing comatose w healing as mon can't rest think will attempt to set to have sleep status icon, no reason not to
     //thought hp was too high, but it doesn't change that much when it evolves, so I guess its fine?
 
@@ -1834,7 +1900,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sKadabraLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_ALAKAZAM}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_ALAKAZAM] =
@@ -1887,7 +1953,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sMachopLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 28, 0, SPECIES_MACHOKE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_MACHOKE] =
@@ -1913,7 +1979,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sMachokeLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_MACHAMP}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_MACHAMP] =
@@ -1965,7 +2031,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sBellsproutLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 21, 0, SPECIES_WEEPINBELL}), //Should hopefully blank these for now without issue
     },//pokemon like this w big evo change have signinficant stat dif so previous evo may be better in some ways do 4 others i find like this
     //remember make 2nd pass at stats to leave room for high ev cap, but still be buffed, leave legends & psuedo where they are 
     //can lower others as needed.
@@ -1993,7 +2059,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sWeepinbellLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_LEAF_STONE, 0, SPECIES_VICTREEBEL}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_VICTREEBEL] =
@@ -2044,7 +2110,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sTentacoolLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 30, 0, SPECIES_TENTACRUEL}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_TENTACRUEL] =
@@ -2094,7 +2160,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sGeodudeLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 25, 0, SPECIES_GRAVELER}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_GRAVELER] =
@@ -2119,7 +2185,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sGravelerLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_GOLEM}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_GOLEM] =
@@ -2168,7 +2234,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sPonytaLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_RAPIDASH}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_RAPIDASH] =
@@ -2222,7 +2288,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sSlowpokeLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 37, 0, SPECIES_SLOWBRO},
+                                {EVO_ITEM, ITEM_KINGS_ROCK, 0, SPECIES_SLOWKING}), //Should hopefully blank these for now without issue
     }, //buff tm learnset and mvoe pool needs it badly  learning payvback,gyro ball slow moves, and more water moves early would be good
 
     [SPECIES_SLOWBRO] =
@@ -2276,7 +2343,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sMagnemiteLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 30, 0, SPECIES_MAGNETON}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_MAGNETON] =
@@ -2303,7 +2370,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sMagnetonLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_MAPSEC, MAPSEC_CERULEAN_CAVE, 0, SPECIES_MAGNEZONE},
+                                {EVO_ITEM, ITEM_THUNDER_STONE, 0, SPECIES_MAGNEZONE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_FARFETCHD] =
@@ -2385,7 +2453,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sDodrioLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 31, 0, SPECIES_DODRIO}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_SEEL] =
@@ -2410,7 +2478,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sSeelLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 34, 0, SPECIES_DEWGONG}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_DEWGONG] =
@@ -2464,7 +2532,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sGrimerLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 38, 0, SPECIES_MUK}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_MUK] =
@@ -2521,7 +2589,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sShellderLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_WATER_STONE, 0, SPECIES_CLOYSTER}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_CLOYSTER] =
@@ -2572,7 +2640,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sGastlyLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 25, 0, SPECIES_HAUNTER}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_HAUNTER] =
@@ -2596,7 +2664,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sHaunterLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_GENGAR}),  //Should hopefully blank these for now without issue
     },
 
     [SPECIES_GENGAR] =
@@ -2648,7 +2716,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sOnixLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_METAL_COAT, 0, SPECIES_STEELIX}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_DROWZEE] =
@@ -2673,7 +2741,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sDrowzeeLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 26, 0, SPECIES_HYPNO}), //Should hopefully blank these for now without issue
     }, 
 
     [SPECIES_HYPNO] =
@@ -2724,7 +2792,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sKrabbyLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 28, 0, SPECIES_KINGLER}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_KINGLER] =
@@ -2776,7 +2844,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sVoltorbLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 30, 0, SPECIES_ELECTRODE}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_ELECTRODE] =
@@ -2832,7 +2900,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sExeggcuteLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_LEAF_STONE, 0, SPECIES_EXEGGUTOR},
+                                {EVO_ITEM, ITEM_DRAGON_SCALE, 0, SPECIES_EXEGGUTOR_ALOLAN}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_EXEGGUTOR] =
@@ -2883,7 +2952,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sCuboneLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue //from strong desire to commune w those lost, gained ability to make contact w ghosts
+        .evolutions = EVOLUTION({EVO_LEVEL, 28, 0, SPECIES_MAROWAK},
+                                {EVO_ITEM, ITEM_FIRE_STONE, 0, SPECIES_MAROWAK_ALOLAN}), //Should hopefully blank these for now without issue //from strong desire to commune w those lost, gained ability to make contact w ghosts
     },
 
     [SPECIES_MAROWAK] =
@@ -2987,7 +3057,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sLickitungLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue//ability name ToxuTongue  based on toxungen which this technically is, or maybe ToxunTongue? to lean more into the name?
+        .evolutions = EVOLUTION({EVO_MOVE, MOVE_ROLLOUT, 0, SPECIES_LICKILICKY}), //Should hopefully blank these for now without issue//ability name ToxuTongue  based on toxungen which this technically is, or maybe ToxunTongue? to lean more into the name?
     },
 
     [SPECIES_KOFFING] =
@@ -3013,8 +3083,9 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sKoffingLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
+        .evolutions = EVOLUTION({EVO_LEVEL, 35, 0, SPECIES_WEEZING},
+                                {EVO_NONE, 0, 0, SPECIES_WEEZING_GALARIAN}), //Should hopefully blank these for now without issue
+    },//vsonic need figre how do these alt forms with identical evo values like pikachu
 
     [SPECIES_WEEZING] =
     { 
@@ -3066,7 +3137,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sRhyhornLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 42, MID_EFFORT, SPECIES_RHYDON}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_RHYDON] =
@@ -3092,7 +3163,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sRhydonLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_PROTECTOR, 0, SPECIES_RHYPERIOR}), //Should hopefully blank these for now without issue
     }, //give head charge & headlong rush
 
     [SPECIES_CHANSEY] =
@@ -3120,7 +3191,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sChanseyLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_BLISSEY}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_TANGELA] =
@@ -3224,7 +3295,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sSeadraLevelUpLearnset,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_DRAGON_SCALE, 0, SPECIES_KINGDRA}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_GOLDEEN] =
@@ -4662,7 +4733,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_PIKACHU}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_CLEFFA] =
@@ -4688,7 +4759,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_CLEFAIRY}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_IGGLYBUFF] =
@@ -4713,7 +4784,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_JIGGLYPUFF}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_TOGEPI] =
@@ -5150,7 +5221,8 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    }, //what fire moves am I giving this lol (speaking for blaze) oh I gave it ember ok
+    }, //what fire moves am I giving this lol (speaking for blaze) oh I gave it ember ok, could give leech seed,think give grass knot
+    //plan move mega drain to higher up, replace w grass knot,
 
     [SPECIES_SUNFLORA] =
     { 
@@ -6314,7 +6386,9 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL_FEMALE, 15, 0, SPECIES_HITMONCHAN},
+                                {EVO_LEVEL_MALE, 15, 0, SPECIES_HITMONLEE},
+                                {EVO_MOVE, MOVE_RAPID_SPIN, 0, SPECIES_HITMONTOP}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_HITMONTOP] =
@@ -6364,7 +6438,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue    //thematically but  its defense is too low, gave it a little more def, and jynx line more hp overall,...may not need I kinda made ice defenses op...
+        .evolutions = EVOLUTION({EVO_LEVEL, 24, 0, SPECIES_JYNX}), //Should hopefully blank these for now without issue    //thematically but  its defense is too low, gave it a little more def, and jynx line more hp overall,...may not need I kinda made ice defenses op...
     },//need rewrite dex for this, use bulbapedia info,  dex entries for this thing are kinda cursed... vsonic
 
     [SPECIES_ELEKID] =
@@ -8569,7 +8643,10 @@ const struct BaseStats gBaseStats[] =
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
+    }, //stats are pretty good for early mon so think will give fire spin earl rather than change ember level
+    //could also lower evo level, but with type effect changes and  giving better moves it can possibly stay as is
+    //rather than give a bunch of stab moves, may give other things, slam body slam,  slack off rest amnesia etc.
+    //give MOVE_INCINERATE  as ember upgrade rather than stronger fire move
 
     [SPECIES_CAMERUPT] =
     { 
@@ -11638,7 +11715,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM_HOLD_DAY, ITEM_OVAL_STONE, 0, SPECIES_CHANSEY},
+                                {EVO_ITEM_DAY, ITEM_OVAL_STONE, 0, SPECIES_CHANSEY}), //Should hopefully blank these for now without issue
     },
 
     [SPECIES_CHATOT] =
@@ -28466,7 +28544,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_ICE_STONE, 0, SPECIES_SANDSLASH_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
 
@@ -28535,7 +28613,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_ICE_STONE, 0, SPECIES_NINETALES_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
 
@@ -28603,7 +28681,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 26, 0, SPECIES_DUGTRIO_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
 
@@ -28671,7 +28749,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_PERSIAN_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
 
@@ -28742,7 +28820,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue                            //but on the other hand most steel are electric too, so it'd be neutral, while rock is weak to steel.. 
+        .evolutions = EVOLUTION({EVO_LEVEL, 25, 0, SPECIES_GRAVELER_ALOLAN}), //Should hopefully blank these for now without issue                            //but on the other hand most steel are electric too, so it'd be neutral, while rock is weak to steel.. 
         .flags = F_ALOLAN_FORM,                 //oh but made electric resist, so it'd just be a neutral hit, hmm check how many steel are also electric to see value
     },//checked steel and they are rare, many are psuedos so its not a type you'd ecounter much, many resist electric, good against metagross, but still a very specific thing
 
@@ -28779,7 +28857,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_GOLEM_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
 
@@ -28842,7 +28920,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 38, 0, SPECIES_MUK_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
 
@@ -28954,7 +29032,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 28, 0, SPECIES_PERRSERKER}), //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
 
@@ -28970,7 +29048,7 @@ const struct BaseStats gBaseStats[] =
         65
         ),
         .type1 = TYPE_PSYCHIC,
-        .type2 = TYPE_PSYCHIC,
+        .type2 = TYPE_FAIRY, //why not make this fairy too?
         .catchRate = 190,
         .expYield = 82,
         //.evYield_Speed = 1,
@@ -28987,7 +29065,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_RAPIDASH_GALARIAN}), //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
 
@@ -29087,7 +29165,8 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        /*.evolutions = EVOLUTION({EVO_ITEM, ITEM_GALARICA_CUFF, 0, SPECIES_SLOWBRO_GALARIAN},
+                                {EVO_ITEM, ITEM_GALARICA_WREATH, 0, SPECIES_SLOWKING_GALARIAN}),*/ //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
 
@@ -29122,7 +29201,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_SIRFETCHD}), //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
 
@@ -29596,7 +29675,7 @@ const struct BaseStats gBaseStats[] =
             .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_FIRE_STONE, 0, SPECIES_ARCANINE_HISUIAN}), //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
 
@@ -29660,7 +29739,7 @@ const struct BaseStats gBaseStats[] =
             .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_ITEM, ITEM_LEAF_STONE, 0, SPECIES_ELECTRODE_HISUIAN}), //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
 
@@ -30568,7 +30647,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = NULL,
         .tmhmLearnset = NULL,
-        .evolutions = NULL, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_PIKACHU}), //Should hopefully blank these for now without issue
     },//make rare form, that should spawn
 
     [SPECIES_UNOWN_B] =

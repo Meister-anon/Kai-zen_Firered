@@ -7448,11 +7448,32 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
         for (i = 0; i != NUM_EVOS_CAP && evolutions[i].method != EVOLUTIONS_END; i++)
         {
-            if (evolutions[i].method == EVO_ITEM
-             && evolutions[i].param == evolutionItem)
+             switch (evolutions[i].method)
             {
-                targetSpecies = evolutions[i].targetSpecies;
+                case EVO_ITEM:
+                if (evolutions[i].param == evolutionItem)
+                {
+                    targetSpecies = evolutions[i].targetSpecies;
+                    break; //should break switch
+                }
+                break;//should break for
+                case EVO_ITEM_DAY:
+                if (evolutions[i].param == evolutionItem &&
+                gLocalTime.hours >= 12 && gLocalTime.hours < 24)
+                {
+                    targetSpecies = evolutions[i].targetSpecies;
+                    break;
+                }
                 break;
+                case EVO_ITEM_NIGHT:
+                if (evolutions[i].param == evolutionItem &&
+                gLocalTime.hours >= 0 && gLocalTime.hours < 12)
+                {
+                    targetSpecies = evolutions[i].targetSpecies;
+                    break;
+                }
+                break;
+                
             }
         }
         break;

@@ -423,6 +423,8 @@ enum
 #define EVO_ITEM_HOLD  		    		    0x0027 // Pokémon levels up, holds specified item
 #define EVO_ITEM_HOLD_DAY  		    		0x0015 // Pokémon levels up, holds specified item at day
 #define EVO_ITEM_HOLD_NIGHT 				0x0016 // Pokémon levels up, holds specified item at night
+#define EVO_ITEM_DAY                        0x002f // specified item is used on a Pokémon at day
+#define EVO_ITEM_NIGHT                      0x0030 // specified item is used on a Pokémon at night
 #define EVO_MOVE           			    	0x0017 // Pokémon levels up, knows specified move
 #define EVO_MOVE_TYPE       				0x0018 // Pokémon levels up, knows move with specified type
 #define EVO_MAPSEC          				0x0019 // Pokémon levels up on specified mapsec
