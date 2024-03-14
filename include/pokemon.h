@@ -89,6 +89,7 @@ struct PokemonSubstruct3
  /* 0x02 */ u16 metGame:4;
  /* 0x03 */ u16 pokeball:4;
  /* 0x03 */ u16 otGender:1;
+  /* 0x03 */ u16 hatched:1;  //new thing to replace met level 0 in daycare
 
  /* 0x04 */ u32 hpIV:5;
  /* 0x04 */ u32 attackIV:5;
@@ -514,6 +515,12 @@ struct SpeciesGraphicInfo
 #define EVOS_PER_MON 16 // set to 16 in case I need the shedinja byte change fix
 #define FORMS_PER_MON 5 //for breeding
 
+//lvl gain needed for different evo thresholds
+#define LOW_EFFORT      10
+#define MID_EFFORT      15
+#define MEDIUM_EFFORT   20
+#define HIGH_EFFORT     30
+
 extern u8 gPlayerPartyCount;
 extern struct Pokemon gPlayerParty[PARTY_SIZE];
 extern u8 gEnemyPartyCount;
@@ -644,6 +651,8 @@ u32 CanSpeciesLearnTMHM(u16 species, u16 tm);
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves);
 u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves); //keep track of this for rotom forms 
 u8 GetNumberOfRelearnableMoves(struct Pokemon *mon);//this too
+u16 GetSpeciesPreEvolution(u16 species); //ported for pre evo checks
+bool8 IsMonPastEvolutionLevel(struct Pokemon *mon);// new port for simplify level evo checks
 u16 SpeciesToPokedexNum(u16 species);
 void ClearBattleMonForms(void);
 void PlayBattleBGM(void);

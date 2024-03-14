@@ -2196,6 +2196,8 @@ static void BufferMonInfo(void) // seems to be PSS_PAGE_INFO or data for it
 
     if (species > NATIONAL_SPECIES_COUNT)
         baseSpecies = GetFormSpeciesId(species, 0);
+    else
+        baseSpecies = species;
 
     dexNum = SpeciesToPokedexNum(baseSpecies); //should ensure dex spescies match summ spsecies num
 
@@ -2777,9 +2779,11 @@ static void PrintInfoPage(void)
         u8 eggCycles;
         u8 hatchMsgIndex;
 
-        eggCycles = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP);
+        //says friendship ubt this is actually egg cycle, since egg cycle does not have a mondata value
+        //value is set from SetInitialEggData function in daycare.c  SetMonData(mon, MON_DATA_FRIENDSHIP, &gBaseStats[species].eggCycles);
+        eggCycles = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_FRIENDSHIP); 
 
-        if (eggCycles <= 5)
+        if (eggCycles <= 5) //ok so for some rason this doesn't work and it instead takes actually egg cycle value rather than friendhsip value when it should be using friendship?
             hatchMsgIndex = 3;
         else if (eggCycles <= 10)
             hatchMsgIndex = 2;
@@ -2787,6 +2791,15 @@ static void PrintInfoPage(void)
             hatchMsgIndex = 1;
         else
             hatchMsgIndex = 0;
+
+        /*
+        static const u8 * const sEggHatchTimeTexts[] = {
+        gText_PokeSum_EggHatch_LongTime,
+        gText_PokeSum_EggHatch_SomeTime,
+        gText_PokeSum_EggHatch_Soon,
+        gText_PokeSum_EggHatch_AlmostReady
+};
+        */
 
         if (sMonSummaryScreen->isBadEgg)
             hatchMsgIndex = 0;
@@ -3216,8 +3229,8 @@ static void PokeSum_PrintTrainerMemo_Mon_HeldByOT(void) // seems to relate to or
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, gNatureNamePointers[nature]);
     level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL);
 
-    if (level == 0)
-        level = 5;
+    /*if (level == 0)
+        level = 5;*/
 
     ConvertIntToDecimalStringN(levelStr, level, STR_CONV_MODE_LEFT_ALIGN, 3);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, levelStr);
@@ -3238,7 +3251,7 @@ static void PokeSum_PrintTrainerMemo_Mon_HeldByOT(void) // seems to relate to or
 
     // These pairs of strings are bytewise identical to each other in English,
     // but Japanese uses different grammar for Bold and Gentle natures.
-    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL) == 0) // Hatched
+    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HATCHED) == TRUE) // Hatched
     {
         if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EVENT_LEGAL) == 1) // Fateful encounter
         {
@@ -3291,8 +3304,9 @@ static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void)  //believe this is tr
 
     level = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL);
 
-    if (level == 0)
-        level = 5;  //assume mostly for setting egg hatch level
+    /*if (level == 0)
+        level = 5;*/  //assume mostly for setting egg hatch level
+        //changed so shouldn't need
 
     ConvertIntToDecimalStringN(levelStr, level, STR_CONV_MODE_LEFT_ALIGN, 3);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, levelStr);
@@ -3335,7 +3349,7 @@ static void PokeSum_PrintTrainerMemo_Mon_NotHeldByOT(void)  //believe this is tr
 
     // These pairs of strings are bytewise identical to each other in English,
     // but Japanese uses different grammar for Bold and Gentle natures.
-    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MET_LEVEL) == 0) // hatched from an EGG
+    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HATCHED) == TRUE) // hatched from an EGG   - apparentlyh this means you can hatch an egg with a different OT id?
     {
         if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_EVENT_LEGAL) == 1) // Fateful encounter
         {

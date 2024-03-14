@@ -1023,7 +1023,11 @@ static void AlterEggSpeciesWithIncenseItem(u16 *species, struct DayCare *daycare
     }
 }
 
-/*static void GiveVoltTackleIfLightBall(struct Pokemon *mon, struct DayCare *daycare)
+//think can use this for breed alt forms
+//check if father is from alt region based on flag, or is same type as alt form of mother species
+//ex. female raticate with dark type absol, could make alolan rattata
+//vsonic IMPORTANT
+static void GiveVoltTackleIfLightBall(struct Pokemon *mon, struct DayCare *daycare)
 {
     u32 motherItem = GetBoxMonData(&daycare->mons[0].mon, MON_DATA_HELD_ITEM);
     u32 fatherItem = GetBoxMonData(&daycare->mons[1].mon, MON_DATA_HELD_ITEM);
@@ -1033,7 +1037,7 @@ static void AlterEggSpeciesWithIncenseItem(u16 *species, struct DayCare *daycare
         if (GiveMoveToMon(mon, MOVE_VOLT_TACKLE) == MON_HAS_MAX_MOVES)
             DeleteFirstMoveAndGiveMoveToMon(mon, MOVE_VOLT_TACKLE);
     }
-}*/
+}
 
 static u16 DetermineEggSpeciesAndParentSlots(struct DayCare *daycare, u8 *parentSlots)
 {
@@ -1104,22 +1108,24 @@ static void _GiveEggFromDaycare(struct DayCare *daycare)
     RemoveEggFromDayCare(daycare);
 }
 
-void CreateEgg(struct Pokemon *mon, u16 species, bool8 setHotSpringsLocation)
+void CreateEgg(struct Pokemon *mon, u16 species, bool8 setHotSpringsLocation) //think this specific for r/s/e receiving egg event from lavaridge town
 {
-    u8 metLevel;
+    u8 metLevel,hatched;
     u16 ball;
     u8 language;
     u8 metLocation;
     u8 isEgg;
 
     CreateMon(mon, species, EGG_HATCH_LEVEL, 32, FALSE, 0, OT_ID_PLAYER_ID, 0);
-    metLevel = 0;
+    metLevel = EGG_HATCH_LEVEL;
+    hatched = FALSE;
     ball = ITEM_POKE_BALL;
     language = LANGUAGE_JAPANESE;
     SetMonData(mon, MON_DATA_POKEBALL, &ball);
     SetMonData(mon, MON_DATA_NICKNAME, sJapaneseEggNickname);
-    SetMonData(mon, MON_DATA_FRIENDSHIP, &gBaseStats[species].eggCycles);
+    SetMonData(mon, MON_DATA_FRIENDSHIP, &gBaseStats[species].eggCycles); //so this friendship based on egg cycles and friendship is then used for egg steps?
     SetMonData(mon, MON_DATA_MET_LEVEL, &metLevel);
+    SetMonData(mon, MON_DATA_HATCHED, &hatched);
     SetMonData(mon, MON_DATA_LANGUAGE, &language);
     if (setHotSpringsLocation)
     {
@@ -1131,22 +1137,24 @@ void CreateEgg(struct Pokemon *mon, u16 species, bool8 setHotSpringsLocation)
     SetMonData(mon, MON_DATA_IS_EGG, &isEgg);
 }
 
-static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *daycare)
+static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *daycare) //seems daycare egg normal events?
 {
     u32 personality;
     u16 ball;
-    u8 metLevel;
+    u8 metLevel,hatched;
     u8 language;
 
     personality = daycare->offspringPersonality | (Random() << 16);
     CreateMon(mon, species, EGG_HATCH_LEVEL, 32, TRUE, personality, OT_ID_PLAYER_ID, 0);
-    metLevel = 0;
+    metLevel = EGG_HATCH_LEVEL;
+    hatched = FALSE;
     ball = ITEM_POKE_BALL;
     language = LANGUAGE_JAPANESE;
     SetMonData(mon, MON_DATA_POKEBALL, &ball);
     SetMonData(mon, MON_DATA_NICKNAME, sJapaneseEggNickname);
     SetMonData(mon, MON_DATA_FRIENDSHIP, &gBaseStats[species].eggCycles);
     SetMonData(mon, MON_DATA_MET_LEVEL, &metLevel);
+    SetMonData(mon, MON_DATA_HATCHED, &hatched);
     SetMonData(mon, MON_DATA_LANGUAGE, &language);
 }
 
@@ -1633,6 +1641,7 @@ static void CreatedHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
     u8 i, friendship, language, gameMet, markings, isEventLegal;
     u16 moves[4];
     u32 ivs[NUM_STATS];
+    u8 hatched = TRUE;
 
 
     species = GetMonData(egg, MON_DATA_SPECIES);
@@ -1672,10 +1681,12 @@ static void CreatedHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
     SetMonData(temp, MON_DATA_MET_GAME, &gameMet);
     SetMonData(temp, MON_DATA_MARKINGS, &markings);
 
-    friendship = 120;
+    friendship = 40; //missed this, as part of friendship revamp.
     SetMonData(temp, MON_DATA_FRIENDSHIP, &friendship);
     SetMonData(temp, MON_DATA_POKERUS, &pokerus);
     SetMonData(temp, MON_DATA_EVENT_LEGAL, &isEventLegal);
+
+    SetMonData(temp, MON_DATA_HATCHED, &hatched);
 
     *egg = *temp;
 }
@@ -1697,7 +1708,7 @@ static void AddHatchedMonToParty(u8 id)
     GetSpeciesName(name, pokeNum);
     SetMonData(mon, MON_DATA_NICKNAME, name);
 
-    pokeNum = SpeciesToNationalPokedexNum(pokeNum);
+    pokeNum = SpeciesToNationalPokedexNum(pokeNum); //think can leave as is, since no way to get mega etc. from egg? and gender form should alreaady be on right form
     GetSetPokedexFlag(pokeNum, FLAG_SET_SEEN);
     GetSetPokedexFlag(pokeNum, FLAG_SET_CAUGHT);
 
@@ -1706,7 +1717,8 @@ static void AddHatchedMonToParty(u8 id)
     ball = ITEM_POKE_BALL;
     SetMonData(mon, MON_DATA_POKEBALL, &ball);
 
-    caughtLvl = 0;
+    //caughtLvl = 5;
+    caughtLvl = GetMonData(mon, MON_DATA_MET_LEVEL);
     SetMonData(mon, MON_DATA_MET_LEVEL, &caughtLvl);
 
     mapNameID = GetCurrentRegionMapSectionId();

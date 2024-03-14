@@ -2622,6 +2622,8 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u8 HiddenAbility1_Chance = 0;  //value to ensure ability 1 comes up more often than ability 2 -forgot -10 artificially boosted hidden1 chance everything from 10 is this odds
     u8 HiddenAbility2_Chance = 93;
 
+    u8 hatched = FALSE;
+
     //if (abilityodds < 0) { abilityodds = 0; }//prevent negative values, why did I add this?? I explicitly need it to be  negative to be able to set hidden ability 1
 
     //checkd and base game hidden abilities are only found by chance at low to increasing odds using pokenav/dexnav in gen 6
@@ -2674,6 +2676,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     value = GetCurrentRegionMapSectionId();
     SetBoxMonData(boxMon, MON_DATA_MET_LOCATION, &value);
     SetBoxMonData(boxMon, MON_DATA_MET_LEVEL, &level);
+    SetBoxMonData(boxMon, MON_DATA_HATCHED, &hatched);
     SetBoxMonData(boxMon, MON_DATA_MET_GAME, &gGameVersion);
     value = ITEM_POKE_BALL;
     SetBoxMonData(boxMon, MON_DATA_POKEBALL, &value);
@@ -5220,6 +5223,9 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
 /*  case MON_DATA_LOST_LOCATON:
        retVal = subsruct3->lostLocation;
        break;*/
+    case MON_DATA_HATCHED:
+        retVal = substruct3->hatched;
+        break;
     case MON_DATA_MET_LEVEL:
         retVal = substruct3->metLevel;
         break;
@@ -5585,6 +5591,12 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
     {
         u8 metLevel = *data;
         substruct3->metLevel = metLevel;
+        break;
+    }
+    case MON_DATA_HATCHED:
+    {
+        u8 hatched = *data;
+        substruct3->hatched = hatched;
         break;
     }
     case MON_DATA_MET_GAME:
@@ -7195,53 +7207,54 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 }
                 break;
             case EVO_LEVEL:
-                if (evolutions[i].param <= level)
+                //if (evolutions[i].param <= level)
+                if (IsMonPastEvolutionLevel(mon))
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_DAY:
                 RtcCalcLocalTime();
-                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && evolutions[i].param <= level)
+                if (gLocalTime.hours >= 12 && gLocalTime.hours < 24 && IsMonPastEvolutionLevel(mon))
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_NIGHT:
                 RtcCalcLocalTime();
-                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && evolutions[i].param <= level)
+                if (gLocalTime.hours >= 0 && gLocalTime.hours < 12 && IsMonPastEvolutionLevel(mon))
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_DUSK:
                 RtcCalcLocalTime();
-                if (gLocalTime.hours >= 17 && gLocalTime.hours < 18 && evolutions[i].param <= level)
+                if (gLocalTime.hours >= 17 && gLocalTime.hours < 18 && IsMonPastEvolutionLevel(mon))
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_ABILITY:
-                if (evolutions[i].param <= level && evolutions[i].param2 == ability)
+                if (IsMonPastEvolutionLevel(mon) && evolutions[i].param2 == ability)
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_ATK_GT_DEF:
-                if (evolutions[i].param <= level)
+                if (IsMonPastEvolutionLevel(mon))
                     if (GetMonData(mon, MON_DATA_ATK, 0) > GetMonData(mon, MON_DATA_DEF, 0))
                         targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_ATK_EQ_DEF:
-                if (evolutions[i].param <= level)
+                if (IsMonPastEvolutionLevel(mon))
                     if (GetMonData(mon, MON_DATA_ATK, 0) == GetMonData(mon, MON_DATA_DEF, 0))
                         targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_ATK_LT_DEF:
-                if (evolutions[i].param <= level)
+                if (IsMonPastEvolutionLevel(mon))
                     if (GetMonData(mon, MON_DATA_ATK, 0) < GetMonData(mon, MON_DATA_DEF, 0))
                         targetSpecies = evolutions[i].targetSpecies;
                 break;//these 3 were just for hitmon evolutions never using
             case EVO_LEVEL_SILCOON:
-                if (evolutions[i].param <= level && (upperPersonality % 10) <= 4)
+                if (IsMonPastEvolutionLevel(mon) && (upperPersonality % 10) <= 4)
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_CASCOON:
-                if (evolutions[i].param <= level && (upperPersonality % 10) > 4)
+                if (IsMonPastEvolutionLevel(mon) && (upperPersonality % 10) > 4)
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_NINJASK:
-                if (evolutions[i].param <= level)
+                if (IsMonPastEvolutionLevel(mon))
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_BEAUTY:
@@ -7286,7 +7299,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 }
                 break;
             case EVO_LEVEL_DARK_TYPE_MON_IN_PARTY:
-                if (evolutions[i].param <= level) //checks if mons level is greater or equal to lvl required for evo in table
+                if (IsMonPastEvolutionLevel(mon)) //checks if mons level is greater or equal to lvl required for evo in table
                 {
                     for (j = 0; j < PARTY_SIZE; j++)
                     {
@@ -7301,9 +7314,9 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 }
                 break;
             case EVO_LEVEL_KARRABLAST: //plan for this is have rival mon in party as well as an electric type mon parameter will be lvl
-                if ((evolutions[i].param || evoShelmet[i].param) <= level) //should let it evolve regardless of which one in your party levels up
+                if (IsMonPastEvolutionLevel(mon)) //should let it evolve regardless of which one in your party levels up
                 {
-                    for (j = 0; j < PARTY_SIZE; j++)
+                    for (j = 0; j < PARTY_SIZE; j++)//above is dumb I have to evo methods I don't to check for the other species while I"m using this species smh
                     {
                         u16 species = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
                         if (gBaseStats[species].type1 == TYPE_ELECTRIC
@@ -7322,7 +7335,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 }
                 break;//if species change doesn't work use one evo method for both and a switch case for species for either
             case EVO_LEVEL_SHELMET:
-                if ((evolutions[i].param || evoKarrablast[i].param) <= level) //should make them both evolve when either levels up
+                if (IsMonPastEvolutionLevel(mon)) //should make them both evolve when either levels up
                 {
                     for (j = 0; j < PARTY_SIZE; j++)
                     {
@@ -7357,7 +7370,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                     targetSpecies = evolutions[i].targetSpecies;
                 break;
             case EVO_LEVEL_NATURE_AMPED:
-                if (evolutions[i].param <= level)
+                if (IsMonPastEvolutionLevel(mon))
                 {
                     u8 nature = GetNature(mon);
                     switch (nature)
@@ -7381,7 +7394,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
                 }
                 break;
             case EVO_LEVEL_NATURE_LOW_KEY:
-                if (evolutions[i].param <= level)
+                if (IsMonPastEvolutionLevel(mon))
                 {
                     u8 nature = GetNature(mon);
                     switch (nature)
@@ -8064,6 +8077,74 @@ const struct Evolution *GetSpeciesEvolutions(u16 species)
     if (evolutions == NULL)
         return gEvolutionTable[species];//ok much better can use this split off change
     return evolutions;
+}
+
+u16 GetSpeciesPreEvolution(u16 species)
+{
+    int i, j;
+    u16 NUM_EVOS_CAP = (gBaseStats[SanitizeSpeciesId(species)].evolutions == NULL) ? EVOS_PER_MON : EVOLUTIONS_END;
+
+    for (i = SPECIES_NONE; i < NUM_SPECIES; i++)     //previous used species_bulbasaur as 1 value, changed in case bulbasaur is not species 1
+    {
+        const struct Evolution *evolutions = GetSpeciesEvolutions(i);
+        if (evolutions == NULL)
+            continue;
+        for (j = 0; j != NUM_EVOS_CAP && evolutions[j].method != EVOLUTIONS_END; j++)
+        {
+            if (SanitizeSpeciesId(evolutions[j].targetSpecies) == species)
+                return i;
+        }
+    }
+
+    return SPECIES_NONE;
+}
+
+bool8 IsMonPastEvolutionLevel(struct Pokemon *mon)
+{
+    int i;
+    u32 LevelFloor;
+    u32 EvoCeiling;
+    u32 EffortToRaise;
+    u8 LevelMet = (GetMonData(mon, MON_DATA_MET_LEVEL, NULL));//Level FLoor
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+    u8 hasPreEvo = FALSE;
+    const struct Evolution *evolutions = GetSpeciesEvolutions(species);
+    u16 NUM_EVOS_CAP = (gBaseStats[SanitizeSpeciesId(species)].evolutions == NULL) ? EVOS_PER_MON : EVOLUTIONS_END;
+
+    if (GetSpeciesPreEvolution(species))
+        hasPreEvo = TRUE;
+
+    if (evolutions == NULL)
+        return FALSE;
+
+
+    for (i = 0; i != NUM_EVOS_CAP && evolutions[i].method != EVOLUTIONS_END; i++)
+    {
+        EvoCeiling = (evolutions[i].param & 0xFF);
+        EffortToRaise = ((evolutions[i].param & 0xFF00) >> 8); //how many levels it needs to gain after acquiring to evolve
+
+        if (hasPreEvo)
+            LevelFloor = gBaseStats[SanitizeSpeciesId(GetSpeciesPreEvolution(species))].evolutions[i].param & 0xFF;
+        else
+            LevelFloor = LevelMet;
+
+        if (SanitizeSpeciesId(evolutions[i].targetSpecies) == SPECIES_NONE)
+            continue;
+
+        /*switch (evolutions[i].method)
+        {
+        case EVO_LEVEL:*/
+            //if (evolutions[i].param <= level) //remove switch logic so can fit in any case
+            if (EvoCeiling <= level || (LevelFloor + EffortToRaise) <= level)
+            {
+                return TRUE;
+                break;
+            }
+        //}
+    }
+
+    return FALSE;
 }
 
 u32 CanMonLearnTMHM(struct Pokemon *mon, u16 tm)

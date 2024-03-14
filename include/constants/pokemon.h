@@ -74,13 +74,13 @@
 #define MON_DATA_VICTORY_RIBBON    69
 #define MON_DATA_ARTIST_RIBBON     70
 #define MON_DATA_EFFORT_RIBBON     71
-#define MON_DATA_MARINE_RIBBON     72
+#define MON_DATA_MARINE_RIBBON     72//removed here
 #define MON_DATA_LAND_RIBBON       73
 #define MON_DATA_SKY_RIBBON        74
-#define MON_DATA_COUNTRY_RIBBON    75
+#define MON_DATA_COUNTRY_RIBBON    75//to here
 #define MON_DATA_NATIONAL_RIBBON   76
-#define MON_DATA_EARTH_RIBBON      77
-#define MON_DATA_WORLD_RIBBON      78
+#define MON_DATA_EARTH_RIBBON      77//and this
+#define MON_DATA_WORLD_RIBBON      78 //and this,  constants still remain but struct values are gone =6 values total
 #define MON_DATA_FILLER            79
 #define MON_DATA_EVENT_LEGAL       80
 #define MON_DATA_KNOWN_MOVES       81
@@ -91,6 +91,7 @@
 #define MON_DATA_SPEED2            86
 #define MON_DATA_SPATK2            87
 #define MON_DATA_SPDEF2            88
+#define MON_DATA_HATCHED           89   //new value to keep track of egg hatch status
 
 #define TYPE_DEFINES
 
