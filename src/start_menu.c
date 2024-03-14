@@ -755,7 +755,8 @@ static u8 SaveDialogCB_PrintAskOverwriteText(void)
 
 static u8 SaveDialogCB_AskOverwritePrintYesNoMenu(void)
 {
-    DisplayYesNoMenuDefaultYes();
+    //DisplayYesNoMenuDefaultYes();
+    DisplayYesNoMenuDefaultNo(); //change for save protection
     sSaveDialogCB = SaveDialogCB_AskOverwriteOrReplacePreviousFileHandleInput;
     return SAVECB_RETURN_CONTINUE;
 }

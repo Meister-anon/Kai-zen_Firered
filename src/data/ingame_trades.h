@@ -34,33 +34,33 @@ static const struct InGameTrade sInGameTrades[] = {
     [INGAME_TRADE_NIDORAN] = 
     {
 #if defined(FIRERED)
-        .nickname = _("MS. NIDO"),
-        .species = SPECIES_NIDORAN_F,
+        .nickname = _("WILD CAT"),
+        .species = SPECIES_ZIGZAGOON_GALARIAN,
         .ivs = {22, 18, 25, 19, 15, 22}, //hp, atk, def, speed, spatk, spdef
-        .abilityNum = 0,
+        .abilityNum = 2,
         .otId = 63184,
         .contestStats = {5, 5, 5, 5, 30},
         .personality = 0x4c970b89,
-        .heldItem = ITEM_TINY_MUSHROOM,
+        .heldItem = ITEM_BLACK_GLASSES,
         //.mailNum = 255,
         .otName = _("SAIGE"),
         .otGender = FEMALE,
         //.sheen = 10,
-        .requestedSpecies = SPECIES_NIDORAN_M
+        .requestedSpecies = SPECIES_RATTATA
 #elif defined(LEAFGREEN)
-        .nickname = _("MR. NIDO"),
-        .species = SPECIES_NIDORAN_M,
+        .nickname = _("TOM CAT"),
+        .species = SPECIES_ZIGZAGOON_GALARIAN,
         .ivs = {19, 25, 18, 22, 22, 15}, //hp, atk, def, speed, spatk, spdef
-        .abilityNum = 0,
+        .abilityNum = 2,
         .otId = 63184,
         .contestStats = {30, 5, 5, 5, 5},
         .personality = 0x4c970b9e,
-        .heldItem = ITEM_TINY_MUSHROOM,
+        .heldItem = ITEM_BLACK_GLASSES,
         //.mailNum = 255,
         .otName = _("SAIGE"),
         .otGender = FEMALE,
         //.sheen = 10,
-        .requestedSpecies = SPECIES_NIDORAN_F
+        .requestedSpecies = SPECIES_RATTATA
 #endif
     }, 
     [INGAME_TRADE_FARFETCHD] = 

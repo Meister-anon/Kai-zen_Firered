@@ -2235,6 +2235,9 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
 
   //Important BIND still has freezing issue? happened when it locked into status move
+  ...ok bind also somehow trigger future sight so that's wonderful -_-
+
+  -issue with dark exclusion for intimidate seems my setup is causing some lag
 
   fixing dex entries, add on for forms, not all forms have entries so right now
   it instead defaults to base species dex entry, when done update functions to read new entries and category names
@@ -2270,9 +2273,22 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   ok NOT fixed,  riolu somehow evolved into mankey
   -ok but that only happens when I build from base stats, not evo table?
 
-  -think want to put encounters in underpass between ceruleun and vermillion. 
-  would keep at lower encounter rate but think can use some night time mon there
   
+
+  fixed, it was issue with base stats evo setup, my condition wasn't right for filterin the evo constant something with how i moved.
+  it was the for loop condition
+
+  -think want to put encounters in underpass between ceruleun and vermillion.  aka Underground Path
+  would keep at lower encounter rate but think can use some night time mon there
+
+  believe also need replace nidoran m / nidoran f trade since both are available before then.
+  maybe do a trade for alt form of early available mon?  could be rattata for alolan rattata?
+  
+  s'not op, but would also be only early option for a dark type
+  -done came up with better idea, trade rattata for galarian zigzagoon, something unique and a fake out
+
+  work on box exp, pidgey seeems to gain too fast, that or they're actually just with me longer?
+
 
   -issue w dex navigation scroll down through dex info pages for some reason goes passed last entry?
   only on nat dex, and after retruning to info page fixes itself?
@@ -2285,8 +2301,49 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
 
   -fixed cerulean city man, gym badge text based on my changes
 
-  fixed, it was issue with base stats evo setup, my condition wasn't right for filterin the evo constant something with how i moved.
-  it was the for loop condition
+
+  - idea replace fixed evos for level up method, for a value that checks for how many levels gained from when you caught it.
+  could use a macro for this similar to evo.  would allow balanced level progression through evos regardless of when set.
+  think macro would take 2 values, 1. number of levels passed met level.  &
+  2 a min/max evo level a ceiling so no matter what level you encounter it, the levels don't bloat passed a reacable point.
+  
+  ex. EVO_Macro  charmander evo_level Level_Macro(10, 16), 0, charmeleon  
+
+  and level macro is the lesser of level met + value 1,  and value 2
+  for adjusting mon that should require more effort to evolve i.e mon w high bst
+  use constants  low effort = 10,  mid effort = 15/20   high effort = 25/30
+  the level ceiling would in most cases be the mons original evo level.
+
+  ex. larvesta evolves at 59,  and goes from 200+ bst to 550. so shouldn't be able to get evo early
+  so make that high effort category
+
+  for futher even if I use a constant mon can still evo at differnet paces, this would be done through use of the growth rates
+  say two mon both evolve at 10 levels the mon with fast growth rate would still get there faster and evolve "faster"
+  ex. for grass starters that typically evolve at lower level, give faster growth rate
+
+  - make sure to properly examine growth rates so know what they actually mean
+
+  -may need set metlevel to 0 default to compile but metlevel 0 is exclusively used for hatched mon, and isnt changed when they hatch.
+  so think I need to make a new state check for if a mon hatched from an egg or not.
+  and use that in summary screen then can replace daycare egg thing with lvl 5
+  could just make a Mon_Data_Hatched yes no  did that works.
+
+  met level set as needed
+
+  now issue with mid evo mon as met level doesn't change,
+  so for the what need to do is use the level cap/ceiling of the pre evo as the starting point,
+  rather than met level.
+
+  i.e ceiling for most mon would be their current evo levels
+  so charmander would be low effort, cap 16,  
+  so for charmeleon it would use mid effort + pre evo(level cap   i.e 20 + 26   (or mid effort could be 15 either or)
+
+  that should work, all would need is a check for if mon has a pre-evolution
+
+  Noticed eggs hatch too fast and display the wrong messages because of friendship rework 
+  since friendship is used for egg cycles/egg hatch time  ok was actually wrong about that,
+  its working as normal
+
 
   -sigh found other issue, moves that  set poisoning status seem to not work well,/correclty
   -when used to reapply poison, the text displays but the toxic damage isn't right. rn using poison gas move to poison

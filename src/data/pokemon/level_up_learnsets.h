@@ -7,6 +7,9 @@
 // below normal ones
 //for evos
 
+//for mon I made starters need to readjust their learnset scaling/arc
+//to better match starters
+
 static const struct LevelUpMove sBulbasaurLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
     LEVEL_UP_MOVE(4, MOVE_GROWL),
@@ -2795,17 +2798,20 @@ static const struct LevelUpMove sSunkernLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_ABSORB),
     LEVEL_UP_MOVE(6, MOVE_GROWTH),
     LEVEL_UP_MOVE(6, MOVE_EMBER),
-    LEVEL_UP_MOVE(13, MOVE_MEGA_DRAIN),
+    LEVEL_UP_MOVE(13, MOVE_GRASS_KNOT),
     LEVEL_UP_MOVE(16, MOVE_SUNNY_DAY),
+    LEVEL_UP_MOVE(18, MOVE_FIRE_SPIN),
     LEVEL_UP_MOVE(20, MOVE_INGRAIN),
+    LEVEL_UP_MOVE(23, MOVE_MEGA_DRAIN),
     LEVEL_UP_MOVE(25, MOVE_ENDEAVOR),
     LEVEL_UP_MOVE(37, MOVE_SYNTHESIS),
     LEVEL_UP_MOVE(42, MOVE_GIGA_DRAIN),
     LEVEL_UP_END
-};
+};//possibly toss in leech seed?
 
 static const struct LevelUpMove sSunfloraLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SWEET_SCENT),
+    LEVEL_UP_MOVE(0, MOVE_LEECH_SEED), //put here for sunflower seeds
     LEVEL_UP_MOVE(1, MOVE_ABSORB),
     LEVEL_UP_MOVE(1, MOVE_POUND),
     LEVEL_UP_MOVE(6, MOVE_GROWTH),
@@ -3231,7 +3237,7 @@ static const struct LevelUpMove sCorsolaLevelUpLearnset[] = {
     LEVEL_UP_MOVE(39, MOVE_MIRROR_COAT),
     LEVEL_UP_MOVE(45, MOVE_ANCIENT_POWER),
     LEVEL_UP_END
-};
+};//give mud sport
 
 static const struct LevelUpMove sRemoraidLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_WATER_GUN),
@@ -4709,6 +4715,7 @@ static const struct LevelUpMove sManectricLevelUpLearnset[] = {
 static const struct LevelUpMove sNumelLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_GROWL),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
+    LEVEL_UP_MOVE(6, MOVE_FIRE_SPIN),
     LEVEL_UP_MOVE(11, MOVE_EMBER),
     LEVEL_UP_MOVE(19, MOVE_MAGNITUDE),
     LEVEL_UP_MOVE(25, MOVE_FOCUS_ENERGY),
@@ -4718,11 +4725,12 @@ static const struct LevelUpMove sNumelLevelUpLearnset[] = {
     LEVEL_UP_MOVE(41, MOVE_FLAMETHROWER),
     LEVEL_UP_MOVE(49, MOVE_DOUBLE_EDGE),
     LEVEL_UP_END
-};
+};//get mudslap and think bring amnesia down
 
 static const struct LevelUpMove sCameruptLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_GROWL),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
+    LEVEL_UP_MOVE(1, MOVE_FIRE_SPIN),
     LEVEL_UP_MOVE(1, MOVE_EMBER),
     LEVEL_UP_MOVE(1, MOVE_MAGNITUDE),
     LEVEL_UP_MOVE(11, MOVE_EMBER),

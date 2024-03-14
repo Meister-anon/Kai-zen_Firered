@@ -838,7 +838,7 @@ const u8 gICE_BURNDescription
     [MOVE_DESCRIPTION_LENGTH + 5] = _("A powerful fusion move\nthat deals Fire and\nIce damage.\nIt has a high chance\nto inflict a burn.");
 
 const u8 gSNARLDescription 
-    [MOVE_DESCRIPTION_LENGTH + 5] = _("Yells and rants at the foe\nlowering its Sp. Atk.");
+    [MOVE_DESCRIPTION_LENGTH + 5] = _("Yells and rants at\nthe foe lowering\nits Sp. Atk.");
 
 const u8 gICICLE_CRASHDescription 
     [MOVE_DESCRIPTION_LENGTH + 5] = _("Drops large icicles on the\nfoe.\nMay cause flinching.");

@@ -2658,7 +2658,7 @@ static void atk06_typecalc(void) //ok checks type think sets effectiveness, but 
                 || (gBattleMoves[gCurrentMove].effect == EFFECT_TWO_TYPED_MOVE
                     && (argument != TYPE_NORMAL && argument != TYPE_MYSTERY)))
             {
-                gBattleMoveDamage = gBattleMoveDamage * 117; //on recomendation uploading cut power back
+                gBattleMoveDamage = gBattleMoveDamage * 117; //on recomendation from uploading cut power back
                 gBattleMoveDamage = gBattleMoveDamage / 100;
             }
         } //changed joat to be non inclusive with stab
@@ -17170,6 +17170,15 @@ static void atkF1_trysetcaughtmondexflags(void)
     else    //otherwise trigger set caught
     {
         HandleSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_SET_CAUGHT, personality);
+
+        //may not need this since it is already in displaydexinfo via registermontopokedex?
+        /*if (species > NATIONAL_SPECIES_COUNT
+        && !(GetSetPokedexFlag(SpeciesToNationalPokedexNum(GetFormSpeciesId(species, 0)), FLAG_GET_SEEN))
+        && gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM
+        || gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION) //actually shouldn't need gender form here
+        {
+            HandleSetPokedexFlag(SpeciesToNationalPokedexNum(GetFormSpeciesId(species, 0)), FLAG_SET_SEEN, personality); //if catch form should set base form is seen so can navigate to dex page
+        }*/
         gBattlescriptCurrInstr += 5;
     }
 }
@@ -17881,7 +17890,7 @@ void BS_tryworryseed(void) {
 
 void BS_metalburstdamagecalculator(void) {
     u8 sideAttacker = GetBattlerSide(gBattlerAttacker);
-    u8 sideTarget = 0;
+    u8 sideTarget = 0; //vsonic need double check if this is what should be
 
     if (gProtectStructs[gBattlerAttacker].physicalDmg
         && sideAttacker != (sideTarget = GetBattlerSide(gProtectStructs[gBattlerAttacker].physicalBattlerId))
