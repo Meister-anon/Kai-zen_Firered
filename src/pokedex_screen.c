@@ -2234,7 +2234,7 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important t
 
 
         //if (selectedIndex >= 10) //oh realized I can do more, since it scrolls fast now
-            DexScreen_LoadIndex(255, SCROLL_UP, selectedIndex, 1); //works
+            DexScreen_LoadIndex(325 + 1, SCROLL_UP, selectedIndex, 1); //works
         //selectedIndex--;
         while (--selectedIndex >= 0) //Should be while (--selectedIndex >= 0) without the selectedIndex-- in the body or before the while at all, but this is needed to match.
         {
@@ -2264,17 +2264,23 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction) //vsonic important t
         //then i would need to lower the number to cut the processing load
         //nvm I need to lower the range, the process goes before the fade 
         //so the fade would be delayed regardless of shortening it,
-        DexScreen_LoadIndex(255, SCROLL_DOWN, selectedIndex, 1);//discovered issue when scroll on entry need value large enough to cover blank entries or wont' scroll
+        //(255, SCROLL_DOWN, selectedIndex, 1);//discovered issue when scroll on entry need value large enough to cover blank entries or wont' scroll
         //ok bounds hold, seems works without issue, huh even with the far larger value, it doesn't add to load time, nice :D
         //ok this is good enough, nvm tested w full dex and its much slower
         //when having to navigate filled values and can't just write blank entries
 
+        DexScreen_LoadIndex(325, SCROLL_DOWN, selectedIndex, 1);//only slows if i need to go full length, load time is based on distance to next value
+
+        //can't tell if its something i caused but in nat dex it breaks when it scrolls 
+        //beyond a gap, think Im somehow missing a limiter?
+        //before I believe it wouldn't move beyond the count amount.
+        //only happens if index is not loaded via scrol first
         //selectedIndex++;
         while (++selectedIndex < sPokedexScreenData->orderedDexCount) //Should be while (++selectedIndex < sPokedexScreenData->orderedDexCount) without the selectedIndex++ in the body or before the while at all, but this is needed to match.
         {            
 
             if ((sPokedexScreenData->listItems[selectedIndex].index >> 16) & 1) //I think should put the dpad loads within these loops?
-                break;
+                break; //<< 16 is seen, believe << 17 is caught, confirmed
             //selectedIndex++;
         }
         if (selectedIndex >= sPokedexScreenData->orderedDexCount)
@@ -2962,6 +2968,7 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     u8 categoryStr[13];//changed from 12 - issue was this, wasn't defined right, needed  be separate
     u16 speciesArgument;
     u16 speciesFilter;
+    u16 FormSpecies;
     bool8 UniqueCategory = FALSE;
     //bool8 UseBaseForm = FALSE;
     u16 NatSpecies = SpeciesToNationalPokedexNum(species);
@@ -2975,6 +2982,17 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     //gFormChangeTablePointers that would be a good split
     //for if the specie is a temp form or permanent form.
     //as that is used for species that change forms in battle
+    
+
+
+    if (species > NATIONAL_SPECIES_COUNT
+    && (gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION))
+    {
+        FormSpecies = GetFormSpeciesId(species, 0);
+    }
+    else
+        FormSpecies = species; //already uses dex->species
 
     for (i = 0; i < NELEMS(gdexCatFormSpecies); i++) //only the cat names I need change
     {
@@ -3039,7 +3057,8 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
 
     //think may need change this, since not all forms are permanent, keep in mind and find answer later
     //vsonic 
-    if (DexScreen_GetSetPokedexFlag(speciesFilter, FLAG_GET_CAUGHT, TRUE))
+    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(speciesFilter, FLAG_GET_CAUGHT, TRUE))
+    
     {
         //#if REVISION == 0
         //       while ((categoryName[index] != CHAR_SPACE) && (index <= 13)) //potentially this is issue, need raise this
@@ -3074,6 +3093,19 @@ void DexScreen_PrintMonHeight(u8 windowId, u16 species, u8 x, u8 y)
     const u8 *labelText;
     u8 buffer[32];
     u8 i;
+    u16 FormSpecies;
+
+
+    if (species > NATIONAL_SPECIES_COUNT
+    && (gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION))
+    {
+        FormSpecies = GetFormSpeciesId(species, 0);
+    }
+    else
+        FormSpecies = species; //already uses dex->species
+
+    
 
     
     if (species > NATIONAL_SPECIES_COUNT)
@@ -3081,8 +3113,15 @@ void DexScreen_PrintMonHeight(u8 windowId, u16 species, u8 x, u8 y)
 
     species = SpeciesToNationalPokedexNum(species);
 
+
     height = gPokedexEntries[species].height;
+
     labelText = gText_HT;
+
+    if (sPokedexScreenData->dexSpecies == SPECIES_MEWTWO_MEGA_Y)
+        height = gPokedexEntries[species].height / 3;
+
+    
 
     i = 0;
     buffer[i++] = EXT_CTRL_CODE_BEGIN;
@@ -3090,7 +3129,7 @@ void DexScreen_PrintMonHeight(u8 windowId, u16 species, u8 x, u8 y)
     buffer[i++] = 5;
     buffer[i++] = CHAR_SPACE;
 
-    if (DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE)) //this needs to use source value nto species
+    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE)) //this needs to use source value nto species
     {
         inches = 10000 * height / 254; // actually tenths of inches here
         if (inches % 10 >= 5)
@@ -3139,7 +3178,17 @@ void DexScreen_PrintMonWeight(u8 windowId, u16 species, u8 x, u8 y)
     u8 buffer[32];
     u8 i;
     u32 j;
+    u16 FormSpecies;
 
+
+    if (species > NATIONAL_SPECIES_COUNT
+    && (gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION))
+    {
+        FormSpecies = GetFormSpeciesId(species, 0);
+    }
+    else
+        FormSpecies = species; //already uses dex->species
 
     if (species > NATIONAL_SPECIES_COUNT)
         species = GetFormSpeciesId(species, 0);
@@ -3150,12 +3199,22 @@ void DexScreen_PrintMonWeight(u8 windowId, u16 species, u8 x, u8 y)
     labelText = gText_WT;
     lbsText = gText_Lbs;
 
+    if (sPokedexScreenData->dexSpecies == SPECIES_MEWTWO_MEGA_Y)
+        weight = gPokedexEntries[species].weight / 13;
+
     i = 0;
     buffer[i++] = EXT_CTRL_CODE_BEGIN;
     buffer[i++] = EXT_CTRL_CODE_MIN_LETTER_SPACING;
     buffer[i++] = 5;
 
-    if (DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE))
+    //realized don't need formspecies for thsi dexspecies is best since you've already caught it to trigger this
+    //what I need is for catching a form to make the base form seen so you're able to navigate to form page in dex.
+    //actually do need formspecies filter, but not for gender species, I could say only mega form and primal reversion use bsae form species
+    //along w exclusion for ash gren and zen_mode mon, but that still leaves issue of randomizers, or when you'd actually catch those mon directly
+    //nvm ash gren is already accounted for it leads to nat dex gren, so itll be fine, so I just need to worry bout megas
+    //if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE))//prints weight only if current species cuaght, issue is with megas can fix use constant
+    //nvm fixed w use of or
+    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE))
     {
         lbs = (weight * 100000) / 4536; // Convert to hundredths of lb
 
@@ -3233,6 +3292,18 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
     s32 xCenter;
     u32 i;
     u16 speciesArgument;
+    u16 FormSpecies;
+
+
+    if (species > NATIONAL_SPECIES_COUNT
+    && (gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION))
+    {
+        FormSpecies = GetFormSpeciesId(species, 0);
+    }
+    else
+        FormSpecies = species; //already uses dex->species
+
     //bool8 UseBaseForm = FALSE;
     //can use ternary operator or just a conditional assignment
     //yeah prob better to do conditional assignment
@@ -3297,15 +3368,17 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
     else
         speciesArgument = sPokedexScreenData->dexSpecies;*/
 
+    
+
     speciesArgument = DexScreen_FormFilter(species);
 
 
-    species = SpeciesToNationalPokedexNum(species);
-
-
     
-    if (DexScreen_GetSetPokedexFlag(speciesArgument, FLAG_GET_CAUGHT, FALSE))
+    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(speciesArgument, FLAG_GET_CAUGHT, TRUE))
     {
+
+        species = SpeciesToNationalPokedexNum(speciesArgument);
+
         if (species > NATIONAL_SPECIES_COUNT)
             printerTemplate.currentChar = gFormdexEntries[species].description;
         else
@@ -3344,7 +3417,7 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
 //turned into function -
 //if specis is on list use the base form to decide if should display 
     //put this in display form as well
-    //still need go over array values to clean up
+    //still need go over array values to clean up //change use flag check instead makes more sense, but keep for dex entry
 u16 DexScreen_FormFilter(u16 species)
 {
     u32 i;
@@ -3352,7 +3425,7 @@ u16 DexScreen_FormFilter(u16 species)
 
     for (i = 0; i < NELEMS(gdexEntryFormSpecies); i++)
     {
-        if (species > NATIONAL_SPECIES_COUNT)
+        if (species > FORMS_START)
         {
             if (species == gdexEntryFormSpecies[i]) //remember put spiky pikachu castform unown etc. on list
             {
@@ -3488,10 +3561,23 @@ u8 DexScreen_DrawMonAreaPage(void)
     u8 width, height;
     bool8 monIsCaught;
     s16 left, top;
-    u16 speciesId, species;
+    u16 speciesId;
+    u16 species = sPokedexScreenData->dexSpecies;
     u16 kantoMapVoff;
+    u16 monScale;
+    u16 FormSpecies;
 
-    species = sPokedexScreenData->dexSpecies;
+
+    if (species > NATIONAL_SPECIES_COUNT
+    && (gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION))
+    {
+        FormSpecies = GetFormSpeciesId(species, 0);
+    }
+    else
+        FormSpecies = species; //already uses dex->species
+    
+
     //seems can just fully replace speciesId use, as its only used in size comparison
     if (species > NATIONAL_SPECIES_COUNT)
         speciesId = SpeciesToNationalPokedexNum(GetFormSpeciesId(species, 0)); //returns base form species
@@ -3500,7 +3586,7 @@ u8 DexScreen_DrawMonAreaPage(void)
     //doesn't work with out below
     //speciesId = SpeciesToNationalPokedexNum(species); //kept this , as before was using nat number so hopefully won't break anything
     
-    monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
+    monIsCaught = DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE);
     width = 28;
     height = 14;
     left = 0;
@@ -3614,6 +3700,7 @@ u8 DexScreen_DrawMonAreaPage(void)
     //will now fill baseform if above species count
     //something wrong w base spepcies pikachu bigger than forms
     //despite supposedly using same values
+    monScale = gPokedexEntries[speciesId].pokemonScale;
     if (monIsCaught) 
     {
         sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, 40, 104, 0, 0xFFFF); //was 65535
@@ -3622,7 +3709,9 @@ u8 DexScreen_DrawMonAreaPage(void)
         gSprites[sPokedexScreenData->windowIds[14]].oam.matrixNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.priority = 1;
         gSprites[sPokedexScreenData->windowIds[14]].pos2.y = gPokedexEntries[speciesId].pokemonOffset; //this is elevation of mon pic
-        SetOamMatrix(2, gPokedexEntries[speciesId].pokemonScale, 0, 0, gPokedexEntries[speciesId].pokemonScale);
+        if (sPokedexScreenData->dexSpecies == SPECIES_MEWTWO_MEGA_Y)
+            monScale = gPokedexEntries[SpeciesToNationalPokedexNum(SPECIES_MEW)].pokemonScale;
+        SetOamMatrix(2, monScale, 0, 0, monScale);
         //trainer pic values
         sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId_Debug(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 104, 0, 0xFFFF); //same as above
         gSprites[sPokedexScreenData->windowIds[15]].oam.paletteNum = 2;
@@ -3975,6 +4064,18 @@ u8 DexScreen_RegisterMonToPokedex(u16 species) //now has nat dex, need workaroun
 {
     DexScreen_GetSetPokedexFlag(species, FLAG_SET_SEEN, TRUE);
     DexScreen_GetSetPokedexFlag(species, FLAG_SET_CAUGHT, TRUE);
+
+    if (species > NATIONAL_SPECIES_COUNT
+    && !(GetSetPokedexFlag((GetFormSpeciesId(species, 0)), FLAG_GET_SEEN))
+    && (gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION
+    || gBaseStats[SanitizeSpeciesId(species)].flags == F_ALOLAN_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == F_GALARIAN_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == F_HISUIAN_FORM
+    || gBaseStats[SanitizeSpeciesId(species)].flags == F_CEFIRIAN_FORM))
+    {
+        DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, 0), FLAG_SET_SEEN, TRUE); //if catch form should set base form is seen so can navigate to dex page
+    }//this part works at least
 
     //if (!IsNationalPokedexEnabled() && SpeciesToNationalPokedexNum(species) > KANTO_DEX_COUNT)
     //    return CreateTask(Task_DexScreen_RegisterNonKantoMonBeforeNationalDex, 0);
@@ -4447,13 +4548,15 @@ static void DexScreen_LoadIndex(u32 count, u8 direction, int selectedIndex, s8 s
         {
             for (i = 0; i <= count; i++) //can have this be taken by count argument, so its same code for increasing once
             {
+                //if (count >= (selectedIndex + 100)) //to stop the function effect so I don't increment passed what I need to
+                //   break;
+
                 seen = DexScreen_GetSetPokedexFlag(ndex_num + i + 1, FLAG_GET_SEEN, FALSE);
                 caught = DexScreen_GetSetPokedexFlag(ndex_num + i + 1, FLAG_GET_CAUGHT, FALSE); //since nav function increments value, can't use that in function
 
                 if (seen) //ok using this fixed it, thiknk issue is keeping same structure between, this function and DexScreen_CreateList_ReturnCount
                 {
                     sPokedexScreenData->listItems[ndex_num + i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num + i + 1)]; //in lower range print first 10
-                    
                 }   
                 else
                 {
@@ -4463,6 +4566,9 @@ static void DexScreen_LoadIndex(u32 count, u8 direction, int selectedIndex, s8 s
 
                 if (ndex_num + i == sPokedexScreenData->orderedDexCount) //to stop the function effect so I don't increment passed what I need to
                     break; //needed to prevent graphic glitch from going too high
+
+                //if (ndex_num + count >= selectedIndex + 100) //to stop the function effect so I don't increment passed what I need to
+                //    break; //for scrolling mon info page, issues are caused when scrolling larger interval than count, testing here
             }
         }
         else if (direction == SCROLL_UP)
@@ -5354,6 +5460,13 @@ static u16 DexScreen_CreateList_ReturnCount(u8 orderIdx, int selectedIndex) //re
                                 i++;
 
                     }
+                }
+                else
+                {
+                    sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                    sPokedexScreenData->listItems[i].index = 0;
+                    //sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(i + 1); //fixed
+                    //ok didn't need that line, was just an issue with my scroll function now fixed
                 }
                 /*else
                 {

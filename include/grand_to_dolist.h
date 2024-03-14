@@ -2344,6 +2344,7 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   since friendship is used for egg cycles/egg hatch time  ok was actually wrong about that,
   its working as normal
 
+ -was able to fix dex scrolling it was issue of the else condition I removed from nat dex
 
   -sigh found other issue, moves that  set poisoning status seem to not work well,/correclty
   -when used to reapply poison, the text displays but the toxic damage isn't right. rn using poison gas move to poison

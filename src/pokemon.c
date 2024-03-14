@@ -7448,7 +7448,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 type, u16 evolutionItem)
         //for (i = 0; evolutions[i].method != EVOLUTIONS_END; i++)
         for (i = 0; i != NUM_EVOS_CAP && evolutions[i].method != EVOLUTIONS_END; i++)
         {
-             switch (evolutions[i].method)
+             switch (evolutions[i].method) //seems works
             {
                 case EVO_ITEM:
                 if (evolutions[i].param == evolutionItem)
