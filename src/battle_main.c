@@ -1272,7 +1272,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     }
 }
 
-u8 ReturnMoveType(u16 move, u8 battlerAtk)
+u8 ReturnMoveType(u16 move, u8 battlerAtk) //can't reemnber if was just for testin but this doesn't appear used anywhere
 {
     s32 typeBits;
     u32 moveType, ateType, attackerAbility;

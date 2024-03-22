@@ -5251,7 +5251,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     pidDef = GetMonData(pokeDef, MON_DATA_PERSONALITY);
     if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI)) // Why isn't that check done at the beginning?
     {
-        u8 moveType, move;
+        u8 moveType;//, move; //why the heck did I use move as a u8 -_-  that's what broke anticipation it couldnt properly store moves above value 255
         s32 i, j;
         
         u8 target1;
@@ -5366,7 +5366,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattlescriptCurrInstr = BattleScript_BlockedByPrimalWeatherRet;
                     ++effect;
                 }
-                else if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE))
+                else if (!(gBattleWeather & WEATHER_RAIN_ANY) && TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
                     gBattleScripting.battler = battler;
@@ -5408,7 +5408,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattlescriptCurrInstr = BattleScript_BlockedByPrimalWeatherRet;
                     ++effect;
                 }
-                else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE))
+                else if (!(gBattleWeather & WEATHER_SUN_ANY) && TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
                     gBattleScripting.battler = battler;
@@ -5445,7 +5445,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }                
                 break;
             case ABILITY_DESOLATE_LAND:
-                if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
+                if (!(gBattleWeather & WEATHER_SUN_PRIMAL) && TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DesolateLandActivates);
                     ++effect;
@@ -5456,14 +5456,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //think will also make fire terrain move for heatran, immunity to fire like flash fire
                 //vsonic
             case ABILITY_PRIMORDIAL_SEA:
-                if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
+                if (!(gBattleWeather & WEATHER_RAIN_PRIMAL) && TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_PrimordialSeaActivates);
                     ++effect;
                 }
                 break;
             case ABILITY_DELTA_STREAM:
-                if (TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
+                if (!(gBattleWeather & WEATHER_STRONG_WINDS) && TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
                 {
                     BattleScriptPushCursorAndCallback(BattleScript_DeltaStreamActivates);
                     ++effect;
@@ -6138,9 +6138,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             case ABILITY_ANTICIPATION:  //working on change
             {
                 u16 moveId = MOVE_NONE; //to store moveId of a move
+                u16 move; //this was the problem I was using a u8 to store move data *facepalm
 
                 if (!gSpecialStatuses[battler].switchInAbilityDone
-                && gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] == FALSE)
+                && gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] == FALSE) //can prob remove switchindone part?
                 {
                     side = GetBattlerSide(battler);
                     
@@ -6151,17 +6152,24 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         {
                             for (j = 0; j < MAX_MON_MOVES; j++)
                             {
+                                if (gBattleMons[i].moves[j] == MOVE_NONE) //taken from forewarn hopefully fixes issue, so not assigned to move at all
+                                    continue; //fixed issue w type change, but think keep this to optimize anyway
+
                                 move = gBattleMons[i].moves[j];
                                 SetTypeBeforeUsingMove(move, i); //usign this fixed it, with get_mvoe_type change without this it just erad as normal type,cuz dynamicmovetype is 0
                                 GET_MOVE_TYPE(move, moveType); //including set type seems to be correct, as ability is supposed to read for things that change type
 
-                                if (gBattleMoves[move].power > gBattleMoves[moveId].power) //for each move,
-                                    moveId = move;
+                                if (gBattleMoves[move].target == MOVE_TARGET_USER) //appears fixed, was right issue was bide, since it ignores type reading
+                                    continue;
+                                    
+
+                                if (gBattleMoves[move].power > gBattleMoves[moveId].power) //for each move, / won't work with new change make 0 power moves, 
+                                    moveId = move;  //could be fine, like unable to register there power, power 0 is fixed dmg like seismic toss, endeavor
 
                                 if (gBattleMoves[move].effect == EFFECT_EXPLOSION //setup multiplier calc think can just use multipier check here.
                                     && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) != UQ_4_12(0.0)) //isue is modifier for some reason doesnt work above 1?
                                 {               //ist onlyh returning a value of 1
-                                    
+
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_EXPLOSION);
                                     ++effect;                                    
                                     break;
@@ -6171,16 +6179,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 else if (gBattleMoves[move].effect == EFFECT_OHKO && (gBattleMons[i].level >= (gBattleMons[battler].level - 3))
                                 && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.55))
                                 {
+
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_OHKO);
                                     ++effect;//
                                     break;
                                 }
                                 else if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.55))//vsonic  //THINK CAN use typecalc fort this?
                                 {
+
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_DEFAULT);
                                     ++effect;//
                                     break;
                                 }//if find super effectivemove, increment effect and break for loop, to lock in move/
+
                                 
                             }//can only return one value, so will need to do an if else based on priority                            
                         }
@@ -6188,14 +6199,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 break; //should be break out of i loop
                     }
 
-                    if (!effect) //if didn't find a move that matched condition
+                    if (!effect) //if didn't find a move that matched condition / ok somehow one of my moves on stufful  is breaking this
                     {
                         PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_STRONGEST_MOVE); //change to return a STrong
-                        if (gBattleMoves[move].power <= gBattleMoves[moveId].power)
+                        if (gBattleMoves[move].power <= gBattleMoves[moveId].power) //for some reason not working when only 1 move?
                             move = moveId; //replace move with strongest move found
                         ++effect;//
                          //realized can't put this here, would prevent loop from going all the way, needs to be outside
-                    } //works perfectly
+                    } //works perfectly - seems this case reads what move does most damage not justpower?  had quad resisted close combat and it chose tackle,
+                    //which was more damage, keep an eye on it, if it does work that way, that's perfect
 
                     
 

@@ -848,6 +848,7 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_RAPIDSPIN] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_REMOVE_STATUS] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_ATK_DEF_DOWN] = BattleScript_MoveEffectSleep,//BattleScript_MoveEffectFallInLove
+    [MOVE_EFFECT_DEF_SPDEF_DOWN] = BattleScript_MoveEffectSleep,//BattleScript_MoveEffectFallInLove
     [MOVE_EFFECT_RECOIL_33] = BattleScript_MoveEffectRecoil,
     [MOVE_EFFECT_SPD_MINUS_2] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_INFESTATION] = BattleScript_MoveEffectInfestation,
@@ -5293,6 +5294,12 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 if (!NoAliveMonsForEitherParty()){
                 BattleScriptPush(gBattlescriptCurrInstr + 1);
                 gBattlescriptCurrInstr = BattleScript_AtkDefDown;
+                }
+                break;
+            case MOVE_EFFECT_DEF_SPDEF_DOWN: //og close combat now changed, but keep effect for test
+            if (!NoAliveMonsForEitherParty()){
+                BattleScriptPush(gBattlescriptCurrInstr + 1);
+                gBattlescriptCurrInstr = BattleScript_DefSpDefDown;
                 }
                 break;
             case MOVE_EFFECT_RECOIL_33: // Double Edge
@@ -15392,10 +15399,10 @@ void BS_VariablePowerCalc(void)
         }
         break;
         case EFFECT_RETURN:
-        gDynamicBasePower = 10 * (gBattleMons[gBattlerAttacker].friendship) / 25;
+        gDynamicBasePower = 10 * (gBattleMons[gBattlerAttacker].friendship) / 25; //new friendship change makes return initially weaker and scale up slower
         break;
         case EFFECT_FRUSTRATION:
-        gDynamicBasePower = 10 * (255 - gBattleMons[gBattlerAttacker].friendship) / 25;
+        gDynamicBasePower = 10 * (255 - gBattleMons[gBattlerAttacker].friendship) / 25; //ironically it makes frustration actually viable in game,
         break;
         case EFFECT_FURY_CUTTER:
         if (gCurrentMove == MOVE_FURY_CUTTER) //changing script to just use the multi-hit bs, need to add this to its loop though,
