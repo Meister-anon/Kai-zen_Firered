@@ -2488,12 +2488,13 @@ static const struct LevelUpMove sAriadosLevelUpLearnset[] = {
     LEVEL_UP_MOVE(11, MOVE_CONSTRICT),
     LEVEL_UP_MOVE(17, MOVE_NIGHT_SHADE),
     LEVEL_UP_MOVE(25, MOVE_LEECH_LIFE),
-    LEVEL_UP_MOVE(34, MOVE_FURY_SWIPES),
+    LEVEL_UP_MOVE(29, MOVE_FURY_SWIPES),
     LEVEL_UP_MOVE(43, MOVE_SPIDER_WEB),
+    LEVEL_UP_MOVE(47, MOVE_MEGAHORN),
     LEVEL_UP_MOVE(53, MOVE_AGILITY),
     LEVEL_UP_MOVE(63, MOVE_PSYCHIC),
     LEVEL_UP_END
-};
+};//megahorn add
 
 static const struct LevelUpMove sCrobatLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_SCREECH),
