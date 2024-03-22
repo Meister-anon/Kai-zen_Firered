@@ -699,6 +699,7 @@ const u16 *GetSpeciesTeachableLearnset(u16 species);
 const struct Evolution *GetSpeciesEvolutions(u16 species);
 u16 SanitizeSpeciesId(u16 species);
 //new functions for file reorg based on EE
+u8 GetFormType(u16 species); //set mostly for dex changes
 
 void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst);
 

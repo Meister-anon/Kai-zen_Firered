@@ -20,13 +20,12 @@
 #include "constants/sound.h"
 #include "pokedex_area_markers.h"
 #include "field_specials.h"
+#include "item.h"
 
 #define TAG_AREA_MARKERS 2001
 
 #define DEX_MAX_SHOWN sListMenuTemplate_OrderedListMenu.maxShowed//9  //plan use for amount of mon to initially load, for speed sake, then expand on as scroll
 
-#define DEX_LOWER_FILL 30
-#define DEX_UPPER_FILL 30 //same value but need diff constant
 
 #define SCROLL_UP 1
 #define SCROLL_DOWN 0
@@ -2139,24 +2138,42 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)//think task show dex entry fro
     }
 }
 
+enum FormValues {
+    MISC_FORM,
+    MEGA_FORM,
+    PRIMAL_FORM
+};
+
+u8 GetFormType(u16 species)
+{
+
+    if (gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION)
+        return PRIMAL_FORM;
+
+    else if (gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM)
+        return MEGA_FORM;
+
+    else if (species > NATIONAL_SPECIES_COUNT) //normal form not mega or primal
+        return MISC_FORM;
+
+
+}
+
 //left right
 static bool32 DexScreen_TryDisplayForms(u8 direction)
 {
     s32 i;
     u32 a = 0; //to get base form use in seen only 
-    u16 seen;
-    u16 species = sPokedexScreenData->dexSpecies;
+    u16 seen, caught;
+    u16 species = sPokedexScreenData->dexSpecies;   //is species of pokemon viewing
     u8 FormId = GetFormIdFromFormSpeciesId(species); //id in relevant table of current species
     u8 FinalFormId = GetFinalFormSpeciesId(species); //id of last form in table
     u16 FormFilter;
+    u8 IsMegaPrimal = FALSE;
+    u8 PassMegaChecks = FALSE;
 
 
-    //for choosing when to display forms
-    //based on what type of form it is, a temp or permanent one
-    //if permanenet I can use actual form species
-    //otherwise I should prefer to use see the base form to display other form
-    //unless seen works for the player USING the species in battle as well,
-    //not just seeing it on the otherside vsonic IMPORTANT
+   
 
     FormFilter = DexScreen_FormFilter(species);
 
@@ -2166,9 +2183,51 @@ static bool32 DexScreen_TryDisplayForms(u8 direction)
             return FALSE;
         for (i = FormId - 1; i >= 0; i--)
         {
+            //decides whether to display base form species or species form
             FormFilter = DexScreen_FormFilter(GetFormSpeciesId(species, i)); //assign based on which form displaying
+            
             //seen = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_SEEN, TRUE);
             seen = DexScreen_GetSetPokedexFlag(FormFilter, FLAG_GET_SEEN, TRUE);
+
+            /*switch (GetFormType(GetFormSpeciesId(species, i)))
+            {
+                case MISC_FORM:
+                if (seen)
+                {
+                    sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                    return TRUE;
+                }
+                break;
+                case MEGA_FORM:
+                if (seen)// && check bag has ITEM_MEGA_RING
+                {
+                    sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                    return TRUE;
+                }
+                break;
+                case PRIMAL_FORM:
+                if (FormFilter == SPECIES_GROUDON)
+                {
+                    if (seen && (CheckBagHasItem(ITEM_RED_ORB, 1))) //check species groudon red orb
+                    {
+                        sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                        return TRUE;
+                    }
+                    break;
+                }
+                else if (FormFilter == SPECIES_KYOGRE)
+                {
+                    if (seen && (CheckBagHasItem(ITEM_BLUE_ORB, 1)))//check species kyogre blue orb,
+                    {
+                        sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                        return TRUE;
+                    }
+                    break;
+                }
+                
+            }*/
+
+
             if (seen)
             {
                 sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
@@ -2188,11 +2247,51 @@ static bool32 DexScreen_TryDisplayForms(u8 direction)
             FormFilter = DexScreen_FormFilter(GetFormSpeciesId(species, i)); //assign based on which form displaying
             //seen = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_SEEN, TRUE);
             seen = DexScreen_GetSetPokedexFlag(FormFilter, FLAG_GET_SEEN, TRUE);
-            if (seen)
+            caught = DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, i), FLAG_GET_CAUGHT, TRUE); //seems to work makes mega visible if caught it
+
+            switch (GetFormType(GetFormSpeciesId(species, i)))
+            {
+                case MISC_FORM:
+                if (seen)
+                {
+                    sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                    return TRUE;
+                }
+                break;
+                case MEGA_FORM:
+                if ((seen && (CheckBagHasItem(ITEM_MEGA_RING, 1))) || caught)// && check bag has ITEM_MEGA_RING
+                {
+                    sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                    return TRUE;
+                }
+                break;
+                case PRIMAL_FORM:
+                if (FormFilter == SPECIES_GROUDON)
+                {
+                    if ((seen && (CheckBagHasItem(ITEM_RED_ORB, 1))) || caught) //check species groudon red orb
+                    {
+                        sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                        return TRUE;
+                    }
+                    break;
+                }
+                else if (FormFilter == SPECIES_KYOGRE)
+                {
+                    if ((seen && (CheckBagHasItem(ITEM_BLUE_ORB, 1))) || caught)//check species kyogre blue orb,
+                    {
+                        sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
+                        return TRUE;
+                    }
+                    break;
+                }
+                
+            }
+           
+            /*if (seen)
             {
                 sPokedexScreenData->dexSpecies = GetFormSpeciesId(species, i);
                 return TRUE;
-            }
+            }*/
                 
         }
         return FALSE;
@@ -2967,7 +3066,6 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     u32 i;
     u8 categoryStr[13];//changed from 12 - issue was this, wasn't defined right, needed  be separate
     u16 speciesArgument;
-    u16 speciesFilter;
     u16 FormSpecies;
     bool8 UniqueCategory = FALSE;
     //bool8 UseBaseForm = FALSE;
@@ -2984,7 +3082,7 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     //as that is used for species that change forms in battle
     
 
-
+    //if mega use base form for catch otherwise use dex species
     if (species > NATIONAL_SPECIES_COUNT
     && (gBaseStats[SanitizeSpeciesId(species)].flags == F_MEGA_FORM
     || gBaseStats[SanitizeSpeciesId(species)].flags == SPECIES_FLAG_PRIMAL_REVERSION))
@@ -2994,6 +3092,9 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     else
         FormSpecies = species; //already uses dex->species
 
+    
+    
+    //check for forms that actually have different cat from base forms
     for (i = 0; i < NELEMS(gdexCatFormSpecies); i++) //only the cat names I need change
     {
         if (NatSpecies > NATIONAL_SPECIES_COUNT)
@@ -3046,7 +3147,6 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     else
         speciesFilter = sPokedexScreenData->dexSpecies;*/
 
-    speciesFilter = DexScreen_FormFilter(species);
         
 
     index = 0;
@@ -3056,8 +3156,10 @@ void DexScreen_PrintMonCategory(u8 windowId, u16 species, u8 x, u8 y)
     
 
     //think may need change this, since not all forms are permanent, keep in mind and find answer later
+    //current issue is override for dex category isn't working anymore, 
     //vsonic 
-    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(speciesFilter, FLAG_GET_CAUGHT, TRUE))
+    //change to work if form species, or species, plan specifically to let catching megas still display correftly
+    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE))
     
     {
         //#if REVISION == 0
@@ -3285,6 +3387,7 @@ void DexScreen_PrintMonWeight(u8 windowId, u16 species, u8 x, u8 y)
     DexScreen_AddTextPrinterParameterized(windowId, FONT_SMALL, buffer, x, y, 0);
 }
 
+//DexScreen_PrintMonCategory
 void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
 {
     struct TextPrinterTemplate printerTemplate;
@@ -3370,14 +3473,14 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
 
     
 
-    speciesArgument = DexScreen_FormFilter(species);
+    //speciesArgument = DexScreen_FormFilter(species);
 
 
     
-    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(speciesArgument, FLAG_GET_CAUGHT, TRUE))
+    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE))
     {
 
-        species = SpeciesToNationalPokedexNum(speciesArgument);
+        species = SpeciesToNationalPokedexNum(species);
 
         if (species > NATIONAL_SPECIES_COUNT)
             printerTemplate.currentChar = gFormdexEntries[species].description;
@@ -3559,7 +3662,7 @@ u8 DexScreen_DrawMonAreaPage(void)
 {
     int i;
     u8 width, height;
-    bool8 monIsCaught;
+    bool8 monIsCaught = FALSE;
     s16 left, top;
     u16 speciesId;
     u16 species = sPokedexScreenData->dexSpecies;
@@ -3586,7 +3689,8 @@ u8 DexScreen_DrawMonAreaPage(void)
     //doesn't work with out below
     //speciesId = SpeciesToNationalPokedexNum(species); //kept this , as before was using nat number so hopefully won't break anything
     
-    monIsCaught = DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE);
+    if (DexScreen_GetSetPokedexFlag(FormSpecies, FLAG_GET_CAUGHT, TRUE) || DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE))
+        monIsCaught = TRUE;
     width = 28;
     height = 14;
     left = 0;
@@ -3887,7 +3991,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_GrasslandPkmnlist); j++)
             {
-                if (species == gDexCategory_GrasslandPkmnlist[j])
+                if (species == gDexCategory_GrasslandPkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_GrasslandPkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_GrasslandPkmnlist[j];
                     break; //break out of inner loop
@@ -3902,7 +4006,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_ForestPkmnlist); j++)
             {
-                if (species == gDexCategory_ForestPkmnlist[j])
+                if (species == gDexCategory_ForestPkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_ForestPkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_ForestPkmnlist[j];
                     break; //break out of inner loop
@@ -3917,7 +4021,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_WatersEdgePkmnlist); j++)
             {
-                if (species == gDexCategory_WatersEdgePkmnlist[j])
+                if (species == gDexCategory_WatersEdgePkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_WatersEdgePkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_WatersEdgePkmnlist[j];
                     break; //break out of inner loop
@@ -3931,7 +4035,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_SeaPkmnlist); j++)
             {
-                if (species == gDexCategory_SeaPkmnlist[j])
+                if (species == gDexCategory_SeaPkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_SeaPkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_SeaPkmnlist[j];
                     break; //break out of inner loop
@@ -3945,7 +4049,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_CavePkmnlist); j++)
             {
-                if (species == gDexCategory_CavePkmnlist[j])
+                if (species == gDexCategory_CavePkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_CavePkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_CavePkmnlist[j];
                     break; //break out of inner loop
@@ -3959,7 +4063,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_MountainPkmnlist); j++)
             {
-                if (species == gDexCategory_MountainPkmnlist[j])
+                if (species == gDexCategory_MountainPkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_MountainPkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_MountainPkmnlist[j];
                     break; //break out of inner loop
@@ -3973,7 +4077,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_RoughTerrainPkmnlist); j++)
             {
-                if (species == gDexCategory_RoughTerrainPkmnlist[j])
+                if (species == gDexCategory_RoughTerrainPkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_RoughTerrainPkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_RoughTerrainPkmnlist[j];
                     break; //break out of inner loop
@@ -3987,7 +4091,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_UrbanPkmnlist); j++)
             {
-                if (species == gDexCategory_UrbanPkmnlist[j])
+                if (species == gDexCategory_UrbanPkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_UrbanPkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_UrbanPkmnlist[j];
                     break; //break out of inner loop
@@ -4001,7 +4105,7 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
         {
             for (j = 0; j < NELEMS(gDexCategory_RarePkmnlist); j++)
             {
-                if (species == gDexCategory_RarePkmnlist[j])
+                if (species == gDexCategory_RarePkmnlist[j] || (GetFormSpeciesId(species, 0) == gDexCategory_RarePkmnlist[j]))
                 {
                     foundSpecies = gDexCategory_RarePkmnlist[j];
                     break; //break out of inner loop
@@ -4018,14 +4122,15 @@ static u8 DexScreen_LookUpCategoryBySpecies(u16 species)
 
         //this needed to pass to screendeta->dexspecies to
         //populate dex as well as play correct cry on dex load - need check cry play w volume but from looks should work correctly
-        sPokedexScreenData->dexSpecies = dexSpecies = foundSpecies;
+        sPokedexScreenData->dexSpecies = species;
+        dexSpecies = foundSpecies;
 
         //got it all working, all need is store category, removed need for other values
         //instead of reading dex category struct, it'll fill in the template page with its image species name and dex number, 
         //same as if it actually had a cat page.
         //this saves me a good deal of physical space, and also I just don't want to add a BUNCH of category pages that already move slowly
         //that no one really looks through, it'd just be unnecesary bloat
-        if (species == dexSpecies)
+        if (species == dexSpecies || (species == GetFormSpeciesId(dexSpecies, 0)))
         {
             sPokedexScreenData->category = i; //this sets category text, only part I needed from original function      
             
@@ -4075,7 +4180,7 @@ u8 DexScreen_RegisterMonToPokedex(u16 species) //now has nat dex, need workaroun
     || gBaseStats[SanitizeSpeciesId(species)].flags == F_CEFIRIAN_FORM))
     {
         DexScreen_GetSetPokedexFlag(GetFormSpeciesId(species, 0), FLAG_SET_SEEN, TRUE); //if catch form should set base form is seen so can navigate to dex page
-    }//this part works at least
+    }//if a form, but not seen base form, set base seen so can acces form dex of caught mon
 
     //if (!IsNationalPokedexEnabled() && SpeciesToNationalPokedexNum(species) > KANTO_DEX_COUNT)
     //    return CreateTask(Task_DexScreen_RegisterNonKantoMonBeforeNationalDex, 0);
