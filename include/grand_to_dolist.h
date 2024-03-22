@@ -1742,7 +1742,11 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   so need make exclusion so doesn't reactivate if weather is strong sun? or sometning
   -done, issue was not keeping it from trying to reactivate if sun already set
   -unsure if primal works right
+
+  -NOTE already set logic for compatibility for tmhm and level up learnsets, 
+  same as evo can read from base stats or table. just a matter of filling them in now
   
+  finished updating up to start of gen 4
 
  -considered cutting all recovery effects, seems like I do, bulk is increased, healing is too strong
  lower half health heal to 1/3rd, for pure recovery moves

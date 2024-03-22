@@ -8100,6 +8100,7 @@ const struct Evolution *GetSpeciesEvolutions(u16 species)
     return evolutions;
 }
 
+//vsonic IMPORTANT plan use for move relearner
 u16 GetSpeciesPreEvolution(u16 species)
 {
     int i, j;
