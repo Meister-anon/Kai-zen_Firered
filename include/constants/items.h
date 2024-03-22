@@ -473,7 +473,6 @@
 #define ITEM_HM07 453
 #define ITEM_HM08 454
 #define ITEM_HM09 455
-#define ITEM_15C 456    
 
 #define ITEM_TM01_FOCUS_PUNCH ITEM_TM01
 #define ITEM_TM02_DRAGON_CLAW ITEM_TM02
@@ -662,6 +661,7 @@
 #define ITEM_HM08_DIVE ITEM_HM08 //can add rock climb right after this simple enough
 #define ITEM_HM09_ROCK_CLIMB ITEM_HM09 //will add, plan use rock climb to revolutionize cave mapping/travel, same as surf can be used as map transition
 
+#define ITEM_MEGA_RING 456    
 // FireRed/LeafGreen  believe this is key items actually maybe..?
 #define ITEM_OAKS_PARCEL 457
 #define ITEM_POKE_FLUTE 458

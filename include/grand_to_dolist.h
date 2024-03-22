@@ -1727,6 +1727,23 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
  -ok anticipation not working right? somehow sabrina alakazaam read an explosion move from my hitmonchan?
  -believe fixed anticipation and forewarn messagoing still to do ffect
 
+ -identified issue is to do with ancitipcation function,
+ its reading all things as "strong move"  even if I have a super effective move
+
+ -ok actually I think the issue is in my move data, I think somehow my moves are out of sequence after a certain point,
+ as multiple moves around mud shot fail while moves below all work. if something is out of sequence,
+ then it could actually be triggering different somehow? but the move effect is right so idk
+
+ ...not moves out of a sequence it caps at move 255 its a freakin type limit error. FACEPALM
+ -fixed
+
+ -...somejow drought drizzle broken, causes infini loop on switch in smh fuck my life
+  //seems to be switch in drought when drought effect is already active,
+  so need make exclusion so doesn't reactivate if weather is strong sun? or sometning
+  -done, issue was not keeping it from trying to reactivate if sun already set
+  -unsure if primal works right
+  
+
  -considered cutting all recovery effects, seems like I do, bulk is increased, healing is too strong
  lower half health heal to 1/3rd, for pure recovery moves
 
@@ -2345,6 +2362,43 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   its working as normal
 
  -was able to fix dex scrolling it was issue of the else condition I removed from nat dex
+
+  - fixed form dex, way its setup now,
+  megas are treated differently, mega and primal reversion
+  will be shown if you caught the base form as if you caught the mega too.
+  ,I think need to go into other function, the one that flips to display the forms for mon
+  and add logic for megas, it'll display on catch,
+  but think if don't have mega ring shouldn't flip forms to display mega form.
+
+  so need add logic to check forms, see if form species would have mega flag, or primal revert flag
+  if so skip that form if don't have relevant keyitem
+  OR  haven't seen the mega species.
+
+  so filter for displaying form from dex navigation would be having mega ring or having seen the mega form
+  DexScreen_TryDisplayForms
+
+  -did so, far as I know is working withot issue
+
+  area page isn't right, its showing mon type when seen but its not supposed to do that until catch on area page
+  -fixed same as before changed value to true false, forgot to set false at definition, so garbage data made it always true
+
+  ...discover new issue, zen mode for darmanitan is broken causes transform in opposiing mon...
+  and messes with species catch logic, not sure why its doing so.
+
+  only happens with ability zen mode
+  -and only when at full hp, when it hits 50% hp it works normally,
+  ability is supposed to swap to zenmode at 50% hp
+
+  actually may not be an issue, if starts battle as normal darmanitan rather than zenmode,
+  it works normally and transforms correctly when hits 50%
+
+  -but if randomizer idk may be an issue, so look into I guess.
+
+  -found issue w anticipation idk why its not working when it did previously
+  moves were bide close combat leer tackle, against weedle issue could be bide, 1 pwr move
+  -no it doesn't have logic for 1 pwr moves
+
+  -surely i tested anticipation too and not just forewarn? I know the messages worked...
 
   -sigh found other issue, moves that  set poisoning status seem to not work well,/correclty
   -when used to reapply poison, the text displays but the toxic damage isn't right. rn using poison gas move to poison

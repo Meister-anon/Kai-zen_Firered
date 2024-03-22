@@ -8157,10 +8157,24 @@ bool8 IsMonPastEvolutionLevel(struct Pokemon *mon)
         {
         case EVO_LEVEL:*/
             //if (evolutions[i].param <= level) //remove switch logic so can fit in any case
-            if (EvoCeiling <= level || (LevelFloor + EffortToRaise) <= level)
+            if (gBaseStats[SanitizeSpeciesId(species)].evolutions == NULL)
             {
-                return TRUE;
-                break;
+                EvoCeiling = (evolutions[i].param);
+
+                if (EvoCeiling <= level)
+                {
+                    return TRUE;
+                    break;
+                }
+
+            }
+            else
+            {
+                if (EvoCeiling <= level || (LevelFloor + EffortToRaise) <= level)
+                {
+                    return TRUE;
+                    break;
+                }
             }
         //}
     }

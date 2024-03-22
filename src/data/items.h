@@ -7463,16 +7463,16 @@ const struct Item gItems[] =
       //"moveId" "RockClimb"
     },
     {
-      .name = _("????????"),
-      .itemId = ITEM_NONE,
+      .name = _("MEGA RING"),
+      .itemId = ITEM_MEGA_RING,
       .price =  0,
       .holdEffect = HOLD_EFFECT_NONE,
       .holdEffectParam =  0,
-     .description = gItemDescription_ITEM_NONE,
+     .description = gItemDescription_ITEM_MEGA_RING,
 //      "description":  gItemDescription_ITEM_NONE
-      .importance = 0,
+      .importance = 2,
       .exitsBagOnUse = 0,
-      .pocket = POCKET_ITEMS,
+      .pocket = POCKET_KEY_ITEMS,
       .type = ITEM_USE_BAG_MENU,
       .fieldUseFunc = FieldUseFunc_OakStopsYou,
       .battleUseFunc = NULL,
