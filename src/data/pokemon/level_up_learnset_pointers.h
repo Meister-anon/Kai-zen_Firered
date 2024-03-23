@@ -498,9 +498,9 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
 [SPECIES_DARKRAI] = sDarkraiLevelUpLearnset,
 [SPECIES_SHAYMIN] = sShayminLevelUpLearnset,
 [SPECIES_ARCEUS] = sArceusLevelUpLearnset,
+[SPECIES_VICTINI] = sVictiniLevelUpLearnset,
 //#endif
 //#if P_GEN_5_POKEMON == TRUE
-[SPECIES_VICTINI] = sVictiniLevelUpLearnset,
 [SPECIES_SNIVY] = sSnivyLevelUpLearnset,
 [SPECIES_SERVINE] = sServineLevelUpLearnset,
 [SPECIES_SERPERIOR] = sSerperiorLevelUpLearnset,

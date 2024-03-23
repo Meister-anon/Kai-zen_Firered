@@ -496,6 +496,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_SHAYMIN] = sShayminTMHMLearnset,
     [SPECIES_ARCEUS] = sArceusTMHMLearnset,
     [SPECIES_VICTINI] = sVictiniTMHMLearnset,
+    
     [SPECIES_SNIVY] = sSnivyTMHMLearnset,
     [SPECIES_SERVINE] = sServineTMHMLearnset,
     [SPECIES_SERPERIOR] = sSerperiorTMHMLearnset,
@@ -652,6 +653,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_KELDEO] = sKeldeoTMHMLearnset,
     [SPECIES_MELOETTA] = sMeloettaTMHMLearnset,
     [SPECIES_GENESECT] = sGenesectTMHMLearnset,
+    
     [SPECIES_CHESPIN] = sChespinTMHMLearnset,
     [SPECIES_QUILLADIN] = sQuilladinTMHMLearnset,
     [SPECIES_CHESNAUGHT] = sChesnaughtTMHMLearnset,

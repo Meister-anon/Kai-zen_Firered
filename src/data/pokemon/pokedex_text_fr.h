@@ -3814,9 +3814,15 @@ const u8 gHeatmorPokedexText[] = _(
 
 const u8 gDurantPokedexText[] = _(
     "Durant dig nests in mountains.\n"
-    "Individuals each play different roles in\n"
+    "They attack in groups, covering themselves\n"
+    "in steel armor to protect themselves from\n"
+    "Heatmor, their natural predator");
+    
+    /*"Individuals each play different roles in\n"
     "driving Heatmor, their natural predator,\n"
-    "away from their colony.");
+    "away from their colony.");*/
+
+    
 
 const u8 gDeinoPokedexText[] = _(
     "Lacking sight, it's unaware of its\n"
