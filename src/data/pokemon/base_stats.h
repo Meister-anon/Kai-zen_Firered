@@ -10898,9 +10898,9 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SHEER_FORCE, ABILITY_BULLETPROOF},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = sCranidosLevelUpLearnset,
-        .evolutions = sCranidosTMHMLearnset, //Should hopefully blank these for now without issue
+        .levelUpLearnset = sCranidosLevelUpLearnset,
+        .tmhmLearnset = sCranidosTMHMLearnset,
+        .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //THERE'S nothing rock like about most fossil mon, just them being from fossils, and from the stone age... most of this ones moves are normal too
 
     [SPECIES_RAMPARDOS] =
@@ -26723,8 +26723,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sVenusaurLevelUpLearnset,
+        .tmhmLearnset = sVenusaurTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_MEGA_FORM,
     },
@@ -26758,8 +26758,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCharizardLevelUpLearnset,
+        .tmhmLearnset = sCharizardTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_MEGA_FORM,
     },
@@ -26790,8 +26790,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCharizardLevelUpLearnset,
+        .tmhmLearnset = sCharizardTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -26825,8 +26825,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sBlastoiseLevelUpLearnset,
+        .tmhmLearnset = sBlastoiseTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -26862,8 +26862,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sBeedrillLevelUpLearnset,
+        .tmhmLearnset = sBeedrillTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -26897,8 +26897,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPidgeotLevelUpLearnset,
+        .tmhmLearnset = sPidgeotTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -26930,8 +26930,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlakazamLevelUpLearnset,
+        .tmhmLearnset = sAlakazamTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -26963,8 +26963,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSlowbroLevelUpLearnset,
+        .tmhmLearnset = sSlowbroTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -26995,8 +26995,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGengarLevelUpLearnset,
+        .tmhmLearnset = sGengarTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27030,8 +27030,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sKangaskhanLevelUpLearnset,
+        .tmhmLearnset = sKangaskhanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27065,8 +27065,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPinsirLevelUpLearnset,
+        .tmhmLearnset = sPinsirTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27100,8 +27100,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGyaradosLevelUpLearnset,
+        .tmhmLearnset = sGyaradosTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27135,8 +27135,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAerodactylLevelUpLearnset,
+        .tmhmLearnset = sAerodactylTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27170,8 +27170,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMewtwoLevelUpLearnset,
+        .tmhmLearnset = sMewtwoTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27202,8 +27202,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMewtwoLevelUpLearnset,
+        .tmhmLearnset = sMewtwoTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27237,8 +27237,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAmpharosLevelUpLearnset,
+        .tmhmLearnset = sAmpharosTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27273,8 +27273,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSteelixLevelUpLearnset,
+        .tmhmLearnset = sSteelixTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27308,8 +27308,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sScizorLevelUpLearnset,
+        .tmhmLearnset = sScizorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27343,8 +27343,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sHeracrossLevelUpLearnset,
+        .tmhmLearnset = sHeracrossTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27378,8 +27378,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sHoundoomLevelUpLearnset,
+        .tmhmLearnset = sHoundoomTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27410,8 +27410,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sTyranitarLevelUpLearnset,
+        .tmhmLearnset = sTyranitarTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27442,8 +27442,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN, //it regenerates its tail its getting that instead
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSceptileLevelUpLearnset,
+        .tmhmLearnset = sSceptileTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM, //there's little reason to pair this with water or flying type
     }, //give sceptile flamethrower incinerate & fire blast (incinerate is for technician)
@@ -27474,8 +27474,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sBlazikenLevelUpLearnset,
+        .tmhmLearnset = sBlazikenTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27506,8 +27506,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSwampertLevelUpLearnset,
+        .tmhmLearnset = sSwampertTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27541,8 +27541,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGardevoirLevelUpLearnset,
+        .tmhmLearnset = sGardevoirTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27577,8 +27577,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSableyeLevelUpLearnset,
+        .tmhmLearnset = sSableyeTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27610,8 +27610,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMawileLevelUpLearnset,
+        .tmhmLearnset = sMawileTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27646,8 +27646,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAggronLevelUpLearnset,
+        .tmhmLearnset = sAggronTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27678,8 +27678,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMedichamLevelUpLearnset,
+        .tmhmLearnset = sMedichamTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27710,8 +27710,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sManectricLevelUpLearnset,
+        .tmhmLearnset = sManectricTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27746,8 +27746,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSharpedoLevelUpLearnset,
+        .tmhmLearnset = sSharpedoTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27782,8 +27782,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCameruptLevelUpLearnset,
+        .tmhmLearnset = sCameruptTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27817,8 +27817,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAltariaLevelUpLearnset,
+        .tmhmLearnset = sAltariaTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27853,8 +27853,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sBanetteLevelUpLearnset,
+        .tmhmLearnset = sBanetteTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27888,8 +27888,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAbsolLevelUpLearnset,
+        .tmhmLearnset = sAbsolTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27921,8 +27921,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGlalieLevelUpLearnset,
+        .tmhmLearnset = sGlalieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27957,8 +27957,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSalamenceLevelUpLearnset,
+        .tmhmLearnset = sSalamenceTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -27993,8 +27993,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMetagrossLevelUpLearnset,
+        .tmhmLearnset = sMetagrossTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28025,8 +28025,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sLatiasLevelUpLearnset,
+        .tmhmLearnset = sLatiasTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28057,8 +28057,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sLatiosLevelUpLearnset,
+        .tmhmLearnset = sLatiosTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28092,8 +28092,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sLopunnyLevelUpLearnset,
+        .tmhmLearnset = sLopunnyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28127,8 +28127,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGarchompLevelUpLearnset,
+        .tmhmLearnset = sGarchompTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     }, //ugly don't want to use
@@ -28163,8 +28163,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sLucarioLevelUpLearnset,
+        .tmhmLearnset = sLucarioTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28200,8 +28200,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAbomasnowLevelUpLearnset,
+        .tmhmLearnset = sAbomasnowTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28232,8 +28232,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGalladeLevelUpLearnset,
+        .tmhmLearnset = sGalladeTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28269,8 +28269,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAudinoLevelUpLearnset,
+        .tmhmLearnset = sAudinoTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28305,8 +28305,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PINK,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDiancieLevelUpLearnset,
+        .tmhmLearnset = sDiancieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     },
@@ -28341,8 +28341,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
        .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRayquazaLevelUpLearnset,
+        .tmhmLearnset = sRayquazaTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
        .flags = F_MEGA_FORM,
     }, //need bring this down in mega/primal readjust
@@ -28376,8 +28376,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sKyogreLevelUpLearnset,
+        .tmhmLearnset = sKyogreTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = SPECIES_FLAG_PRIMAL_REVERSION,
     },
@@ -28411,8 +28411,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGroudonLevelUpLearnset,
+        .tmhmLearnset = sGroudonTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = SPECIES_FLAG_PRIMAL_REVERSION,
     },
@@ -28445,8 +28445,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SCRAPPY, ABILITY_STRONG_JAW},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRattataAlolanLevelUpLearnset,
+        .tmhmLearnset = sRattataAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28479,8 +28479,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_THICK_FAT, ABILITY_STRONG_JAW},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRaticateAlolanLevelUpLearnset,
+        .tmhmLearnset = sRaticateAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28514,8 +28514,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRaichuAlolanLevelUpLearnset,
+        .tmhmLearnset = sRaichuAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28550,8 +28550,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SLUSH_RUSH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSandshrewAlolanLevelUpLearnset,
+        .tmhmLearnset = sSandshrewAlolanTMHMLearnset,
         .evolutions = EVOLUTION({EVO_ITEM, ITEM_ICE_STONE, 0, SPECIES_SANDSLASH_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28583,8 +28583,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SLUSH_RUSH, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSandslashAlolanLevelUpLearnset,
+        .tmhmLearnset = sSandslashAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28619,8 +28619,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SNOW_WARNING, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sVulpixAlolanLevelUpLearnset,
+        .tmhmLearnset = sVulpixAlolanTMHMLearnset,
         .evolutions = EVOLUTION({EVO_ITEM, ITEM_ICE_STONE, 0, SPECIES_NINETALES_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28653,8 +28653,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SNOW_WARNING, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sNinetalesAlolanLevelUpLearnset,
+        .tmhmLearnset = sNinetalesAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28687,8 +28687,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDiglettAlolanLevelUpLearnset,
+        .tmhmLearnset = sDiglettAlolanTMHMLearnset,
         .evolutions = EVOLUTION({EVO_LEVEL, 26, 0, SPECIES_DUGTRIO_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28721,8 +28721,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDugtrioAlolanLevelUpLearnset,
+        .tmhmLearnset = sDugtrioAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28755,8 +28755,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_RATTLED, ABILITY_STALL},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMeowthAlolanLevelUpLearnset,
+        .tmhmLearnset = sMeowthAlolanTMHMLearnset,
         .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_PERSIAN_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28789,8 +28789,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_RATTLED, ABILITY_STALL},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPersianAlolanLevelUpLearnset,
+        .tmhmLearnset = sPersianAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     }, //changed up sprite face
@@ -28826,8 +28826,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,                      //magnet pull would actually be good on them...they could slow down steel types and then super hit them with electricity
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGeodudeAlolanLevelUpLearnset,
+        .tmhmLearnset = sGeodudeAlolanTMHMLearnset,
         .evolutions = EVOLUTION({EVO_LEVEL, RELATIVE_EVO(25, MID_EFFORT), 0, SPECIES_GRAVELER_ALOLAN}), //Should hopefully blank these for now without issue                            //but on the other hand most steel are electric too, so it'd be neutral, while rock is weak to steel.. 
         .flags = F_ALOLAN_FORM,                 //oh but made electric resist, so it'd just be a neutral hit, hmm check how many steel are also electric to see value
     },//checked steel and they are rare, many are psuedos so its not a type you'd ecounter much, many resist electric, good against metagross, but still a very specific thing
@@ -28863,8 +28863,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGravelerAlolanLevelUpLearnset,
+        .tmhmLearnset = sGravelerAlolanTMHMLearnset,
         .evolutions = EVOLUTION({EVO_LEVEL, RELATIVE_EVO(40, LOW_EFFORT), 0, SPECIES_GOLEM_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28897,8 +28897,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGolemAlolanLevelUpLearnset,
+        .tmhmLearnset = sGolemAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28926,8 +28926,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_POWER_OF_ALCHEMY, ABILITY_POISON_HEAL},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGrimerAlolanLevelUpLearnset,
+        .tmhmLearnset = sGrimerAlolanTMHMLearnset,
         .evolutions = EVOLUTION({EVO_LEVEL, 38, 0, SPECIES_MUK_ALOLAN}), //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28953,8 +28953,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_POWER_OF_ALCHEMY, ABILITY_POISON_HEAL},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMukAlolanLevelUpLearnset,
+        .tmhmLearnset = sMukAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -28979,8 +28979,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_HARVEST, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sExeggutorAlolanLevelUpLearnset,
+        .tmhmLearnset = sExeggutorAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     },
@@ -29005,8 +29005,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_ROCK_HEAD, ABILITY_MUSCLE_MAGIC}, //gets so many good special moves
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMarowakAlolanLevelUpLearnset,
+        .tmhmLearnset = sMarowakAlolanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_ALOLAN_FORM,
     }, //can keep phantom touch to just normal marowak, makes more sense since this version turned the ghost into a flame that's always with them
@@ -29038,8 +29038,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_UNNERVE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMeowthGalarianLevelUpLearnset,
+        .tmhmLearnset = sMeowthGalarianTMHMLearnset,
         .evolutions = EVOLUTION({EVO_LEVEL, 28, 0, SPECIES_PERRSERKER}), //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29071,8 +29071,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ANTICIPATION, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPonytaGalarianLevelUpLearnset,
+        .tmhmLearnset = sPonytaGalarianTMHMLearnset,
         .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_RAPIDASH_GALARIAN}), //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29104,8 +29104,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ANTICIPATION, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRapidashGalarianLevelUpLearnset,
+        .tmhmLearnset = sRapidashGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29137,8 +29137,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSlowpokeGalarianLevelUpLearnset,
+        .tmhmLearnset = sSlowpokeGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29171,8 +29171,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSlowbroGalarianLevelUpLearnset,
+        .tmhmLearnset = sSlowbroGalarianTMHMLearnset,
         /*.evolutions = EVOLUTION({EVO_ITEM, ITEM_GALARICA_CUFF, 0, SPECIES_SLOWBRO_GALARIAN},
                                 {EVO_ITEM, ITEM_GALARICA_WREATH, 0, SPECIES_SLOWKING_GALARIAN}),*/ //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
@@ -29207,8 +29207,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SCRAPPY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sFarfetchdGalarianLevelUpLearnset,
+        .tmhmLearnset = sFarfetchdGalarianTMHMLearnset,
         .evolutions = EVOLUTION({EVO_LEVEL, 40, 0, SPECIES_SIRFETCHD}), //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29243,8 +29243,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_MISTY_SURGE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sWeezingGalarianLevelUpLearnset,
+        .tmhmLearnset = sWeezingGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29276,8 +29276,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ICE_BODY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMrMimeGalarianLevelUpLearnset,
+        .tmhmLearnset = sMrMimeGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29311,8 +29311,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArticunoGalarianLevelUpLearnset,
+        .tmhmLearnset = sArticunoGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29346,8 +29346,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sZapdosGalarianLevelUpLearnset,
+        .tmhmLearnset = sZapdosGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29381,8 +29381,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMoltresGalarianLevelUpLearnset,
+        .tmhmLearnset = sMoltresGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     }, //lacks special dark moves, as they pretty much don't exist outside of its unique move
@@ -29414,8 +29414,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_REGENERATOR, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSlowkingGalarianLevelUpLearnset,
+        .tmhmLearnset = sSlowkingGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29448,8 +29448,8 @@ const struct BaseStats gBaseStats[] =
        // #ifdef BATTLE_ENGINE//courtesy of haven new ability Liquid Soul turns water moves into ghost moves
         .bodyColor = BODY_COLOR_WHITE,//other idea Ocean Memory, reduced damage from water moves
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCorsolaGalarianLevelUpLearnset,
+        .tmhmLearnset = sCorsolaGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue    // for ancient pokemon or fosill mon that previoiusly dwelled in water
         .flags = F_GALARIAN_FORM,
     }, //gave this line liquid ooze to double up on absorb damage from ghost tweak :)
@@ -29481,8 +29481,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_QUICK_FEET, ABILITY_DARK_DEAL},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sZigzagoonGalarianLevelUpLearnset,
+        .tmhmLearnset = sZigzagoonGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29514,8 +29514,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_QUICK_FEET, ABILITY_DARK_DEAL},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sLinooneGalarianLevelUpLearnset,
+        .tmhmLearnset = sLinooneGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29546,8 +29546,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_INNER_FOCUS, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDarumakaGalarianLevelUpLearnset,
+        .tmhmLearnset = sDarumakaGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29579,8 +29579,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ZEN_MODE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDarmanitanGalarianLevelUpLearnset,
+        .tmhmLearnset = sDarmanitanGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29614,8 +29614,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sYamaskGalarianLevelUpLearnset,
+        .tmhmLearnset = sYamaskGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29649,8 +29649,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sStunfiskGalarianLevelUpLearnset,
+        .tmhmLearnset = sStunfiskGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },
@@ -29681,8 +29681,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_JUSTIFIED, ABILITY_NONE},
             .bodyColor = BODY_COLOR_BROWN,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGrowlitheHisuianLevelUpLearnset,
+        .tmhmLearnset = sGrowlitheHisuianTMHMLearnset,
         .evolutions = EVOLUTION({EVO_ITEM, ITEM_FIRE_STONE, 0, SPECIES_ARCANINE_HISUIAN}), //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29713,8 +29713,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_JUSTIFIED, ABILITY_NONE},
             .bodyColor = BODY_COLOR_BROWN,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArcanineHisuianLevelUpLearnset,
+        .tmhmLearnset = sArcanineHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29745,8 +29745,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_GRASSY_SURGE, ABILITY_SKILL_LINK}, //ok remember wy I did this now, their grass so get bullet seed, this would guarantee 5 hit
             .bodyColor = BODY_COLOR_RED,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sVoltorbHisuianLevelUpLearnset,
+        .tmhmLearnset = sVoltorbHisuianTMHMLearnset,
         .evolutions = EVOLUTION({EVO_ITEM, ITEM_LEAF_STONE, 0, SPECIES_ELECTRODE_HISUIAN}), //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29777,8 +29777,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_GRASSY_SURGE, ABILITY_SKILL_LINK},
             .bodyColor = BODY_COLOR_RED,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sElectrodeHisuianLevelUpLearnset,
+        .tmhmLearnset = sElectrodeHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29809,8 +29809,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_FRISK, ABILITY_FILTER},
             .bodyColor = BODY_COLOR_YELLOW,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sTyphlosionHisuianLevelUpLearnset,
+        .tmhmLearnset = sTyphlosionHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29842,8 +29842,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_INTIMIDATE, ABILITY_NONE},
             .bodyColor = BODY_COLOR_GRAY,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sQwilfishHisuianLevelUpLearnset,
+        .tmhmLearnset = sQwilfishHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29875,8 +29875,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_POISON_TOUCH, ABILITY_KEEN_EYE}, 
             .bodyColor = BODY_COLOR_BLACK,
             .noFlip = TRUE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSneaselHisuianLevelUpLearnset,
+        .tmhmLearnset = sSneaselHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29908,8 +29908,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SHELL_ARMOR, ABILITY_NONE},
             .bodyColor = BODY_COLOR_BLUE,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSamurottHisuianLevelUpLearnset,
+        .tmhmLearnset = sSamurottHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29941,8 +29941,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_LEAF_GUARD, ABILITY_NONE},
             .bodyColor = BODY_COLOR_GREEN,
             .noFlip = TRUE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sLilligantHisuianLevelUpLearnset,
+        .tmhmLearnset = sLilligantHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -29973,8 +29973,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
             .bodyColor = BODY_COLOR_GRAY,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sZoruaHisuianLevelUpLearnset,
+        .tmhmLearnset = sZoruaHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -30005,8 +30005,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
             .bodyColor = BODY_COLOR_GRAY,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sZoroarkHisuianLevelUpLearnset,
+        .tmhmLearnset = sZoroarkHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -30037,8 +30037,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_DEFIANT, ABILITY_NONE},
             .bodyColor = BODY_COLOR_RED,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sBraviaryHisuianLevelUpLearnset,
+        .tmhmLearnset = sBraviaryHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -30072,8 +30072,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_GOOEY, ABILITY_NONE},
             .bodyColor = BODY_COLOR_PURPLE,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSliggooHisuianLevelUpLearnset,
+        .tmhmLearnset = sSliggooHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -30104,8 +30104,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_GOOEY, ABILITY_NONE},
             .bodyColor = BODY_COLOR_PURPLE,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGoodraHisuianLevelUpLearnset,
+        .tmhmLearnset = sGoodraHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -30136,8 +30136,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_STURDY, ABILITY_NONE},
             .bodyColor = BODY_COLOR_BLUE,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAvaluggHisuianLevelUpLearnset,
+        .tmhmLearnset = sAvaluggHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -30170,8 +30170,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_FEATHER_JACKET, ABILITY_NONE},
             .bodyColor = BODY_COLOR_BROWN,
             .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDecidueyeHisuianLevelUpLearnset,
+        .tmhmLearnset = sDecidueyeHisuianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_HISUIAN_FORM,
         },
@@ -30203,8 +30203,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//ok cosplay pikachu, is just the special base form, that  changes with the costome so not necessary as I'm doing the radical red version
     //doing plus 40 bst for each form to make unique/
@@ -30236,8 +30236,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuRockStarTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//don't take rest of pika abilitie instead for forms that change type fill with abilities that fit secondary type
     //nvm just keeping lightning rod,  as that's what it had in game change typing and stats and instead of doing like rotom forms give each its own learnset
@@ -30269,8 +30269,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuBelleTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //ok can't make this grass, but would really really want a grass/electric one so I could do a cottage core pikachu idea.  but idk maybe still fits
 
@@ -30301,8 +30301,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuPopStarTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30333,8 +30333,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuPhdTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30365,8 +30365,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuLibreTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //not taking cap forms
 
@@ -30397,8 +30397,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30429,8 +30429,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30461,8 +30461,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30493,8 +30493,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30525,8 +30525,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30557,8 +30557,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30589,8 +30589,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30621,8 +30621,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPikachuLevelUpLearnset,
+        .tmhmLearnset = sPikachuTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30653,8 +30653,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_LIGHTNING_ROD, ABILITY_OVERCHARGE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPichuLevelUpLearnset,
+        .tmhmLearnset = sPichuTMHMLearnset,
         .evolutions = EVOLUTION({EVO_FRIENDSHIP, 0, 0, SPECIES_PIKACHU}), //Should hopefully blank these for now without issue
     },//make rare form, that should spawn
 
@@ -30685,8 +30685,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30717,8 +30717,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30749,8 +30749,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30780,8 +30780,8 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILTY_UNKNOWN_POWER, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30812,8 +30812,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30844,8 +30844,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30876,8 +30876,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30908,8 +30908,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30940,8 +30940,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -30972,8 +30972,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31004,8 +31004,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31036,8 +31036,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31068,8 +31068,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31100,8 +31100,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31132,8 +31132,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31164,8 +31164,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31196,8 +31196,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31228,8 +31228,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31260,8 +31260,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31292,8 +31292,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31324,8 +31324,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31356,8 +31356,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31388,8 +31388,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31420,8 +31420,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31452,8 +31452,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31484,8 +31484,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31516,8 +31516,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sUnownLevelUpLearnset,
+        .tmhmLearnset = sUnownTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31541,8 +31541,8 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_FORECAST, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCastformLevelUpLearnset,
+        .tmhmLearnset = sCastformTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31566,8 +31566,8 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_FORECAST, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCastformLevelUpLearnset,
+        .tmhmLearnset = sCastformTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31591,8 +31591,8 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_FORECAST, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCastformLevelUpLearnset,
+        .tmhmLearnset = sCastformTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31616,8 +31616,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDeoxysAttackLevelUpLearnset,
+        .tmhmLearnset = sDeoxysTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31641,8 +31641,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDeoxysDefenseLevelUpLearnset,
+        .tmhmLearnset = sDeoxysTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31665,8 +31665,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDeoxysSpeedLevelUpLearnset,
+        .tmhmLearnset = sDeoxysTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31690,8 +31690,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sBurmyLevelUpLearnset,
+        .tmhmLearnset = sBurmyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31715,8 +31715,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sBurmyLevelUpLearnset,
+        .tmhmLearnset = sBurmyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31741,8 +31741,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_IMMUNITY},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sWormadamSandyCloakLevelUpLearnset,
+        .tmhmLearnset = sWormadamSandyCloakTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31768,8 +31768,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_OVERCOAT, ABILITY_STURDY},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sWormadamTrashCloakLevelUpLearnset,
+        .tmhmLearnset = sWormadamTrashCloakTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31793,8 +31793,8 @@ const struct BaseStats gBaseStats[] =
             .abilities = {ABILITY_FLOWER_GIFT, ABILITY_NONE},//can't have different ability/hidden ability,  as this form is linked to ability
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = TRUE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCherrimLevelUpLearnset,
+        .tmhmLearnset = sCherrimTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //dropped attack back to 70 as ability is meant to boost atk & sp def in sun
 
@@ -31818,8 +31818,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sShellosLevelUpLearnset,
+        .tmhmLearnset = sShellosTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31843,8 +31843,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_SAND_FORCE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGastrodonLevelUpLearnset,
+        .tmhmLearnset = sGastrodonTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -31868,8 +31868,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_FLAME_BODY},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRotomLevelUpLearnset,
+        .tmhmLearnset = sRotomTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //higher defense than base lower than bulk forms as its a microwave / plan to give second secondary type hidden ability for slot 4 so here anotehr fire ability
     //need to change weight for these forms as well
@@ -31894,8 +31894,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_STORM_DRAIN}, //here another water ability
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRotomLevelUpLearnset,
+        .tmhmLearnset = sRotomTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },//bulk
 
@@ -31919,8 +31919,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_FILTER},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRotomLevelUpLearnset,
+        .tmhmLearnset = sRotomTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //all in floating list so immune to ground by base, so while not ghost still retains ghost elements / bulk
 
@@ -31944,8 +31944,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_GALEFORCE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRotomLevelUpLearnset,
+        .tmhmLearnset = sRotomTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //Maybe Fan could be given a spatk version of wind rider So it has a wind immunity and gets spatk boosts
     //wind moves i.e gust whirlwind huricane etc. setup with flag like iron  fist
@@ -31971,8 +31971,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_MOTOR_DRIVE, ABILITY_GRASSY_SURGE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sRotomLevelUpLearnset,
+        .tmhmLearnset = sRotomTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     }, //speed attacker
 
@@ -31995,8 +31995,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sGiratinaLevelUpLearnset,
+        .tmhmLearnset = sGiratinaTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32021,8 +32021,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sShayminSkyLevelUpLearnset,
+        .tmhmLearnset = sShayminSkyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32055,8 +32055,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32089,8 +32089,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32123,8 +32123,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32157,8 +32157,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32191,8 +32191,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32225,8 +32225,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32259,8 +32259,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32293,8 +32293,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32327,8 +32327,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32361,8 +32361,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32395,8 +32395,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32429,8 +32429,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32463,8 +32463,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32497,8 +32497,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32531,8 +32531,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32565,8 +32565,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32599,8 +32599,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sArceusLevelUpLearnset,
+        .tmhmLearnset = sArceusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32679,8 +32679,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ZEN_MODE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDarmanitanLevelUpLearnset,
+        .tmhmLearnset = sDarmanitanTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32704,8 +32704,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_ZEN_MODE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDarmanitanGalarianLevelUpLearnset,
+        .tmhmLearnset = sDarmanitanGalarianTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_GALARIAN_FORM,
     },//hmm pretty sure ability should only be zen mode for these forms?
@@ -32737,8 +32737,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDeerlingLevelUpLearnset,
+        .tmhmLearnset = sDeerlingTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32769,8 +32769,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDeerlingLevelUpLearnset,
+        .tmhmLearnset = sDeerlingTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32801,8 +32801,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sDeerlingLevelUpLearnset,
+        .tmhmLearnset = sDeerlingTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32833,8 +32833,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSawsbuckLevelUpLearnset,
+        .tmhmLearnset = sSawsbuckTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32865,8 +32865,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSawsbuckLevelUpLearnset,
+        .tmhmLearnset = sSawsbuckTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32897,8 +32897,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_SERENE_GRACE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSawsbuckLevelUpLearnset,
+        .tmhmLearnset = sSawsbuckTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32931,8 +32931,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sTornadusLevelUpLearnset,
+        .tmhmLearnset = sTornadusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32962,8 +32962,8 @@ const struct BaseStats gBaseStats[] =
         .abilityHidden = {ABILITY_NONE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sThundurusLevelUpLearnset,
+        .tmhmLearnset = sThundurusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -32992,8 +32992,8 @@ const struct BaseStats gBaseStats[] =
         .abilities = {ABILITY_INTIMIDATE, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sLandorusLevelUpLearnset,
+        .tmhmLearnset = sLandorusTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -34860,8 +34860,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAegislashLevelUpLearnset,
+        .tmhmLearnset = sAegislashTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35086,8 +35086,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sXerneasLevelUpLearnset,
+        .tmhmLearnset = sXerneasTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35120,8 +35120,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sZygardeLevelUpLearnset,
+        .tmhmLearnset = sZygardeTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35154,8 +35154,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sZygardeLevelUpLearnset,
+        .tmhmLearnset = sZygardeTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35188,8 +35188,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sZygardeLevelUpLearnset,
+        .tmhmLearnset = sZygardeTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35222,8 +35222,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sZygardeLevelUpLearnset,
+        .tmhmLearnset = sZygardeTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35256,8 +35256,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sHoopaUnboundLevelUpLearnset,
+        .tmhmLearnset = sHoopaUnboundTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35468,8 +35468,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sWishiwashiLevelUpLearnset,
+        .tmhmLearnset = sWishiwashiTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35502,8 +35502,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35536,8 +35536,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35570,8 +35570,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35604,8 +35604,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35638,8 +35638,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35672,8 +35672,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35706,8 +35706,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35740,8 +35740,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35774,8 +35774,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35808,8 +35808,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35842,8 +35842,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35876,8 +35876,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35910,8 +35910,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35944,8 +35944,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -35978,8 +35978,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36012,8 +36012,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36046,8 +36046,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GRAY,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSilvallyLevelUpLearnset,
+        .tmhmLearnset = sSilvallyTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36082,8 +36082,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36118,8 +36118,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36154,8 +36154,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36190,8 +36190,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36226,8 +36226,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36262,8 +36262,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36298,8 +36298,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36334,8 +36334,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36370,8 +36370,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36406,8 +36406,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36442,8 +36442,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36478,8 +36478,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36514,8 +36514,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMiniorLevelUpLearnset,
+        .tmhmLearnset = sMiniorTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36582,10 +36582,12 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sNecrozmaLevelUpLearnset,
+        .tmhmLearnset = sNecrozmaTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
-    },
+    }, //the typesa are different should these have different forms,
+    //don't they also have unique moves for each form? no unique move
+    //but look into it, ultra was already strong but is it good without moves that get its typing?
 
     [SPECIES_NECROZMA_DAWN_WINGS] =
     { 
@@ -36616,8 +36618,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sNecrozmaLevelUpLearnset,
+        .tmhmLearnset = sNecrozmaTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36652,8 +36654,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sNecrozmaLevelUpLearnset,
+        .tmhmLearnset = sNecrozmaTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36686,8 +36688,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_RED,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMagearnaLevelUpLearnset,
+        .tmhmLearnset = sMagearnaTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36720,8 +36722,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCramorantLevelUpLearnset,
+        .tmhmLearnset = sCramorantTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36754,8 +36756,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sCramorantLevelUpLearnset,
+        .tmhmLearnset = sCramorantTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36786,8 +36788,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_TECHNICIAN, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sToxtricityLowKeyLevelUpLearnset,
+        .tmhmLearnset = sToxtricityTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36818,8 +36820,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sSinisteaLevelUpLearnset,
+        .tmhmLearnset = sSinisteaTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36850,8 +36852,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_CURSED_BODY, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sPolteageistLevelUpLearnset,
+        .tmhmLearnset = sPolteageistTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36882,8 +36884,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlcremieLevelUpLearnset,
+        .tmhmLearnset = sAlcremieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36914,8 +36916,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_GREEN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlcremieLevelUpLearnset,
+        .tmhmLearnset = sAlcremieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36946,8 +36948,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlcremieLevelUpLearnset,
+        .tmhmLearnset = sAlcremieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -36978,8 +36980,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlcremieLevelUpLearnset,
+        .tmhmLearnset = sAlcremieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -37010,8 +37012,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_WHITE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlcremieLevelUpLearnset,
+        .tmhmLearnset = sAlcremieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -37042,8 +37044,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlcremieLevelUpLearnset,
+        .tmhmLearnset = sAlcremieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -37074,8 +37076,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlcremieLevelUpLearnset,
+        .tmhmLearnset = sAlcremieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -37106,8 +37108,8 @@ const struct BaseStats gBaseStats[] =
             .abilityHidden = {ABILITY_AROMA_VEIL, ABILITY_NONE},
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sAlcremieLevelUpLearnset,
+        .tmhmLearnset = sAlcremieTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -37140,8 +37142,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sEiscueLevelUpLearnset,
+        .tmhmLearnset = sEiscueTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
@@ -37173,8 +37175,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_PURPLE,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sIndeedeeFemaleLevelUpLearnset,
+        .tmhmLearnset = sIndeedeeFemaleTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
         .flags = F_SPECIES_GENDER_DIFFERENCE,
     },
@@ -37208,8 +37210,8 @@ const struct BaseStats gBaseStats[] =
         // #endif
         .bodyColor = BODY_COLOR_YELLOW,
         .noFlip = FALSE,
-        .levelUpLearnset = NULL,
-        .tmhmLearnset = NULL,
+        .levelUpLearnset = sMorpekoLevelUpLearnset,
+        .tmhmLearnset = sMorpekoTMHMLearnset,
         .evolutions = NULL, //Should hopefully blank these for now without issue
     },
 
