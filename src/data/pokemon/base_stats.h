@@ -1485,7 +1485,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
         .levelUpLearnset = sVenonatLevelUpLearnset,
         .tmhmLearnset = sVenonatTMHMLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, RELATIVE_EVO(31, LOW_EFFORT), 0, SPECIES_VENOMOTH}),, //Should hopefully blank these for now without issue
+        .evolutions = EVOLUTION({EVO_LEVEL, RELATIVE_EVO(31, LOW_EFFORT), 0, SPECIES_VENOMOTH}), //Should hopefully blank these for now without issue
     }, //since it has tinted lens I kinda want this to be normal type..but its literlaly venom nat so poison bug
 
     [SPECIES_VENOMOTH] =
