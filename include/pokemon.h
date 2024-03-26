@@ -653,8 +653,8 @@ u32 CanSpeciesLearnTMHM(u16 species, u16 tm);
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves);
 u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves); //keep track of this for rotom forms 
 u8 GetNumberOfRelearnableMoves(struct Pokemon *mon);//this too
-u16 GetSpeciesPreEvolution(u16 species); //ported for pre evo checks
-bool8 IsMonPastEvolutionLevel(struct Pokemon *mon);// new port for simplify level evo checks
+u16 GetSpeciesPreEvolution(u16 species, u32 i); //ported for pre evo checks
+bool8 IsMonPastEvolutionLevel(struct Pokemon *mon, u32 i);// new port for simplify level evo checks
 u16 SpeciesToPokedexNum(u16 species);
 void ClearBattleMonForms(void);
 void PlayBattleBGM(void);
