@@ -727,6 +727,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_DIANCIE] = sDiancieTMHMLearnset,
     [SPECIES_HOOPA] = sHoopaTMHMLearnset,
     [SPECIES_VOLCANION] = sVolcanionTMHMLearnset,
+
     [SPECIES_ROWLET] = sRowletTMHMLearnset,
     [SPECIES_DARTRIX] = sDartrixTMHMLearnset,
     [SPECIES_DECIDUEYE] = sDecidueyeTMHMLearnset,
@@ -815,6 +816,7 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_ZERAORA] = sZeraoraTMHMLearnset,
     [SPECIES_MELTAN] = sMeltanTMHMLearnset,
     [SPECIES_MELMETAL] = sMelmetalTMHMLearnset,
+
     [SPECIES_GROOKEY] = sGrookeyTMHMLearnset,
     [SPECIES_THWACKEY] = sThwackeyTMHMLearnset,
     [SPECIES_RILLABOOM] = sRillaboomTMHMLearnset,
@@ -1305,6 +1307,10 @@ const u16 *const gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_CALYREX_ICE_RIDER] = sCalyrexIceRiderTMHMLearnset,
     [SPECIES_CALYREX_SHADOW_RIDER] = sCalyrexShadowRiderTMHMLearnset,
 
+    // Basculegion female
+    [SPECIES_BASCULEGION_FEMALE] = sBasculegionTMHMLearnset,
+    // Enamorus
+    [SPECIES_ENAMORUS_THERIAN] = sEnamorusTMHMLearnset,
     //New Mega Forms
     [SPECIES_TORTERRA_MEGA] = sTorterraTMHMLearnset,
     [SPECIES_MAROWAK_MEGA] = sMarowakTMHMLearnset,
