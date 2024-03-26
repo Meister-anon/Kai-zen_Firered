@@ -1747,9 +1747,19 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   same as evo can read from base stats or table. just a matter of filling them in now
   
   finished updating up to start of gen 4
+  -finished updating up to forms
+  -finished base stat update, making compatability commit for in between change
+  -before removal of files
+
+  -update teleport effect, works same in wild battles,
+  but double battles works as a slow switch think shold be simple to do,
+  just matter of check fi trainer battle, instead jump to switch can't cancel logic
 
  -considered cutting all recovery effects, seems like I do, bulk is increased, healing is too strong
  lower half health heal to 1/3rd, for pure recovery moves
+ -think I already did?
+
+ Look into necrozma unique learnsets for each form
 
  -upgrade move belch, (pretty sure I haven't set it up yet either)
  -move only works after has used a berry, change effect so that if haven't used a berry
