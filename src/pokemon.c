@@ -2254,14 +2254,14 @@ static const s8 sNatureStatTable[][5] =
 };
 
 #include "data/pokemon/tmhm_learnsets.h"
-#include "data/pokemon/tmhm_learnset_pointers.h"
+//#include "data/pokemon/tmhm_learnset_pointers.h" //removed as part of consolidation to base stats
 #include "data/pokemon/trainer_class_lookups.h"
 #include "data/pokemon/cry_ids.h"
 #include "data/pokemon/experience_tables.h"
 //#include "data/pokemon/base_stats.h"
 #include "data/pokemon/level_up_learnsets.h"
 #include "data/pokemon/evolution.h"
-#include "data/pokemon/level_up_learnset_pointers.h"
+//#include "data/pokemon/level_up_learnset_pointers.h" //removed as part of consolidation to base stats
 #include "data/pokemon/base_stats.h"  //fix thanks to Luvas in pret, now that base stats calls tm evo and learnset base stat include has to go AFTER those
 #include "data/pokemon/form_species_tables.h"
 #include "data/pokemon/form_species_table_pointers.h"
@@ -8079,7 +8079,7 @@ const struct LevelUpMove *GetSpeciesLevelUpLearnset(u16 species)
 {
     const struct LevelUpMove *learnset = gBaseStats[SanitizeSpeciesId(species)].levelUpLearnset;
     if (learnset == NULL)
-        return gLevelUpLearnsets[species];
+        return gBaseStats[SPECIES_NONE].levelUpLearnset;
     return learnset;
 }
 
@@ -8088,7 +8088,7 @@ const u16 *GetSpeciesTeachableLearnset(u16 species)
 {
     const u16 *learnset = gBaseStats[SanitizeSpeciesId(species)].tmhmLearnset;
     if (learnset == NULL)
-        return gTMHMLearnsets[species];
+        return gBaseStats[SPECIES_NONE].tmhmLearnset;
     return learnset;
 }
 
