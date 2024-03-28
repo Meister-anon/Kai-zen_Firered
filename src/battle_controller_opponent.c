@@ -425,7 +425,7 @@ void OpponentBufferExecCompleted(void)
     gBattleControllerExecFlags &= ~gBitTable[gActiveBattler];
 }
 
-static void OpponentHandleGetMonData(void)
+static void OpponentHandleGetMonData(void) //vsonic IMPORTANT prob need update this  for triple battles
 {
     u8 monData[sizeof(struct Pokemon) * 2 + 56]; // this allows to get full data of two pokemon, trying to get more will result in overwriting data
     u32 size = 0;

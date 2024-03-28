@@ -232,6 +232,13 @@ if it would otherwise be 0/NONE except in the case of ability.
 //for evo stuff, decide what effort level to use based on bst,
 //but also consider eggs, if I use low for many they'll evolve at 15, so keep that in mind
 
+//actually scratch that, breeding isn't available until far later in game,
+//and if you consider it that mon trained grow faster nautrally 
+//than it would make sense and be bette for game balance for bred mon/mon from eggs
+//to evolve faster.
+//would be a feature that helps get them online faster and be a benefit unique to breeding
+//which I've wanted to enhance
+
 const struct BaseStats gBaseStats[] =
 {
     [SPECIES_NONE] = {0},

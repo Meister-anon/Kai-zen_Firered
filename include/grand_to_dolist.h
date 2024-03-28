@@ -1754,6 +1754,71 @@ If the Pokémon affected by Encore runs out of PP for the affected move, the eff
   -update teleport effect, works same in wild battles,
   but double battles works as a slow switch think shold be simple to do,
   just matter of check fi trainer battle, instead jump to switch can't cancel logic
+  -ok that was wrong, but got it working by copying EE.
+
+  it is -6 priority so doesn't trigger pursuit so EE version doesn't hvae that built into teh scritp
+  In considering this I learned Lagging Tail and Stall don't make you move last, but last in priority bracket
+  That's dumb -_-  no benefit you're just taking a fast mon and making them effectively slow.
+  and doesn't interact w trick room/
+
+  I plan to just make them set whatever move you use to -12 priority, basically works the same,
+  only diff is not being able to use priority moves to get around effect.
+  but the caviate is now you have a new niche, where you counter moves that gain power for going last
+  and slow switch strats from things like teleport, and slow volt switch users etc.
+  done
+  /but need setup pursuit logic for teleport now, and look into other existing effects ensure no issues
+
+  -IMPORTANT discoverd issue with forewarn anticipation smh
+  ability fails no matter what after turn 1, because of bad code I wrote *FACEPALM
+  logic in HandleEndTurn_ContinueBattle  that sets them to unavailable not only makes them single use,
+  it makes them single use for ANYONE not just that mon, for the duration of the battle.
+  so if you send out an anticipation/forewarn mon on turn 2, the text would play but the ability would never cancel the move.
+  gDisableStructs[i].forewarnedMove = MOVE_UNAVAILABLE;
+  because this ties it to the position of the battler NOT the specific mon itself *FACEPALM
+  no checks or anything just auto settting it to unavailable smh
+
+  DOUBLE chek this, 
+  gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = TRUE;
+  this line should prevent mon ability from retriggering for duration of battle. I think it stores proper place even post switch
+  test with mimikyu see if works remove species check, to test only this factor alone
+  if works for that, can use for forwarn etc. if needbe
+
+  appears to work for mimikyu, removed species check, but not sure if that just works for battler position 0 or if it moves with teh mon itself
+  would need to test double batttle
+
+  in menatime used setup for forewarn anticipation, locking both slots if a mon with either ability has used it
+  plan being to prevent players from being too lazy and just stacking anticipation and forewarn mon together,
+  this way you'd get just one use of either for an entire battle as they would be linked.
+  ...if I can do this right smh
+
+  APPEARS to be working, caterpie with anticipation thrown on turn 2 still blocke move correctly
+  clauses left to check, turn 2 caterpie after turn 1 weedle w anticipation
+  and doube battle w anticipation/disguise mon switched back in from a different positinon ability initially activated from
+
+  clause 1 passed,  on 2nd use ability activated but did not avoid the hit.
+  but thinking issue is filter is too broad, its checking both sides and setting if found not setting for each side
+  and its using gbattlerscount which pulls from both sides
+
+  so this would only allow one side to use either ability, whoever was faster gets it, need to fix that
+  on 2nd look the side part is fine it checks properly for that
+
+  I think if I replace with a check for ability and if used singleuse ability I can then set unavailable I think I can make work?
+  -confirmed singleuseability is properly tracking, was able to test in double battle
+
+  note before forget STILL need to go back and redress use of battlemoves.power == 0  replace w status move in relevant places
+  //some places I actually need/mean 0 power for typeless, but other places what I need is check if move is a status move
+
+  -NOTE IMPORTANT major targetting issue, for self target moves in doubles when click select,
+  attempts to target other mon on d pad press not locked to self as should be.
+
+  -NOTE: for new game plus only change your party mon to lvl 1, make sure player has chance to change team
+  before reset, so they can pick who they want to start with.
+  Also will need to turn off pc exp gain for mon from previous loop, until player gets certain badges
+  -hm could also just wrap that into base setup, start at lvl 10 w no badges I guess or lvl 5 idk
+  so no one at or above lvl cap would gain exp while in pc until player gets badge that puts them at
+  the range to use said pokemon
+  /All so you don't just chese the mode with high level mon, its supposed to be harder which is why you use
+  lvl 1 pokemon rather than starting at 5
 
  -considered cutting all recovery effects, seems like I do, bulk is increased, healing is too strong
  lower half health heal to 1/3rd, for pure recovery moves
