@@ -4407,6 +4407,7 @@ static void TryDoEventsBeforeFirstTurn(void)
 static void HandleEndTurn_ContinueBattle(void)
 {
     s32 i;
+    u32 j;
 
     if (!gBattleControllerExecFlags)
     {
@@ -4419,8 +4420,33 @@ static void HandleEndTurn_ContinueBattle(void)
             //if ((gBattleMons[i].status1 & STATUS1_SLEEP) && (gBattleMons[i].status2 & STATUS2_MULTIPLETURNS))
             if ((gBattleMons[i].status1 & STATUS1_SLEEP)) //pretty sure no reason not to just make it auto run on sleep
                 CancelMultiTurnMoves(i);
-            gDisableStructs[i].forewarnedMove = MOVE_UNAVAILABLE;
-            gDisableStructs[i].anticipatedMove = MOVE_UNAVAILABLE;  //to clear out effects at endturn properly
+
+            //...ok so think what this actually does is make it so no mon on the side can use this ability at all? or is it anymon?    
+            for (j = 0; j < PARTY_SIZE; ++j) //ok actually have to use party size i.e loop 6 for this to properly track no idea why it works but it works
+            {
+                //&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]]
+                if (gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[j]][GetBattlerSide(i)] == TRUE 
+                && (gBattleMons[i].ability == ABILITY_FOREWARN || gBattleMons[i].ability == ABILITY_ANTICIPATION))
+                {
+                    gDisableStructs[i].forewarnedMove = MOVE_UNAVAILABLE; //-_- yup ability fails to work for ANYONE after turn 1 because of this
+                    gDisableStructs[i].anticipatedMove = MOVE_UNAVAILABLE;  //to clear out effects at endturn properly
+                }
+            }//attempted fix, hopefully doesn't lag to hell. - no lag, fix not quite there yet, or if rihgt, not fully explored
+            //actyally this might do it, long as this in right place, this would set the side as haing used ability,
+            //then whatever mon with these two abilities that goes out, would have themselves set as being unable to use it
+            //no matter what battle position, because it loops all of them
+
+
+            //...or does it just block all singlue useabilities if any of the category get used... isgh
+            //well I guess that's an issue if single use isn't actually tracking to the battler and just a position...
+            //which now that I think about it,  based on how disguise works it looks like its working correctly
+            //and tracking wherever the mon is switched?
+
+            //think it works? tested w two mimikyu,  one got busted swapped it out for another and it still took the hit,
+            //since it wasn't teh same one, so seems to prove it follows the mon rather than just the slot
+
+            //may need add check that indexedd mon is not mimikyu or doe snot have disguise to ensure mon in questino
+            //actually used forewarn or anticipation
         }
         gBattleStruct->turnEffectsTracker = 0;
         gBattleStruct->turnEffectsBattlerId = 0;
@@ -5168,14 +5194,14 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
             strikesFirst = 0;
         else if (gProtectStructs[battler2].usedCustapBerry && !gProtectStructs[battler1].usedCustapBerry)
             strikesFirst = 1;
-        else if (holdEffectBattler1 == HOLD_EFFECT_LAGGING_TAIL && holdEffectBattler2 != HOLD_EFFECT_LAGGING_TAIL)
+        /*else if (holdEffectBattler1 == HOLD_EFFECT_LAGGING_TAIL && holdEffectBattler2 != HOLD_EFFECT_LAGGING_TAIL)
             strikesFirst = 1;
         else if (holdEffectBattler2 == HOLD_EFFECT_LAGGING_TAIL && holdEffectBattler1 != HOLD_EFFECT_LAGGING_TAIL)
             strikesFirst = 0;
         else if (ability1 == ABILITY_STALL && ability2 != ABILITY_STALL)
             strikesFirst = 1;
         else if (ability2 == ABILITY_STALL && ability1 != ABILITY_STALL)
-            strikesFirst = 0;
+            strikesFirst = 0;*/
         else //trick room logic below to explicitly exclude above  affects from calculation
         {
             if (speedBattler1 == speedBattler2 && Random() & 1)
@@ -6459,7 +6485,14 @@ s8 GetMovePriority(u8 battlerId, u16 move) //ported from emerald the EXACT thing
         && gDisableStructs[battlerId].bideTimer == 0) //think had to remove check for move bide, since that's not set until atk canceler
     {
         priority = 3; //if works, second attack will go before most priority moves /that did it works now
-    }
+    }    
+
+    else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_LAGGING_TAIL)
+        priority = -12;
+
+    else if (GetBattlerAbility(battlerId) == ABILITY_STALL)
+        priority = -12;
+
     return priority;
 }
 

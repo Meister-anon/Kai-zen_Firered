@@ -162,6 +162,7 @@ bool32 IsGastroAcidBannedAbility(u16 ability);
 bool32 IsEntrainmentBannedAbilityAttacker(u16 ability);
 bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
+bool8 IsMoveCounterAttack(u16 move); 
 bool32 CanSleep(u8 battlerId);
 bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget);
 bool32 CanBePoisoned(u8 PoisonUser, u8 PoisonTarget); //actually needs to be different from type
@@ -170,6 +171,7 @@ bool32 CanBeParalyzed(u8 battlerId);
 bool32 CanBeFrozen(u8 battlerId);
 bool32 CanThaw(u32 move); //always use gcurrentmove hope work
 bool32 CanBeConfused(u8 battlerId);
+bool32 CanTeleport(u8 battlerId); //new teleport logic
 bool32 HasEnoughHpToEatBerry(u8 battlerId, u32 hpFraction, u16 itemId);
 bool32 DoesPranksterBlockMove(u16 move, u8 battlerwithPrankster, u8 battlerDef, bool32 checkTarget);
 bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);

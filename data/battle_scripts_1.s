@@ -5084,19 +5084,42 @@ BattleScript_EffectThunder::
 	setmoveeffect MOVE_EFFECT_PARALYSIS
 	goto BattleScript_EffectHit
 
+@check if still works with pursuit or need to add something here, case lagging tail pursuit
 BattleScript_EffectTeleport::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifbattletype BATTLE_TYPE_TRAINER, BattleScript_ButItFailed
-	getifcantrunfrombattle BS_ATTACKER
-	jumpifbyte CMP_EQUAL, gBattleCommunication, 1, BattleScript_ButItFailed
-	jumpifbyte CMP_EQUAL, gBattleCommunication, 2, BattleScript_PrintAbilityMadeIneffective
+	@jumpifbattletype BATTLE_TYPE_TRAINER, BattleScript_ButItFailed
+	@getifcantrunfrombattle BS_ATTACKER
+	@jumpifbyte CMP_EQUAL, gBattleCommunication, 1, BattleScript_ButItFailed
+	@jumpifbyte CMP_EQUAL, gBattleCommunication, 2, BattleScript_PrintAbilityMadeIneffective
+	canteleport BS_ATTACKER
+	jumpifbyte CMP_EQUAL, gBattleCommunication, FALSE, BattleScript_ButItFailed
 	attackanimation
 	waitanimation
-	printstring STRINGID_PKMNFLEDFROMBATTLE
+	jumpifbattletype BATTLE_TYPE_TRAINER, BattleScript_EffectTeleportNew	@test but think should be enough for my version of teleport
+	printstring STRINGID_PKMNFLEDFROMBATTLE	@ok tried againm, switch worked, but setting as faint forces enemytrainer to also switch, so I need something original here.
 	waitmessage 0x40
 	setbyte gBattleOutcome, B_OUTCOME_PLAYER_TELEPORTED
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectTeleportNew::
+	openpartyscreen BS_ATTACKER, BattleScript_EffectTeleportNewEnd
+	switchoutabilities BS_ATTACKER
+	waitstate
+	switchhandleorder BS_ATTACKER, 2
+	returntoball BS_ATTACKER
+	getswitchedmondata BS_ATTACKER
+	switchindataupdate BS_ATTACKER
+	hpthresholds BS_ATTACKER
+	trytoclearprimalweather
+	printstring STRINGID_EMPTYSTRING3
+	waitmessage 1
+	printstring STRINGID_SWITCHINMON
+	switchinanim BS_ATTACKER, TRUE
+	waitstate
+	switchineffects BS_ATTACKER
+BattleScript_EffectTeleportNewEnd:
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectBeatUp::

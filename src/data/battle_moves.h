@@ -2325,7 +2325,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 80,
     #endif
     .effect = EFFECT_PSYWAVE,
-    .power = 1,
+    .power = 0, //since typeless think should have made this power 0 but forgot
     .type = TYPE_PSYCHIC,
     .pp = 15,
     .secondaryEffectChance = 0,

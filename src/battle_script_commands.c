@@ -1304,6 +1304,7 @@ static const u32 gUnknown_8250898 = 0xFF7EAE60;
 
 static bool32 TryAegiFormChange(void)
 {
+    u16 effect = gBattleMoves[gCurrentMove].effect;
     // Only Aegislash with Stance Change can transform, transformed mons cannot.
     if (GetBattlerAbility(gBattlerAttacker) != ABILITY_STANCE_CHANGE
         || gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED)
@@ -1313,8 +1314,9 @@ static bool32 TryAegiFormChange(void)
     {
     default:
         return FALSE;
-    case SPECIES_AEGISLASH: // Shield -> Blade
-        if (gBattleMoves[gCurrentMove].power == 0)
+    case SPECIES_AEGISLASH: // Shield -> Blade  //myust be damaging move, so this should be if status or couter 
+        //if (gBattleMoves[gCurrentMove].power == 0)
+        if (IS_MOVE_STATUS(gCurrentMove) || IsMoveCounterAttack(gCurrentMove))
             return FALSE;
         gBattleMons[gBattlerAttacker].species = SPECIES_AEGISLASH_BLADE;
         break;
@@ -1498,9 +1500,8 @@ static void atk00_attackcanceler(void) //vsonic
             gLastHitByType[gBattlerTarget] = 0;//not sur ethat will work but need figure out how to do ,. can make new struct thats' only cleared on battle start and end
             gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG; //check target matches forewarn user
         }
-        //gDisableStructs[gBattlerTarget].forewarnedMove = MOVE_UNAVAILABLE; //ensures, only works for first turn - set in battle_main
-        
-        
+        //gDisableStructs[gBattlerTarget].forewarnedMove = MOVE_UNAVAILABLE; //ensures, only works for first turn - set in battle_main        
+        gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[gBattlerTarget]][GetBattlerSide(gBattlerTarget)] = TRUE;
     }
     else if ((GetBattlerAbility(gBattlerTarget) == ABILITY_ANTICIPATION)
     && gDisableStructs[gBattlerTarget].anticipatedMove != MOVE_UNAVAILABLE
@@ -1515,7 +1516,9 @@ static void atk00_attackcanceler(void) //vsonic
             gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_DMG;
         }
         //gDisableStructs[gBattlerTarget].anticipatedMove = MOVE_UNAVAILABLE; //issue if move used doesn't go through attak canceler this doesn't remove status
-
+        gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[gBattlerTarget]][GetBattlerSide(gBattlerTarget)] = TRUE;
+        //put here since ability completion is based on attack being done, not actually using the move stored by ability
+        //appears to work now
     }
 
     for (i = 0; i < gBattlersCount; ++i)
@@ -1663,11 +1666,11 @@ static bool8 IsBattlerProtected(u8 battlerId, u16 move)//IMPORTANT change to fal
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD
         && GetChosenMovePriority(gBattlerAttacker) > 0)
         return TRUE;
-    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD
-        && gBattleMoves[move].power == 0)
+    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD //user side moves shouldnt affect i.e aromatherapy also perish song bypasses vsonic
+        && IS_MOVE_STATUS(move))
         return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK
-        && gBattleMoves[move].power != 0)
+        && !IS_MOVE_STATUS(move))
         return TRUE; //think below should instead be its own function start fromweather has effect down
     //else if (ProtectBreak) //idk may work, should be if not 0
        // return TRUE; // nah doesn't work becuase of how function returns work, 
@@ -10952,6 +10955,9 @@ static void atk76_various(void) //will need to add all these emerald various com
         BtlController_EmitSetMonData(0, REQUEST_PP_DATA_BATTLE, 0, 5, data);
         MarkBattlerForControllerExec(gActiveBattler);
         break;
+    case VARIOUS_CAN_TELEPORT:  //new logic for teleport
+        gBattleCommunication[0] = CanTeleport(gActiveBattler);
+        break;
     case VARIOUS_TRY_ACTIVATE_MOXIE:    // and chilling neigh + as one ice rider
         if ((GetBattlerAbility(gActiveBattler) == ABILITY_MOXIE
             || GetBattlerAbility(gActiveBattler) == ABILITY_CHILLING_NEIGH
@@ -11086,12 +11092,17 @@ static void atk76_various(void) //will need to add all these emerald various com
         }
         return;
     case VARIOUS_SUCKER_PUNCH_CHECK:
+    {
+        u16 move = gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]];
+
         if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
-        else if (gBattleMoves[gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]]].power == 0)
+        //else if (gBattleMoves[move].power == 0)
+        else if (IS_MOVE_STATUS(move) && move != MOVE_ME_FIRST)
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         else
             gBattlescriptCurrInstr += 7;
+    }
         return;
     case VARIOUS_SET_SIMPLE_BEAM:
         if (IsEntrainmentTargetOrSimpleBeamBannedAbility(gBattleMons[gActiveBattler].ability))
@@ -11180,18 +11191,24 @@ static void atk76_various(void) //will need to add all these emerald various com
         HandleTerrainMove(gBattleMoves[gCurrentMove].effect);
         return;
     case VARIOUS_TRY_ME_FIRST:
+    {
+        u16 effect = gBattleMoves[gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]]].effect;
+        u16 move = gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]];
+
         if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
-        else if (gBattleMoves[gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]]].power == 0)
+        //else if (gBattleMoves[gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]]].power == 0)
+        else if (IS_MOVE_STATUS(move))
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         else
         {
-            u16 move = gBattleMons[gBattlerTarget].moves[gBattleStruct->chosenMovePositions[gBattlerTarget]];
+            
             switch (move)
             {
             case MOVE_STRUGGLE:
-            case MOVE_CHATTER:
-            case MOVE_FOCUS_PUNCH:
+            case MOVE_BEAK_BLAST:
+            case MOVE_BELCH:
+            case MOVE_SHELL_TRAP:
             case MOVE_THIEF:
             case MOVE_COVET:
             case MOVE_COUNTER:
@@ -11209,6 +11226,7 @@ static void atk76_various(void) //will need to add all these emerald various com
                 break;
             }
         }
+    }
         return;
     case VARIOUS_TRY_ELECTRIFY:
         if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
@@ -17722,7 +17740,7 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) //sound b
 {
     if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE))
         return FALSE;
-    else if (gBattleMoves[move].type == TYPE_SOUND)
+    else if (gBattleMoves[move].flags & FLAG_SOUND)
         return FALSE;
     else if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE)
         return FALSE;
@@ -17732,14 +17750,15 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) //sound b
         return TRUE;
 }
 
+//test with doubles, keep an eye on
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) //plan add rocky helm rough skin passive dmg to things that can break /vsonic
 {
     if (GetBattlerAbility(battlerDef) != ABILITY_DISGUISE
-        || gBattleMons[battlerDef].species != SPECIES_MIMIKYU   //since species transforms to busted afterwards, this is line that makes it one time only
-        || gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battlerDef]][GetBattlerSide(battlerDef)] == TRUE
-        || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED
-        //|| gBattleMoves[move].power == 0
-        || IS_MOVE_STATUS(move)
+        //|| gBattleMons[battlerDef].species != SPECIES_MIMIKYU   //since species transforms to busted afterwards, this is line that makes it one time only
+        || (gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battlerDef]][GetBattlerSide(battlerDef)] == TRUE && gBattleMons[battlerDef].ability == ABILITY_DISGUISE)
+        || gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED //^new change seems to work without species, but need check w double batte ensure not just spot 0
+        //|| gBattleMoves[move].power == 0      /need/want it to track with the mon as it moves so if I switch it, the status still applies,
+        || IS_MOVE_STATUS(move)                 //hmm I guess simple as look into status then since status1 stays with mon, no matter where switch
         || gHitMarker & HITMARKER_IGNORE_DISGUISE
         || gProtectStructs[battlerAtk].confusionSelfDmg) //should allow conufusion dmg through without breaking form -works, just makes more sense, 
         return FALSE; //its not the same as substitute where its a different object, disguise is part of the mon

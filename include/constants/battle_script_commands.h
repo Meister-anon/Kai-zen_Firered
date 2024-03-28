@@ -261,6 +261,7 @@
 #define VARIOUS_TRY_REVIVAL_BLESSING                 170
 #define VARIOUS_TRY_TRAINER_SLIDE_MSG_Z_MOVE         171
 #define VARIOUS_TRY_TRAINER_SLIDE_MSG_MEGA_EVOLUTION 172
+#define VARIOUS_CAN_TELEPORT                        173 //set fr new teleport logic
 
 
 // atk80, dmg manipulation

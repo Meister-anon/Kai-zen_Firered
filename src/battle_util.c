@@ -1199,7 +1199,7 @@ u8 TrySetCantSelectMoveBattleScript(void)
         gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveChoiceItem;
         ++limitations;
     }
-    else if (holdEffect == HOLD_EFFECT_ASSAULT_VEST && gBattleMoves[move].power == 0 && move != MOVE_ME_FIRST)
+    else if (holdEffect == HOLD_EFFECT_ASSAULT_VEST && IS_MOVE_STATUS(move) && move != MOVE_ME_FIRST)
     {
         gCurrentMove = move;
         gLastUsedItem = gBattleMons[gActiveBattler].item;
@@ -1227,6 +1227,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
     u8 holdEffect;
     u16 *choicedMove = &gBattleStruct->choicedMove[battlerId];
     s32 i;
+    
 
     if (gBattleMons[battlerId].item == ITEM_ENIGMA_BERRY)
         holdEffect = gEnigmaBerries[battlerId].holdEffect;
@@ -1236,46 +1237,49 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
 
     for (i = 0; i < MAX_MON_MOVES; ++i)
     {
-        if (gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
+        u16 move;
+        move = gBattleMons[battlerId].moves[i];
+
+        if (move == 0 && check & MOVE_LIMITATION_ZEROMOVE)
             unusableMoves |= gBitTable[i];
         if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
             unusableMoves |= gBitTable[i];
-        if (gBattleMons[battlerId].moves[i] == gDisableStructs[battlerId].disabledMove && check & MOVE_LIMITATION_DISABLED)
+        if (move == gDisableStructs[battlerId].disabledMove && check & MOVE_LIMITATION_DISABLED)
             unusableMoves |= gBitTable[i];
-        if (gBattleMons[battlerId].moves[i] == gDisableStructs[battlerId].inthralledMove && check & MOVE_LIMITATION_DISABLED)
+        if (move == gDisableStructs[battlerId].inthralledMove && check & MOVE_LIMITATION_DISABLED)
             unusableMoves |= gBitTable[i];
-        if (gBattleMons[battlerId].moves[i] == gLastMoves[battlerId] && check & MOVE_LIMITATION_TORMENTED && gBattleMons[battlerId].status2 & STATUS2_TORMENT)
+        if (move == gLastMoves[battlerId] && check & MOVE_LIMITATION_TORMENTED && gBattleMons[battlerId].status2 & STATUS2_TORMENT)
             unusableMoves |= gBitTable[i];
-        if (gDisableStructs[battlerId].tauntTimer && check & MOVE_LIMITATION_TAUNT && gBattleMoves[gBattleMons[battlerId].moves[i]].power == 0)
+        if (gDisableStructs[battlerId].tauntTimer && check & MOVE_LIMITATION_TAUNT && IS_MOVE_STATUS(move))
             unusableMoves |= gBitTable[i];
-        if (GetImprisonedMovesCount(battlerId, gBattleMons[battlerId].moves[i]) && check & MOVE_LIMITATION_IMPRISON)
+        if (GetImprisonedMovesCount(battlerId, move) && check & MOVE_LIMITATION_IMPRISON)
             unusableMoves |= gBitTable[i];
-        if (gDisableStructs[battlerId].bindTurns && gDisableStructs[battlerId].bindedMove != gBattleMons[battlerId].moves[i]) //checking existing moves for locked move
+        if (gDisableStructs[battlerId].bindTurns && gDisableStructs[battlerId].bindedMove != move) //checking existing moves for locked move
            unusableMoves |= gBitTable[i]; //adds moves to unusable list
-        if (gDisableStructs[battlerId].encoreTimer && gDisableStructs[battlerId].encoredMove != gBattleMons[battlerId].moves[i])
+        if (gDisableStructs[battlerId].encoreTimer && gDisableStructs[battlerId].encoredMove != move)
             unusableMoves |= gBitTable[i];
-        if (holdEffect == HOLD_EFFECT_CHOICE_BAND && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
+        if (holdEffect == HOLD_EFFECT_CHOICE_BAND && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != move)
             unusableMoves |= gBitTable[i];
         // Assault Vest
-        if (holdEffect == HOLD_EFFECT_ASSAULT_VEST && gBattleMoves[gBattleMons[battlerId].moves[i]].power == 0 && gBattleMons[battlerId].moves[i] != MOVE_ME_FIRST)
+        if (holdEffect == HOLD_EFFECT_ASSAULT_VEST && IS_MOVE_STATUS(move) && move != MOVE_ME_FIRST)
             unusableMoves |= gBitTable[i];
         // Gravity
-        if (IsGravityPreventingMove(gBattleMons[battlerId].moves[i]))
+        if (IsGravityPreventingMove(move))
             unusableMoves |= gBitTable[i];
         // Heal Block
-        if (IsHealBlockPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
+        if (IsHealBlockPreventingMove(battlerId, move))
             unusableMoves |= gBitTable[i];
         // Belch
-        if (IsBelchPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
+        if (IsBelchPreventingMove(battlerId, move))
             unusableMoves |= gBitTable[i];
         // Throat Chop
-        if (gDisableStructs[battlerId].throatChopTimer && gBattleMoves[gBattleMons[battlerId].moves[i]].flags & FLAG_SOUND)
+        if (gDisableStructs[battlerId].throatChopTimer && gBattleMoves[move].flags & FLAG_SOUND)// this is correct I had thought I removed flag soud but didn't
             unusableMoves |= gBitTable[i];
         // Stuff Cheeks
-        if (gBattleMons[battlerId].moves[i] == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRY_POUCH)
+        if (move == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRY_POUCH)
             unusableMoves |= gBitTable[i];
         // Gorilla Tactics
-        if (GetBattlerAbility(battlerId) == ABILITY_GORILLA_TACTICS && *choicedMove != MOVE_NONE && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
+        if (GetBattlerAbility(battlerId) == ABILITY_GORILLA_TACTICS && *choicedMove != MOVE_NONE && *choicedMove != 0xFFFF && *choicedMove != move)
             unusableMoves |= gBitTable[i];
     }
     return unusableMoves;
@@ -3978,7 +3982,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             ++gBattleStruct->atkCancellerTracker;
             break;
         case CANCELLER_TAUNTED: // taunt
-            if (gDisableStructs[gBattlerAttacker].tauntTimer && gBattleMoves[gCurrentMove].power == 0)
+            if (gDisableStructs[gBattlerAttacker].tauntTimer && IS_MOVE_STATUS(gCurrentMove))
             {
                 gProtectStructs[gBattlerAttacker].usedTauntedMove = 1;
                 CancelMultiTurnMoves(gBattlerAttacker);
@@ -4039,7 +4043,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                                 gBattlerTarget = gBattlerAttacker;  //Handles target swap
                                 
 
-                                if (gBattleMovePower == 0) //if status move does default confusion hit 
+                                if (gBattleMovePower <= 1) //if status move does default confusion hit  (or variable power/typeless move)
                                 {
                                     
                                     //gBattlerTarget = gBattlerAttacker;    this line not needed already handled above
@@ -6131,14 +6135,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                     ++effect;
                 }
-                if (effect)
-                    gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = TRUE;
+                //if (effect)
+                //    gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = TRUE;
                 
                 break; //other things use the same setup but the script works fine, looking further 
             case ABILITY_ANTICIPATION:  //working on change
             {
                 u16 moveId = MOVE_NONE; //to store moveId of a move
                 u16 move; //this was the problem I was using a u8 to store move data *facepalm
+                u16 power,storedpower;
+                u8 stored_type; //for storing type of comparison move from moveId
 
                 if (!gSpecialStatuses[battler].switchInAbilityDone
                 && gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] == FALSE) //can prob remove switchindone part?
@@ -6152,19 +6158,44 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         {
                             for (j = 0; j < MAX_MON_MOVES; j++)
                             {
-                                if (gBattleMons[i].moves[j] == MOVE_NONE) //taken from forewarn hopefully fixes issue, so not assigned to move at all
+                                if (gBattleMons[i].moves[j] == MOVE_NONE
+                                || gBattleMoves[gBattleMons[i].moves[j]].target == MOVE_TARGET_USER) //taken from forewarn hopefully fixes issue, so not assigned to move at all
                                     continue; //fixed issue w type change, but think keep this to optimize anyway
 
                                 move = gBattleMons[i].moves[j];
+                                power = gBattleMoves[move].power;
+                                storedpower = gBattleMoves[moveId].power;
                                 SetTypeBeforeUsingMove(move, i); //usign this fixed it, with get_mvoe_type change without this it just erad as normal type,cuz dynamicmovetype is 0
                                 GET_MOVE_TYPE(move, moveType); //including set type seems to be correct, as ability is supposed to read for things that change type
+                                
+                                SetTypeBeforeUsingMove(moveId, i);
+                                GET_MOVE_TYPE(moveId, stored_type);
 
-                                if (gBattleMoves[move].target == MOVE_TARGET_USER) //appears fixed, was right issue was bide, since it ignores type reading
-                                    continue;
+                                //yup seems to be same issue, once again says "a dangerous move"
+                                //if (gBattleMoves[move].target == MOVE_TARGET_USER) //appears fixed, was right issue was bide, since it ignores type reading
+                                //    continue; //ok issue was bide, but I think issue was actually moves of 0 power...
+
+                                if (gBattleMoves[move].power == 1
+                                || (gBattleMoves[move].power == 0 && gBattleMoves[move].split != SPLIT_STATUS))
+                                    power = 80;  //substitute to compare power for atypical dmging moves.
+
+                                if ((gBattleMoves[moveId].power == 1
+                                || (gBattleMoves[moveId].power == 0 && gBattleMoves[moveId].split != SPLIT_STATUS))
+                                && moveId != MOVE_NONE)//as of yet not correctly working /...just realized didn't work because they are using the same logic -__-
+                                    storedpower = 80;
+
+                                //if (gBattleMoves[move].power == 0)//in that case issue was typeless moves? i.e power 0 moves
+                                //    continue;
                                     
-
-                                if (gBattleMoves[move].power > gBattleMoves[moveId].power) //for each move, / won't work with new change make 0 power moves, 
+                                //way this works for two equal power (or both >= 1 power) won't assign moveId, and will always take whatever move was first in move order
+                                if (power > storedpower) //for each move, / won't work with new change make 0 power moves, 
                                     moveId = move;  //could be fine, like unable to register there power, power 0 is fixed dmg like seismic toss, endeavor
+
+                                else if (power == storedpower)
+                                {
+                                    if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) > CalcTypeEffectivenessMultiplier(moveId, stored_type, i, battler, FALSE))
+                                        moveId = move;
+                                }//should be a fix for moves, with non-standard power or equal power, should return the move that should do more damage
 
                                 if (gBattleMoves[move].effect == EFFECT_EXPLOSION //setup multiplier calc think can just use multipier check here.
                                     && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) != UQ_4_12(0.0)) //isue is modifier for some reason doesnt work above 1?
@@ -6177,14 +6208,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                       //depending on value  or have different value copied to gBattleTextBuff1 for each
                                 }
                                 else if (gBattleMoves[move].effect == EFFECT_OHKO && (gBattleMons[i].level >= (gBattleMons[battler].level - 3))
-                                && CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.55))
+                                && (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.55)))
                                 {
 
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_OHKO);
                                     ++effect;//
                                     break;
                                 }
-                                else if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.55))//vsonic  //THINK CAN use typecalc fort this?
+                                else if ((CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(1.55)))//vsonic  //THINK CAN use typecalc fort this?
                                 {
 
                                     PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_DEFAULT);
@@ -6199,11 +6230,22 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                                 break; //should be break out of i loop
                     }
 
-                    if (!effect) //if didn't find a move that matched condition / ok somehow one of my moves on stufful  is breaking this
+                    //think perhaps split this off, between move and strong move
+                    //as auto saying strong is deceptive but it does pick the strongest move 
+                    //so logic it'll sense strongest move if no other moves, but have a differnet message based on perceived power
+                    //just move prepare string buff into effect below, not here sensed a strong move/ vs sensed something to give more info
+                    //actually nvm can't move string buff to effect just put it below move reassignment
+                    if (!effect) //if didn't find a move that matched condition / 
                     {
-                        PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_STRONGEST_MOVE); //change to return a STrong
-                        if (gBattleMoves[move].power <= gBattleMoves[moveId].power) //for some reason not working when only 1 move?
+                        
+                        if (power <= storedpower) //should prob change this for equal power to take move with highest multiplier only take moveid if greater or equal effectiveness
                             move = moveId; //replace move with strongest move found
+
+                        if (gBattleMoves[move].power >= 90)
+                            PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_STRONG_MOVE); //change to return a STrong
+
+                        if (gBattleMoves[move].power < 90)
+                            PREPARE_STRING_BUFFER(gBattleTextBuff1, STRINGID_ANTICIPATE_SOME_MOVE); //for some reason refused to work with else if...
                         ++effect;//
                          //realized can't put this here, would prevent loop from going all the way, needs to be outside
                     } //works perfectly - seems this case reads what move does most damage not justpower?  had quad resisted close combat and it chose tackle,
@@ -6216,8 +6258,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gDisableStructs[battler].anticipatedMove = move;
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ANTICIPATION;
                         gSpecialStatuses[battler].switchInAbilityDone = TRUE;
-                        gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = TRUE;
-                        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                        //gBattleStruct->usedSingleUseAbility[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)] = TRUE; 
+                        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg); //moved above to util enemy attack cancell, as move is "done" then not before
                     }
                 }
                 break;
@@ -6865,7 +6907,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
                             effect = 3; 
                         }
-                        else if ((gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) || (gBattleMoves[moveArg].power == 0))
+                        else if ((gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) || IS_MOVE_STATUS(moveArg))
                         {
                             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_FLASH_FIRE_NO_BOOST;
                             if (gProtectStructs[gBattlerAttacker].notFirstStrike)
@@ -6889,7 +6931,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         else
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
                     }
-                    else if (gBattleMoves[moveArg].power == 0)
+                    else if (IS_MOVE_STATUS(moveArg))//(gBattleMoves[moveArg].power == 0)
                     {
                         if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
@@ -6919,7 +6961,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         else
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
                     }
-                    else if (gBattleMoves[moveArg].power == 0)
+                    else if (IS_MOVE_STATUS(moveArg))
                     {
                         if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
@@ -6952,7 +6994,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         else
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
                     }
-                    else if (gBattleMoves[moveArg].power == 0)
+                    else if (IS_MOVE_STATUS(moveArg))
                     {
                         if ((gProtectStructs[gBattlerAttacker].notFirstStrike))
                             gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
@@ -10793,6 +10835,19 @@ bool8 IsMoveMakingContact(u16 move, u8 battlerAtk)
 
 }
 
+//mostly setup for power == 0 replacements, non status moves that should also be ignored 
+bool8 IsMoveCounterAttack(u16 move)
+{
+
+    if (move == MOVE_COUNTER
+    || move == MOVE_MIRROR_COAT
+    || move == MOVE_METAL_BURST
+    || move == MOVE_SHELL_TRAP)
+        return TRUE;
+    
+    return FALSE;
+}
+
 //understand why thsi is here now, later gen knock off fully remove the item held
 //for effects that take advantage of the user not having an item.
 //oh...nvm the item is restored at battle end...
@@ -11757,9 +11812,9 @@ u16 GetTypeModifier(u8 atkType, u8 defType) //used inside MulByTypeEffectiveness
 
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities)
 {
-    u16 modifier = UQ_4_12(1.0);
+    u16 modifier = UQ_4_12(1.0); //fix for power 0 moves not status to be typeless
 
-    if (move != MOVE_STRUGGLE && move != MOVE_BIDE && moveType != TYPE_SOUND && moveType != TYPE_MYSTERY) //skips type calculation as both are meant to do typeless dmg i.e neutral to all
+    if (move != MOVE_STRUGGLE && !(gBattleMoves[move].power == 0 && gBattleMoves[move].split != SPLIT_STATUS) && moveType != TYPE_SOUND && moveType != TYPE_MYSTERY) //skips type calculation as both are meant to do typeless dmg i.e neutral to all
     {
         modifier = CalcTypeEffectivenessMultiplierInternal(move, moveType, battlerAtk, battlerDef, recordAbilities, modifier);
         if (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE)
@@ -12307,6 +12362,49 @@ bool32 CanBeConfused(u8 battlerId)
         return FALSE;
     return TRUE;
 }
+
+bool32 CanTeleport(u8 battlerId)
+{
+    struct Pokemon* party = NULL;
+    u32 species, count, i;
+
+    if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+        party = gPlayerParty;
+    else
+        party = gEnemyParty;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        species = GetMonData(&party[i], MON_DATA_SPECIES2);
+        if (species != SPECIES_NONE && species != SPECIES_EGG && GetMonData(&party[i], MON_DATA_HP) != 0)
+            count++;
+    }
+
+    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+    {
+        if (count == 1 || (count <= 2 && gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
+        return FALSE;
+    }    
+
+    /*switch (GetBattlerSide(battlerId)) //replace use of switch / well maybe not use else if instead actually don't need swith
+    {
+    case B_SIDE_OPPONENT:
+        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+            return FALSE;
+        break;
+    case B_SIDE_PLAYER:
+        if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        {
+            if (count == 1 || (count <= 2 && gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
+            return FALSE;
+        }        
+        break;
+    }*/
+
+    return TRUE;
+}
+
 
 bool32 TryActivateBattlePoisonHeal(void)  //change mind better to do 2 functions, rather than do 2 different effects with one.
 {

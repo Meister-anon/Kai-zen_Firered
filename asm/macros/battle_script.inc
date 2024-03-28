@@ -1524,6 +1524,10 @@
 	various \battler, VARIOUS_RESTORE_PP
 	.endm
 
+	.macro canteleport battler:req
+	various \battler, VARIOUS_CAN_TELEPORT
+	.endm
+
 	.macro tryactivatemoxie battler:req
 	various \battler, VARIOUS_TRY_ACTIVATE_MOXIE
 	.endm
